@@ -1,0 +1,109 @@
+Library update: batch B25, by character — Script 22 (the miser, part 2)
+
+Master — 3 formulas
+
+F613 Pay cut for something nobody controls (వర్షాలు కురవనందుకు గాను) · L1 · punch 10/10
+  Recipe: Punish someone for something they can't control, like the weather.
+  Use when: An unreasonable boss
+  Sample punchline: మాస్టర్: ఈరోజు కరెంట్ పోయింది కదా రా నాన్న? — మధు: అవును సార్. — మాస్టర్: కరెంట్ పోయినందుకు నీకు ఐదు మార్కులు కట్!
+
+F624 'A month before, a month after' (పెళ్లికి నెల రోజులు ముందు వచ్చి, నెల రోజులు ఉండి) · L6 · punch 9/10
+  Recipe: Invited politely to come only on the day, insist on coming much earlier and staying much longer — free.
+  Use when: Being invited somewhere
+  Sample punchline: మాస్టర్: మీ ఇంట్లో ఫంక్షనా రా నాన్న? ఫంక్షన్ రోజు రావడమేంటి? వారం ముందు వచ్చి, వారం తర్వాత వెళ్తా! భోజనం గురించి నువ్వు ఆలోచించకు!
+
+F630 Paper lungi, next a paper saree (పేపర్ చీర ఎలా ఉంటుందా అని ఆలోచిస్తున్నాను) · L8 · punch 10/10
+  Recipe: Adopt an absurd saving idea, praise it as genius, and immediately plan a bigger version.
+  Use when: A character copies a silly trick
+  Sample punchline: మాస్టర్: చాక్ పీస్ ముక్కలు అతికించి కొత్త చాక్ పీస్ చేశా రా నాన్న! అద్భుతమైన ఆలోచన! ఇప్పుడు డస్టర్ కూడా పాత గుడ్డలతో చేద్దామని ఆలోచిస్తున్నా!
+
+Budatha — 3 formulas
+
+F614 The erosion history (జలుబు చేసినప్పుడు… కొంత కొంత కోసుకుంటూ వచ్చి) · L1 · punch 9/10
+  Recipe: List every silly occasion on which something was cut, ending with the tiny amount left.
+  Use when: Complaining about shrinking pay, marks or pocket money
+  Sample punchline: బుడత: నా పాకెట్ మనీ వంద సార్. మా నాన్న టీవీ పగిలినప్పుడు కోశాడు, నేను ఫెయిల్ అయినప్పుడు కోశాడు, ఆయనకి జలుబు చేసినప్పుడు కూడా కోశాడు… ఇప్పుడు నెలకి పన్నెండు రూపాయల పావలా సార్!
+
+F628 Sublet arbitrage (రెండు వందలకి తీసుకుని రెండు వందల యాభైకి) · L7 · punch 9/10
+  Recipe: Explain a costly choice as a profit scheme: rent it, sublet it for more, and sleep on the tenant's verandah.
+  Use when: Asked why you spent money
+  Sample punchline: బుడత: మాస్టర్ దగ్గర ట్యూషన్ వంద సార్. నేను నోట్స్ రాసుకొని మహేష్‌కి నూట యాభైకి అమ్ముతా. నేను వాళ్ళ ఇంటి అరుగు మీద కూర్చొని వింటా!
+
+F629 Iron by sleeping on it (చాప కింద పెట్టి… తెల్లారేటప్పటికి ఇస్త్రీ) · L7 · punch 9/10
+  Recipe: Explain neat clothes with a free trick: fold them under the mat and sleep on them.
+  Use when: Someone asks about your smart look
+  Sample punchline: బుడత: ఈ షర్ట్ ఇస్త్రీనా అన్నా? రాత్రి పుస్తకాల కింద పెట్టి వాటి మీద పడుకుంటా. షర్ట్ ఇస్త్రీ అవుతుంది, పుస్తకాలు నా బుర్రలోకి ఎక్కుతాయి!
+
+Madhu — 3 formulas
+
+F615 Corrected compliment that insults (శని గాడే వెళ్ళలేడు మీ జోలికి) · L1 · punch 9/10
+  Recipe: Start a flattering line, slip, and the correction turns out to be an insult.
+  Use when: Flattering a boss
+  Sample punchline: మధు: సార్, మీ దగ్గరికి బాధలు రావు… అదే, మీరంటేనే బాధలు భయపడతాయి సార్… అంటే మిమ్మల్ని చూస్తేనే అన్నీ పారిపోతాయి!
+
+F616 Mythic comparison backfires (ప్రహ్లాదుడు టైప్ → నేను హిరణ్యకశిపుడినా?) · L1 · punch 9/10
+  Recipe: Praise the son with a holy figure from a story; the father realises that makes him the story's villain.
+  Use when: Defending someone to his parent
+  Sample punchline: మధు: మహేష్ అచ్చం శ్రవణ కుమారుడు అంకుల్. — నాన్న: అంటే నేను కావడి మోయించేవాడినా రా?
+
+F619 Count-and-escape (కళ్ళు మూసుకొని ఒకటి నుంచి వంద) · L3 · punch 9/10
+  Recipe: Trapped by a pest, ask him to close his eyes and count to a hundred 'while I decide' — then slip away.
+  Use when: Escaping a clingy person
+  Sample punchline: మధు: సార్, నేను ఆలోచించాలి. మీరు కళ్ళు మూసుకొని వంద లెక్కపెట్టండి… శబాష్… అలా… (పారిపోతాడు) — (మాస్టర్: …యాభై ఒకటి, యాభై రెండు…)
+
+Mahesh — 3 formulas
+
+F617 Running total of cuts (ఇంకా మిగిలేది రూపాయి పావలా) · L1 · punch 9/10
+  Recipe: After a second cut, do the arithmetic aloud and despair at the remainder.
+  Use when: After another penalty
+  Sample punchline: మహేష్: ముప్పై మార్కుల్లో పది కోశారు, ఇప్పుడు ఇంకో పది… ఇంకా మిగిలేది పది. పాస్ మార్క్ ముప్పై ఐదు. నా శ్రాద్ధం!
+
+F621 Praise or slipper rhyme (మెప్పు కాదు, చెప్పు తగులుతుంది) · L4 · punch 8/10
+  Recipe: Warn that instead of praise you'll get a slipper, using the rhyming pair.
+  Use when: Threatening to tell on someone
+  Sample punchline: మహేష్: ఈ విషయం మాస్టర్‌కి చెప్తే నీకు మెప్పు రాదు రా మధు, చెప్పు వస్తుంది.
+
+F626 Pay-per-word (లాభం లేనిదే నోరు విప్పను. స్వరపేటిక అరిగిపోతుందని) · L7 · punch 9/10
+  Recipe: Refuse to speak without payment, because the voice box wears out; a small coin buys only a few words.
+  Use when: Someone asks you a question
+  Sample punchline: మధు: ఏం జరిగిందిరా? — మహేష్: (చేయి చాపుతాడు) … (పది రూపాయలు) … ఆ, మాస్టర్ వస్తున్నాడు. ఇంకో మాటకి ఇంకో పది.
+
+Venki — 3 formulas
+
+F618 Hawking a house like fruit (తాజా ఇల్లు! అందమైన ఇల్లు బాబూ!) · L3 · punch 9/10
+  Recipe: Advertise something big with a street-vendor cry meant for fruit or vegetables.
+  Use when: Selling or renting anything
+  Sample punchline: వెంకి: సీటు బాబు సీటు! ఫ్రెష్ సీటు! లాస్ట్ బెంచ్ సీటు! మాస్టర్ చూపు పడని సీటు! పది రూపాయలే అమ్మా!
+
+F620 Mail pun on blackmail (హౌరా మెయిల్ రాదు. బ్లాక్ మెయిలే గతి) · L4 · punch 9/10
+  Recipe: Accused of blackmail, explain that the famous mail train doesn't stop here, so blackmail is the only mail you've got.
+  Use when: Caught blackmailing
+  Sample punchline: మహేష్: నన్ను బ్లాక్ మెయిల్ చేస్తావా రా? — వెంకి: ఏం చేయను బాబు? మన ఊర్లో ఈ-మెయిల్‌కి సిగ్నల్ లేదు, బ్లాక్ మెయిలే గతి అమ్మా!
+
+F625 'Eat at the hotel in my name — you pay' (నా పేరు చెప్పి… ఏడో ఎనిమిదో పుచ్చుకుంటాడు, ఇచ్చేయ్) · L6 · punch 9/10
+  Recipe: Send a guest off without food, recommending a hotel 'in my name', where the guest pays.
+  Use when: Getting rid of a guest at mealtime
+  Sample punchline: వెంకి: భోజనం ఇక్కడ కాదు బాబు. రోడ్డు చివర హోటల్ ఉంది, నా పేరు చెప్పు. స్పెషల్ మీల్స్ పెడతారు. డబ్బులు మాత్రం నువ్వే ఇచ్చేయ్ అమ్మా!
+
+Father — 3 formulas
+
+F622 'Our houses are one' — takes the whole gift (మీ ఇల్లు మా ఇల్లు ఒకటి కాదేమిటయ్యా?) · L6 · punch 9/10
+  Recipe: When a guest says only part of the gift is for you, claim both homes are one and take all of it.
+  Use when: A visitor brings something
+  Sample punchline: మహేష్: ఈ స్వీట్లలో సగం మా ఇంటికి అంకుల్. — నాన్న: మీ ఇల్లు మా ఇల్లు ఒకటే కదా బాబు! (డబ్బా మొత్తం లాక్కుంటాడు)
+
+F623 Stingy care (ఎండలు మండిపోతూ ఉంటే వేడి వేడి కాఫీ అంటావేమిటే?) · L6 · punch 9/10
+  Recipe: Refuse to serve something costly by pretending to care for the guest's comfort.
+  Use when: A host avoids spending
+  Sample punchline: నాన్న: ఇంత చలిలో ఐస్ క్రీమ్ ఏంట్రా? గొంతు పాడవుతుంది. గోరువెచ్చని నీళ్ళు తాగు, ఆరోగ్యం!
+
+F627 Burnt matchsticks for cooking (కాలిపోయిన అగ్గిపుల్లలు… వాటితో చారు కాచుకుంటా) · L7 · punch 10/10
+  Recipe: Collect useless scraps (burnt matchsticks, shells) and claim you cook with them.
+  Use when: Showing extreme thrift
+  Sample punchline: నాన్న: రోడ్డు మీద పడిన పెన్ను మూతలు ఏరుకొని వస్తా రా. పది మూతలు కలిపి ఒక పెన్ను చేస్తా! మీ మాస్టర్‌కి కూడా అమ్ముతా!
+
+Repeats (already in the library, now also assigned)
+  F599 Muttered 'face like…' curse → Mahesh · L1
+  F611 Pay cut that leaves a coin → Master · L1
+  F609 'What's in it for me?' → Venki · L7
+  F596 Absurd association → Budatha · L7
