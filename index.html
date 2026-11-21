@@ -1350,9 +1350,10 @@ if(await h(i.value.trim())===H){i.value="";show(bump());document.body.classList.
 })();
 </script>
 <script>
+window.CFL_FDL={save:async o=>{const b=o.data instanceof Blob?o.data:new Blob([o.data],{type:o.filename.endsWith(".pdf")?"application/pdf":"text/html"});const u=URL.createObjectURL(b);const a=document.createElement("a");a.href=u;a.download=o.filename.replace(/[^\w.\-]+/g,"_").replace(/_+/g,"_");document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),4000);return {status:"saved"}}};
 {
 const msg=t=>{document.getElementById("evoMsg").textContent=t};
-let dl=null;(async()=>{try{for(let i=0;i<50&&!window.claude;i++)await new Promise(r=>setTimeout(r,100));dl=window.claude?await window.claude.use("downloads"):null}catch(e){dl=null}})();
+let dl=null;(async()=>{try{for(let i=0;i<50&&!window.claude;i++)await new Promise(r=>setTimeout(r,100));dl=(window.claude?await window.claude.use("downloads"):null)||window.CFL_FDL}catch(e){dl=window.CFL_FDL}})();
 const why=c=>({declined:"Download cancelled.",rate_limited:"A download prompt is already open. Try again in a moment.",too_large:"The file is too large for this view."})[c]||"Downloads aren't available in this view. Open the library in claude.ai and try again.";
 async function save(name,data){if(!dl){msg(why("unavailable"));return}
 try{await dl.save({filename:name,data});msg("Saved: "+name)}catch(e){msg(why(e&&e.code))}}
@@ -1365,7 +1366,7 @@ window.CFL.scenePdf(h,"My saved scenes · Old → New Dialogue","My_scenes_old_t
 </script>
 <script>
 {
-let dlp=null;const getDl=async()=>{if(dlp)return dlp;try{for(let i=0;i<50&&!window.claude;i++)await new Promise(r=>setTimeout(r,100));dlp=window.claude?await window.claude.use("downloads"):null}catch(e){dlp=null}return dlp};
+let dlp=null;const getDl=async()=>{if(dlp)return dlp;try{for(let i=0;i<50&&!window.claude;i++)await new Promise(r=>setTimeout(r,100));dlp=(window.claude?await window.claude.use("downloads"):null)||window.CFL_FDL}catch(e){dlp=window.CFL_FDL}return dlp};
 const loadJs=src=>new Promise((ok,no)=>{const s=document.createElement("script");s.src=src;s.onload=ok;s.onerror=no;document.head.appendChild(s)});
 async function snap(el){const w=el.offsetWidth,h=el.offsetHeight;const st=el.parentNode.querySelector("style").outerHTML;
 const x=new XMLSerializer().serializeToString(el);const st2=new XMLSerializer().serializeToString(el.parentNode.querySelector("style"));
