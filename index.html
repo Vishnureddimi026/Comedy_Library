@@ -115,7 +115,8 @@ body.locked #lock{display:flex}
 #lock button{margin-top:12px;width:100%;padding:11px;font-size:16px;border:0;border-radius:10px;background:#2f5d50;color:#fff}
 .lockNote{margin-top:10px;font-size:13px;color:#666}
 #accessBadge{position:fixed;right:10px;bottom:10px;z-index:50;background:#2f5d50;color:#fff;font:13px system-ui,sans-serif;padding:6px 12px;border-radius:20px;box-shadow:0 2px 8px rgba(0,0,0,.2)}
-.evo{margin:28px 0;padding:18px;border:2px solid #c58a1a;border-radius:14px;background:#fff8e8;color:#222}.evo h2{margin-top:0}.pdfbar{margin:10px 0 4px}.evorow{display:flex;flex-wrap:wrap;gap:10px}
+.evo{margin:28px 0;padding:18px;border:2px solid #c58a1a;border-radius:14px;background:#fff8e8;color:#222}.evo h2{margin-top:0}.pdfbar{margin:10px 0 4px}.keybox{margin:10px 0;padding:12px;border:1.5px dashed #c58a1a;border-radius:10px}.keybox p{margin:4px 0}.keyrow{display:flex;flex-wrap:wrap;gap:8px}.keyrow input{flex:1 1 220px;min-width:0;font-size:16px;padding:10px;border-radius:8px;border:1.5px solid #bbb}
+.evorow{display:flex;flex-wrap:wrap;gap:10px}
 #lockErr{color:#b3261e;font-size:13px;min-height:18px;margin-top:8px}
 </style>
 </head>
@@ -186,7 +187,8 @@ body.locked #lock{display:flex}
 <button class="btn ghost" id="stop" hidden>Stop</button>
 <button class="btn ghost" id="copyReq">Copy request for chat</button>
 </div>
-<div class="meta" id="status" style="margin:0"></div>
+<div class="meta" id="status" style="margin:0"></div><div id="keyBox" class="keybox" hidden><p><b>Write scenes on this site with your own Claude API key.</b> Get a key at console.anthropic.com → API keys. It is saved only in this browser on this device, and each scene is billed to that API account.</p>
+<div class="keyrow"><input type="password" id="apiKey" placeholder="sk-ant-..." autocomplete="off" aria-label="Claude API key"><button class="btn" type="button" id="keySave">Save key</button><button class="btn ghost" type="button" id="keyDel" hidden>Remove key</button></div><p class="row" id="keyMsg" role="status"></p></div>
 </div>
 <div id="out"></div>
 <div id="histWrap" hidden><div style="display:flex;align-items:center;justify-content:space-between;gap:10px;margin:28px 0 10px"><h2 style="font-size:24px;margin:0">Saved scenes</h2><button class="btn ghost" id="delAll" style="min-height:40px">Delete all</button></div><div class="hist" id="hist"></div></div>
@@ -1312,7 +1314,18 @@ $("#delAll").addEventListener("click",e=>{const x=e.currentTarget;if(!x.classLis
 hist.length=0;saveHist();cur=null;$("#out").innerHTML="";drawHist();x.classList.remove("arm");x.textContent="Delete all";x.style.background="";x.style.color="";$("#status").textContent="All saved scenes deleted."});
 drawHist();
 (async()=>{try{for(let i=0;i<50&&!window.claude;i++)await new Promise(r=>setTimeout(r,100));sample=window.claude?await window.claude.use("sample"):null}catch(e){sample=null}
-if(!sample){$("#go").hidden=true;$("#status").textContent="Scene writing isn't available in this view. Use Copy request for chat and paste it into the conversation."}})();
+if(!sample)setupKey()})();
+function apiSample(p,o){const key=(()=>{try{return localStorage.getItem("cfl_api_key")||""}catch(e){return ""}})();
+const model=o&&o.modelTier==="complex"?"claude-opus-5-5":"claude-sonnet-5-5";
+return fetch("https://api.anthropic.com/v1/messages",{method:"POST",signal:o&&o.signal,headers:{"content-type":"application/json","x-api-key":key,"anthropic-version":"2023-06-01","anthropic-dangerous-direct-browser-access":"true"},body:JSON.stringify({model,max_tokens:16000,messages:[{role:"user",content:p}]})})
+.then(async r=>{const j=await r.json().catch(()=>({}));if(!r.ok){const m=(j.error&&j.error.message)||("HTTP "+r.status);const err=new Error(r.status===401?"The API key was refused. Check it and save it again.":r.status===429?"Too many requests or no credit left on the API account. Try again later.":m);err.code=r.status===401?"bad_key":"api_error";throw err}
+return {text:(j.content||[]).filter(c=>c.type==="text").map(c=>c.text).join("")}}).catch(e=>{if(e&&e.name==="AbortError"){const x=new Error("Stopped.");x.code="cancelled";throw x}throw e})}
+function setupKey(){const box=$("#keyBox");box.hidden=false;const has=()=>{try{return !!localStorage.getItem("cfl_api_key")}catch(e){return false}};
+const sync=()=>{const h=has();sample=h?apiSample:null;$("#go").hidden=!h;$("#keyDel").hidden=!h;$("#apiKey").value="";$("#apiKey").placeholder=h?"Key saved ✓ (paste a new one to replace it)":"sk-ant-...";
+$("#status").textContent=h?"Scenes on this site use your Claude API key.":"Save your Claude API key above to write scenes here, or use Copy request for chat and paste it into Claude."};
+$("#keySave").addEventListener("click",()=>{const v=$("#apiKey").value.trim();if(!/^sk-ant-/.test(v)){$("#keyMsg").textContent="That doesn't look like a Claude API key (it starts with sk-ant-).";return}
+try{localStorage.setItem("cfl_api_key",v);$("#keyMsg").textContent="Key saved on this device."}catch(e){$("#keyMsg").textContent="This browser won't let the page save the key."}sync()});
+$("#keyDel").addEventListener("click",()=>{try{localStorage.removeItem("cfl_api_key")}catch(e){}$("#keyMsg").textContent="Key removed from this device.";sync()});sync()}
 
 const scLabel=id=>id[0]==="S"?"Script 1 · B1":"Script 2 · B2";
 $("#oldList").innerHTML=["S","T","U","V","W","X","Y","Z","Q","P","R","N","K","J","H","G","E","D","C","A","B","L","M"].map(p=>`<h2 style="font-size:26px;margin:10px 0">${({S:"Script 1 — Classroom heist (S1–S12) · B1",T:"Script 2 — Madhu's M20 fuel (T1–T12) · B2",U:"Script 3 — Wedding curse & the lion husband (U1–U6) · B3",V:"Script 4 — Wedding escape & police-station marriage (V1–V7) · B4",W:"Script 5 — College days (W1–W32) · B6–B8",X:"Script 6 — The cockroach in the bottle (X1–X22) · B9",Y:"Script 7 — EAMCET long term (Y1–Y12) · B10",Z:"Script 8 — The train journey (Z1–Z20) · B11",Q:"Script 9 — DJ Tillu (Q1–Q20) · B12",P:"Script 10 — Family and marks (P1–P10) · B13",R:"Script 11 — Tillu Square (R1–R6) · B14",N:"Script 12 — The ten-year degree (N1–N8) · B15",K:"Script 13 — Bheeshma (K1–K2) · B16",J:"Script 14 — 24 subjects (J1–J17) · B17",H:"Script 15 — Balu's degree (H1–H13) · B18",G:"Script 16 — TV studio (G1–G4) · B19",E:"Script 17 — Annavaram trip (E1–E8) · B20",D:"Script 18 — The bag on the train (D1–D16) · B21",C:"Script 19 — The village feud (C1–C11) · B22",A:"Script 20 — The station wedding (A1–A9) · B23",B:"Script 21 — The miser (B1–B7) · B24",L:"Script 22 — The miser, part 2 (L1–L8) · B25",M:"Script 23 — The debtor (M1–M13) · B26"})[p]}</h2>`+REF.filter(r=>r.id[0]===p).map(r=>`<details style="margin-bottom:10px"><summary>${r.id} — ${esc(r.t)}</summary><div class="dlg">${r.l.map((x,i)=>`<p><span>L${i+1}</span><span style="text-align:left;color:inherit;font-size:inherit;padding:0">${x[0]!=="—"?`<b>${esc(x[0])}:</b> `:""}${esc(x[1])}</span></p>`).join("")}</div></details>`).join("")).join("");
