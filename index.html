@@ -1104,7 +1104,7 @@ const slangNote=()=>{const x=SLANGS.find(y=>y.k===$("#slang").value);$("#slangNo
 $("#slang").addEventListener("change",()=>{try{localStorage.setItem("cfl-slang",$("#slang").value)}catch(e){}slangNote()});slangNote();
 let pinned=[];
 const SK="cfl-scenes";let hist=[];try{hist=JSON.parse(localStorage.getItem(SK)||"[]")}catch(e){}
-const saveHist=()=>{try{localStorage.setItem(SK,JSON.stringify(hist.slice(0,15)))}catch(e){}};
+const saveHist=()=>{try{localStorage.setItem(SK,JSON.stringify(hist.slice(0,15)))}catch(e){}if(window.CFL_SRV)window.CFL_SRV.save(hist.slice(0,200))};
 function showPins(){const p=$("#pins");p.hidden=!pinned.length;p.innerHTML=pinned.length?`Must use: ${pinned.map(id=>{const f=F.find(x=>x[0]===id);return esc(id+" "+f[1])}).join(", ")} · <button class="btn ghost" id="unpin" style="min-height:36px;padding:4px 10px">Clear</button>`:""}
 document.body.addEventListener("click",e=>{if(e.target.id==="unpin"){pinned=[];showPins()}});
 $("#useCombo").addEventListener("click",()=>{pinned=combo.map(f=>f[0]);showPins();location.hash="write"});
@@ -1313,8 +1313,22 @@ const b=e.target.closest("[data-h]");if(!b)return;cur=hist[+b.dataset.h];renderS
 $("#delAll").addEventListener("click",e=>{const x=e.currentTarget;if(!x.classList.contains("arm")){x.classList.add("arm");x.textContent="Tap again to delete all";x.style.background="#b3122b";x.style.color="#fff";setTimeout(()=>{x.classList.remove("arm");x.textContent="Delete all";x.style.background="";x.style.color=""},4000);return}
 hist.length=0;saveHist();cur=null;$("#out").innerHTML="";drawHist();x.classList.remove("arm");x.textContent="Delete all";x.style.background="";x.style.color="";$("#status").textContent="All saved scenes deleted."});
 drawHist();
-(async()=>{try{for(let i=0;i<50&&!window.claude;i++)await new Promise(r=>setTimeout(r,100));sample=window.claude?await window.claude.use("sample"):null}catch(e){sample=null}
-if(!sample)setupKey()})();
+(async()=>{try{for(let i=0;i<50&&!window.claude&&window.parent!==window;i++)await new Promise(r=>setTimeout(r,100));sample=window.claude?await window.claude.use("sample"):null}catch(e){sample=null}
+if(!sample&&!(await useServer()))setupKey()})();
+async function useServer(){try{const r=await fetch("api/health",{cache:"no-store"});if(!r.ok)return false;const j=await r.json();if(!j||!j.ok)return false;
+if(!j.ai){$("#go").hidden=true;$("#status").textContent="The server has no Claude API key yet (ANTHROPIC_API_KEY). Scene writing is off until it is set.";return true}
+sample=serverSample;
+try{if(!localStorage.getItem("cfl-tier-set")&&j.defaultTier)$("#tier").value=j.defaultTier;$("#tier").addEventListener("change",()=>{try{localStorage.setItem("cfl-tier-set","1")}catch(e){}})}catch(e){}
+let tm=null;window.CFL_SRV={save:list=>{clearTimeout(tm);tm=setTimeout(()=>fetch("api/scenes",{method:"PUT",headers:{"content-type":"application/json"},body:JSON.stringify(list)}).catch(()=>{}),400)}};
+try{const sr=await fetch("api/scenes",{cache:"no-store"});const srv=sr.ok?await sr.json():[];const seen=new Set(hist.map(h=>h.t));let added=0;
+(Array.isArray(srv)?srv:[]).forEach(h=>{if(h&&!seen.has(h.t)){hist.push(h);seen.add(h.t);added++}});hist.sort((a,b)=>(b.t||0)-(a.t||0));
+if(added){try{localStorage.setItem(SK,JSON.stringify(hist.slice(0,15)))}catch(e){}drawHist()}if(hist.length&&(!srv.length||hist.length>srv.length))window.CFL_SRV.save(hist.slice(0,200))}catch(e){}
+$("#status").textContent="Connected to the AI server. Scenes are written by Claude and saved on the server.";return true}catch(e){return false}}
+async function serverSample(p,o){let r;try{r=await fetch("api/generate",{method:"POST",signal:o&&o.signal,headers:{"content-type":"application/json"},body:JSON.stringify({prompt:p,tier:o&&o.modelTier})})}
+catch(e){const x=new Error(e&&e.name==="AbortError"?"Stopped.":"Could not reach the server.");x.code=e&&e.name==="AbortError"?"cancelled":"network";throw x}
+if(!r.ok){let j={};try{j=await r.json()}catch(e){}const x=new Error(j.message||("Server error "+r.status));x.code=j.error==="rate_limited"?"rate_limited":(j.error||"server_error");throw x}
+const rd=r.body.getReader(),dec=new TextDecoder();let t="";try{for(;;){const {done,value}=await rd.read();if(done)break;t+=dec.decode(value,{stream:true});if(o&&o.onText&&t.indexOf("\u0000")<0)try{o.onText({text:t})}catch(e){}}}catch(e){const x=new Error(e&&e.name==="AbortError"?"Stopped.":"The connection dropped while writing.");x.code=e&&e.name==="AbortError"?"cancelled":"network";throw x}
+const k=t.indexOf("\u0000ERR:");if(k>=0){const x=new Error(t.slice(k+5));x.code="api_error";throw x}return {text:t}}
 function apiSample(p,o){const key=(()=>{try{return localStorage.getItem("cfl_api_key")||""}catch(e){return ""}})();
 const model=o&&o.modelTier==="complex"?"claude-opus-5-5":"claude-sonnet-5-5";
 return fetch("https://api.anthropic.com/v1/messages",{method:"POST",signal:o&&o.signal,headers:{"content-type":"application/json","x-api-key":key,"anthropic-version":"2023-06-01","anthropic-dangerous-direct-browser-access":"true"},body:JSON.stringify({model,max_tokens:16000,messages:[{role:"user",content:p}]})})
@@ -1360,7 +1374,7 @@ document.getElementById("accessCount").textContent=n;document.getElementById("ac
 window.CFL_FDL={save:async o=>{const b=o.data instanceof Blob?o.data:new Blob([o.data],{type:o.filename.endsWith(".pdf")?"application/pdf":"text/html"});const u=URL.createObjectURL(b);const a=document.createElement("a");a.href=u;a.download=o.filename.replace(/[^\w.\-]+/g,"_").replace(/_+/g,"_");document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),4000);return {status:"saved"}}};
 {
 const msg=t=>{document.getElementById("evoMsg").textContent=t};
-let dl=null;(async()=>{try{for(let i=0;i<50&&!window.claude;i++)await new Promise(r=>setTimeout(r,100));dl=(window.claude?await window.claude.use("downloads"):null)||window.CFL_FDL}catch(e){dl=window.CFL_FDL}})();
+let dl=null;(async()=>{try{for(let i=0;i<50&&!window.claude&&window.parent!==window;i++)await new Promise(r=>setTimeout(r,100));dl=(window.claude?await window.claude.use("downloads"):null)||window.CFL_FDL}catch(e){dl=window.CFL_FDL}})();
 const why=c=>({declined:"Download cancelled.",rate_limited:"A download prompt is already open. Try again in a moment.",too_large:"The file is too large for this view."})[c]||"Downloads aren't available in this view. Open the library in claude.ai and try again.";
 async function save(name,data){if(!dl){msg(why("unavailable"));return}
 try{await dl.save({filename:name,data});msg("Saved: "+name)}catch(e){msg(why(e&&e.code))}}
@@ -1373,7 +1387,7 @@ window.CFL.scenePdf(h,"My saved scenes · Old → New Dialogue","My_scenes_old_t
 </script>
 <script>
 {
-let dlp=null;const getDl=async()=>{if(dlp)return dlp;try{for(let i=0;i<50&&!window.claude;i++)await new Promise(r=>setTimeout(r,100));dlp=(window.claude?await window.claude.use("downloads"):null)||window.CFL_FDL}catch(e){dlp=window.CFL_FDL}return dlp};
+let dlp=null;const getDl=async()=>{if(dlp)return dlp;try{for(let i=0;i<50&&!window.claude&&window.parent!==window;i++)await new Promise(r=>setTimeout(r,100));dlp=(window.claude?await window.claude.use("downloads"):null)||window.CFL_FDL}catch(e){dlp=window.CFL_FDL}return dlp};
 const loadJs=src=>new Promise((ok,no)=>{const s=document.createElement("script");s.src=src;s.onload=ok;s.onerror=no;document.head.appendChild(s)});
 async function snap(el){const w=el.offsetWidth,h=el.offsetHeight;const st=el.parentNode.querySelector("style").outerHTML;
 const x=new XMLSerializer().serializeToString(el);const st2=new XMLSerializer().serializeToString(el.parentNode.querySelector("style"));

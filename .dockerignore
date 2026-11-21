@@ -1,0 +1,7 @@
+.git
+app/node_modules
+app/data
+app/.env
+batches
+by-character
+Everything_I_sent_in_this_chat.pdf

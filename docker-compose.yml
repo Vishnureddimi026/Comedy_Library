@@ -1,0 +1,16 @@
+# Run the app:  docker compose up -d --build   (reads app/.env)
+services:
+  app:
+    build:
+      context: .
+      dockerfile: app/Dockerfile
+    env_file: app/.env
+    environment:
+      DATA_DIR: /srv/data
+    ports:
+      - "127.0.0.1:3000:3000"
+    volumes:
+      - scenes:/srv/data
+    restart: unless-stopped
+volumes:
+  scenes:

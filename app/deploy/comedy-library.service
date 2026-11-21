@@ -1,0 +1,15 @@
+# /etc/systemd/system/comedy-library.service  (for running without Docker)
+[Unit]
+Description=Comedy Formula Library
+After=network.target
+
+[Service]
+User=ubuntu
+WorkingDirectory=/home/ubuntu/Comedy_Library/app
+ExecStart=/usr/bin/node server.js
+Restart=always
+RestartSec=3
+Environment=NODE_ENV=production
+
+[Install]
+WantedBy=multi-user.target

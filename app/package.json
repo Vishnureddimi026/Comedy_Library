@@ -1,0 +1,13 @@
+{
+  "name": "comedy-formula-library",
+  "version": "1.0.0",
+  "description": "Telugu Comedy Formula Library web app with Claude-powered scene writing",
+  "main": "server.js",
+  "type": "commonjs",
+  "scripts": {
+    "start": "node server.js",
+    "sync": "cp ../index.html public/index.html"
+  },
+  "engines": { "node": ">=20" },
+  "dependencies": { "express": "5.1.0" }
+}
