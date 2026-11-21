@@ -1323,7 +1323,7 @@ let tm=null;window.CFL_SRV={save:list=>{clearTimeout(tm);tm=setTimeout(()=>fetch
 try{const sr=await fetch("api/scenes",{cache:"no-store"});const srv=sr.ok?await sr.json():[];const seen=new Set(hist.map(h=>h.t));let added=0;
 (Array.isArray(srv)?srv:[]).forEach(h=>{if(h&&!seen.has(h.t)){hist.push(h);seen.add(h.t);added++}});hist.sort((a,b)=>(b.t||0)-(a.t||0));
 if(added){try{localStorage.setItem(SK,JSON.stringify(hist.slice(0,15)))}catch(e){}drawHist()}if(hist.length&&(!srv.length||hist.length>srv.length))window.CFL_SRV.save(hist.slice(0,200))}catch(e){}
-$("#status").textContent="Connected to the AI server. Scenes are written by Claude and saved on the server.";return true}catch(e){return false}}
+$("#status").textContent=j.claude===false&&j.backup?`Connected to the AI server (backup AI: ${j.backup}). Scenes are saved on the server.`:`Connected to the AI server. Scenes are written by Claude${j.backup?", with a backup AI if Claude can't answer":""}, and saved on the server.`;return true}catch(e){return false}}
 async function serverSample(p,o){let r;try{r=await fetch("api/generate",{method:"POST",signal:o&&o.signal,headers:{"content-type":"application/json"},body:JSON.stringify({prompt:p,tier:o&&o.modelTier})})}
 catch(e){const x=new Error(e&&e.name==="AbortError"?"Stopped.":"Could not reach the server.");x.code=e&&e.name==="AbortError"?"cancelled":"network";throw x}
 if(!r.ok){let j={};try{j=await r.json()}catch(e){}const x=new Error(j.message||("Server error "+r.status));x.code=j.error==="rate_limited"?"rate_limited":(j.error||"server_error");throw x}

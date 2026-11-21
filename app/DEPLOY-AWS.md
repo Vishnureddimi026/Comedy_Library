@@ -78,6 +78,28 @@ sudo ln -sf /etc/nginx/sites-available/comedy-library /etc/nginx/sites-enabled/ 
 | `MAX_TOKENS` | Longest answer allowed. Raise it if very long scenes get cut off. |
 | `GEN_PER_HOUR` | Safety limit on AI calls per hour from one address. |
 
+## Billing: your Claude subscription is not used
+
+- The app talks to the **Claude API** with the key in `ANTHROPIC_API_KEY`. The API is billed through the
+  **Anthropic Console** (console.anthropic.com → Billing), separately from a Claude.ai Pro/Max plan.
+- When your Claude.ai subscription ends, the app keeps working as long as the **API account has credit**.
+  Turn on auto-reload in the Console, or check the balance from time to time.
+- If the API credit runs out or the key stops working, Claude answers with an error and the app switches
+  to the **backup AI** (next section) if you set one up.
+
+## Backup AI (optional)
+
+Fill in `FALLBACK_BASE_URL`, `FALLBACK_API_KEY` and `FALLBACK_MODEL` in `app/.env` (examples are in
+`.env.example`: OpenAI, Google Gemini, OpenRouter, or your own Ollama). Then restart:
+`sudo docker compose up -d --build`.
+
+- The server always tries **Claude first**. If Claude can't be reached or refuses (no credit, bad key,
+  overloaded, outage), the same request goes to the backup AI with the same instructions and library.
+- The backup writes in the same structure (scan, Box 1, Box 2, A–F), but its comedy, Telugu and slang
+  will **not be as good** as Claude's. Treat it as an emergency spare.
+- The backup has its own account and billing with that provider.
+- Logs show which AI wrote each scene, e.g. `[generate] backup:<model> …`.
+
 ## Good to know
 
 - **Long requests.** A scene can take 1–5 minutes. nginx is set to wait 15 minutes. If you put an AWS
