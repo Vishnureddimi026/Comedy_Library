@@ -174,6 +174,7 @@ body.locked #lock{display:flex}
 <label for="tier">Speed<select id="tier">
 <option value="default">Faster: usually under a minute (recommended)</option>
 <option value="complex">Best quality: can take 1–3 minutes</option>
+<option value="deep">Deepest: extra polishing, up to 5 minutes</option>
 </select></label>
 <label for="alang">Analysis language<select id="alang">
 <option value="mix">English with Telugu quotes</option>
@@ -1063,7 +1064,7 @@ const usedLib=sc=>{const ids=usedIds(sc);const fs=F.filter(f=>ids.includes(f[0])
 const refFor=sc=>{const ids=new Set();F.filter(f=>usedIds(sc).includes(f[0])).forEach(f=>{String(f[7]).split(/[,\s]+/).forEach(x=>{if(/^\d+$/.test(x))ids.add("S"+x);else if(/^[TUV]\d+$/.test(x))ids.add(x)});(String(f[11]).match(/[TUV]\d+/g)||[]).forEach(x=>ids.add(x))});
 const list=[...ids].slice(0,10).map(findRef).filter(Boolean);return (list.length?list:REF.slice(0,4)).map(r=>`${r.id} — ${r.t}\n`+r.l.map((x,i)=>`  L${i+1}. ${x[0]}: ${x[1]}`).join("\n")).join("\n\n")};
 let ctl=null,tick=null;
-const ask=(p,o)=>{ctl=new AbortController();return sample(p,{...o,modelTier:$("#tier").value,signal:ctl.signal})};
+const ask=(p,o)=>{ctl=new AbortController();const tv=$("#tier").value;return sample(p,{...o,modelTier:tv==="deep"?"complex":tv,deep:tv==="deep",signal:ctl.signal})};
 const startTimer=(el,label)=>{const t0=Date.now();clearInterval(tick);const f=()=>{const n=Math.round((Date.now()-t0)/1000);if(el())el().textContent=`${label}… ${n}s (Claude thinks first, then writes)`};f();tick=setInterval(f,1000)};
 const stopTimer=()=>{clearInterval(tick);tick=null};
 const errText=e=>e&&e.code==="cancelled"?"Stopped.":e&&e.code==="not_granted"?"Permission to write with Claude wasn't given. Use Copy request for chat instead.":e&&e.code==="rate_limited"?"Too many requests just now. Wait a minute and try again.":`It didn't come through${e&&e.code?` (${e.code})`:""}${e&&e.message?": "+e.message:""}. Tap again, or use Copy request for chat.`;
@@ -1140,7 +1141,7 @@ GOLD TECHNIQUES (the user's hand-picked best lines — highest-quality reference
 - Report the scan in "scan": how many formulas you checked (must be ${SF().length}) and the shortlist.
 
 ${inc12()?"":"- Batch 1 and Batch 2 formulas are switched off: do NOT use them, even if you know them, unless they are in MUST USE.\n"}
-STEP 2 — WRITE THE SCENE.
+${$("#tier").value==="deep"?"DEEP MODE (the user chose the slowest, most careful setting — take your time):\n- Before writing the final JSON, privately draft the scene, then do a full rewrite pass: for every punchline, think of at least three alternatives and keep only the strongest; cut any line that is not funny or does not move the scene.\n- Check every beat against the GOLD TECHNIQUES quality bar; if a line is weaker than those, rewrite it.\n- Make the final punchline the biggest laugh of the scene.\n- Output only the final polished version.\n\n":""}STEP 2 — WRITE THE SCENE.
 
 RULES:
 - TECHNIQUE MIX TARGET: about ${$("#mix").value}% of the comedy beats driven by library formulas and about ${100-+$("#mix").value}% driven by NEW techniques you invent that are not in the library (new comic mechanisms, not just new wording). List every invented technique in "newTech".
