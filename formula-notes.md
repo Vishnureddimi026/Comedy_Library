@@ -761,6 +761,7 @@ Before delivering: a punch-up pass that cuts or rewrites any ordinary, predictab
 
 ## Gold techniques — from the best lines you picked (bathroom scenes, set 21 Nov 2026)
 Use these as top-quality references for every new scene. Rules:
+- Quality bar (set 21 Nov 2026): the user writes each scene idea in about four versions and shares the 2–3 strongest lines from each. Those lines set the minimum level for punch strength, timing and creativity; every new scene must match or beat them with fresh lines. Each new set of shared lines is studied and added here as new gold techniques (G09, G10, …).
 - Use only ONE or TWO gold techniques per scene, the ones that fit the situation naturally.
 - Never copy the original lines; keep only the technique.
 - Slang follows the scene and region the user asks for (Telangana → authentic Telangana; Rayalaseema, Uttarandhra, etc. likewise). Don't mix regions unless the scene calls for it.

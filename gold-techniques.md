@@ -3,6 +3,7 @@
 Learned from the best lines hand-picked from the bathroom scenes (`references/bathroom-best-lines.txt`). The scene writer uses them as top-quality references.
 
 ## Rules
+- Quality bar: the user writes each scene idea in about four versions and shares the 2–3 strongest lines from each. Those lines set the minimum level for punch strength, timing and creativity; every new scene must match or beat them with fresh lines. Each new set is studied and added here as new gold techniques (G09, G10, …).
 - Use only ONE or TWO gold techniques per scene, the ones that fit the situation naturally.
 - Never copy the original lines; keep only the technique.
 - Slang follows the scene and region the user asks for (Telangana → authentic Telangana; Rayalaseema, Uttarandhra, etc. likewise). Don't mix regions unless the scene calls for it.
