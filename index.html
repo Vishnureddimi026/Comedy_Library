@@ -107,7 +107,6 @@ details>div{padding:0 16px 16px}
 [hidden]{display:none!important}
 .empty{padding:30px;text-align:center;color:var(--mute)}
 @media(max-width:600px){nav a{padding:10px 12px;font-size:15px}.slip h3{font-size:19px}}
-body.locked>*:not(#lock){display:none!important}
 #lock{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:#f6f3ee;z-index:9999;font-family:system-ui,sans-serif}
 body.locked #lock{display:flex}
 #lock form{background:#fff;padding:28px 24px;border-radius:14px;box-shadow:0 4px 24px rgba(0,0,0,.12);text-align:center;width:min(300px,86vw)}
@@ -120,8 +119,8 @@ body.locked #lock{display:flex}
 #lockErr{color:#b3261e;font-size:13px;min-height:18px;margin-top:8px}
 </style>
 </head>
-<body class="locked">
-<div id="lock"><form id="lockForm" autocomplete="off"><h2>Comedy Formula Library</h2><p>Enter password</p><input id="lockPin" type="password" inputmode="numeric" maxlength="8" aria-label="Password" autofocus><button type="submit">Open</button><div id="lockErr" role="alert"></div><div class="lockNote">Opened today: <b id="lockToday">0</b></div></form></div>
+<body>
+
 <div id="accessBadge" hidden title="Times you opened the library today (resets at midnight)">Today: <b id="accessCount">0</b> opens</div>
 <header>
 <h1>Comedy Formula Library</h1>
@@ -1338,15 +1337,10 @@ render();roll();route();
 }
 </script>
 <script>
-(function(){const H="7c1aade3c99cc6a8eff0291730fdec8c01f36d22e3ae35d8fde7318770322ba3",C="cfl_access";
+(function(){const C="cfl_access";
 const today=()=>{const d=new Date();return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")};
-function read(){try{const o=JSON.parse(localStorage.getItem(C)||"{}");return o.d===today()?o.n|0:0}catch(e){return 0}}
-function bump(){const n=read()+1;try{localStorage.setItem(C,JSON.stringify({d:today(),n}))}catch(e){}return n}
-function show(n){document.getElementById("accessCount").textContent=n;document.getElementById("accessBadge").hidden=false}
-async function h(t){const b=await crypto.subtle.digest("SHA-256",new TextEncoder().encode(t));return [...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,"0")).join("")}
-document.getElementById("lockToday").textContent=read();
-document.getElementById("lockForm").addEventListener("submit",async e=>{e.preventDefault();const i=document.getElementById("lockPin");
-if(await h(i.value.trim())===H){i.value="";show(bump());document.body.classList.remove("locked")}else{document.getElementById("lockErr").textContent="Wrong password";i.value="";i.focus()}});
+let n=1;try{const o=JSON.parse(localStorage.getItem(C)||"{}");n=(o.d===today()?o.n|0:0)+1;localStorage.setItem(C,JSON.stringify({d:today(),n}))}catch(e){}
+document.getElementById("accessCount").textContent=n;document.getElementById("accessBadge").hidden=false;
 })();
 </script>
 <script>
