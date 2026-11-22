@@ -200,7 +200,7 @@ setTimeout(function(){var i=document.getElementById("lockP");if(i)i.focus()},100
 <div class="keyrow"><input type="password" id="apiKey" placeholder="sk-ant-..." autocomplete="off" aria-label="Claude API key"><button class="btn" type="button" id="keySave">Save key</button><button class="btn ghost" type="button" id="keyDel" hidden>Remove key</button></div><p class="row" id="keyMsg" role="status"></p></div>
 </div>
 <div id="out"></div>
-<div id="histWrap" hidden><div style="display:flex;align-items:center;justify-content:space-between;gap:10px;margin:28px 0 10px"><h2 style="font-size:24px;margin:0">Saved scenes</h2><button class="btn ghost" id="delAll" style="min-height:40px">Delete all</button></div><div class="hist" id="hist"></div></div>
+<div id="histWrap" hidden><div style="display:flex;align-items:center;justify-content:space-between;gap:10px;margin:28px 0 10px"><h2 style="font-size:24px;margin:0">Saved scenes</h2><button class="btn ghost" id="delAll" style="min-height:40px">Delete all</button></div><p class="row" id="syncMsg">Saved on this device only.</p><div class="acts" style="margin:6px 0 12px"><button class="btn ghost sm" type="button" id="bkOut">Download backup of saved scenes</button><button class="btn ghost sm" type="button" id="bkIn">Restore from a backup file</button><input type="file" id="bkFile" accept=".json,application/json" hidden></div><div class="hist" id="hist"></div></div>
 </section>
 
 <section id="v-formulas" class="band" hidden>
@@ -1130,7 +1130,14 @@ const slangNote=()=>{const x=SLANGS.find(y=>y.k===$("#slang").value);$("#slangNo
 $("#slang").addEventListener("change",()=>{try{localStorage.setItem("cfl-slang",$("#slang").value)}catch(e){}slangNote()});slangNote();
 let pinned=[];
 const SK="cfl-scenes";let hist=[];try{hist=JSON.parse(localStorage.getItem(SK)||"[]")}catch(e){}
-const saveHist=()=>{try{localStorage.setItem(SK,JSON.stringify(hist.slice(0,15)))}catch(e){}if(window.CFL_SRV)window.CFL_SRV.save(hist.slice(0,200))};
+const saveLocal=()=>{for(const n of [60,30,15,5]){try{localStorage.setItem(SK,JSON.stringify(hist.slice(0,n)));return}catch(e){}}};
+const saveHist=()=>{saveLocal();if(window.CFL_SRV)window.CFL_SRV.save(hist.slice(0,200));if(window.CFL_CLOUD)window.CFL_CLOUD.push()};
+const cleanItem=h=>{const o={};for(const k in h)if(k[0]!=="_"&&k!=="aerr")o[k]=h[k];return o};
+function mergeScenes(list,tomb){const seen=new Map(hist.map(h=>[h.t,h]));let added=0;
+(Array.isArray(list)?list:[]).forEach(h=>{if(!h||!h.t||!h.s||!Array.isArray(h.s.scene)||(tomb&&tomb.has(h.t)))return;const mine=seen.get(h.t);
+if(!mine){hist.push(h);seen.set(h.t,h);added++}else if(!mine.a&&h.a){mine.a=h.a;added++}});
+if(tomb){const before=hist.length;for(let i=hist.length-1;i>=0;i--)if(tomb.has(hist[i].t)&&hist[i]!==cur)hist.splice(i,1);added+=before-hist.length}
+hist.sort((a,b)=>(b.t||0)-(a.t||0));return added}
 function showPins(){const p=$("#pins");p.hidden=!pinned.length;p.innerHTML=pinned.length?`Must use: ${pinned.map(id=>{const f=F.find(x=>x[0]===id);return esc(id+" "+f[1])}).join(", ")} · <button class="btn ghost" id="unpin" style="min-height:36px;padding:4px 10px">Clear</button>`:""}
 document.body.addEventListener("click",e=>{if(e.target.id==="unpin"){pinned=[];showPins()}});
 $("#useCombo").addEventListener("click",()=>{pinned=combo.map(f=>f[0]);showPins();location.hash="write"});
@@ -1383,13 +1390,34 @@ document.addEventListener("click",async e=>{const pb=e.target.closest("[data-pas
 try{const t=await navigator.clipboard.readText();if(!t||!t.trim()){$("#cstatus").textContent="The clipboard is empty. Tap Copy scene on a saved scene first.";return}ta.value=t;saveCombo();$("#cstatus").textContent=`Pasted into Scene ${pb.dataset.paste}.`}
 catch(err){ta.focus();$("#cstatus").textContent="Pasting was blocked here. Long-press inside the box and choose Paste, or use the Saved scene… list."}});
 $("#out").addEventListener("click",e=>{const b=e.target.closest("[data-addc]");if(!b||!cur)return;const m=addToCombo(cur);b.textContent=m.short;const mm=document.querySelector("[data-addmsg]");if(mm)mm.innerHTML=m.html;$("#status").innerHTML=m.html;setTimeout(()=>{if(b.isConnected)b.textContent="Add to scene combo"},3500)});
-function drawHist(){try{fillPickers()}catch(e){}$("#histWrap").hidden=!hist.length;$("#hist").innerHTML=hist.map((h,i)=>{const who=[...new Set(h.s.scene.map(x=>x.s))].slice(0,5).join(", ");return `<div class="hrow"><button data-h="${i}"><span class="ht">${esc(h.s.title)}</span><span class="hm">${new Date(h.t).toLocaleDateString("en-IN",{day:"numeric",month:"short",year:"numeric"})} · ${esc(who)} · ${h.s.scene.length} lines${h.a?"":" · analysis missing"}</span><span class="row">${esc(h.idea.slice(0,110))}</span></button><button class="hcombo" data-hc="${i}" aria-label="Add this saved scene to Scene combo">+ Add to scene combo</button><button class="hdel" data-del="${i}" aria-label="Delete this saved scene">Delete</button></div>`}).join("")}
+function drawHist(){try{fillPickers()}catch(e){}$("#histWrap").hidden=false;$("#delAll").hidden=!hist.length;$("#bkOut").hidden=!hist.length;$("#hist").innerHTML=hist.map((h,i)=>{const who=[...new Set(h.s.scene.map(x=>x.s))].slice(0,5).join(", ");return `<div class="hrow"><button data-h="${i}"><span class="ht">${esc(h.s.title)}</span><span class="hm">${new Date(h.t).toLocaleDateString("en-IN",{day:"numeric",month:"short",year:"numeric"})} · ${esc(who)} · ${h.s.scene.length} lines${h.a?"":" · analysis missing"}</span><span class="row">${esc(h.idea.slice(0,110))}</span></button><button class="hcombo" data-hc="${i}" aria-label="Add this saved scene to Scene combo">+ Add to scene combo</button><button class="hdel" data-del="${i}" aria-label="Delete this saved scene">Delete</button></div>`}).join("")}
 $("#hist").addEventListener("click",e=>{const hc=e.target.closest("[data-hc]");if(hc){e.stopPropagation();const m=addToCombo(hist[+hc.dataset.hc]);hc.textContent=m.short;$("#status").innerHTML=m.html;setTimeout(()=>{if(hc.isConnected)hc.textContent="+ Add to scene combo"},3500);return}
 const x=e.target.closest("[data-del]");if(x){e.stopPropagation();if(!x.classList.contains("arm")){document.querySelectorAll(".hdel.arm").forEach(y=>{y.classList.remove("arm");y.textContent="Delete"});x.classList.add("arm");x.textContent="Tap again to delete";setTimeout(()=>{if(x.isConnected&&x.classList.contains("arm")){x.classList.remove("arm");x.textContent="Delete"}},4000);return}
 const i=+x.dataset.del,gone=hist[i];hist.splice(i,1);saveHist();if(cur===gone){cur=null;$("#out").innerHTML=""}drawHist();$("#status").textContent="Saved scene deleted.";return}
 const b=e.target.closest("[data-h]");if(!b)return;cur=hist[+b.dataset.h];renderScene(cur);if(!cur.a&&!cur.aerr)cur.aerr="Analysis wasn't finished.";renderScene(cur);$("#out").scrollIntoView&&$("#out").scrollIntoView({behavior:"smooth"})});
 $("#delAll").addEventListener("click",e=>{const x=e.currentTarget;if(!x.classList.contains("arm")){x.classList.add("arm");x.textContent="Tap again to delete all";x.style.background="#b3122b";x.style.color="#fff";setTimeout(()=>{x.classList.remove("arm");x.textContent="Delete all";x.style.background="";x.style.color=""},4000);return}
 hist.length=0;saveHist();cur=null;$("#out").innerHTML="";drawHist();x.classList.remove("arm");x.textContent="Delete all";x.style.background="";x.style.color="";$("#status").textContent="All saved scenes deleted."});
+$("#bkOut").addEventListener("click",async()=>{const d=new Date().toISOString().slice(0,10);const body=JSON.stringify({kind:"cfl-saved-scenes",v:1,scenes:hist.map(cleanItem)});
+const fn=`saved-scenes-${d}.json`;try{let dlr=null;try{dlr=window.claude&&window.parent!==window?await window.claude.use("downloads"):null}catch(e){}
+if(dlr&&dlr.save){await dlr.save({filename:fn,data:new Blob([body],{type:"application/json"})})}else{const u=URL.createObjectURL(new Blob([body],{type:"application/json"}));const a=document.createElement("a");a.href=u;a.download=fn;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),4000)}
+$("#syncMsg").textContent=`Backup of ${hist.length} scenes downloaded (${fn}). Open the library on the other device and tap "Restore from a backup file".`}catch(e){$("#syncMsg").textContent="The download was blocked here."}});
+$("#bkIn").addEventListener("click",()=>$("#bkFile").click());
+$("#bkFile").addEventListener("change",async e=>{const f=e.target.files[0];e.target.value="";if(!f)return;try{const j=JSON.parse(await f.text());const list=Array.isArray(j)?j:j.scenes;const n=mergeScenes(list);saveHist();drawHist();$("#syncMsg").textContent=n?`Restored ${n} scene${n>1?"s":""} from the backup. Scenes already here were kept.`:"Nothing new in that backup — all its scenes are already here."}catch(err){$("#syncMsg").textContent="That file isn't a saved-scenes backup."}});
+(async()=>{if(window.parent===window)return;let db=null,uid=null;try{for(let i=0;i<50&&!window.claude;i++)await new Promise(r=>setTimeout(r,100));if(!window.claude)return;db=await window.claude.use("db");const u=await window.claude.use("user");uid=u?await u.id():null}catch(e){return}
+if(!db||!uid)return;const col=db.collection("data/users/"+uid),tombRef=col.doc("deleted");const synced=new Map();let tomb=new Set();
+const msg=t=>{const m=document.getElementById("syncMsg");if(m)m.textContent=t};msg("Syncing saved scenes with your Claude account…");
+const to=new Promise((_,rj)=>setTimeout(()=>rj(new Error("timeout")),12000));
+let snap;try{snap=await Promise.race([col.get(),to])}catch(e){msg("Couldn't reach your Claude account just now. Scenes are saved on this device; they'll sync next time.");return}
+const remote=[];snap.docs.forEach(d=>{if(d.id==="deleted"){const x=d.data();tomb=new Set((x&&x.t)||[])}else{const x=d.data();if(x&&x.item){remote.push(x.item);synced.set(x.item.t,JSON.stringify(x.item))}}});
+const added=mergeScenes(remote,tomb);saveLocal();if(added)drawHist();
+let busyQ=false,again=false,failed=false;
+async function push(){if(busyQ){again=true;return}busyQ=true;try{do{again=false;const now=new Map(hist.map(h=>[h.t,cleanItem(h)]));
+for(const [t,h] of now){if(!h.s||!Array.isArray(h.s.scene))continue;const js=JSON.stringify(h);if(synced.get(t)===js)continue;
+try{await col.doc("s"+t).set({t,item:h});synced.set(t,js)}catch(e){failed=true;msg(e&&e.code==="quota_exceeded"?"Your Claude account storage for scenes is full — delete some old scenes.":"Some scenes couldn't sync just now; they're safe on this device.")}}
+const gone=[...synced.keys()].filter(t=>!now.has(t));if(gone.length){gone.forEach(t=>tomb.add(t));try{await tombRef.set({t:[...tomb].slice(-2000)})}catch(e){}
+for(const t of gone){try{await col.doc("s"+t).delete();synced.delete(t)}catch(e){}}}}while(again)}finally{busyQ=false}
+if(!failed)msg(`Synced with your Claude account · ${hist.length} scene${hist.length===1?"":"s"} · open this library on any device signed in to the same account to see them.`)}
+window.CFL_CLOUD={push};await push()})();
 drawHist();
 (async()=>{try{for(let i=0;i<50&&!window.claude&&window.parent!==window;i++)await new Promise(r=>setTimeout(r,100));sample=window.claude?await window.claude.use("sample"):null}catch(e){sample=null}
 if(!sample&&!(await useServer()))setupKey()})();
