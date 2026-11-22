@@ -116,7 +116,7 @@ body.locked #lock{display:flex}
 .lockNote{margin-top:10px;font-size:13px;color:#666}
 #accessBadge{position:fixed;right:10px;bottom:10px;z-index:50;background:#2f5d50;color:#fff;font:13px system-ui,sans-serif;padding:6px 12px;border-radius:20px;box-shadow:0 2px 8px rgba(0,0,0,.2)}
 .evo{margin:28px 0;padding:18px;border:2px solid #c58a1a;border-radius:14px;background:#fff8e8;color:#222}.evo h2{margin-top:0}.pdfbar{margin:10px 0 4px}.keybox{margin:10px 0;padding:12px;border:1.5px dashed #c58a1a;border-radius:10px}.keybox p{margin:4px 0}.keyrow{display:flex;flex-wrap:wrap;gap:8px}.keyrow input{flex:1 1 220px;min-width:0;font-size:16px;padding:10px;border-radius:8px;border:1.5px solid #bbb}
-.sc4{margin-bottom:22px}.chead{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:6px;margin-bottom:4px}.chead span{display:flex;gap:6px;flex:none}.chead .btn{padding:6px 12px;min-height:36px;min-width:0;flex:none}.cpk{font:inherit;font-size:14px;max-width:150px;padding:6px;border-radius:8px;border:1.5px solid var(--line);background:var(--card);color:var(--ink)}.endbar{margin-top:18px;padding-top:14px;border-top:1.5px dashed var(--line)}.hcombo{font-size:13px;padding:6px 10px;border-radius:8px;border:1.5px solid var(--line);background:none;color:var(--ink);cursor:pointer;white-space:nowrap}.sc4 h2{margin:0 0 6px}.cgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,360px),1fr));gap:12px;margin:10px 0}.cta{width:100%;min-height:170px;font:inherit;font-size:16px;padding:10px;border-radius:10px;border:1.5px solid var(--line);background:var(--card);color:var(--ink);resize:vertical}.cin{width:100%;font:inherit;font-size:16px;padding:10px;border-radius:10px;border:1.5px solid var(--line);background:var(--card);color:var(--ink);margin:4px 0 10px}.cpick{margin:6px 0;padding:8px 10px;border-left:4px solid #c58a1a;background:rgba(197,138,26,.08);border-radius:6px}.cpick .src{font-size:13px;opacity:.75}
+.ftag{display:inline-block;font-size:11px;font-weight:700;padding:1px 7px;border-radius:9px;background:rgba(197,138,26,.18);color:inherit;vertical-align:middle;margin-left:4px}.ftag.fnew{background:rgba(120,120,120,.18);font-weight:500}.sc4{margin-bottom:22px}.chead{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:6px;margin-bottom:4px}.chead span{display:flex;gap:6px;flex:none}.chead .btn{padding:6px 12px;min-height:36px;min-width:0;flex:none}.cpk{font:inherit;font-size:14px;max-width:150px;padding:6px;border-radius:8px;border:1.5px solid var(--line);background:var(--card);color:var(--ink)}.endbar{margin-top:18px;padding-top:14px;border-top:1.5px dashed var(--line)}.hcombo{font-size:13px;padding:6px 10px;border-radius:8px;border:1.5px solid var(--line);background:none;color:var(--ink);cursor:pointer;white-space:nowrap}.sc4 h2{margin:0 0 6px}.cgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,360px),1fr));gap:12px;margin:10px 0}.cta{width:100%;min-height:170px;font:inherit;font-size:16px;padding:10px;border-radius:10px;border:1.5px solid var(--line);background:var(--card);color:var(--ink);resize:vertical}.cin{width:100%;font:inherit;font-size:16px;padding:10px;border-radius:10px;border:1.5px solid var(--line);background:var(--card);color:var(--ink);margin:4px 0 10px}.cpick{margin:6px 0;padding:8px 10px;border-left:4px solid #c58a1a;background:rgba(197,138,26,.08);border-radius:6px}.cpick .src{font-size:13px;opacity:.75}
 .evorow{display:flex;flex-wrap:wrap;gap:10px}
 #lockErr{color:#b3261e;font-size:13px;min-height:18px;margin-top:8px}
 </style>
@@ -210,7 +210,7 @@ body.locked #lock{display:flex}
 <section id="v-combo" class="band" hidden>
 <div class="box b1 sc4">
 <h2>Scene combo · best of five</h2>
-<p class="row">Paste up to five versions of a scene (same situation or different ones). Claude studies each one, picks the strongest punchlines, reactions, slang and twists, and rebuilds them into one new, stronger scene, followed by the full A–F analysis. Speed, slang and analysis language follow your settings on Write a scene.</p>
+<p class="row">Paste up to five versions of a scene (same situation or different ones). Claude collects the best punches, comebacks, reactions and slang lines from all of them and sets them into one scene, adding short linking lines only where needed. Each line shows which scene it came from, followed by the full A–F analysis. Speed, slang and analysis language follow your settings on Write a scene.</p>
 <label for="csit"><b>Situation</b> (optional)</label>
 <input id="csit" class="cin" placeholder="e.g. Madhu and Mahesh hide in the bathroom and find the Master there">
 <div class="cgrid">
@@ -1132,17 +1132,20 @@ const idea=$("#idea").value.trim(),n=+$("#len").value||24,cast=castText();
 return {idea,n,cast};
 }
 function comboBlock(r){return `
-SCENE COMBO MODE — the user wrote ${r.combo.length} versions of this scene. Build ONE new scene from the best of them.
+SCENE COMBO MODE — the user wrote ${r.combo.length} versions of this scene. Collect the BEST LINES from all of them and set them into ONE scene.
 ${r.combo.map((t,i)=>`----- REFERENCE SCENE ${i+1} -----\n${t}`).join("\n")}
 ----- END OF REFERENCE SCENES -----
+These reference scenes are the user's OWN writing. The "never copy original lines" rule is only for the library scripts; here the user WANTS their own best lines used as they are.
 How to do it:
-1. Study each reference scene on its own. Find its strongest elements: punchlines, counter-punches, reactions, slang, twists, set-ups and the comedy technique behind each.
-2. Select only the best. Leave out weak, repeated or flat lines; do not try to fit everything in.
-3. Rebuild the chosen elements into ONE new scene with its own natural flow: new set-ups so each punch lands harder, sharper wording, stronger reactions and at least one new twist none of the references had. It must read as one complete scene, never four scenes stitched together.
-4. You may keep a few of the very best lines close to their original wording when they are already excellent (they are the user's own lines), but improve their timing and set-up; everything else is rewritten fresh.
-5. Keep the characters' names, personalities, slang and speaking styles from the reference scenes. Follow the library rules and quality bar below as usual.
-6. Make the final punchline bigger than any ending in the reference scenes.
-Add to the JSON a key "combo": {"picked":[{"from":1,"element":"the line or idea you took","why":"why it is strong","lines":[0]}],"left":"one sentence on what you left out and why","improved":"one sentence on what is new or stronger in the combined scene"} — "from" is the reference scene number, "lines" are the dialogue numbers in your new scene where it is used.
+1. Go through every reference scene line by line. Pick out its best lines: punchlines, counter-punches, comebacks, reactions, slang lines, twist lines and the set-up lines a punch needs to work.
+2. Keep only the best. Drop weak, flat or repeated lines. When two scenes have the same joke, keep the funnier version only.
+3. TAKE THE CHOSEN LINES AS THEY ARE: same words, same slang, same speaker. Only change a word or two where it is needed to fit the new order (a name, a "then", a reference to something said earlier).
+4. Arrange all the chosen lines into ONE scene with a natural order: set-up → building punches → twist → biggest punch at the end. Put the strongest punch last.
+5. Where two chosen lines do not connect, add a SHORT new linking line (set-up or reaction) in the same characters' voice and slang. Keep new lines few; most of the scene must be the user's own chosen lines.
+6. It must read as one smooth scene with one story, never as separate scenes pasted together.
+7. The length setting is a guide: use as many lines as the best material needs.
+In the "scene" array, give every dialogue an extra key "f": the reference scene number the line was taken from (1–${r.combo.length}), or 0 for a new linking line you wrote.
+Add to the JSON a key "combo": {"picked":[{"from":1,"element":"the line you took","why":"why it is strong","lines":[0]}],"left":"one sentence on what you left out and why","improved":"one sentence on how the new order makes the punches land harder"} — "from" is the reference scene number, "lines" are the dialogue numbers in the new scene where it is used.
 `}
 function scenePrompt(r){
 return `You are a top Telugu comedy dialogue writer for a YouTube sketch channel.
@@ -1209,7 +1212,7 @@ CHARACTER NOTES FROM THE REFERENCE:
 ${CHARS}
 
 USER'S IDEA: ${r.idea}
-${r.combo?`THIS IS A SCENE COMBO built from the user's ${r.combo.length} reference scenes. In C (old vs new) and E (originality), also compare the new scene with these reference scenes: what was kept, what was improved, what is new.\n${r.combo.map((t,i)=>`--- Reference scene ${i+1} ---\n${t.slice(0,6000)}`).join("\n")}\n`:""}FORMULAS THE WRITER SAYS IT USED: ${(sc.formulas||[]).join(", ")}
+${r.combo?`THIS IS A SCENE COMBO built from the user's ${r.combo.length} reference scenes. The scene deliberately reuses the user's OWN best lines from these scenes (that is what the user asked for), so in E and F do not treat reused lines from these scenes as a problem; judge how well the best lines were chosen and ordered. In C (old vs new) and E (originality), also compare the new scene with these reference scenes: what was kept, what was improved, what is new.\n${r.combo.map((t,i)=>`--- Reference scene ${i+1} ---\n${t.slice(0,6000)}`).join("\n")}\n`:""}FORMULAS THE WRITER SAYS IT USED: ${(sc.formulas||[]).join(", ")}
 NEW TECHNIQUES THE WRITER INVENTED (not in the library): ${(sc.newTech||[]).map(t=>t.name+" — "+t.how).join("; ")||"none listed"}
 The writer aimed for about ${sc.mix||50}% library techniques and ${100-(sc.mix||50)}% new techniques. Measure the real split honestly; do not just copy the target.
 
@@ -1253,9 +1256,9 @@ const hw=isU?howBox(x,f,ln,sc):"";
 return `<div class="beat"><div class="bt"><b>${esc(x.id||"")}${f?" · "+esc(f[1]):""}</b><span class="ids">${f?esc(f[9])+" · ":""}→ ${esc(x.who||"")}${isU?" · used":""}</span></div><p class="row">${esc(x.why||"")}</p>${old}${smp}${nw}${hw}</div>`};
 const u=sl.filter(x=>(x.lines||[]).some(n=>+n>0)||usedIds.includes(x.id)),r=sl.filter(x=>!u.includes(x));
 return `<details class="box"><summary>Library scan · ${esc(String(sc.scan.checked||F.length))} of ${sc.scanTotal||F.length} formulas checked${sc.skip12?" (Batch 1–2 off)":""} · ${sl.length} shortlisted · ${u.length} used — tap to see old vs new lines</summary><div>${u.length?`<h3>Used in this scene: old line → new line</h3>${u.map(item).join("")}`:""}${r.length?`<h3>Shortlisted but not used</h3>${r.map(item).join("")}`:""}</div></details><div class="pdfbar"><button class="btn" type="button" data-scenepdf="1">Download this scene · Old → New PDF</button><p class="row pdfmsg" role="status"></p></div>`}
-function dlg(sc){return sc.scene.map((x,i)=>`<p><span>${i+1}</span><span style="text-align:left;color:inherit;font-size:inherit;padding:0"><b>${esc(x.s)}:</b> ${esc(x.l)}</span></p>`).join("")}
+function dlg(sc){const cb=!!sc.combo;return sc.scene.map((x,i)=>`<p><span>${i+1}</span><span style="text-align:left;color:inherit;font-size:inherit;padding:0"><b>${esc(x.s)}:</b> ${esc(x.l)}${cb&&x.f!==undefined?` <span class="ftag${+x.f?"":" fnew"}">${+x.f?"Scene "+(+x.f):"new link"}</span>`:""}</span></p>`).join("")}
 function comboBox(sc){const c=sc.combo;if(!c)return "";const p=c.picked||[];
-return `<details class="box" open><summary><b>Scene combo report</b> · ${p.length} best elements taken from your scenes</summary><div>${p.map(x=>`<div class="cpick"><div class="src">From scene ${esc(String(x.from||"?"))}${(x.lines||[]).filter(n=>+n>0).length?" → used in line "+x.lines.filter(n=>+n>0).join(", "):""}</div><div>${esc(x.element||"")}</div><div class="row">${esc(x.why||"")}</div></div>`).join("")}${c.left?`<p><b>Left out:</b> ${esc(c.left)}</p>`:""}${c.improved?`<p><b>What's new or stronger:</b> ${esc(c.improved)}</p>`:""}</div></details>`}
+return `<details class="box" open><summary><b>Scene combo report</b> · ${p.length} best elements taken from your scenes</summary><div>${p.map(x=>`<div class="cpick"><div class="src">From scene ${esc(String(x.from||"?"))}${(x.lines||[]).filter(n=>+n>0).length?" → used in line "+x.lines.filter(n=>+n>0).join(", "):""}</div><div>${esc(x.element||"")}</div><div class="row">${esc(x.why||"")}</div></div>`).join("")}${c.left?`<p><b>Left out:</b> ${esc(c.left)}</p>`:""}${c.improved?`<p><b>Why this order works:</b> ${esc(c.improved)}</p>`:""}</div></details>`}
 function renderScene(item){
 setTimeout(()=>{try{const sl=(item.s&&item.s.scan&&item.s.scan.shortlist)||[];if(!item._telTried&&sample&&sl.some(x=>x.how&&String(x.how).trim()&&!isTelHow(x.how))){item._telTried=1;const b=document.querySelector("[data-howall]");if(b)b.click()}}catch(e){}},50);
 window._rs=item;const {s:sc,a}=item;
