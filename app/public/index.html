@@ -225,7 +225,7 @@ setTimeout(function(){var i=document.getElementById("lockP");if(i)i.focus()},100
 </div>
 <div id="cmpOut" class="cmpout"></div>
 <div id="cmpBar" class="cmpbar min" hidden><div class="selhead"><button class="btn sm" type="button" id="selToggle" aria-expanded="false">Open ▲</button><b id="selCount"></b></div><div id="cmpBody"><span class="selhint">Order = gold numbers. Tap a line again to unselect.</span>
-<div class="acts"><button class="btn sm" type="button" id="selCopy">Copy selected lines</button><button class="btn ghost sm" type="button" id="selCombo">Add to Scene combo</button><button class="btn ghost sm" type="button" id="selClear">Clear</button></div>
+<div class="acts"><button class="btn sm" type="button" id="selCopy">Copy selected lines</button><button class="btn ghost sm" type="button" id="selCombo">Add to Scene combo</button><button class="btn ghost sm" type="button" id="selLinesPdf">Selected lines PDF</button><button class="btn ghost sm" type="button" id="selClear">Clear</button></div>
 <label class="selhint"><input type="checkbox" id="selTag"> Show which scene each line came from, like [B7] (for Copy)</label>
 <div class="tgen"><b>Old-to-New Analysis PDF</b><span class="selhint">Formula, OLD line, library sample, NEW line and how — for each selected line.</span>
 <button class="btn sm" type="button" id="selPdf">Generate Old-to-New Analysis PDF</button>
@@ -1515,6 +1515,8 @@ const beats=((h.a&&h.a.B)||[]).filter(b=>+b.newFrom<=n&&n<=+b.newTo).map(b=>({ti
 return {kind:"generated",title:h.s.title,cards:sl.map(x=>({...card(x.id),who:x.who||"",why:x.why||"",lines:(x.lines||[]).filter(v=>+v>0),how:x.how||""})),beats}}
 if(id.startsWith("r:")){const R=findRef(id.slice(2));return {kind:"reference",title:R?R.id+" — "+R.t:""}}
 return {kind:"pasted"}}
+$("#selLinesPdf").addEventListener("click",async()=>{if(!SELK.length)return;const sel=SELK.map(k=>{const d=SELD[k];return {tag:(d.k||"?").toUpperCase()+(d.i+1),s:d.s,l:d.l,t:d.t||""}});
+$("#selMsg").textContent="Making the PDF…";await window.CFL.scenePdf([{kind:"sellines",sel,at:Date.now()}],"My selected lines","Selected_lines_"+new Date().toISOString().slice(0,16).replace(/[:T]/g,"-")+".pdf",$("#selMsg"))});
 $("#selPdf").addEventListener("click",async()=>{if(!SELK.length)return;
 const sel=SELK.map(k=>{const d=SELD[k];const [id]=k.split("|");return {tag:(d.k||"?").toUpperCase()+(d.i+1),s:d.s,l:d.l,t:d.t,data:cardData(id,d.i)}});
 EXP={cards:true,sel,at:Date.now()};
@@ -1671,6 +1673,9 @@ ${f[12]?`<div class="sm"><b>Library sample (${E(f[6]||"")}):</b> ${E(f[12])}</di
 const rest=sl.filter(x=>!used.includes(x));if(rest.length)B.push(`<p><b>Shortlisted, not used:</b> ${rest.map(x=>E(x.id)+" "+E((fm[x.id]||[])[1]||"")).join(" · ")}</p>`);
 const L=sc.scene||[];for(let i=0;i<L.length;i+=14)B.push(`${i?"":"<p><b>పూర్తి సీన్ (full scene)</b></p>"}<div class="dl">${L.slice(i,i+14).map((d,j)=>`<p><span>${i+j+1}</span><b>${E(d.s)}:</b> ${E(d.l)}</p>`).join("")}</div>`);
 return B}
+function sblocks(X){const B=[`<p class="mt">${new Date(X.at).toLocaleString()} · ${X.sel.length} line${X.sel.length>1?"s":""} · in the order you picked them</p>`];
+for(let i=0;i<X.sel.length;i+=12)B.push(`<div class="dl">${X.sel.slice(i,i+12).map((x,k)=>`<p style="margin:10px 0;font-size:18px;line-height:1.7"><span>${i+k+1}</span>${x.s&&x.s!=="—"?`<b>${E(x.s)}:</b> `:""}${E(x.l)} <i class="mt">[${E(x.tag)}${x.t?" · "+E(x.t):""}]</i></p>`).join("")}</div>`);
+return B}
 function cblocks(X){const B=[];
 B.push(`<p class="mt">${new Date(X.at).toLocaleString()} · ${X.sel.length} selected line${X.sel.length>1?"s":""}</p>`);
 X.sel.forEach(x=>{const D=x.data||{};const st=B.length;
@@ -1724,7 +1729,7 @@ async function makePdf(items,title,fname,msgEl){const dl=await getDl();if(!dl){m
 msgEl.textContent="Making the PDF…";try{await libs()}catch(e){msgEl.textContent="Couldn't load the PDF maker. Check your internet and try again.";return}
 const host=document.createElement("div");host.style.cssText="position:fixed;left:-12000px;top:0;z-index:-1";host.innerHTML=`<style>${CSS}</style>`;document.body.appendChild(host);
 try{const {jsPDF}=window.jspdf;const pdf=new jsPDF({unit:"mm",format:"a4"});const W=190,X=10,TOP=10,BOT=287;let y=TOP;
-const all=[`<h1>${E(title)}</h1><p class="mt">Comedy Formula Library · ${new Date().toLocaleDateString()}</p>`];items.forEach((it,i)=>all.push(...(it.kind==="lineexp"?lblocks(it):it.s&&it.s.transform?tblocks(it):blocks(it,items.length>1?i+1:0))));
+const all=[`<h1>${E(title)}</h1><p class="mt">Comedy Formula Library · ${new Date().toLocaleDateString()}</p>`];items.forEach((it,i)=>all.push(...(it.kind==="sellines"?sblocks(it):it.kind==="lineexp"?lblocks(it):it.s&&it.s.transform?tblocks(it):blocks(it,items.length>1?i+1:0))));
 for(let i=0;i<all.length;i++){msgEl.textContent=`Making the PDF… ${Math.round(100*i/all.length)}%`;const el=document.createElement("div");el.className="pr";el.innerHTML=all[i];host.appendChild(el);
 const c=await snap(el);host.removeChild(el);
 const h=c.height*W/c.width;
