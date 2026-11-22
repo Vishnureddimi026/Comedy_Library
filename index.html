@@ -1478,11 +1478,9 @@ out.rec=t;out.scene=h.s.scene.map((x,i)=>`${i+1}. ${x.s}: ${x.l}`).join("\n");re
 if(id.startsWith("r:")){const R=findRef(id.slice(2));out.kind="reference";out.title=R?R.id+" — "+R.t:"";oldUses("F1");const ids=Object.keys(OLDU||{}).filter(fid=>(OLDU[fid]||[]).some(u=>u.sc===(R&&R.id)));out.rec=`  This is an ORIGINAL line from an old reference scene. Library formulas taken from this scene: ${ids.slice(0,12).join(", ")||"(none recorded)"}\n${ids.slice(0,6).map(fmt).join("\n")}`;out.scene=R?R.l.map((x,i)=>`${i+1}. ${x[0]}: ${x[1]}`).join("\n"):"";return out}
 return out}
 function explainPrompt(sel){const scenes={};sel.forEach(x=>{if(!scenes[x.k])scenes[x.k]=x.ctx});
+const needLib=sel.some(x=>!x.ctx.rec||/none recorded|no records/.test(x.ctx.rec));
 return `You are a comedy script analyst for a Telugu sketch channel. The user selected ${sel.length} dialogue line(s) and wants to understand EXACTLY how each one was created.
-
-FORMULA LIBRARY (technique recipes):
-${LIBCF()}
-
+${needLib?`\nFORMULA LIBRARY (technique recipes):\n${LIBCF()}\n`:""}
 THE SCENES THE LINES COME FROM:
 ${Object.entries(scenes).map(([k,c])=>`=== Scene ${k}: ${c.title||"pasted scene"} (${c.kind==="generated"?"NEW scene written by the AI from the formula library":c.kind==="reference"?"OLD reference scene from the library":"pasted by the user, no records"}) ===\n${c.idea?"Idea: "+c.idea+"\n":""}${c.scene||""}`).join("\n\n")}
 
@@ -1500,8 +1498,11 @@ Return ONLY valid JSON, no fences:
 "transform":{"kept":"the technique taken from the old line","changed":"what was changed: situation, words, character, target","adapted":"how it was adapted to this scene and character"},
 "development":{"idea":"how the idea was developed from set-up to this line","punch":"how the punchline was constructed, word by word where useful","why":"why it works and gets a laugh in this scene"},
 "originality":{"technique":"exactly what was taken as technique from the library/old scene","new":"exactly what is newly written: wording, image, situation, reaction"}}]}
-Give one entry in "lines" for each selected line, in the same order.`}
+Give one entry in "lines" for each selected line, in the same order.
+JSON RULES: inside text values never use the double-quote character — quote words with single quotes ' ' instead; no line breaks inside values; keep each field to 1–3 sentences.`}
 let EXP=null;
+function parseLoose(t){t=String(t||"").replace(/```(json)?/g,"");try{return parse(t)}catch(e){}
+const a=t.indexOf("{"),b=t.lastIndexOf("}");if(a<0||b<a)throw new Error("no JSON");let x=t.slice(a,b+1).replace(/[“”]/g,"'").replace(/,\s*([}\]])/g,"$1").replace(/\r?\n/g," ");return JSON.parse(x)}
 async function makeExpPdf(msgEl){if(!EXP)return;await window.CFL.scenePdf([{kind:"lineexp",x:EXP}],"Old-to-New Analysis · How each line was created","Old_to_New_Line_Analysis_"+new Date().toISOString().slice(0,16).replace(/[:T]/g,"-")+".pdf",msgEl)}
 document.addEventListener("click",e=>{if(e.target.closest("[data-exppdf]")){const m=document.querySelector("#selProg .expmsg")||$("#selMsg");makeExpPdf(m)}});
 $("#selPdf").addEventListener("click",async()=>{if(!SELK.length)return;
@@ -1510,12 +1511,21 @@ if(!sample){prog("Writing isn't available in this view.");return}
 const S={};[1,2,3,4].forEach(n=>{const g=cmpGet(n);if(g)S[g.id]=g});
 const sel=SELK.map(k=>{const d=SELD[k];const [id]=k.split("|");return {tag:(d.k||"?").toUpperCase()+(d.i+1),k:(d.k||"?").toUpperCase(),n:d.i+1,s:d.s,l:d.l,t:d.t,sub:d.sub,ctx:lineCtx({id,i:d.i})}});
 busy=true;$("#go").disabled=true;const t0=Date.now();let chars=0;const tk=setInterval(()=>{prog(`<b>Analysing ${sel.length} selected line${sel.length>1?"s":""}…</b> ${Math.round((Date.now()-t0)/1000)}s${chars?` · writing ${chars} characters`:" (Claude thinks first, then writes)"}<div class="acts"><button class="btn ghost sm" type="button" data-selstop="1">Stop</button></div>`)},1000);
-try{const res=await ask(explainPrompt(sel),{cache:false,onText:({text})=>{chars=text.length}});clearInterval(tk);
-const j=parse(res.text);if(!j.lines||!j.lines.length)throw {message:"The analysis came back empty. Try again."};
-EXP={sel:sel.map(({ctx,...r})=>({...r,kind:ctx.kind,title:ctx.title||r.t})),j,at:Date.now()};
+let part=0,parts=0;
+const runPart=async(chunk,tries)=>{chars=0;const res=await ask(explainPrompt(chunk),{cache:false,onText:({text})=>{chars=text.length}});
+if(res.truncated){if(chunk.length>1){const h=Math.ceil(chunk.length/2);parts++;return (await runPart(chunk.slice(0,h),1)).concat(await runPart(chunk.slice(h),1))}throw {message:"The explanation for line "+chunk[0].tag+" was too long and got cut off."}}
+let j;try{j=parseLoose(res.text)}catch(e){if(tries>0)return runPart(chunk,tries-1);throw {message:"Line "+chunk.map(x=>x.tag).join(", ")+": the reply wasn't in the right format twice in a row ("+(e&&e.message||"parse error")+")."}}
+if(!j.lines||!j.lines.length){if(tries>0)return runPart(chunk,tries-1);throw {message:"The reply for "+chunk.map(x=>x.tag).join(", ")+" was empty."}}
+if(j.overview&&!OV)OV=j.overview;part++;return j.lines.slice(0,chunk.length).concat(Array(Math.max(0,chunk.length-j.lines.length)).fill({}))};
+let OV="";clearInterval(tk);const t1=Date.now();
+const tk2=setInterval(()=>{prog(`<b>Analysing ${sel.length} selected line${sel.length>1?"s":""}</b> · part ${Math.min(part+1,parts)} of ${parts} · ${Math.round((Date.now()-t1)/1000)}s${chars?` · writing ${chars} characters`:" (Claude thinks first, then writes)"}<div class="acts"><button class="btn ghost sm" type="button" data-selstop="1">Stop</button></div>`)},1000);
+try{const CH=3,chunks=[];for(let k=0;k<sel.length;k+=CH)chunks.push(sel.slice(k,k+CH));parts=chunks.length;let lines=[];
+for(const c of chunks)lines=lines.concat(await runPart(c,1));clearInterval(tk2);
+lines=lines.map((L,k)=>({...L,tag:L.tag||sel[k].tag}));
+EXP={sel:sel.map(({ctx,...r})=>({...r,kind:ctx.kind,title:ctx.title||r.t})),j:{overview:OV,lines},at:Date.now()};
 prog(`<b>Analysis ready.</b><div class="acts"><button class="btn sm" type="button" data-exppdf="1">Download PDF again</button></div><span class="expmsg"></span>`);
 await makeExpPdf(document.querySelector("#selProg .expmsg"))}
-catch(e){clearInterval(tk);prog(`<b>It didn't finish.</b> ${esc(e&&e.code?errText(e):(e&&e.message==="no JSON")||e instanceof SyntaxError?"The answer came back in a broken format.":(e&&e.message)||errText(e))} Tap Generate again.`)}
+catch(e){clearInterval(tk2);prog(`<b>It didn't finish.</b> ${esc(e&&e.code?errText(e):(e&&e.message)||errText(e))}${part?` (${part} of ${parts} parts were done.)`:""} Tap Generate again${sel.length>3?", or select fewer lines":""}.`)}
 busy=false;$("#go").disabled=false});
 $("#selNew").addEventListener("click",()=>{if(!SELK.length)return;
 if(busy){prog(`<b>Another scene is still being written.</b><br>${esc($("#status").textContent||"")}<br>Wait for it to finish, or tap Stop, then tap Generate again.${progBtns}`);return}
