@@ -116,7 +116,7 @@ body.locked #lock{display:flex}
 .lockNote{margin-top:10px;font-size:13px;color:#666}
 #accessBadge{position:fixed;right:10px;bottom:10px;z-index:50;background:#2f5d50;color:#fff;font:13px system-ui,sans-serif;padding:6px 12px;border-radius:20px;box-shadow:0 2px 8px rgba(0,0,0,.2)}
 .evo{margin:28px 0;padding:18px;border:2px solid #c58a1a;border-radius:14px;background:#fff8e8;color:#222}.evo h2{margin-top:0}.pdfbar{margin:10px 0 4px}.keybox{margin:10px 0;padding:12px;border:1.5px dashed #c58a1a;border-radius:10px}.keybox p{margin:4px 0}.keyrow{display:flex;flex-wrap:wrap;gap:8px}.keyrow input{flex:1 1 220px;min-width:0;font-size:16px;padding:10px;border-radius:8px;border:1.5px solid #bbb}
-.sc4{margin-bottom:22px}.sc4 h2{margin:0 0 6px}.cgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:12px;margin:10px 0}.cta{width:100%;min-height:170px;font:inherit;font-size:16px;padding:10px;border-radius:10px;border:1.5px solid var(--line);background:var(--card);color:var(--ink);resize:vertical}.cin{width:100%;font:inherit;font-size:16px;padding:10px;border-radius:10px;border:1.5px solid var(--line);background:var(--card);color:var(--ink);margin:4px 0 10px}.cpick{margin:6px 0;padding:8px 10px;border-left:4px solid #c58a1a;background:rgba(197,138,26,.08);border-radius:6px}.cpick .src{font-size:13px;opacity:.75}
+.sc4{margin-bottom:22px}.chead{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:6px;margin-bottom:4px}.chead span{display:flex;gap:6px;flex:none}.chead .btn{padding:6px 12px;min-height:36px;min-width:0;flex:none}.cpk{font:inherit;font-size:14px;max-width:150px;padding:6px;border-radius:8px;border:1.5px solid var(--line);background:var(--card);color:var(--ink)}.endbar{margin-top:18px;padding-top:14px;border-top:1.5px dashed var(--line)}.hcombo{font-size:13px;padding:6px 10px;border-radius:8px;border:1.5px solid var(--line);background:none;color:var(--ink);cursor:pointer;white-space:nowrap}.sc4 h2{margin:0 0 6px}.cgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,360px),1fr));gap:12px;margin:10px 0}.cta{width:100%;min-height:170px;font:inherit;font-size:16px;padding:10px;border-radius:10px;border:1.5px solid var(--line);background:var(--card);color:var(--ink);resize:vertical}.cin{width:100%;font:inherit;font-size:16px;padding:10px;border-radius:10px;border:1.5px solid var(--line);background:var(--card);color:var(--ink);margin:4px 0 10px}.cpick{margin:6px 0;padding:8px 10px;border-left:4px solid #c58a1a;background:rgba(197,138,26,.08);border-radius:6px}.cpick .src{font-size:13px;opacity:.75}
 .evorow{display:flex;flex-wrap:wrap;gap:10px}
 #lockErr{color:#b3261e;font-size:13px;min-height:18px;margin-top:8px}
 </style>
@@ -214,10 +214,10 @@ body.locked #lock{display:flex}
 <label for="csit"><b>Situation</b> (optional)</label>
 <input id="csit" class="cin" placeholder="e.g. Madhu and Mahesh hide in the bathroom and find the Master there">
 <div class="cgrid">
-<div><label for="cs1"><b>Scene 1</b></label><textarea id="cs1" class="cta" placeholder="Paste scene 1 here"></textarea></div>
-<div><label for="cs2"><b>Scene 2</b></label><textarea id="cs2" class="cta" placeholder="Paste scene 2 here"></textarea></div>
-<div><label for="cs3"><b>Scene 3</b></label><textarea id="cs3" class="cta" placeholder="Paste scene 3 here"></textarea></div>
-<div><label for="cs4"><b>Scene 4</b></label><textarea id="cs4" class="cta" placeholder="Paste scene 4 here"></textarea></div>
+<div><div class="chead"><label for="cs1"><b>Scene 1</b></label><span><select class="cpk" data-box="1" aria-label="Fill scene 1 from a saved scene"><option value="">Saved scene…</option></select><button class="btn ghost sm" type="button" data-paste="1">Paste</button></span></div><textarea id="cs1" class="cta" placeholder="Paste scene 1 here"></textarea></div>
+<div><div class="chead"><label for="cs2"><b>Scene 2</b></label><span><select class="cpk" data-box="2" aria-label="Fill scene 2 from a saved scene"><option value="">Saved scene…</option></select><button class="btn ghost sm" type="button" data-paste="2">Paste</button></span></div><textarea id="cs2" class="cta" placeholder="Paste scene 2 here"></textarea></div>
+<div><div class="chead"><label for="cs3"><b>Scene 3</b></label><span><select class="cpk" data-box="3" aria-label="Fill scene 3 from a saved scene"><option value="">Saved scene…</option></select><button class="btn ghost sm" type="button" data-paste="3">Paste</button></span></div><textarea id="cs3" class="cta" placeholder="Paste scene 3 here"></textarea></div>
+<div><div class="chead"><label for="cs4"><b>Scene 4</b></label><span><select class="cpk" data-box="4" aria-label="Fill scene 4 from a saved scene"><option value="">Saved scene…</option></select><button class="btn ghost sm" type="button" data-paste="4">Paste</button></span></div><textarea id="cs4" class="cta" placeholder="Paste scene 4 here"></textarea></div>
 </div>
 <label for="clen"><b>Length of the combined scene</b></label>
 <select id="clen" class="cin"><option value="14">Short · about 14 lines</option><option value="24" selected>Medium · about 24 lines</option><option value="36">Long · about 36 lines</option><option value="50">Extra long · about 50 lines</option></select>
@@ -1263,7 +1263,7 @@ ${comboBox(sc)}${scanBox(sc)}
 <div class="box b1"><div class="lbl">BOX 1 · Scene description</div><p>${esc(sc.box1)}</p></div>
 <div class="box"><div class="lbl">BOX 2 · New scene — ${esc(sc.title)} · ${sc.scene.length} dialogues</div><div class="dlg">${dlg(sc)}</div>
 ${(sc.trailer||[]).length?`<details class="box" open><summary><b>Trailer highlights</b> · ${sc.trailer.length} lines${(sc.twists||[]).length?` · ${sc.twists.length} twists`:""}</summary><div>${sc.trailer.map(t=>{const d=sc.scene[(+t.n||0)-1];return d?`<p><b>L${+t.n} ${esc(d.s)}:</b> ${esc(d.l)}<br><span class="row">${esc(t.why||"")}</span></p>`:""}).join("")}${(sc.twists||[]).length?`<p class="row"><b>Twists:</b> ${sc.twists.map(esc).join(" · ")}</p>`:""}</div></details>`:""}
-<div class="acts"><button class="btn ghost" data-cp="scene">Copy scene</button><button class="btn ghost" data-cp="all">Copy scene + analysis</button></div></div>
+<div class="acts"><button class="btn ghost" data-cp="scene">Copy scene</button><button class="btn ghost" data-cp="all">Copy scene + analysis</button><button class="btn ghost" data-addc="1">Add to scene combo</button></div></div>
 <h2>Complete analysis (A–F)</h2>`;
 if(!a){h+=`<div class="box" id="anaBox">${item.aerr?`<span class="err">${esc(item.aerr)}</span> <button class="btn" id="reAna">Try the analysis again</button>`:"Writing the analysis…"}</div>`}
 else{
@@ -1289,7 +1289,7 @@ const E=a.E||[];h+=sec("E","Originality analysis",(Array.isArray(E)?E:Object.val
 const P=a.F||{};const bar=(l,v)=>`<div class="fr"><span>${l}</span><b>${esc(v)}%</b></div><div class="bar"><i style="width:${Math.max(0,Math.min(100,+v||0))}%"></i></div>`;
 h+=sec("F","Formula usage and similarity",bar("Previously collected techniques used",P.collected)+bar("Newly developed techniques",P.newTech)+bar("Similarity in dialogue structure",P.structure)+bar("Original dialogue content",P.original)+((sc.newTech||[]).length?`<p class="para"><b>Newly developed techniques in this scene:</b></p><ul>${sc.newTech.map(t=>`<li><b>${esc(t.name)}</b> — ${esc(t.how)}</li>`).join("")}</ul>`:"")+(sc.mix?`<p class="row">Target mix: ${sc.mix}% library · ${100-sc.mix}% new.</p>`:"")+`<p class="para">${esc(P.notes)}</p><p class="row">Creative estimates for learning only. Not a legal copyright assessment.</p>`);
 }
-h+=`</article>`;$("#out").innerHTML=h;
+h+=`<div class="acts endbar"><button class="btn" data-cp="dlg">Copy scene</button><button class="btn ghost" data-addc="1">Add to scene combo</button><span class="row" data-addmsg></span></div></article>`;$("#out").innerHTML=h;
 const ra=$("#reAna");if(ra)ra.addEventListener("click",()=>runAnalysis(item));
 const ua=$("#upAna");if(ua)ua.addEventListener("click",()=>{if(!sample){ua.textContent="Not available in this view";return}item.a=null;runAnalysis(item)});
 }
@@ -1304,7 +1304,7 @@ t+=`\n\nA. New scene – as above.\n\nB. Formula sources\n`+(a.B||[]).map(b=>{if
 return t}
 let cur=null,sample=null,busy=false;
 $("#out").addEventListener("click",e=>{const f=e.target.closest("[data-full]");if(!f)return;const d=$("#full"+f.dataset.full);d.hidden=!d.hidden;f.textContent=f.textContent.replace(d.hidden?"Hide":"Show",d.hidden?"Show":"Hide")});
-$("#out").addEventListener("click",async e=>{const b=e.target.closest("[data-cp]");if(!b||!cur)return;try{await navigator.clipboard.writeText(asText(cur,b.dataset.cp==="all"));b.textContent="Copied"}catch(err){b.textContent="Copy blocked here"}});
+$("#out").addEventListener("click",async e=>{const b=e.target.closest("[data-cp]");if(!b||!cur)return;const txt=b.dataset.cp==="dlg"?dlgText(cur):asText(cur,b.dataset.cp==="all");try{await navigator.clipboard.writeText(txt);b.textContent="Copied"}catch(err){b.textContent="Copy blocked here"}});
 async function runAnalysis(item){
 item.aerr=null;renderScene(item);
 startTimer(()=>$("#anaBox"),"Thinking about the analysis");
@@ -1328,7 +1328,7 @@ if(busy){$("#cstatus").textContent="A scene is already being written. Wait for i
 const sit=$("#csit").value.trim();
 const r={idea:(sit?sit+" — ":"")+"Scene combo: the best of "+filled.length+" reference scenes",n:+$("#clen").value||24,cast:"Use the characters who appear in the reference scenes, with the same names, personalities, slang and speaking styles.",combo:filled};
 $("#cstatus").textContent="Writing your scene combo — follow it on the Write a scene tab.";location.hash="#write";setTimeout(()=>genScene(r),60)});
-$("#comboClear").addEventListener("click",()=>{[1,2,3,4].forEach(i=>$("#cs"+i).value="");$("#csit").value="";$("#cstatus").textContent="Cleared."});
+$("#comboClear").addEventListener("click",()=>{[1,2,3,4].forEach(i=>$("#cs"+i).value="");$("#csit").value="";saveCombo();$("#cstatus").textContent="Cleared."});
 async function genScene(r){
 if(busy)return;
 if(!sample){$("#status").textContent="Scene writing isn't available in this view. Use Copy request for chat instead.";return}
@@ -1347,8 +1347,28 @@ stopTimer();$("#stop").hidden=true;busy=false;$("#go").disabled=false;
 }
 $("#copyReq").addEventListener("click",async()=>{const r=req();const t=`Scene Creation – My Scene Idea Input\n\nBOX 1: My Scene Idea\n${r.idea||"(write your idea)"}\n\nLength: ${r.n} dialogues\nCharacters:
 ${r.cast}\n${pinned.length?"Must use formulas: "+pinned.join(", ")+"\n":""}\nUse the saved formula library. Output: BOX 1 one-line description, BOX 2 full scene, then complete A–F analysis.`;try{await navigator.clipboard.writeText(t);$("#status").textContent="Request copied. Paste it into the chat."}catch(e){$("#status").textContent="Copy was blocked here."}});
-function drawHist(){$("#histWrap").hidden=!hist.length;$("#hist").innerHTML=hist.map((h,i)=>{const who=[...new Set(h.s.scene.map(x=>x.s))].slice(0,5).join(", ");return `<div class="hrow"><button data-h="${i}"><span class="ht">${esc(h.s.title)}</span><span class="hm">${new Date(h.t).toLocaleDateString("en-IN",{day:"numeric",month:"short",year:"numeric"})} · ${esc(who)} · ${h.s.scene.length} lines${h.a?"":" · analysis missing"}</span><span class="row">${esc(h.idea.slice(0,110))}</span></button><button class="hdel" data-del="${i}" aria-label="Delete this saved scene">Delete</button></div>`}).join("")}
-$("#hist").addEventListener("click",e=>{const x=e.target.closest("[data-del]");if(x){e.stopPropagation();if(!x.classList.contains("arm")){document.querySelectorAll(".hdel.arm").forEach(y=>{y.classList.remove("arm");y.textContent="Delete"});x.classList.add("arm");x.textContent="Tap again to delete";setTimeout(()=>{if(x.isConnected&&x.classList.contains("arm")){x.classList.remove("arm");x.textContent="Delete"}},4000);return}
+function dlgText(item){const sc=item.s;return `${sc.title}\n`+sc.scene.map(x=>`${x.s}: ${x.l}`).join("\n")}
+const CK="cfl-combo-boxes";
+function saveCombo(){try{localStorage.setItem(CK,JSON.stringify([1,2,3,4].map(i=>$("#cs"+i).value).concat([$("#csit").value])))}catch(e){}}
+try{const v=JSON.parse(localStorage.getItem(CK)||"null");if(v){[1,2,3,4].forEach(i=>{if(v[i-1])$("#cs"+i).value=v[i-1]});if(v[4])$("#csit").value=v[4]}}catch(e){}
+["#cs1","#cs2","#cs3","#cs4","#csit"].forEach(k=>$(k).addEventListener("input",saveCombo));
+function addToCombo(item){const t=dlgText(item);const boxes=[1,2,3,4].map(i=>$("#cs"+i));
+const dup=boxes.findIndex(b=>b.value.trim()===t.trim());
+if(dup>=0)return {short:"Already in Scene "+(dup+1),html:`This scene is already in Scene combo box ${dup+1}. <a href="#combo">Open Scene combo</a>`};
+const k=boxes.findIndex(b=>!b.value.trim());
+if(k<0)return {short:"All 4 boxes full",html:`<span class="err">All four Scene combo boxes are full.</span> Clear one first, or pick this scene from the "Saved scene…" list on a box to replace it. <a href="#combo">Open Scene combo</a>`};
+boxes[k].value=t;saveCombo();
+const left=boxes.filter(b=>!b.value.trim()).length;
+return {short:"Added to Scene "+(k+1),html:`Added “${esc(item.s.title)}” to Scene combo box ${k+1}. ${left?left+" box"+(left>1?"es":"")+" still empty.":"All four boxes are filled."} <a href="#combo">Open Scene combo</a>`}}
+function fillPickers(){document.querySelectorAll(".cpk").forEach(sel=>{sel.innerHTML='<option value="">Saved scene…</option>'+hist.map((h,i)=>`<option value="${i}">${esc(h.s.title.slice(0,40))} · ${h.s.scene.length} lines</option>`).join("")})}
+document.addEventListener("change",e=>{const sel=e.target.closest(".cpk");if(!sel||sel.value==="")return;const h=hist[+sel.value];if(h){$("#cs"+sel.dataset.box).value=dlgText(h);saveCombo();$("#cstatus").textContent=`Scene ${sel.dataset.box} filled from “${h.s.title}”. Your saved scene is unchanged.`}sel.value=""});
+document.addEventListener("click",async e=>{const pb=e.target.closest("[data-paste]");if(!pb)return;const ta=$("#cs"+pb.dataset.paste);
+try{const t=await navigator.clipboard.readText();if(!t||!t.trim()){$("#cstatus").textContent="The clipboard is empty. Tap Copy scene on a saved scene first.";return}ta.value=t;saveCombo();$("#cstatus").textContent=`Pasted into Scene ${pb.dataset.paste}.`}
+catch(err){ta.focus();$("#cstatus").textContent="Pasting was blocked here. Long-press inside the box and choose Paste, or use the Saved scene… list."}});
+$("#out").addEventListener("click",e=>{const b=e.target.closest("[data-addc]");if(!b||!cur)return;const m=addToCombo(cur);b.textContent=m.short;const mm=document.querySelector("[data-addmsg]");if(mm)mm.innerHTML=m.html;$("#status").innerHTML=m.html;setTimeout(()=>{if(b.isConnected)b.textContent="Add to scene combo"},3500)});
+function drawHist(){try{fillPickers()}catch(e){}$("#histWrap").hidden=!hist.length;$("#hist").innerHTML=hist.map((h,i)=>{const who=[...new Set(h.s.scene.map(x=>x.s))].slice(0,5).join(", ");return `<div class="hrow"><button data-h="${i}"><span class="ht">${esc(h.s.title)}</span><span class="hm">${new Date(h.t).toLocaleDateString("en-IN",{day:"numeric",month:"short",year:"numeric"})} · ${esc(who)} · ${h.s.scene.length} lines${h.a?"":" · analysis missing"}</span><span class="row">${esc(h.idea.slice(0,110))}</span></button><button class="hcombo" data-hc="${i}" aria-label="Add this saved scene to Scene combo">+ Combo</button><button class="hdel" data-del="${i}" aria-label="Delete this saved scene">Delete</button></div>`}).join("")}
+$("#hist").addEventListener("click",e=>{const hc=e.target.closest("[data-hc]");if(hc){e.stopPropagation();const m=addToCombo(hist[+hc.dataset.hc]);hc.textContent=m.short;$("#status").innerHTML=m.html;setTimeout(()=>{if(hc.isConnected)hc.textContent="+ Combo"},3500);return}
+const x=e.target.closest("[data-del]");if(x){e.stopPropagation();if(!x.classList.contains("arm")){document.querySelectorAll(".hdel.arm").forEach(y=>{y.classList.remove("arm");y.textContent="Delete"});x.classList.add("arm");x.textContent="Tap again to delete";setTimeout(()=>{if(x.isConnected&&x.classList.contains("arm")){x.classList.remove("arm");x.textContent="Delete"}},4000);return}
 const i=+x.dataset.del,gone=hist[i];hist.splice(i,1);saveHist();if(cur===gone){cur=null;$("#out").innerHTML=""}drawHist();$("#status").textContent="Saved scene deleted.";return}
 const b=e.target.closest("[data-h]");if(!b)return;cur=hist[+b.dataset.h];renderScene(cur);if(!cur.a&&!cur.aerr)cur.aerr="Analysis wasn't finished.";renderScene(cur);$("#out").scrollIntoView&&$("#out").scrollIntoView({behavior:"smooth"})});
 $("#delAll").addEventListener("click",e=>{const x=e.currentTarget;if(!x.classList.contains("arm")){x.classList.add("arm");x.textContent="Tap again to delete all";x.style.background="#b3122b";x.style.color="#fff";setTimeout(()=>{x.classList.remove("arm");x.textContent="Delete all";x.style.background="";x.style.color=""},4000);return}
