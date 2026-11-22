@@ -121,7 +121,14 @@ body.locked #lock{display:flex}
 #lockErr{color:#b3261e;font-size:13px;min-height:18px;margin-top:8px}
 </style>
 </head>
-<body>
+<body class="locked">
+<style>body.locked>*:not(#lock){display:none!important}#lock{position:fixed;inset:0;z-index:99999;display:none;align-items:center;justify-content:center;background:#14110d;padding:20px}body.locked #lock{display:flex}#lock form{width:100%;max-width:340px;background:#211c16;border:1.5px solid #4a3f30;border-radius:16px;padding:24px;color:#f3ead9;font-family:system-ui,sans-serif;text-align:center}#lock h1{font-size:22px;margin:0 0 6px}#lock p{margin:0 0 16px;color:#bfb29b;font-size:15px}#lock input{width:100%;box-sizing:border-box;font-size:24px;letter-spacing:8px;text-align:center;padding:12px;border-radius:10px;border:1.5px solid #4a3f30;background:#14110d;color:#f3ead9}#lock button{width:100%;margin-top:12px;font-size:17px;font-weight:700;padding:12px;border:0;border-radius:10px;background:#5fd3c6;color:#0b1f1d;cursor:pointer}#lock .e{color:#ff8a9a;min-height:20px;margin:10px 0 0;font-size:14px}</style>
+<div id="lock"><form id="lockF" autocomplete="off"><h1>Comedy Formula Library</h1><p>Enter the password to open.</p><input id="lockP" type="password" inputmode="numeric" maxlength="12" aria-label="Password" autofocus><button type="submit">Open</button><p class="e" id="lockE" role="alert"></p></form></div>
+<script>(function(){var H="1fd4f5a4e87e556dd705a2d31ee8f514325eafb97b6b6ed094d252bb71c0ef83";
+function hex(b){return Array.from(new Uint8Array(b)).map(function(x){return x.toString(16).padStart(2,"0")}).join("")}
+async function ok(v){try{if(window.crypto&&crypto.subtle){return hex(await crypto.subtle.digest("SHA-256",new TextEncoder().encode("cfl:"+v)))===H}}catch(e){}return v==="66"+"01"}
+document.getElementById("lockF").addEventListener("submit",async function(e){e.preventDefault();var i=document.getElementById("lockP");if(await ok(i.value.trim())){document.body.classList.remove("locked");document.getElementById("lock").remove();window.dispatchEvent(new Event("cfl-unlocked"))}else{document.getElementById("lockE").textContent="Wrong password. Try again.";i.value="";i.focus()}});
+setTimeout(function(){var i=document.getElementById("lockP");if(i)i.focus()},100)})();</script>
 
 <div id="accessBadge" hidden title="Times you opened the library today (resets at midnight)">Today: <b id="accessCount">0</b> opens</div>
 <header>
