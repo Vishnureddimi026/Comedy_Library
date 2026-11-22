@@ -225,10 +225,10 @@ setTimeout(function(){var i=document.getElementById("lockP");if(i)i.focus()},100
 </div>
 <div id="cmpOut" class="cmpout"></div>
 <div id="cmpBar" class="cmpbar min" hidden><div class="selhead"><button class="btn sm" type="button" id="selToggle" aria-expanded="false">Open ▲</button><b id="selCount"></b></div><div id="cmpBody"><span class="selhint">Order = gold numbers. Tap a line again to unselect.</span>
-<div class="acts"><button class="btn sm" type="button" id="selCopy">Copy selected lines</button><button class="btn ghost sm" type="button" id="selCombo">Add to Scene combo</button><button class="btn ghost sm" type="button" id="selLinesPdf">Selected lines PDF</button><button class="btn ghost sm" type="button" id="selClear">Clear</button></div>
+<div class="acts"><button class="btn sm" type="button" id="selCopy">Copy selected lines</button><button class="btn ghost sm" type="button" id="selCombo">Add to Scene combo</button><button class="btn ghost sm" type="button" id="selClear">Clear</button></div>
 <label class="selhint"><input type="checkbox" id="selTag"> Show which scene each line came from, like [B7] (for Copy)</label>
-<div class="tgen"><b>Old-to-New Analysis PDF</b><span class="selhint">Formula, OLD line, library sample, NEW line and how — for each selected line.</span>
-<button class="btn sm" type="button" id="selPdf">Generate Old-to-New Analysis PDF</button>
+<div class="tgen"><b>PDFs</b><span class="selhint"><b>Old-to-New Analysis PDF:</b> formula, OLD line, library sample, NEW line and how, for each line. <b>Selected lines PDF:</b> just your selected lines, in order.</span>
+<div class="acts" style="margin:0"><button class="btn sm" type="button" id="selPdf">Generate Old-to-New Analysis PDF</button><button class="btn sm" type="button" id="selLinesPdf">Selected lines PDF</button></div>
 <div id="selProg" class="selprog" role="status" hidden></div></div>
 <details class="tgen2"><summary>Or: write a brand-new scene from these lines</summary><div class="tgen">
 <label for="selSit" class="selhint"><b>Where does the new scene happen?</b> (optional — one short sentence, not dialogue)</label>
