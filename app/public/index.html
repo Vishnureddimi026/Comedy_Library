@@ -116,6 +116,7 @@ body.locked #lock{display:flex}
 .lockNote{margin-top:10px;font-size:13px;color:#666}
 #accessBadge{position:fixed;right:10px;bottom:10px;z-index:50;background:#2f5d50;color:#fff;font:13px system-ui,sans-serif;padding:6px 12px;border-radius:20px;box-shadow:0 2px 8px rgba(0,0,0,.2)}
 .evo{margin:28px 0;padding:18px;border:2px solid #c58a1a;border-radius:14px;background:#fff8e8;color:#222}.evo h2{margin-top:0}.pdfbar{margin:10px 0 4px}.keybox{margin:10px 0;padding:12px;border:1.5px dashed #c58a1a;border-radius:10px}.keybox p{margin:4px 0}.keyrow{display:flex;flex-wrap:wrap;gap:8px}.keyrow input{flex:1 1 220px;min-width:0;font-size:16px;padding:10px;border-radius:8px;border:1.5px solid #bbb}
+.sc4{margin-bottom:22px}.sc4 h2{margin:0 0 6px}.cgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:12px;margin:10px 0}.cta{width:100%;min-height:170px;font:inherit;font-size:16px;padding:10px;border-radius:10px;border:1.5px solid var(--line);background:var(--card);color:var(--ink);resize:vertical}.cin{width:100%;font:inherit;font-size:16px;padding:10px;border-radius:10px;border:1.5px solid var(--line);background:var(--card);color:var(--ink);margin:4px 0 10px}.cpick{margin:6px 0;padding:8px 10px;border-left:4px solid #c58a1a;background:rgba(197,138,26,.08);border-radius:6px}.cpick .src{font-size:13px;opacity:.75}
 .evorow{display:flex;flex-wrap:wrap;gap:10px}
 #lockErr{color:#b3261e;font-size:13px;min-height:18px;margin-top:8px}
 </style>
@@ -207,8 +208,24 @@ body.locked #lock{display:flex}
 </section>
 
 <section id="v-combo" class="band" hidden>
+<div class="box b1 sc4">
+<h2>Scene combo · best of four</h2>
+<p class="row">Paste four versions of a scene (same situation or different ones). Claude studies each one, picks the strongest punchlines, reactions, slang and twists, and rebuilds them into one new, stronger scene, followed by the full A–F analysis. Speed, slang and analysis language follow your settings on Write a scene.</p>
+<label for="csit"><b>Situation</b> (optional)</label>
+<input id="csit" class="cin" placeholder="e.g. Madhu and Mahesh hide in the bathroom and find the Master there">
+<div class="cgrid">
+<div><label for="cs1"><b>Scene 1</b></label><textarea id="cs1" class="cta" placeholder="Paste scene 1 here"></textarea></div>
+<div><label for="cs2"><b>Scene 2</b></label><textarea id="cs2" class="cta" placeholder="Paste scene 2 here"></textarea></div>
+<div><label for="cs3"><b>Scene 3</b></label><textarea id="cs3" class="cta" placeholder="Paste scene 3 here"></textarea></div>
+<div><label for="cs4"><b>Scene 4</b></label><textarea id="cs4" class="cta" placeholder="Paste scene 4 here"></textarea></div>
+</div>
+<label for="clen"><b>Length of the combined scene</b></label>
+<select id="clen" class="cin"><option value="14">Short · about 14 lines</option><option value="24" selected>Medium · about 24 lines</option><option value="36">Long · about 36 lines</option><option value="50">Extra long · about 50 lines</option></select>
+<div class="acts"><button class="btn" type="button" id="comboGo">Create scene combo</button><button class="btn ghost" type="button" id="comboClear">Clear the four scenes</button></div>
+<p class="row" id="cstatus" role="status"></p>
+</div>
 <div class="clap">
-<h2>Pull a fresh combo</h2>
+<h2>Random formula combo</h2>
 <div>Six formulas from six different families, skipping any you've marked as used. Swap any slip you don't like.</div>
 <div class="grid" id="combo"></div>
 <div class="acts">
@@ -1113,6 +1130,19 @@ function req(){
 const idea=$("#idea").value.trim(),n=+$("#len").value||24,cast=castText();
 return {idea,n,cast};
 }
+function comboBlock(r){return `
+SCENE COMBO MODE — the user wrote FOUR versions of this scene. Build ONE new scene from the best of them.
+${r.combo.map((t,i)=>`----- REFERENCE SCENE ${i+1} -----\n${t}`).join("\n")}
+----- END OF REFERENCE SCENES -----
+How to do it:
+1. Study each reference scene on its own. Find its strongest elements: punchlines, counter-punches, reactions, slang, twists, set-ups and the comedy technique behind each.
+2. Select only the best. Leave out weak, repeated or flat lines; do not try to fit everything in.
+3. Rebuild the chosen elements into ONE new scene with its own natural flow: new set-ups so each punch lands harder, sharper wording, stronger reactions and at least one new twist none of the four had. It must read as one complete scene, never four scenes stitched together.
+4. You may keep a few of the very best lines close to their original wording when they are already excellent (they are the user's own lines), but improve their timing and set-up; everything else is rewritten fresh.
+5. Keep the characters' names, personalities, slang and speaking styles from the reference scenes. Follow the library rules and quality bar below as usual.
+6. Make the final punchline bigger than any ending in the four references.
+Add to the JSON a key "combo": {"picked":[{"from":1,"element":"the line or idea you took","why":"why it is strong","lines":[0]}],"left":"one sentence on what you left out and why","improved":"one sentence on what is new or stronger in the combined scene"} — "from" is the reference scene number, "lines" are the dialogue numbers in your new scene where it is used.
+`}
 function scenePrompt(r){
 return `You are a top Telugu comedy dialogue writer for a YouTube sketch channel.
 
@@ -1125,7 +1155,7 @@ Dialect: North-Andhra (Uttarandhra) Telugu with natural Tenglish.
 
 USER'S SCENE IDEA (the starting point):
 ${r.idea}
-
+${r.combo?comboBlock(r):""}
 CAST:
 ${r.cast}
 LENGTH: exactly ${r.n} dialogues (each speaker turn counts as one). Do not shorten.
@@ -1178,7 +1208,7 @@ CHARACTER NOTES FROM THE REFERENCE:
 ${CHARS}
 
 USER'S IDEA: ${r.idea}
-FORMULAS THE WRITER SAYS IT USED: ${(sc.formulas||[]).join(", ")}
+${r.combo?`THIS IS A SCENE COMBO built from the user's four reference scenes. In C (old vs new) and E (originality), also compare the new scene with these four scenes: what was kept, what was improved, what is new.\n${r.combo.map((t,i)=>`--- Reference scene ${i+1} ---\n${t.slice(0,6000)}`).join("\n")}\n`:""}FORMULAS THE WRITER SAYS IT USED: ${(sc.formulas||[]).join(", ")}
 NEW TECHNIQUES THE WRITER INVENTED (not in the library): ${(sc.newTech||[]).map(t=>t.name+" — "+t.how).join("; ")||"none listed"}
 The writer aimed for about ${sc.mix||50}% library techniques and ${100-(sc.mix||50)}% new techniques. Measure the real split honestly; do not just copy the target.
 
@@ -1223,11 +1253,13 @@ return `<div class="beat"><div class="bt"><b>${esc(x.id||"")}${f?" · "+esc(f[1]
 const u=sl.filter(x=>(x.lines||[]).some(n=>+n>0)||usedIds.includes(x.id)),r=sl.filter(x=>!u.includes(x));
 return `<details class="box"><summary>Library scan · ${esc(String(sc.scan.checked||F.length))} of ${sc.scanTotal||F.length} formulas checked${sc.skip12?" (Batch 1–2 off)":""} · ${sl.length} shortlisted · ${u.length} used — tap to see old vs new lines</summary><div>${u.length?`<h3>Used in this scene: old line → new line</h3>${u.map(item).join("")}`:""}${r.length?`<h3>Shortlisted but not used</h3>${r.map(item).join("")}`:""}</div></details><div class="pdfbar"><button class="btn" type="button" data-scenepdf="1">Download this scene · Old → New PDF</button><p class="row pdfmsg" role="status"></p></div>`}
 function dlg(sc){return sc.scene.map((x,i)=>`<p><span>${i+1}</span><span style="text-align:left;color:inherit;font-size:inherit;padding:0"><b>${esc(x.s)}:</b> ${esc(x.l)}</span></p>`).join("")}
+function comboBox(sc){const c=sc.combo;if(!c)return "";const p=c.picked||[];
+return `<details class="box" open><summary><b>Scene combo report</b> · ${p.length} best elements taken from the four scenes</summary><div>${p.map(x=>`<div class="cpick"><div class="src">From scene ${esc(String(x.from||"?"))}${(x.lines||[]).filter(n=>+n>0).length?" → used in line "+x.lines.filter(n=>+n>0).join(", "):""}</div><div>${esc(x.element||"")}</div><div class="row">${esc(x.why||"")}</div></div>`).join("")}${c.left?`<p><b>Left out:</b> ${esc(c.left)}</p>`:""}${c.improved?`<p><b>What's new or stronger:</b> ${esc(c.improved)}</p>`:""}</div></details>`}
 function renderScene(item){
 setTimeout(()=>{try{const sl=(item.s&&item.s.scan&&item.s.scan.shortlist)||[];if(!item._telTried&&sample&&sl.some(x=>x.how&&String(x.how).trim()&&!isTelHow(x.how))){item._telTried=1;const b=document.querySelector("[data-howall]");if(b)b.click()}}catch(e){}},50);
 window._rs=item;const {s:sc,a}=item;
 let h=`<article class="scene">
-${scanBox(sc)}
+${comboBox(sc)}${scanBox(sc)}
 <div class="box b1"><div class="lbl">BOX 1 · Scene description</div><p>${esc(sc.box1)}</p></div>
 <div class="box"><div class="lbl">BOX 2 · New scene — ${esc(sc.title)} · ${sc.scene.length} dialogues</div><div class="dlg">${dlg(sc)}</div>
 ${(sc.trailer||[]).length?`<details class="box" open><summary><b>Trailer highlights</b> · ${sc.trailer.length} lines${(sc.twists||[]).length?` · ${sc.twists.length} twists`:""}</summary><div>${sc.trailer.map(t=>{const d=sc.scene[(+t.n||0)-1];return d?`<p><b>L${+t.n} ${esc(d.s)}:</b> ${esc(d.l)}<br><span class="row">${esc(t.why||"")}</span></p>`:""}).join("")}${(sc.twists||[]).length?`<p class="row"><b>Twists:</b> ${sc.twists.map(esc).join(" · ")}</p>`:""}</div></details>`:""}
@@ -1289,12 +1321,20 @@ const pr=`You are a Telugu comedy writing teacher. For each formula below, expla
 try{const res=await ask(pr,{cache:false});const j=parse(res.text);(j.items||[]).forEach(it=>{sl.filter(x=>x.id===it.id).forEach(x=>{x.how=it.how})});saveHist();renderScene(item);drawHist()}
 catch(err){document.querySelectorAll("[data-howall]").forEach(y=>{y.disabled=false;y.textContent="మళ్ళీ ప్రయత్నించు"})}});
 
-$("#go").addEventListener("click",async()=>{
-if(busy)return;const r=req();if(!r.idea){$("#status").innerHTML='<span class="err">Write your scene idea first.</span>';$("#idea").focus();return}
+$("#go").addEventListener("click",()=>{const r=req();if(!r.idea){$("#status").innerHTML='<span class="err">Write your scene idea first.</span>';$("#idea").focus();return}genScene(r)});
+$("#comboGo").addEventListener("click",()=>{const sc=[1,2,3,4].map(i=>$("#cs"+i).value.trim());const filled=sc.filter(Boolean);
+if(filled.length<2){$("#cstatus").innerHTML='<span class="err">Paste at least two scenes (four works best).</span>';return}
+if(busy){$("#cstatus").textContent="A scene is already being written. Wait for it to finish.";return}
+const sit=$("#csit").value.trim();
+const r={idea:(sit?sit+" — ":"")+"Scene combo: the best of "+filled.length+" reference scenes",n:+$("#clen").value||24,cast:"Use the characters who appear in the reference scenes, with the same names, personalities, slang and speaking styles.",combo:filled};
+$("#cstatus").textContent="Writing your scene combo — follow it on the Write a scene tab.";location.hash="#write";setTimeout(()=>genScene(r),60)});
+$("#comboClear").addEventListener("click",()=>{[1,2,3,4].forEach(i=>$("#cs"+i).value="");$("#csit").value="";$("#cstatus").textContent="Cleared."});
+async function genScene(r){
+if(busy)return;
 if(!sample){$("#status").textContent="Scene writing isn't available in this view. Use Copy request for chat instead.";return}
 busy=true;$("#go").disabled=true;$("#out").innerHTML="";
 try{
-$("#stop").hidden=false;startTimer(()=>$("#status"),`Scanning ${SF().length} formulas${inc12()?"":" (Batch 1–2 off)"}, then writing your scene`);
+$("#stop").hidden=false;startTimer(()=>$("#status"),r.combo?`Studying your ${r.combo.length} scenes and ${SF().length} formulas, then writing the combined scene`:`Scanning ${SF().length} formulas${inc12()?"":" (Batch 1–2 off)"}, then writing your scene`);
 const res=await ask(scenePrompt(r),{cache:false,onText:({text})=>{stopTimer();$("#status").textContent=`Writing the scene… ${text.length} characters`}});stopTimer();
 if(res.truncated)throw {message:"The scene was cut off. Try fewer dialogues."};
 const sc=parse(res.text);sc.mix=+$("#mix").value;sc.scanTotal=SF().length;sc.skip12=!inc12();if(!sc.scene||!sc.scene.length)throw {message:"The scene came back empty. Try again."};
@@ -1304,7 +1344,7 @@ $("#status").textContent="Scene ready. Writing the analysis…";
 await runAnalysis(cur);$("#status").textContent="Done. Tap any section A–F to open it.";
 }catch(e){$("#status").innerHTML=`<span class="err">${esc(e&&e.code?errText(e):e&&e.message==="no JSON"||e instanceof SyntaxError?"The scene came back in a broken format. Tap Create scene again.":(e&&e.message)||errText(e))}</span>`}
 stopTimer();$("#stop").hidden=true;busy=false;$("#go").disabled=false;
-});
+}
 $("#copyReq").addEventListener("click",async()=>{const r=req();const t=`Scene Creation – My Scene Idea Input\n\nBOX 1: My Scene Idea\n${r.idea||"(write your idea)"}\n\nLength: ${r.n} dialogues\nCharacters:
 ${r.cast}\n${pinned.length?"Must use formulas: "+pinned.join(", ")+"\n":""}\nUse the saved formula library. Output: BOX 1 one-line description, BOX 2 full scene, then complete A–F analysis.`;try{await navigator.clipboard.writeText(t);$("#status").textContent="Request copied. Paste it into the chat."}catch(e){$("#status").textContent="Copy was blocked here."}});
 function drawHist(){$("#histWrap").hidden=!hist.length;$("#hist").innerHTML=hist.map((h,i)=>{const who=[...new Set(h.s.scene.map(x=>x.s))].slice(0,5).join(", ");return `<div class="hrow"><button data-h="${i}"><span class="ht">${esc(h.s.title)}</span><span class="hm">${new Date(h.t).toLocaleDateString("en-IN",{day:"numeric",month:"short",year:"numeric"})} · ${esc(who)} · ${h.s.scene.length} lines${h.a?"":" · analysis missing"}</span><span class="row">${esc(h.idea.slice(0,110))}</span></button><button class="hdel" data-del="${i}" aria-label="Delete this saved scene">Delete</button></div>`}).join("")}
