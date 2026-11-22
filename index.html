@@ -209,8 +209,8 @@ body.locked #lock{display:flex}
 
 <section id="v-combo" class="band" hidden>
 <div class="box b1 sc4">
-<h2>Scene combo · best of four</h2>
-<p class="row">Paste four versions of a scene (same situation or different ones). Claude studies each one, picks the strongest punchlines, reactions, slang and twists, and rebuilds them into one new, stronger scene, followed by the full A–F analysis. Speed, slang and analysis language follow your settings on Write a scene.</p>
+<h2>Scene combo · best of five</h2>
+<p class="row">Paste up to five versions of a scene (same situation or different ones). Claude studies each one, picks the strongest punchlines, reactions, slang and twists, and rebuilds them into one new, stronger scene, followed by the full A–F analysis. Speed, slang and analysis language follow your settings on Write a scene.</p>
 <label for="csit"><b>Situation</b> (optional)</label>
 <input id="csit" class="cin" placeholder="e.g. Madhu and Mahesh hide in the bathroom and find the Master there">
 <div class="cgrid">
@@ -218,10 +218,11 @@ body.locked #lock{display:flex}
 <div><div class="chead"><label for="cs2"><b>Scene 2</b></label><span><select class="cpk" data-box="2" aria-label="Fill scene 2 from a saved scene"><option value="">Saved scene…</option></select><button class="btn ghost sm" type="button" data-paste="2">Paste</button></span></div><textarea id="cs2" class="cta" placeholder="Paste scene 2 here"></textarea></div>
 <div><div class="chead"><label for="cs3"><b>Scene 3</b></label><span><select class="cpk" data-box="3" aria-label="Fill scene 3 from a saved scene"><option value="">Saved scene…</option></select><button class="btn ghost sm" type="button" data-paste="3">Paste</button></span></div><textarea id="cs3" class="cta" placeholder="Paste scene 3 here"></textarea></div>
 <div><div class="chead"><label for="cs4"><b>Scene 4</b></label><span><select class="cpk" data-box="4" aria-label="Fill scene 4 from a saved scene"><option value="">Saved scene…</option></select><button class="btn ghost sm" type="button" data-paste="4">Paste</button></span></div><textarea id="cs4" class="cta" placeholder="Paste scene 4 here"></textarea></div>
+<div><div class="chead"><label for="cs5"><b>Scene 5</b></label><span><select class="cpk" data-box="5" aria-label="Fill scene 5 from a saved scene"><option value="">Saved scene…</option></select><button class="btn ghost sm" type="button" data-paste="5">Paste</button></span></div><textarea id="cs5" class="cta" placeholder="Paste scene 5 here"></textarea></div>
 </div>
 <label for="clen"><b>Length of the combined scene</b></label>
 <select id="clen" class="cin"><option value="14">Short · about 14 lines</option><option value="24" selected>Medium · about 24 lines</option><option value="36">Long · about 36 lines</option><option value="50">Extra long · about 50 lines</option></select>
-<div class="acts"><button class="btn" type="button" id="comboGo">Create scene combo</button><button class="btn ghost" type="button" id="comboClear">Clear the four scenes</button></div>
+<div class="acts"><button class="btn" type="button" id="comboGo">Create scene combo</button><button class="btn ghost" type="button" id="comboClear">Clear all five scenes</button></div>
 <p class="row" id="cstatus" role="status"></p>
 </div>
 <div class="clap">
@@ -1131,16 +1132,16 @@ const idea=$("#idea").value.trim(),n=+$("#len").value||24,cast=castText();
 return {idea,n,cast};
 }
 function comboBlock(r){return `
-SCENE COMBO MODE — the user wrote FOUR versions of this scene. Build ONE new scene from the best of them.
+SCENE COMBO MODE — the user wrote ${r.combo.length} versions of this scene. Build ONE new scene from the best of them.
 ${r.combo.map((t,i)=>`----- REFERENCE SCENE ${i+1} -----\n${t}`).join("\n")}
 ----- END OF REFERENCE SCENES -----
 How to do it:
 1. Study each reference scene on its own. Find its strongest elements: punchlines, counter-punches, reactions, slang, twists, set-ups and the comedy technique behind each.
 2. Select only the best. Leave out weak, repeated or flat lines; do not try to fit everything in.
-3. Rebuild the chosen elements into ONE new scene with its own natural flow: new set-ups so each punch lands harder, sharper wording, stronger reactions and at least one new twist none of the four had. It must read as one complete scene, never four scenes stitched together.
+3. Rebuild the chosen elements into ONE new scene with its own natural flow: new set-ups so each punch lands harder, sharper wording, stronger reactions and at least one new twist none of the references had. It must read as one complete scene, never four scenes stitched together.
 4. You may keep a few of the very best lines close to their original wording when they are already excellent (they are the user's own lines), but improve their timing and set-up; everything else is rewritten fresh.
 5. Keep the characters' names, personalities, slang and speaking styles from the reference scenes. Follow the library rules and quality bar below as usual.
-6. Make the final punchline bigger than any ending in the four references.
+6. Make the final punchline bigger than any ending in the reference scenes.
 Add to the JSON a key "combo": {"picked":[{"from":1,"element":"the line or idea you took","why":"why it is strong","lines":[0]}],"left":"one sentence on what you left out and why","improved":"one sentence on what is new or stronger in the combined scene"} — "from" is the reference scene number, "lines" are the dialogue numbers in your new scene where it is used.
 `}
 function scenePrompt(r){
@@ -1208,7 +1209,7 @@ CHARACTER NOTES FROM THE REFERENCE:
 ${CHARS}
 
 USER'S IDEA: ${r.idea}
-${r.combo?`THIS IS A SCENE COMBO built from the user's four reference scenes. In C (old vs new) and E (originality), also compare the new scene with these four scenes: what was kept, what was improved, what is new.\n${r.combo.map((t,i)=>`--- Reference scene ${i+1} ---\n${t.slice(0,6000)}`).join("\n")}\n`:""}FORMULAS THE WRITER SAYS IT USED: ${(sc.formulas||[]).join(", ")}
+${r.combo?`THIS IS A SCENE COMBO built from the user's ${r.combo.length} reference scenes. In C (old vs new) and E (originality), also compare the new scene with these reference scenes: what was kept, what was improved, what is new.\n${r.combo.map((t,i)=>`--- Reference scene ${i+1} ---\n${t.slice(0,6000)}`).join("\n")}\n`:""}FORMULAS THE WRITER SAYS IT USED: ${(sc.formulas||[]).join(", ")}
 NEW TECHNIQUES THE WRITER INVENTED (not in the library): ${(sc.newTech||[]).map(t=>t.name+" — "+t.how).join("; ")||"none listed"}
 The writer aimed for about ${sc.mix||50}% library techniques and ${100-(sc.mix||50)}% new techniques. Measure the real split honestly; do not just copy the target.
 
@@ -1254,7 +1255,7 @@ const u=sl.filter(x=>(x.lines||[]).some(n=>+n>0)||usedIds.includes(x.id)),r=sl.f
 return `<details class="box"><summary>Library scan · ${esc(String(sc.scan.checked||F.length))} of ${sc.scanTotal||F.length} formulas checked${sc.skip12?" (Batch 1–2 off)":""} · ${sl.length} shortlisted · ${u.length} used — tap to see old vs new lines</summary><div>${u.length?`<h3>Used in this scene: old line → new line</h3>${u.map(item).join("")}`:""}${r.length?`<h3>Shortlisted but not used</h3>${r.map(item).join("")}`:""}</div></details><div class="pdfbar"><button class="btn" type="button" data-scenepdf="1">Download this scene · Old → New PDF</button><p class="row pdfmsg" role="status"></p></div>`}
 function dlg(sc){return sc.scene.map((x,i)=>`<p><span>${i+1}</span><span style="text-align:left;color:inherit;font-size:inherit;padding:0"><b>${esc(x.s)}:</b> ${esc(x.l)}</span></p>`).join("")}
 function comboBox(sc){const c=sc.combo;if(!c)return "";const p=c.picked||[];
-return `<details class="box" open><summary><b>Scene combo report</b> · ${p.length} best elements taken from the four scenes</summary><div>${p.map(x=>`<div class="cpick"><div class="src">From scene ${esc(String(x.from||"?"))}${(x.lines||[]).filter(n=>+n>0).length?" → used in line "+x.lines.filter(n=>+n>0).join(", "):""}</div><div>${esc(x.element||"")}</div><div class="row">${esc(x.why||"")}</div></div>`).join("")}${c.left?`<p><b>Left out:</b> ${esc(c.left)}</p>`:""}${c.improved?`<p><b>What's new or stronger:</b> ${esc(c.improved)}</p>`:""}</div></details>`}
+return `<details class="box" open><summary><b>Scene combo report</b> · ${p.length} best elements taken from your scenes</summary><div>${p.map(x=>`<div class="cpick"><div class="src">From scene ${esc(String(x.from||"?"))}${(x.lines||[]).filter(n=>+n>0).length?" → used in line "+x.lines.filter(n=>+n>0).join(", "):""}</div><div>${esc(x.element||"")}</div><div class="row">${esc(x.why||"")}</div></div>`).join("")}${c.left?`<p><b>Left out:</b> ${esc(c.left)}</p>`:""}${c.improved?`<p><b>What's new or stronger:</b> ${esc(c.improved)}</p>`:""}</div></details>`}
 function renderScene(item){
 setTimeout(()=>{try{const sl=(item.s&&item.s.scan&&item.s.scan.shortlist)||[];if(!item._telTried&&sample&&sl.some(x=>x.how&&String(x.how).trim()&&!isTelHow(x.how))){item._telTried=1;const b=document.querySelector("[data-howall]");if(b)b.click()}}catch(e){}},50);
 window._rs=item;const {s:sc,a}=item;
@@ -1322,13 +1323,13 @@ try{const res=await ask(pr,{cache:false});const j=parse(res.text);(j.items||[]).
 catch(err){document.querySelectorAll("[data-howall]").forEach(y=>{y.disabled=false;y.textContent="మళ్ళీ ప్రయత్నించు"})}});
 
 $("#go").addEventListener("click",()=>{const r=req();if(!r.idea){$("#status").innerHTML='<span class="err">Write your scene idea first.</span>';$("#idea").focus();return}genScene(r)});
-$("#comboGo").addEventListener("click",()=>{const sc=[1,2,3,4].map(i=>$("#cs"+i).value.trim());const filled=sc.filter(Boolean);
-if(filled.length<2){$("#cstatus").innerHTML='<span class="err">Paste at least two scenes (four works best).</span>';return}
+$("#comboGo").addEventListener("click",()=>{const sc=[1,2,3,4,5].map(i=>$("#cs"+i).value.trim());const filled=sc.filter(Boolean);
+if(filled.length<2){$("#cstatus").innerHTML='<span class="err">Paste at least two scenes (five works best).</span>';return}
 if(busy){$("#cstatus").textContent="A scene is already being written. Wait for it to finish.";return}
 const sit=$("#csit").value.trim();
 const r={idea:(sit?sit+" — ":"")+"Scene combo: the best of "+filled.length+" reference scenes",n:+$("#clen").value||24,cast:"Use the characters who appear in the reference scenes, with the same names, personalities, slang and speaking styles.",combo:filled};
 $("#cstatus").textContent="Writing your scene combo — follow it on the Write a scene tab.";location.hash="#write";setTimeout(()=>genScene(r),60)});
-$("#comboClear").addEventListener("click",()=>{[1,2,3,4].forEach(i=>$("#cs"+i).value="");$("#csit").value="";saveCombo();$("#cstatus").textContent="Cleared."});
+$("#comboClear").addEventListener("click",()=>{[1,2,3,4,5].forEach(i=>$("#cs"+i).value="");$("#csit").value="";saveCombo();$("#cstatus").textContent="Cleared."});
 async function genScene(r){
 if(busy)return;
 if(!sample){$("#status").textContent="Scene writing isn't available in this view. Use Copy request for chat instead.";return}
@@ -1349,17 +1350,17 @@ $("#copyReq").addEventListener("click",async()=>{const r=req();const t=`Scene Cr
 ${r.cast}\n${pinned.length?"Must use formulas: "+pinned.join(", ")+"\n":""}\nUse the saved formula library. Output: BOX 1 one-line description, BOX 2 full scene, then complete A–F analysis.`;try{await navigator.clipboard.writeText(t);$("#status").textContent="Request copied. Paste it into the chat."}catch(e){$("#status").textContent="Copy was blocked here."}});
 function dlgText(item){const sc=item.s;return `${sc.title}\n`+sc.scene.map(x=>`${x.s}: ${x.l}`).join("\n")}
 const CK="cfl-combo-boxes";
-function saveCombo(){try{localStorage.setItem(CK,JSON.stringify([1,2,3,4].map(i=>$("#cs"+i).value).concat([$("#csit").value])))}catch(e){}}
-try{const v=JSON.parse(localStorage.getItem(CK)||"null");if(v){[1,2,3,4].forEach(i=>{if(v[i-1])$("#cs"+i).value=v[i-1]});if(v[4])$("#csit").value=v[4]}}catch(e){}
-["#cs1","#cs2","#cs3","#cs4","#csit"].forEach(k=>$(k).addEventListener("input",saveCombo));
-function addToCombo(item){const t=dlgText(item);const boxes=[1,2,3,4].map(i=>$("#cs"+i));
+function saveCombo(){try{localStorage.setItem(CK,JSON.stringify([1,2,3,4,5].map(i=>$("#cs"+i).value).concat([$("#csit").value])))}catch(e){}}
+try{const v=JSON.parse(localStorage.getItem(CK)||"null");if(v){[1,2,3,4,5].forEach(i=>{if(v[i-1])$("#cs"+i).value=v[i-1]});const sit=v.length===5?v[4]:v[5];if(v.length===5)$("#cs5").value="";if(sit)$("#csit").value=sit}}catch(e){}
+["#cs1","#cs2","#cs3","#cs4","#cs5","#csit"].forEach(k=>$(k).addEventListener("input",saveCombo));
+function addToCombo(item){const t=dlgText(item);const boxes=[1,2,3,4,5].map(i=>$("#cs"+i));
 const dup=boxes.findIndex(b=>b.value.trim()===t.trim());
 if(dup>=0)return {short:"Already in Scene "+(dup+1),html:`This scene is already in Scene combo box ${dup+1}. <a href="#combo">Open Scene combo</a>`};
 const k=boxes.findIndex(b=>!b.value.trim());
-if(k<0)return {short:"All 4 boxes full",html:`<span class="err">All four Scene combo boxes are full.</span> Clear one first, or pick this scene from the "Saved scene…" list on a box to replace it. <a href="#combo">Open Scene combo</a>`};
+if(k<0)return {short:"All 5 boxes full",html:`<span class="err">All five Scene combo boxes are full.</span> Clear one first, or pick this scene from the "Saved scene…" list on a box to replace it. <a href="#combo">Open Scene combo</a>`};
 boxes[k].value=t;saveCombo();
 const left=boxes.filter(b=>!b.value.trim()).length;
-return {short:"Added to Scene "+(k+1),html:`Added “${esc(item.s.title)}” to Scene combo box ${k+1}. ${left?left+" box"+(left>1?"es":"")+" still empty.":"All four boxes are filled."} <a href="#combo">Open Scene combo</a>`}}
+return {short:"Added to Scene "+(k+1),html:`Added “${esc(item.s.title)}” to Scene combo box ${k+1}. ${left?left+" box"+(left>1?"es":"")+" still empty.":"All five boxes are filled."} <a href="#combo">Open Scene combo</a>`}}
 function fillPickers(){document.querySelectorAll(".cpk").forEach(sel=>{sel.innerHTML='<option value="">Saved scene…</option>'+hist.map((h,i)=>`<option value="${i}">${esc(h.s.title.slice(0,40))} · ${h.s.scene.length} lines</option>`).join("")})}
 document.addEventListener("change",e=>{const sel=e.target.closest(".cpk");if(!sel||sel.value==="")return;const h=hist[+sel.value];if(h){$("#cs"+sel.dataset.box).value=dlgText(h);saveCombo();$("#cstatus").textContent=`Scene ${sel.dataset.box} filled from “${h.s.title}”. Your saved scene is unchanged.`}sel.value=""});
 document.addEventListener("click",async e=>{const pb=e.target.closest("[data-paste]");if(!pb)return;const ta=$("#cs"+pb.dataset.paste);
