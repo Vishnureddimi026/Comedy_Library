@@ -227,8 +227,7 @@ setTimeout(function(){var i=document.getElementById("lockP");if(i)i.focus()},100
 <div id="cmpBar" class="cmpbar" hidden><div class="selrow"><b id="selCount"></b><span class="selhint">Copies in the order you tapped (gold numbers). Tap again to unselect.</span></div>
 <div class="acts"><button class="btn sm" type="button" id="selCopy">Copy selected lines</button><button class="btn ghost sm" type="button" id="selCombo">Add to Scene combo</button><button class="btn ghost sm" type="button" id="selClear">Clear</button></div>
 <label class="selhint"><input type="checkbox" id="selTag"> Show which scene each line came from, like [B7] (for Copy)</label>
-<div class="tgen"><b>Old-to-New Analysis PDF</b><span class="selhint">Explains every selected line: how it was created, the formula used, which old scene and line it came from, how the old technique became the new dialogue, how the punch was built, and what is original.</span>
-<div class="acts" style="margin:0;align-items:center"><label class="selhint" for="expLen" style="display:inline"><b>PDF size:</b></label><select id="expLen" class="explen"><option value="short">Short · 4 points per line, faster</option><option value="detail">Detailed · 6 points per line</option></select></div>
+<div class="tgen"><b>Old-to-New Analysis PDF</b><span class="selhint">For every selected line: the formula used (batch, character, why it fits), the OLD line and where it was used, the library sample, the NEW line, and how — kept, changed, why it's funny. Made instantly from what was saved with the scene.</span>
 <button class="btn sm" type="button" id="selPdf">Generate Old-to-New Analysis PDF</button>
 <div id="selProg" class="selprog" role="status" hidden></div></div>
 <details class="tgen2"><summary>Or: write a brand-new scene from these lines</summary><div class="tgen">
@@ -1502,33 +1501,23 @@ Return ONLY valid JSON, no fences:
 Give one entry in "lines" for each selected line, in the same order.${short?`
 SHORT MODE: keep it brief. Fill ONLY these fields, ONE short sentence each: "created"; "formulas" (id, name, role); "sources" (id, scene, title, oldLine — at most 2); "transform" (kept, changed); "originality" (technique, new). Leave out "development", "type", "contributed" and "adapted". Overview: 2 sentences.`:""}
 JSON RULES: inside text values never use the double-quote character — quote words with single quotes ' ' instead; no line breaks inside values; keep each field to 1–3 sentences.`}
-let EXP=null;try{const v=localStorage.getItem("cfl-explen");if(v)$("#expLen").value=v}catch(e){}$("#expLen").addEventListener("change",()=>{try{localStorage.setItem("cfl-explen",$("#expLen").value)}catch(e){}});
+let EXP=null;
 function parseLoose(t){t=String(t||"").replace(/```(json)?/g,"");try{return parse(t)}catch(e){}
 const a=t.indexOf("{"),b=t.lastIndexOf("}");if(a<0||b<a)throw new Error("no JSON");let x=t.slice(a,b+1).replace(/[“”]/g,"'").replace(/,\s*([}\]])/g,"$1").replace(/\r?\n/g," ");return JSON.parse(x)}
-async function makeExpPdf(msgEl){if(!EXP)return;await window.CFL.scenePdf([{kind:"lineexp",x:EXP}],"Old-to-New Analysis · How each line was created"+(EXP.short?" (short)":""),"Old_to_New_Line_Analysis_"+new Date().toISOString().slice(0,16).replace(/[:T]/g,"-")+".pdf",msgEl)}
+async function makeExpPdf(msgEl){if(!EXP)return;await window.CFL.scenePdf([{kind:"lineexp",x:EXP}],"Old-to-New Analysis · Selected lines","Old_to_New_Line_Analysis_"+new Date().toISOString().slice(0,16).replace(/[:T]/g,"-")+".pdf",msgEl)}
 document.addEventListener("click",e=>{if(e.target.closest("[data-exppdf]")){const m=document.querySelector("#selProg .expmsg")||$("#selMsg");makeExpPdf(m)}});
+function cardData(id,i){const fm=window.CFL.fm()||{};const n=i+1;const card=fid=>{const f=fm[fid]||[];return {id:fid,name:f[1]||"",batch:f[9]||"",recipe:f[4]||"",sampleWho:f[6]||"",sample:f[12]||"",olds:oldUses(fid).slice(0,3).map(u=>({sc:u.sc,t:scTitle(u.sc)||"",d:u.d||""}))}};
+if(id.startsWith("h:")){const h=hist.find(x=>String(x.t)===id.slice(2));if(!h)return {kind:"missing"};
+const sl=((h.s.scan&&h.s.scan.shortlist)||[]).filter(x=>(x.lines||[]).some(v=>+v===n));
+const beats=((h.a&&h.a.B)||[]).filter(b=>+b.newFrom<=n&&n<=+b.newTo).map(b=>({title:b.title||"",ids:b.ids||[],collected:b.collected||"",added:b.added||"",old:(b.old||[]).map(o=>{const R=findRef(o.scene);const L=R&&R.l[+o.line-1];return {sc:o.scene,line:o.line,t:R?R.t:"",d:L?L[0]+": "+L[1]:""}})}));
+return {kind:"generated",title:h.s.title,cards:sl.map(x=>({...card(x.id),who:x.who||"",why:x.why||"",lines:(x.lines||[]).filter(v=>+v>0),how:x.how||""})),beats}}
+if(id.startsWith("r:")){const R=findRef(id.slice(2));return {kind:"reference",title:R?R.id+" — "+R.t:""}}
+return {kind:"pasted"}}
 $("#selPdf").addEventListener("click",async()=>{if(!SELK.length)return;
-if(busy){prog(`<b>Another scene is still being written.</b><br>${esc($("#status").textContent||"")}<br>Wait for it to finish, or tap Stop, then tap Generate again.${progBtns}`);return}
-if(!sample){prog("Writing isn't available in this view.");return}
-const S={};[1,2,3,4].forEach(n=>{const g=cmpGet(n);if(g)S[g.id]=g});
-const sel=SELK.map(k=>{const d=SELD[k];const [id]=k.split("|");return {tag:(d.k||"?").toUpperCase()+(d.i+1),k:(d.k||"?").toUpperCase(),n:d.i+1,s:d.s,l:d.l,t:d.t,sub:d.sub,ctx:lineCtx({id,i:d.i})}});
-busy=true;$("#go").disabled=true;const t0=Date.now();let chars=0;const tk=setInterval(()=>{prog(`<b>Analysing ${sel.length} selected line${sel.length>1?"s":""}…</b> ${Math.round((Date.now()-t0)/1000)}s${chars?` · writing ${chars} characters`:" (Claude thinks first, then writes)"}<div class="acts"><button class="btn ghost sm" type="button" data-selstop="1">Stop</button></div>`)},1000);
-let part=0,parts=0;const SHORT=$("#expLen").value==="short";
-const runPart=async(chunk,tries)=>{chars=0;const res=await ask(explainPrompt(chunk,SHORT),{cache:false,onText:({text})=>{chars=text.length}});
-if(res.truncated){if(chunk.length>1){const h=Math.ceil(chunk.length/2);parts++;return (await runPart(chunk.slice(0,h),1)).concat(await runPart(chunk.slice(h),1))}throw {message:"The explanation for line "+chunk[0].tag+" was too long and got cut off."}}
-let j;try{j=parseLoose(res.text)}catch(e){if(tries>0)return runPart(chunk,tries-1);throw {message:"Line "+chunk.map(x=>x.tag).join(", ")+": the reply wasn't in the right format twice in a row ("+(e&&e.message||"parse error")+")."}}
-if(!j.lines||!j.lines.length){if(tries>0)return runPart(chunk,tries-1);throw {message:"The reply for "+chunk.map(x=>x.tag).join(", ")+" was empty."}}
-if(j.overview&&!OV)OV=j.overview;part++;return j.lines.slice(0,chunk.length).concat(Array(Math.max(0,chunk.length-j.lines.length)).fill({}))};
-let OV="";clearInterval(tk);const t1=Date.now();
-const tk2=setInterval(()=>{prog(`<b>Analysing ${sel.length} selected line${sel.length>1?"s":""}</b> · part ${Math.min(part+1,parts)} of ${parts} · ${Math.round((Date.now()-t1)/1000)}s${chars?` · writing ${chars} characters`:" (Claude thinks first, then writes)"}<div class="acts"><button class="btn ghost sm" type="button" data-selstop="1">Stop</button></div>`)},1000);
-try{const CH=SHORT?5:3,chunks=[];for(let k=0;k<sel.length;k+=CH)chunks.push(sel.slice(k,k+CH));parts=chunks.length;let lines=[];
-for(const c of chunks)lines=lines.concat(await runPart(c,1));clearInterval(tk2);
-lines=lines.map((L,k)=>({...L,tag:L.tag||sel[k].tag}));
-EXP={short:SHORT,sel:sel.map(({ctx,...r})=>({...r,kind:ctx.kind,title:ctx.title||r.t})),j:{overview:OV,lines},at:Date.now()};
-prog(`<b>Analysis ready.</b><div class="acts"><button class="btn sm" type="button" data-exppdf="1">Download PDF again</button></div><span class="expmsg"></span>`);
-await makeExpPdf(document.querySelector("#selProg .expmsg"))}
-catch(e){clearInterval(tk2);prog(`<b>It didn't finish.</b> ${esc(e&&e.code?errText(e):(e&&e.message)||errText(e))}${part?` (${part} of ${parts} parts were done.)`:""} Tap Generate again${sel.length>3?", or select fewer lines":""}.`)}
-busy=false;$("#go").disabled=false});
+const sel=SELK.map(k=>{const d=SELD[k];const [id]=k.split("|");return {tag:(d.k||"?").toUpperCase()+(d.i+1),s:d.s,l:d.l,t:d.t,data:cardData(id,d.i)}});
+EXP={cards:true,sel,at:Date.now()};
+prog(`<b>Making the PDF for ${sel.length} line${sel.length>1?"s":""}…</b><div class="acts"><button class="btn sm" type="button" data-exppdf="1">Download PDF again</button></div><span class="expmsg"></span>`);
+await makeExpPdf(document.querySelector("#selProg .expmsg"))});
 $("#selNew").addEventListener("click",()=>{if(!SELK.length)return;
 if(busy){prog(`<b>Another scene is still being written.</b><br>${esc($("#status").textContent||"")}<br>Wait for it to finish, or tap Stop, then tap Generate again.${progBtns}`);return}
 {const v=$("#selSit").value.trim();if(v&&((v.match(/[:：]/g)||[]).length>=2||v.length>200)){$("#selSit").value="";$("#selMsg").textContent="The situation box had dialogue in it, so I cleared it — your selected lines are sent automatically. The AI will choose a fresh situation (or type one short sentence and tap Generate again)."}}
@@ -1680,7 +1669,23 @@ ${f[12]?`<div class="sm"><b>Library sample (${E(f[6]||"")}):</b> ${E(f[12])}</di
 const rest=sl.filter(x=>!used.includes(x));if(rest.length)B.push(`<p><b>Shortlisted, not used:</b> ${rest.map(x=>E(x.id)+" "+E((fm[x.id]||[])[1]||"")).join(" · ")}</p>`);
 const L=sc.scene||[];for(let i=0;i<L.length;i+=14)B.push(`${i?"":"<p><b>పూర్తి సీన్ (full scene)</b></p>"}<div class="dl">${L.slice(i,i+14).map((d,j)=>`<p><span>${i+j+1}</span><b>${E(d.s)}:</b> ${E(d.l)}</p>`).join("")}</div>`);
 return B}
-function lblocks(item){const X=item.x,J=X.j||{},B=[],j=a=>(a||[]).join(", ");
+function cblocks(X){const B=[];
+B.push(`<p class="mt">${new Date(X.at).toLocaleString()} · ${X.sel.length} selected line${X.sel.length>1?"s":""}</p>`);
+X.sel.forEach(x=>{const D=x.data||{};const st=B.length;
+B.push(`<h2>Line ${E(x.tag)}</h2><div class="fx"><p style="font-size:17px">${x.s&&x.s!=="—"?`<b>${E(x.s)}:</b> `:""}${E(x.l)}</p><p class="mt">${E(D.title||x.t||"")}</p></div>`);
+if(D.kind==="reference"){B.push(`<p class="sm">This is an original line from the old scene ${E(D.title)}. It was not generated.</p>`);B.splice(st,2,B[st]+B[st+1]);return}
+if(D.kind!=="generated"){B.push(`<p class="sm">No saved formula information for this line (it was pasted or its scene is no longer saved).</p>`);B.splice(st,2,B[st]+B[st+1]);return}
+if(!(D.cards||[]).length&&!(D.beats||[]).length){B.push(`<p class="sm">No formula was recorded for this exact line.</p>`);B.splice(st,2,B[st]+B[st+1]);return}
+(D.cards||[]).forEach(c=>{
+B.push(`<div class="fx"><div class="fh"><b>${E(c.id)} · ${E(c.name)}</b><span>${c.batch?"Batch "+E(String(c.batch).replace(/^B/,""))+" · ":""}Character: ${E(c.who)} · ✓ Used in this scene · line ${E(c.lines.join(", "))}</span></div>
+${c.why?`<p><b>Why it fits:</b> ${E(c.why)}</p>`:""}
+${c.olds.map(o=>`<div class="sm"><span class="mt">OLD · where it was used · ${E(o.sc)}${o.t?" — "+E(o.t):""}</span><br>${E(o.d||"(see the old scene)")}</div>`).join("")}
+${c.sample?`<div class="sm"><span class="mt">Library sample (${E(c.sampleWho)})</span><br>${E(c.sample)}</div>`:""}
+<table><tr><th>NEW · where it's used now · line ${E(c.lines.join(", "))}</th></tr><tr><td class="n">${x.s&&x.s!=="—"?`<b>${E(x.s)}:</b> `:""}${E(x.l)}</td></tr></table>
+<div class="hw"><div class="t">ఎలా · పాతది → కొత్తది · నేను ఎలా ఆలోచించాను</div>${c.how?howP(c.how):`<p><b>ఉంచింది:</b> ${E(c.recipe)}</p>`}</div></div>`)});
+(D.beats||[]).filter(b=>!(D.cards||[]).length).forEach(b=>B.push(`<div class="fx"><div class="fh"><b>${E(b.title)}</b><span>${E(b.ids.join(", "))}</span></div>${b.old.map(o=>`<div class="sm"><span class="mt">OLD · ${E(o.sc)} L${E(o.line)}${o.t?" — "+E(o.t):""}</span><br>${E(o.d)}</div>`).join("")}<p><b>Collected:</b> ${E(b.collected)}</p><p><b>Added:</b> ${E(b.added)}</p></div>`));if(B.length>st+1)B.splice(st,2,B[st]+B[st+1])});
+return B}
+function lblocks(item){const X=item.x;if(X.cards)return cblocks(X);const J=X.j||{},B=[],j=a=>(a||[]).join(", ");
 B.push(`<p class="mt">${new Date(X.at).toLocaleString()} · ${X.sel.length} selected line${X.sel.length>1?"s":""}</p>${J.overview?`<div class="sm"><b>Overview:</b> ${E(J.overview)}</div>`:""}`);
 const src=[];X.sel.forEach(x=>{if(!src.some(y=>y.k===x.k))src.push(x)});
 B.push(`<h2>Selected lines</h2><table><tr><th style="width:12%">Tag</th><th style="width:30%">Scene</th><th>Line</th></tr>${X.sel.map(x=>`<tr><td>${E(x.tag)}</td><td>${E(x.title||"")}<br><span class="mt">${E(x.kind==="generated"?"New generated scene":x.kind==="reference"?"Old reference scene":"Pasted")}</span></td><td>${x.s&&x.s!=="—"?`<b>${E(x.s)}:</b> `:""}${E(x.l)}</td></tr>`).join("")}</table>`);
