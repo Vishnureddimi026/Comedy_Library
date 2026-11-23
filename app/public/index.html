@@ -1539,11 +1539,12 @@ function parseLoose(t){t=String(t||"").replace(/```(json)?/g,"");try{return pars
 const a=t.indexOf("{"),b=t.lastIndexOf("}");if(a<0||b<a)throw new Error("no JSON");let x=t.slice(a,b+1).replace(/[“”]/g,"'").replace(/,\s*([}\]])/g,"$1").replace(/\r?\n/g," ");return JSON.parse(x)}
 async function makeExpPdf(msgEl){if(!EXP)return;await window.CFL.scenePdf([{kind:"lineexp",x:EXP}],"Old-to-New Analysis · Selected lines","Old_to_New_Line_Analysis_"+new Date().toISOString().slice(0,16).replace(/[:T]/g,"-")+".pdf",msgEl)}
 document.addEventListener("click",e=>{if(e.target.closest("[data-exppdf]")){const m=document.querySelector("#selProg .expmsg")||$("#selMsg");makeExpPdf(m)}});
-function cardData(id,i){const fm=window.CFL.fm()||{};const n=i+1;const card=fid=>{const f=fm[fid]||[];return {id:fid,name:f[1]||"",batch:f[9]||"",recipe:f[4]||"",sampleWho:f[6]||"",sample:f[12]||"",olds:oldUses(fid).slice(0,3).map(u=>({sc:u.sc,t:scTitle(u.sc)||"",d:u.d||""}))}};
+function cardData(id,i){const fm=window.CFL.fm()||{};const n=i+1;const card=fid=>{const f=fm[fid]||[];return {id:fid,name:f[1]||"",batch:f[9]||"",recipe:f[4]||"",useWhen:f[5]||"",family:(typeof CATS!=="undefined"&&CATS[f[3]])||"",sampleWho:f[6]||"",sample:f[12]||"",olds:oldUses(fid).slice(0,3).map(u=>({sc:u.sc,t:scTitle(u.sc)||"",d:u.d||""}))}};
 if(id.startsWith("h:")){const h=hist.find(x=>String(x.t)===id.slice(2));if(!h)return {kind:"missing"};
 const sl=((h.s.scan&&h.s.scan.shortlist)||[]).filter(x=>(x.lines||[]).some(v=>+v===n));
 const beats=((h.a&&h.a.B)||[]).filter(b=>+b.newFrom<=n&&n<=+b.newTo).map(b=>({title:b.title||"",ids:b.ids||[],collected:b.collected||"",added:b.added||"",old:(b.old||[]).map(o=>{const R=findRef(o.scene);const L=R&&R.l[+o.line-1];return {sc:o.scene,line:o.line,t:R?R.t:"",d:L?L[0]+": "+L[1]:""}})}));
-return {kind:"generated",title:h.s.title,cards:sl.map(x=>({...card(x.id),who:x.who||"",why:x.why||"",lines:(x.lines||[]).filter(v=>+v>0),how:x.how||""})),beats}}
+const SC=h.s.scene,ctx=k=>SC[k]?{n:k+1,s:SC[k].s,l:SC[k].l}:null;
+return {kind:"generated",title:h.s.title,idea:h.idea||"",before:ctx(n-2),after:ctx(n),total:SC.length,n,cards:sl.map(x=>({...card(x.id),who:x.who||"",why:x.why||"",lines:(x.lines||[]).filter(v=>+v>0),how:x.how||""})),beats}}
 if(id.startsWith("r:")){const R=findRef(id.slice(2));return {kind:"reference",title:R?R.id+" — "+R.t:""}}
 return {kind:"pasted"}}
 $("#selLinesPdf").addEventListener("click",async()=>{if(!SELK.length)return;const sel=SELK.map(k=>{const d=SELD[k];return {tag:(d.k||"?").toUpperCase()+(d.i+1),s:d.s,l:d.l,t:d.t||""}});
@@ -1714,14 +1715,26 @@ B.push(`<h2>Line ${E(x.tag)}</h2><div class="fx"><p style="font-size:17px">${x.s
 if(D.kind==="reference"){B.push(`<p class="sm">This is an original line from the old scene ${E(D.title)}. It was not generated.</p>`);B.splice(st,2,B[st]+B[st+1]);return}
 if(D.kind!=="generated"){B.push(`<p class="sm">No saved formula information for this line (it was pasted or its scene is no longer saved).</p>`);B.splice(st,2,B[st]+B[st+1]);return}
 if(!(D.cards||[]).length&&!(D.beats||[]).length){B.push(`<p class="sm">No formula was recorded for this exact line.</p>`);B.splice(st,2,B[st]+B[st+1]);return}
+const HS=t=>{const o={};String(t||"").split("|").forEach(y=>{const m=y.trim().match(/^([^:]{2,30}):\s*(.*)$/);if(m){const k=m[1].trim().toLowerCase();o[/kept|ఉంచ/.test(k)?"kept":/chang|మార్చ/.test(k)?"changed":/why|funny|ఎందుకు|నవ్వ/.test(k)?"why":k]=m[2]}});return o};
+{const cs=D.cards||[],bt=D.beats||[],st=[];const q=(x)=>x?`<b>${E(x.s)}:</b> ${E(x.l)}`:"";
+st.push(`<p><b>1. The scene idea:</b> ${E(D.idea||"—")}</p>`);
+st.push(`<p><b>2. Where this line sits:</b> line ${D.n} of ${D.total}.${D.before?` It answers line ${D.before.n} — ${q(D.before)}`:" It opens the scene."}${D.after?`<br>The next line ${D.after.n} reacts to it — ${q(D.after)}`:" It ends the scene."}</p>`);
+if(bt.length)st.push(`<p><b>3. The job of this moment</b> (from the scene analysis): ${bt.map(b=>`<i>${E(b.title)}</i>${b.collected?` — collected: ${E(b.collected)}`:""}`).join("; ")}</p>`);
+if(cs.length)st.push(`<p><b>${bt.length?4:3}. Formulas I picked:</b> ${cs.map(c=>`<b>${E(c.id)} · ${E(c.name)}</b>${c.family?` (${E(c.family)})`:""} — ${E(c.why||"")}`).join("<br>")}</p>`);
+const k0=bt.length?5:4;let k=k0;
+cs.forEach(c=>{const h=HS(c.how),o=(c.olds||[])[0];
+st.push(`<p><b>${k++}. Using ${E(c.id)}:</b> the method is <i>${E(c.recipe||"")}</i>${c.useWhen?` — it works when ${E(c.useWhen.charAt(0).toLowerCase()+c.useWhen.slice(1))}`:""}.${o?` I took the technique from ${E(o.sc)}${o.t?" ("+E(o.t)+")":""}: “${E(String(o.d).replace(/^["“\s]+|["”\s]+$/g,""))}”.`:""}${h.kept?` <br>Kept: ${E(h.kept)}.`:""}${h.changed?` <br>Changed for this scene: ${E(h.changed)}.`:""}${h.why?` <br>Why it gets a laugh: ${E(h.why)}.`:""}</p>`)});
+const ad=bt.map(b=>b.added).filter(Boolean);if(ad.length)st.push(`<p><b>${k++}. What I added new</b> (not in any old scene): ${E(ad.join(" "))}</p>`);
+st.push(`<p><b>${k}. Result:</b> ${q({s:x.s,l:x.l})}</p>`);
+B.push(`<div class="fx"><div class="fh"><b>How I thought — step by step</b></div>${st.join("")}</div>`)}
 (D.cards||[]).forEach(c=>{
 B.push(`<div class="fx"><div class="fh"><b>${E(c.id)} · ${E(c.name)}</b><span>${c.batch?"Batch "+E(String(c.batch).replace(/^B/,""))+" · ":""}Character: ${E(c.who)} · ✓ Used in this scene · line ${E(c.lines.join(", "))}</span></div>
-${c.why?`<p><b>Why it fits:</b> ${E(c.why)}</p>`:""}
+${c.why?`<p><b>Why it fits:</b> ${E(c.why)}</p>`:""}${c.recipe?`<p><b>Method (recipe):</b> ${E(c.recipe)}</p>`:""}${c.useWhen?`<p><b>Use when:</b> ${E(c.useWhen)}</p>`:""}
 ${c.olds.map(o=>`<div class="sm"><span class="mt">OLD · where it was used · ${E(o.sc)}${o.t?" — "+E(o.t):""}</span><br>${E(o.d||"(see the old scene)")}</div>`).join("")}
 ${c.sample?`<div class="sm"><span class="mt">Library sample (${E(c.sampleWho)})</span><br>${E(c.sample)}</div>`:""}
 <table><tr><th>NEW · where it's used now · line ${E(c.lines.join(", "))}</th></tr><tr><td class="n">${x.s&&x.s!=="—"?`<b>${E(x.s)}:</b> `:""}${E(x.l)}</td></tr></table>
 <div class="hw"><div class="t">ఎలా · పాతది → కొత్తది · నేను ఎలా ఆలోచించాను</div>${c.how?howP(c.how):`<p><b>ఉంచింది:</b> ${E(c.recipe)}</p>`}</div></div>`)});
-(D.beats||[]).filter(b=>!(D.cards||[]).length).forEach(b=>B.push(`<div class="fx"><div class="fh"><b>${E(b.title)}</b><span>${E(b.ids.join(", "))}</span></div>${b.old.map(o=>`<div class="sm"><span class="mt">OLD · ${E(o.sc)} L${E(o.line)}${o.t?" — "+E(o.t):""}</span><br>${E(o.d)}</div>`).join("")}<p><b>Collected:</b> ${E(b.collected)}</p><p><b>Added:</b> ${E(b.added)}</p></div>`));if(B.length>st+1)B.splice(st,2,B[st]+B[st+1])});
+(D.beats||[]).forEach(b=>B.push(`<div class="fx"><div class="fh"><b>From the scene analysis · ${E(b.title)}</b><span>${E(b.ids.join(", "))}</span></div>${b.old.map(o=>`<div class="sm"><span class="mt">OLD · ${E(o.sc)} L${E(o.line)}${o.t?" — "+E(o.t):""}</span><br>${E(o.d)}</div>`).join("")}<p><b>Collected:</b> ${E(b.collected)}</p><p><b>Added:</b> ${E(b.added)}</p></div>`));if(B.length>st+1)B.splice(st,2,B[st]+B[st+1])});
 return B}
 function lblocks(item){const X=item.x;if(X.cards)return cblocks(X);const J=X.j||{},B=[],j=a=>(a||[]).join(", ");
 B.push(`<p class="mt">${new Date(X.at).toLocaleString()} · ${X.sel.length} selected line${X.sel.length>1?"s":""}</p>${J.overview?`<div class="sm"><b>Overview:</b> ${E(J.overview)}</div>`:""}`);
