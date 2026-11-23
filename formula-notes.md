@@ -783,3 +783,11 @@ Use these as top-quality references for every new scene. Rules:
 - Order them into one scene: set-up → building punches → twist → strongest punch last. Add short linking lines in the characters' voice only where two chosen lines don't connect; most of the scene stays the user's lines.
 - Tag every line with the scene it came from (or "new link"), give a combo report (what was picked, from where, why; what was left out; why the order works), then the full A–F analysis.
 - Page: saved scenes have Copy scene and Add to scene combo; each combo box has a Saved scene… list and a Paste button.
+
+## New character: DJ Tillu (added 23 Nov 2026, at the user's request)
+- Source: Tillu's own 163 lines in the reference scenes Q2–Q20 and R1–R6 (DJ Tillu / Tillu Square scripts). Profile describes his patterns; new scenes write fresh lines, never his film lines.
+- Personality: the cool show-off — a Hyderabad local DJ who acts like a celebrity. Fast, half-bored, fully confident; never panics, never admits; bluffs, lectures on nonsense, changes the topic; grovels only when real power appears (అన్నా! అన్నగారు!), then acts cool again.
+- Speech: always Hyderabadi Telangana (ఈడ / ఆడ, అయితది / వస్తది, -ర్రు endings, చేస్తలేదు, ఊకో, లొల్లి, జర, ముచ్చట, మజాక్, కిరికిరి) + English mid-sentence (ఓకే?, వన్ మినిట్, ఐ హావ్ వన్ డౌట్) + a little Hindi (యార్); calls people బాయ్ / అంకుల్ / అన్నా, parents డాడీ / మమ్మీ; self-praise tag (మనతోని అట్ల ఉంటది style); countdowns.
+- Signature formulas (taken from his lines): F362 F365 F366 F369 F370 F376 F377 F378 F379 F384 F387 F407 F412 F413 F414 F247.
+- Voice separation (rule in every scene with Tillu): Madhu = sincere fool, long earnest logic, సార్ tags, punch = wrong conclusion. Mahesh = sarcastic realist, short flat lines, Uttarandhra deadpan, punch = cold truth. Tillu = cool show-off, fast Hyderabadi + English, punch = cool twist or sudden topic change. Madhu/Mahesh never use Tillu's tags; Tillu never uses Uttarandhra words or humble సార్ endings unless scared.
+- Pair dynamics: Tillu & Madhu (sincere fool vs cool bluffer), Tillu & Mahesh (the bluff and the X-ray), Tillu & Master (bored celebrity vs melodrama).
