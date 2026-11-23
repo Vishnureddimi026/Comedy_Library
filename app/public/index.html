@@ -1549,8 +1549,8 @@ if(id.startsWith("r:")){const R=findRef(id.slice(2));return {kind:"reference",ti
 return {kind:"pasted"}}
 $("#selLinesPdf").addEventListener("click",async()=>{if(!SELK.length)return;const sel=SELK.map(k=>{const d=SELD[k];return {tag:(d.k||"?").toUpperCase()+(d.i+1),s:d.s,l:d.l,t:d.t||""}});
 $("#selMsg").textContent="Making the PDF…";await window.CFL.scenePdf([{kind:"sellines",sel,at:Date.now()}],"My selected lines","Selected_lines_"+new Date().toISOString().slice(0,16).replace(/[:T]/g,"-")+".pdf",$("#selMsg"))});
-$("#selPdf").addEventListener("click",async()=>{if(!SELK.length)return;
-const sel=SELK.map(k=>{const d=SELD[k];const [id]=k.split("|");return {tag:(d.k||"?").toUpperCase()+(d.i+1),s:d.s,l:d.l,t:d.t,data:cardData(id,d.i)}});
+$("#selPdf").addEventListener("click",async()=>{if(!SELK.length)return;prog("<b>Making the PDF…</b>");
+let sel;try{sel=SELK.map(k=>{const d=SELD[k];const [id]=k.split("|");let data;try{data=cardData(id,d.i)}catch(e){data={kind:"pasted"}}return {tag:(d.k||"?").toUpperCase()+(d.i+1),s:d.s,l:d.l,t:d.t,data}})}catch(e){prog("Couldn't read the selected lines ("+(e&&e.message)+"). Tap Clear and select them again.");return}
 EXP={cards:true,sel,at:Date.now()};
 prog(`<b>PDF for ${sel.length} line${sel.length>1?"s":""}</b><div class="acts"><button class="btn sm" type="button" data-exppdf="1">Download PDF again</button></div><span class="expmsg"></span>`);
 await makeExpPdf(document.querySelector("#selProg .expmsg"))});
@@ -1716,7 +1716,7 @@ if(D.kind==="reference"){B.push(`<p class="sm">This is an original line from the
 if(D.kind!=="generated"){B.push(`<p class="sm">No saved formula information for this line (it was pasted or its scene is no longer saved).</p>`);B.splice(st,2,B[st]+B[st+1]);return}
 if(!(D.cards||[]).length&&!(D.beats||[]).length){B.push(`<p class="sm">No formula was recorded for this exact line.</p>`);B.splice(st,2,B[st]+B[st+1]);return}
 const HS=t=>{const o={};String(t||"").split("|").forEach(y=>{const m=y.trim().match(/^([^:]{2,30}):\s*(.*)$/);if(m){const k=m[1].trim().toLowerCase();o[/kept|ఉంచ/.test(k)?"kept":/chang|మార్చ/.test(k)?"changed":/why|funny|ఎందుకు|నవ్వ/.test(k)?"why":k]=m[2]}});return o};
-{const cs=D.cards||[],bt=D.beats||[],st=[];const q=(x)=>x?`<b>${E(x.s)}:</b> ${E(x.l)}`:"";
+try{const cs=D.cards||[],bt=D.beats||[],st=[];const q=(x)=>x?`<b>${E(x.s)}:</b> ${E(x.l)}`:"";
 st.push(`<p><b>1. The scene idea:</b> ${E(D.idea||"—")}</p>`);
 st.push(`<p><b>2. Where this line sits:</b> line ${D.n} of ${D.total}.${D.before?` It answers line ${D.before.n} — ${q(D.before)}`:" It opens the scene."}${D.after?`<br>The next line ${D.after.n} reacts to it — ${q(D.after)}`:" It ends the scene."}</p>`);
 if(bt.length)st.push(`<p><b>3. The job of this moment</b> (from the scene analysis): ${bt.map(b=>`<i>${E(b.title)}</i>${b.collected?` — collected: ${E(b.collected)}`:""}`).join("; ")}</p>`);
@@ -1726,7 +1726,7 @@ cs.forEach(c=>{const h=HS(c.how),o=(c.olds||[])[0];
 st.push(`<p><b>${k++}. Using ${E(c.id)}:</b> the method is <i>${E(c.recipe||"")}</i>${c.useWhen?` — it works when ${E(c.useWhen.charAt(0).toLowerCase()+c.useWhen.slice(1))}`:""}.${o?` I took the technique from ${E(o.sc)}${o.t?" ("+E(o.t)+")":""}: “${E(String(o.d).replace(/^["“\s]+|["”\s]+$/g,""))}”.`:""}${h.kept?` <br>Kept: ${E(h.kept)}.`:""}${h.changed?` <br>Changed for this scene: ${E(h.changed)}.`:""}${h.why?` <br>Why it gets a laugh: ${E(h.why)}.`:""}</p>`)});
 const ad=bt.map(b=>b.added).filter(Boolean);if(ad.length)st.push(`<p><b>${k++}. What I added new</b> (not in any old scene): ${E(ad.join(" "))}</p>`);
 st.push(`<p><b>${k}. Result:</b> ${q({s:x.s,l:x.l})}</p>`);
-B.push(`<div class="fx"><div class="fh"><b>How I thought — step by step</b></div>${st.join("")}</div>`)}
+B.push(`<div class="fx"><div class="fh"><b>How I thought — step by step</b></div>${st.join("")}</div>`)}catch(e){B.push(`<p class="sm">(Step-by-step part skipped for this line.)</p>`)}
 (D.cards||[]).forEach(c=>{
 B.push(`<div class="fx"><div class="fh"><b>${E(c.id)} · ${E(c.name)}</b><span>${c.batch?"Batch "+E(String(c.batch).replace(/^B/,""))+" · ":""}Character: ${E(c.who)} · ✓ Used in this scene · line ${E(c.lines.join(", "))}</span></div>
 ${c.why?`<p><b>Why it fits:</b> ${E(c.why)}</p>`:""}${c.recipe?`<p><b>Method (recipe):</b> ${E(c.recipe)}</p>`:""}${c.useWhen?`<p><b>Use when:</b> ${E(c.useWhen)}</p>`:""}
@@ -1780,8 +1780,8 @@ const h=c.height*W/c.width;
 if(h<=BOT-TOP){if(y+h>BOT){pdf.addPage();y=TOP}pdf.addImage(c.toDataURL("image/jpeg",0.88),"JPEG",X,y,W,h);y+=h+4}
 else{const pxPerMm=c.width/W;let off=0;while(off<c.height){if(y>TOP+5){pdf.addPage();y=TOP}const sh=Math.min(c.height-off,Math.floor((BOT-y)*pxPerMm));const p=document.createElement("canvas");p.width=c.width;p.height=sh;p.getContext("2d").drawImage(c,0,off,c.width,sh,0,0,c.width,sh);pdf.addImage(p.toDataURL("image/jpeg",0.88),"JPEG",X,y,W,sh/pxPerMm);y+=sh/pxPerMm+4;off+=sh}}}
 const blob=pdf.output("blob");msgEl.textContent="Ready — confirm the download.";
-try{await dl.save({filename:fname,data:blob});msgEl.textContent="Saved: "+fname}catch(e){msgEl.textContent=({declined:"Download cancelled.",rate_limited:"A download prompt is already open. Try again in a moment."})[e&&e.code]||"The download didn't go through. Try again."}}
-catch(e){msgEl.textContent="Something went wrong making the PDF. Try again."}finally{host.remove()}}
+try{await dl.save({filename:fname,data:blob});msgEl.textContent="Saved: "+fname}catch(e){msgEl.textContent=({declined:"Download cancelled — the save prompt was closed. Tap Download PDF again and choose Save.",rate_limited:"A download prompt is already open. Try again in a moment."})[e&&e.code]||"The download didn't go through ("+((e&&(e.code||e.message))||"unknown")+"). Try again."}}
+catch(e){msgEl.textContent="Something went wrong making the PDF ("+((e&&(e.code||e.message))||String(e))+"). Try again, or select fewer lines."}finally{host.remove()}}
 window.CFL.scenePdf=makePdf;
 document.addEventListener("click",e=>{const b=e.target.closest("[data-scenepdf]");if(!b)return;const it=window._rs;if(!it)return;const m=b.parentElement.querySelector(".pdfmsg");
 const nm=((it.s&&it.s.title)||"scene").replace(/[^\wఀ-౿]+/g,"_").slice(0,40);makePdf([it],"Old → New: "+((it.s&&it.s.title)||"Scene"),`Scene_${nm}_old_to_new.pdf`,m)});
