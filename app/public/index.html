@@ -231,8 +231,8 @@ setTimeout(function(){var i=document.getElementById("lockP");if(i)i.focus()},100
 <div id="cmpBar" class="cmpbar min" hidden><div class="selhead"><button class="btn sm" type="button" id="selToggle" aria-expanded="false">Open ▲</button><b id="selCount"></b></div><div id="cmpBody"><span class="selhint">Order = gold numbers. Tap a line again to unselect.</span>
 <div class="acts"><button class="btn sm" type="button" id="selCopy">Copy selected lines</button><button class="btn ghost sm" type="button" id="selCombo">Add to Scene combo</button><button class="btn ghost sm" type="button" id="selClear">Clear</button></div>
 <label class="selhint"><input type="checkbox" id="selTag"> Show which scene each line came from, like [B7] (for Copy)</label>
-<div class="tgen"><b>PDFs</b><span class="selhint"><b>Old-to-New Analysis PDF:</b> formula, OLD line, library sample, NEW line and how, for each line. <b>Selected lines PDF:</b> just your selected lines, in order.</span>
-<div class="acts" style="margin:0"><button class="btn sm" type="button" id="selPdf">Generate Old-to-New Analysis PDF</button><button class="btn sm" type="button" id="selLinesPdf">Selected lines PDF</button></div>
+<div class="tgen"><b>PDFs</b><span class="selhint"><b>Old-to-New Analysis PDF:</b> formula, OLD line, library sample, NEW line and how, for each line. <b>Short PDF:</b> only the formula cards (OLD line, sample, NEW line, kept/changed/why). <b>Selected lines PDF:</b> just your selected lines, in order.</span>
+<div class="acts" style="margin:0"><button class="btn sm" type="button" id="selPdf">Generate Old-to-New Analysis PDF</button><button class="btn sm" type="button" id="selShortPdf">Short PDF (cards only)</button><button class="btn sm" type="button" id="selLinesPdf">Selected lines PDF</button></div>
 <div id="selProg" class="selprog" role="status" hidden></div></div>
 <details class="tgen2"><summary>Or: write a brand-new scene from these lines</summary><div class="tgen">
 <label for="selSit" class="selhint"><b>Where does the new scene happen?</b> (optional — one short sentence, not dialogue)</label>
@@ -1537,7 +1537,7 @@ JSON RULES: inside text values never use the double-quote character — quote wo
 let EXP=null;
 function parseLoose(t){t=String(t||"").replace(/```(json)?/g,"");try{return parse(t)}catch(e){}
 const a=t.indexOf("{"),b=t.lastIndexOf("}");if(a<0||b<a)throw new Error("no JSON");let x=t.slice(a,b+1).replace(/[“”]/g,"'").replace(/,\s*([}\]])/g,"$1").replace(/\r?\n/g," ");return JSON.parse(x)}
-async function makeExpPdf(msgEl){if(!EXP)return;await window.CFL.scenePdf([{kind:"lineexp",x:EXP}],"Old-to-New Analysis · Selected lines","Old_to_New_Line_Analysis_"+new Date().toISOString().slice(0,16).replace(/[:T]/g,"-")+".pdf",msgEl)}
+async function makeExpPdf(msgEl){if(!EXP)return;await window.CFL.scenePdf([{kind:"lineexp",x:EXP}],"Old-to-New Analysis · Selected lines"+(EXP.compact?" (short)":""),(EXP.compact?"Old_to_New_Short_":"Old_to_New_Line_Analysis_")+new Date().toISOString().slice(0,16).replace(/[:T]/g,"-")+".pdf",msgEl)}
 document.addEventListener("click",e=>{if(e.target.closest("[data-exppdf]")){const m=document.querySelector("#selProg .expmsg")||$("#selMsg");makeExpPdf(m)}});
 function cardData(id,i){const fm=window.CFL.fm()||{};const n=i+1;const card=fid=>{const f=fm[fid]||[];return {id:fid,name:f[1]||"",batch:f[9]||"",recipe:f[4]||"",useWhen:f[5]||"",family:(typeof CATS!=="undefined"&&CATS[f[3]])||"",sampleWho:f[6]||"",sample:f[12]||"",olds:oldUses(fid).slice(0,3).map(u=>({sc:u.sc,t:scTitle(u.sc)||"",d:u.d||""}))}};
 if(id.startsWith("h:")){const h=hist.find(x=>String(x.t)===id.slice(2));if(!h)return {kind:"missing"};
@@ -1550,11 +1550,12 @@ if(id.startsWith("r:")){const R=findRef(id.slice(2));return {kind:"reference",ti
 return {kind:"pasted"}}
 $("#selLinesPdf").addEventListener("click",async()=>{if(!SELK.length)return;const sel=SELK.map(k=>{const d=SELD[k];return {tag:(d.k||"?").toUpperCase()+(d.i+1),s:d.s,l:d.l,t:d.t||""}});
 $("#selMsg").textContent="Making the PDF…";await window.CFL.scenePdf([{kind:"sellines",sel,at:Date.now()}],"My selected lines","Selected_lines_"+new Date().toISOString().slice(0,16).replace(/[:T]/g,"-")+".pdf",$("#selMsg"))});
-$("#selPdf").addEventListener("click",async()=>{if(!SELK.length)return;prog("<b>Making the PDF…</b>");
+const cardsPdf=async compact=>{if(!SELK.length)return;prog("<b>Making the PDF…</b>");
 let sel;try{sel=SELK.map(k=>{const d=SELD[k];const [id]=k.split("|");let data;try{data=cardData(id,d.i)}catch(e){data={kind:"pasted"}}return {tag:(d.k||"?").toUpperCase()+(d.i+1),s:d.s,l:d.l,t:d.t,data}})}catch(e){prog("Couldn't read the selected lines ("+(e&&e.message)+"). Tap Clear and select them again.");return}
-EXP={cards:true,sel,at:Date.now()};
-prog(`<b>PDF for ${sel.length} line${sel.length>1?"s":""}</b><div class="acts"><button class="btn sm" type="button" data-exppdf="1">Download PDF again</button></div><span class="expmsg"></span>`);
-await makeExpPdf(document.querySelector("#selProg .expmsg"))});
+EXP={cards:true,compact,sel,at:Date.now()};
+prog(`<b>${compact?"Short PDF":"PDF"} for ${sel.length} line${sel.length>1?"s":""}</b><div class="acts"><button class="btn sm" type="button" data-exppdf="1">Download PDF again</button></div><span class="expmsg"></span>`);
+await makeExpPdf(document.querySelector("#selProg .expmsg"))};
+$("#selPdf").addEventListener("click",()=>cardsPdf(false));$("#selShortPdf").addEventListener("click",()=>cardsPdf(true));
 $("#selNew").addEventListener("click",()=>{if(!SELK.length)return;
 if(busy){prog(`<b>Another scene is still being written.</b><br>${esc($("#status").textContent||"")}<br>Wait for it to finish, or tap Stop, then tap Generate again.${progBtns}`);return}
 {const v=$("#selSit").value.trim();if(v&&((v.match(/[:：]/g)||[]).length>=2||v.length>200)){$("#selSit").value="";$("#selMsg").textContent="The situation box had dialogue in it, so I cleared it — your selected lines are sent automatically. The AI will choose a fresh situation (or type one short sentence and tap Generate again)."}}
@@ -1710,7 +1711,7 @@ function sblocks(X){const B=[`<p class="mt">${new Date(X.at).toLocaleString()} �
 for(let i=0;i<X.sel.length;i+=12)B.push(`<div class="dl">${X.sel.slice(i,i+12).map((x,k)=>`<p style="margin:10px 0;font-size:18px;line-height:1.7"><span>${i+k+1}</span>${x.s&&x.s!=="—"?`<b>${E(x.s)}:</b> `:""}${E(x.l)} <i class="mt">[${E(x.tag)}${x.t?" · "+E(x.t):""}]</i></p>`).join("")}</div>`);
 return B}
 function cblocks(X){const B=[];
-B.push(`<div class="fx"><div class="fh"><b>How to read this PDF · ఈ PDF ఎలా చదవాలి</b></div><p><b>Formula (ఫార్ములా)</b> = a comedy trick that works again and again, like a recipe. Each has a number, e.g. F409.</p><p><b>Old scene (పాత సీన్)</b> = the old script where the trick was first seen. The new line uses the same <i>trick</i>, but new words and a new situation.</p><p>For every line you get: first a <b>30-second explanation</b> (easy to tell someone), then <b>more detail</b> step by step, then the <b>formula cards</b> with the old lines.</p></div>`);
+if(!X.compact)B.push(`<div class="fx"><div class="fh"><b>How to read this PDF · ఈ PDF ఎలా చదవాలి</b></div><p><b>Formula (ఫార్ములా)</b> = a comedy trick that works again and again, like a recipe. Each has a number, e.g. F409.</p><p><b>Old scene (పాత సీన్)</b> = the old script where the trick was first seen. The new line uses the same <i>trick</i>, but new words and a new situation.</p><p>For every line you get: first a <b>30-second explanation</b> (easy to tell someone), then <b>more detail</b> step by step, then the <b>formula cards</b> with the old lines.</p></div>`);
 B.push(`<p class="mt">${new Date(X.at).toLocaleString()} · ${X.sel.length} selected line${X.sel.length>1?"s":""}</p>`);
 X.sel.forEach(x=>{const D=x.data||{};const st=B.length;
 B.push(`<h2>Line ${E(x.tag)}</h2><div class="fx"><p style="font-size:17px">${x.s&&x.s!=="—"?`<b>${E(x.s)}:</b> `:""}${E(x.l)}</p><p class="mt">${E(D.title||x.t||"")}</p></div>`);
@@ -1718,14 +1719,14 @@ if(D.kind==="reference"){B.push(`<p class="sm">This is an original line from the
 if(D.kind!=="generated"){B.push(`<p class="sm">No saved formula information for this line (it was pasted or its scene is no longer saved).</p>`);B.splice(st,2,B[st]+B[st+1]);return}
 if(!(D.cards||[]).length&&!(D.beats||[]).length){B.push(`<p class="sm">No formula was recorded for this exact line.</p>`);B.splice(st,2,B[st]+B[st+1]);return}
 const HS=t=>{const o={};String(t||"").split("|").forEach(y=>{const m=y.trim().match(/^([^:]{2,30}):\s*(.*)$/);if(m){const k=m[1].trim().toLowerCase();o[/kept|ఉంచ/.test(k)?"kept":/chang|మార్చ/.test(k)?"changed":/why|funny|ఎందుకు|నవ్వ/.test(k)?"why":k]=m[2]}});return o};
-try{const cs=D.cards||[],bt=D.beats||[];if(cs.length){const H=HS(cs[0].how),o=(cs[0].olds||[])[0],cl=t=>E(String(t||"").replace(/^["“\s]+|["”\s]+$/g,""));
+try{const cs=D.cards||[],bt=D.beats||[];if(cs.length&&!X.compact){const H=HS(cs[0].how),o=(cs[0].olds||[])[0],cl=t=>E(String(t||"").replace(/^["“\s]+|["”\s]+$/g,""));
 const rows=[["ఏం జరుగుతోంది?","What is happening?",(D.before?`After “${cl(D.before.l)}”, `:"At the start of the scene, ")+`${E(x.s||"the character")} says this line. Scene: ${E(D.idea||D.title||"")}`],
 ["ట్రిక్ ఏంటి?","What is the trick?",cs.map(c=>`<b>${E(c.name)}</b> (${E(c.id)}) — ${E(c.recipe||c.why||"")}`).join("<br>")],
 ["ఎక్కడి నుంచి?","Where did the trick come from?",o?`Old scene ${E(o.sc)}${o.t?" — "+E(o.t):""}: “${cl(o.d)}”`:"From the formula library."],
 ["ఏం మార్చాను?","What did I change?",E(H.changed||cs.map(c=>HS(c.how).changed).filter(Boolean).join(" ")||"New words, new situation, same trick.")],
 ["ఎందుకు నవ్వొస్తుంది?","Why do people laugh?",E(H.why||cs.map(c=>HS(c.how).why).filter(Boolean).join(" ")||cs[0].why||"")]];
 B.push(`<div class="fx" style="border:2px solid #2f6b5b"><div class="fh"><b>Explain it in 30 seconds · 30 సెకన్లలో చెప్పండి</b></div><table>${rows.map(r=>`<tr><th style="width:30%">${r[0]}<br><span class="mt">${r[1]}</span></th><td>${r[2]}</td></tr>`).join("")}</table></div>`)}}catch(e){}
-try{const cs=D.cards||[],bt=D.beats||[],st=[];const q=(x)=>x?`<b>${E(x.s)}:</b> ${E(x.l)}`:"";
+if(!X.compact)try{const cs=D.cards||[],bt=D.beats||[],st=[];const q=(x)=>x?`<b>${E(x.s)}:</b> ${E(x.l)}`:"";
 let k=1;const P=(title,body)=>st.push(`<div class="stp"><p><b>Step ${k++} · ${title}</b></p>${body}</div>`);
 P("The scene idea",`<p>${E(D.idea||"—")}</p><p class="mt">Scene: ${E(D.title||"")} · ${D.total} lines</p>`);
 if(D.chr)P(`Who is speaking: ${E(D.chr.name)}`,`<p><b>Character:</b> ${E(D.chr.role)}</p><p><b>How he talks:</b> ${E(D.chr.style)}</p>${D.chr.habits.length?`<p><b>His comedy habits:</b> ${D.chr.habits.map(E).join(" · ")}</p>`:""}${D.chr.slang.length?`<p><b>His slang words used in this line:</b> ${D.chr.slang.map(E).join(", ")}</p>`:""}`);
@@ -1742,12 +1743,12 @@ P("Tell it in one sentence",`<p><i>${E(x.s||"The character")} uses the “${E((c
 B.push(`<div class="fx"><div class="fh"><b>More detail · how I thought, step by step</b></div>${st[0]||""}</div>`);st.slice(1).forEach(x=>B.push(`<div class="fx">${x}</div>`))}catch(e){B.push(`<p class="sm">(Step-by-step part skipped for this line.)</p>`)}
 (D.cards||[]).forEach(c=>{
 B.push(`<div class="fx"><div class="fh"><b>${E(c.id)} · ${E(c.name)}</b><span>${c.batch?"Batch "+E(String(c.batch).replace(/^B/,""))+" · ":""}Character: ${E(c.who)} · ✓ Used in this scene · line ${E(c.lines.join(", "))}</span></div>
-${c.why?`<p><b>Why it fits:</b> ${E(c.why)}</p>`:""}${c.recipe?`<p><b>Method (recipe):</b> ${E(c.recipe)}</p>`:""}${c.useWhen?`<p><b>Use when:</b> ${E(c.useWhen)}</p>`:""}
+${c.why?`<p><b>Why it fits:</b> ${E(c.why)}</p>`:""}${c.recipe&&!X.compact?`<p><b>Method (recipe):</b> ${E(c.recipe)}</p>`:""}${c.useWhen&&!X.compact?`<p><b>Use when:</b> ${E(c.useWhen)}</p>`:""}
 ${c.olds.map(o=>`<div class="sm"><span class="mt">OLD · where it was used · ${E(o.sc)}${o.t?" — "+E(o.t):""}</span><br>${E(o.d||"(see the old scene)")}</div>`).join("")}
 ${c.sample?`<div class="sm"><span class="mt">Library sample (${E(c.sampleWho)})</span><br>${E(c.sample)}</div>`:""}
 <table><tr><th>NEW · where it's used now · line ${E(c.lines.join(", "))}</th></tr><tr><td class="n">${x.s&&x.s!=="—"?`<b>${E(x.s)}:</b> `:""}${E(x.l)}</td></tr></table>
 <div class="hw"><div class="t">ఎలా · పాతది → కొత్తది · నేను ఎలా ఆలోచించాను</div>${c.how?howP(c.how):`<p><b>ఉంచింది:</b> ${E(c.recipe)}</p>`}</div></div>`)});
-(D.beats||[]).forEach(b=>B.push(`<div class="fx"><div class="fh"><b>From the scene analysis · ${E(b.title)}</b><span>${E(b.ids.join(", "))}</span></div>${b.old.map(o=>`<div class="sm"><span class="mt">OLD · ${E(o.sc)} L${E(o.line)}${o.t?" — "+E(o.t):""}</span><br>${E(o.d)}</div>`).join("")}<p><b>Collected:</b> ${E(b.collected)}</p><p><b>Added:</b> ${E(b.added)}</p></div>`));if(B.length>st+1)B.splice(st,2,B[st]+B[st+1])});
+(X.compact?[]:(D.beats||[])).forEach(b=>B.push(`<div class="fx"><div class="fh"><b>From the scene analysis · ${E(b.title)}</b><span>${E(b.ids.join(", "))}</span></div>${b.old.map(o=>`<div class="sm"><span class="mt">OLD · ${E(o.sc)} L${E(o.line)}${o.t?" — "+E(o.t):""}</span><br>${E(o.d)}</div>`).join("")}<p><b>Collected:</b> ${E(b.collected)}</p><p><b>Added:</b> ${E(b.added)}</p></div>`));if(B.length>st+1)B.splice(st,2,B[st]+B[st+1])});
 return B}
 function lblocks(item){const X=item.x;if(X.cards)return cblocks(X);const J=X.j||{},B=[],j=a=>(a||[]).join(", ");
 B.push(`<p class="mt">${new Date(X.at).toLocaleString()} · ${X.sel.length} selected line${X.sel.length>1?"s":""}</p>${J.overview?`<div class="sm"><b>Overview:</b> ${E(J.overview)}</div>`:""}`);
