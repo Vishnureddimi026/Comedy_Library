@@ -1779,8 +1779,9 @@ const c=await snap(el);host.removeChild(el);
 const h=c.height*W/c.width;
 if(h<=BOT-TOP){if(y+h>BOT){pdf.addPage();y=TOP}pdf.addImage(c.toDataURL("image/jpeg",0.88),"JPEG",X,y,W,h);y+=h+4}
 else{const pxPerMm=c.width/W;let off=0;while(off<c.height){if(y>TOP+5){pdf.addPage();y=TOP}const sh=Math.min(c.height-off,Math.floor((BOT-y)*pxPerMm));const p=document.createElement("canvas");p.width=c.width;p.height=sh;p.getContext("2d").drawImage(c,0,off,c.width,sh,0,0,c.width,sh);pdf.addImage(p.toDataURL("image/jpeg",0.88),"JPEG",X,y,W,sh/pxPerMm);y+=sh/pxPerMm+4;off+=sh}}}
-const blob=pdf.output("blob");msgEl.textContent="Ready — confirm the download.";
-try{await dl.save({filename:fname,data:blob});msgEl.textContent="Saved: "+fname}catch(e){msgEl.textContent=({declined:"Download cancelled — the save prompt was closed. Tap Download PDF again and choose Save.",rate_limited:"A download prompt is already open. Try again in a moment."})[e&&e.code]||"The download didn't go through ("+((e&&(e.code||e.message))||"unknown")+"). Try again."}}
+const blob=pdf.output("blob");msgEl.textContent="Ready — confirm the download in the save prompt.";
+let done=false;const fb=setTimeout(()=>{if(done)return;const u=URL.createObjectURL(blob);msgEl.innerHTML=`No save prompt yet? It may be hidden or an older prompt may still be open. <a class="btn sm" href="${u}" download="${fname}" target="_blank" rel="noopener">Open the PDF</a> <span class="row">(or close any open prompt and tap again)</span>`},6000);
+try{await dl.save({filename:fname,data:blob});done=true;clearTimeout(fb);msgEl.textContent="Saved: "+fname}catch(e){done=true;clearTimeout(fb);msgEl.textContent=({declined:"Download cancelled — the save prompt was closed. Tap Download PDF again and choose Save.",rate_limited:"A download prompt is already open. Try again in a moment."})[e&&e.code]||"The download didn't go through ("+((e&&(e.code||e.message))||"unknown")+"). Try again."}}
 catch(e){msgEl.textContent="Something went wrong making the PDF ("+((e&&(e.code||e.message))||String(e))+"). Try again, or select fewer lines."}finally{host.remove()}}
 window.CFL.scenePdf=makePdf;
 document.addEventListener("click",e=>{const b=e.target.closest("[data-scenepdf]");if(!b)return;const it=window._rs;if(!it)return;const m=b.parentElement.querySelector(".pdfmsg");
