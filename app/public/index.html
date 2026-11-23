@@ -1709,6 +1709,7 @@ function sblocks(X){const B=[`<p class="mt">${new Date(X.at).toLocaleString()} �
 for(let i=0;i<X.sel.length;i+=12)B.push(`<div class="dl">${X.sel.slice(i,i+12).map((x,k)=>`<p style="margin:10px 0;font-size:18px;line-height:1.7"><span>${i+k+1}</span>${x.s&&x.s!=="—"?`<b>${E(x.s)}:</b> `:""}${E(x.l)} <i class="mt">[${E(x.tag)}${x.t?" · "+E(x.t):""}]</i></p>`).join("")}</div>`);
 return B}
 function cblocks(X){const B=[];
+B.push(`<div class="fx"><div class="fh"><b>How to read this PDF · ఈ PDF ఎలా చదవాలి</b></div><p><b>Formula (ఫార్ములా)</b> = a comedy trick that works again and again, like a recipe. Each has a number, e.g. F409.</p><p><b>Old scene (పాత సీన్)</b> = the old script where the trick was first seen. The new line uses the same <i>trick</i>, but new words and a new situation.</p><p>For every line you get: first a <b>30-second explanation</b> (easy to tell someone), then <b>more detail</b> step by step, then the <b>formula cards</b> with the old lines.</p></div>`);
 B.push(`<p class="mt">${new Date(X.at).toLocaleString()} · ${X.sel.length} selected line${X.sel.length>1?"s":""}</p>`);
 X.sel.forEach(x=>{const D=x.data||{};const st=B.length;
 B.push(`<h2>Line ${E(x.tag)}</h2><div class="fx"><p style="font-size:17px">${x.s&&x.s!=="—"?`<b>${E(x.s)}:</b> `:""}${E(x.l)}</p><p class="mt">${E(D.title||x.t||"")}</p></div>`);
@@ -1716,6 +1717,13 @@ if(D.kind==="reference"){B.push(`<p class="sm">This is an original line from the
 if(D.kind!=="generated"){B.push(`<p class="sm">No saved formula information for this line (it was pasted or its scene is no longer saved).</p>`);B.splice(st,2,B[st]+B[st+1]);return}
 if(!(D.cards||[]).length&&!(D.beats||[]).length){B.push(`<p class="sm">No formula was recorded for this exact line.</p>`);B.splice(st,2,B[st]+B[st+1]);return}
 const HS=t=>{const o={};String(t||"").split("|").forEach(y=>{const m=y.trim().match(/^([^:]{2,30}):\s*(.*)$/);if(m){const k=m[1].trim().toLowerCase();o[/kept|ఉంచ/.test(k)?"kept":/chang|మార్చ/.test(k)?"changed":/why|funny|ఎందుకు|నవ్వ/.test(k)?"why":k]=m[2]}});return o};
+try{const cs=D.cards||[],bt=D.beats||[];if(cs.length){const H=HS(cs[0].how),o=(cs[0].olds||[])[0],cl=t=>E(String(t||"").replace(/^["“\s]+|["”\s]+$/g,""));
+const rows=[["ఏం జరుగుతోంది?","What is happening?",(D.before?`After “${cl(D.before.l)}”, `:"At the start of the scene, ")+`${E(x.s||"the character")} says this line. Scene: ${E(D.idea||D.title||"")}`],
+["ట్రిక్ ఏంటి?","What is the trick?",cs.map(c=>`<b>${E(c.name)}</b> (${E(c.id)}) — ${E(c.recipe||c.why||"")}`).join("<br>")],
+["ఎక్కడి నుంచి?","Where did the trick come from?",o?`Old scene ${E(o.sc)}${o.t?" — "+E(o.t):""}: “${cl(o.d)}”`:"From the formula library."],
+["ఏం మార్చాను?","What did I change?",E(H.changed||cs.map(c=>HS(c.how).changed).filter(Boolean).join(" ")||"New words, new situation, same trick.")],
+["ఎందుకు నవ్వొస్తుంది?","Why do people laugh?",E(H.why||cs.map(c=>HS(c.how).why).filter(Boolean).join(" ")||cs[0].why||"")]];
+B.push(`<div class="fx" style="border:2px solid #2f6b5b"><div class="fh"><b>Explain it in 30 seconds · 30 సెకన్లలో చెప్పండి</b></div><table>${rows.map(r=>`<tr><th style="width:30%">${r[0]}<br><span class="mt">${r[1]}</span></th><td>${r[2]}</td></tr>`).join("")}</table></div>`)}}catch(e){}
 try{const cs=D.cards||[],bt=D.beats||[],st=[];const q=(x)=>x?`<b>${E(x.s)}:</b> ${E(x.l)}`:"";
 st.push(`<p><b>1. The scene idea:</b> ${E(D.idea||"—")}</p>`);
 st.push(`<p><b>2. Where this line sits:</b> line ${D.n} of ${D.total}.${D.before?` It answers line ${D.before.n} — ${q(D.before)}`:" It opens the scene."}${D.after?`<br>The next line ${D.after.n} reacts to it — ${q(D.after)}`:" It ends the scene."}</p>`);
@@ -1726,7 +1734,7 @@ cs.forEach(c=>{const h=HS(c.how),o=(c.olds||[])[0];
 st.push(`<p><b>${k++}. Using ${E(c.id)}:</b> the method is <i>${E(c.recipe||"")}</i>${c.useWhen?` — it works when ${E(c.useWhen.charAt(0).toLowerCase()+c.useWhen.slice(1))}`:""}.${o?` I took the technique from ${E(o.sc)}${o.t?" ("+E(o.t)+")":""}: “${E(String(o.d).replace(/^["“\s]+|["”\s]+$/g,""))}”.`:""}${h.kept?` <br>Kept: ${E(h.kept)}.`:""}${h.changed?` <br>Changed for this scene: ${E(h.changed)}.`:""}${h.why?` <br>Why it gets a laugh: ${E(h.why)}.`:""}</p>`)});
 const ad=bt.map(b=>b.added).filter(Boolean);if(ad.length)st.push(`<p><b>${k++}. What I added new</b> (not in any old scene): ${E(ad.join(" "))}</p>`);
 st.push(`<p><b>${k}. Result:</b> ${q({s:x.s,l:x.l})}</p>`);
-B.push(`<div class="fx"><div class="fh"><b>How I thought — step by step</b></div>${st.join("")}</div>`)}catch(e){B.push(`<p class="sm">(Step-by-step part skipped for this line.)</p>`)}
+B.push(`<div class="fx"><div class="fh"><b>More detail · how I thought, step by step</b></div>${st.join("")}</div>`)}catch(e){B.push(`<p class="sm">(Step-by-step part skipped for this line.)</p>`)}
 (D.cards||[]).forEach(c=>{
 B.push(`<div class="fx"><div class="fh"><b>${E(c.id)} · ${E(c.name)}</b><span>${c.batch?"Batch "+E(String(c.batch).replace(/^B/,""))+" · ":""}Character: ${E(c.who)} · ✓ Used in this scene · line ${E(c.lines.join(", "))}</span></div>
 ${c.why?`<p><b>Why it fits:</b> ${E(c.why)}</p>`:""}${c.recipe?`<p><b>Method (recipe):</b> ${E(c.recipe)}</p>`:""}${c.useWhen?`<p><b>Use when:</b> ${E(c.useWhen)}</p>`:""}
