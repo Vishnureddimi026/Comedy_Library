@@ -292,6 +292,7 @@ main>section:not([hidden]),.page:not([hidden]){animation:rise3d .35s cubic-bezie
 .opfoot{position:sticky;bottom:8px;z-index:5}.opfoot .btn{max-width:calc(100% - 118px);white-space:normal;line-height:1.25}@media(min-width:700px){.opfoot .btn{max-width:none}}
 .opt.half{border-style:dashed;border-color:color-mix(in srgb,#c8902a 60%,var(--line))}.opt.half .otag{color:#9b6c1c}.opt.half.on{border-style:solid;border-color:#c8902a;background:rgba(224,165,42,.12);box-shadow:inset 0 0 0 1px #c8902a}
 #rpHalf{background:var(--teal);color:#fff}
+.rppdf{border:1.5px dashed var(--line);border-radius:12px;padding:10px;margin-top:10px}
 </style>
 </head>
 <body class="locked">
@@ -1697,7 +1698,7 @@ const item={t:Date.now(),idea:`Character replacement: ${desc}${title?` (from “
 hist.unshift(item);saveHist();drawHist();RPC=item;OPT=null;optSave();
 $("#rpOut").innerHTML=`<div class="box"><h2 style="margin-top:0">${esc(item.s.title)}</h2><p class="row">${esc(desc)} · saved in Saved scenes. Changed characters' lines are highlighted.</p>${rpCmp(L,j.scene,changed)}
 ${(j.changes||[]).length?`<h3>How the replaced characters were rewritten</h3>${j.changes.map(c=>`<p><b>${esc(c.was||"")} → ${esc(c.char||"")}:</b> ${esc(c.how||"")}</p>`).join("")}`:""}${j.kept?`<p><b>Kept characters:</b> ${esc(j.kept)}</p>`:""}
-<div class="acts"><button class="btn" type="button" id="rpCopy">Copy new scene</button><button class="btn ghost" type="button" id="rpAgain">Try another version</button><a class="btn ghost" href="#compare" id="rpCmpLink">Open in Compare scenes</a></div><div class="acts"><button class="btn" type="button" id="rpPdfNew">Download PDF · new scene</button><button class="btn ghost" type="button" id="rpPdfBoth">Download PDF · original vs new</button></div><p class="row" id="rpMsg"></p></div>`;
+<div class="acts"><button class="btn" type="button" id="rpCopy">Copy new scene</button><button class="btn ghost" type="button" id="rpAgain">Try another version</button><a class="btn ghost" href="#compare" id="rpCmpLink">Open in Compare scenes</a></div><div class="rppdf"><p class="row" style="margin:0 0 6px"><b>Download PDF</b> — <b>Analysis:</b> for every changed line, the original line, the new line and how it was made, step by step. <b>Short:</b> only the cards (original → new, kept / changed / why). <b>New scene lines:</b> just the final scene, in order.</p><div class="acts" style="margin:0"><button class="btn sm" type="button" id="rpPdfAna">Old-to-New Analysis PDF</button><button class="btn sm" type="button" id="rpPdfShort">Short PDF (cards only)</button><button class="btn sm" type="button" id="rpPdfNew">New scene lines PDF</button></div><div class="acts" style="margin:6px 0 0"><button class="btn ghost sm" type="button" id="rpPdfBoth">Original vs new — side by side PDF</button></div></div><p class="row" id="rpMsg"></p></div>`;
 $("#rpStatus").textContent="Done.";$("#rpOut").scrollIntoView({behavior:"smooth",block:"start"})}
 catch(e){clearInterval(tk);$("#rpStatus").textContent=(e&&e.code?errText(e):(e&&e.message)||errText(e))}
 busy=false;$("#go").disabled=false;$("#rpGo").disabled=false});
@@ -1777,7 +1778,7 @@ if(OPT.itemT){const it=hist.find(h=>h.t===OPT.itemT);if(it)optShowFinal(it,false
 function optRefreshRow(i){const el=document.querySelector(`.oprow[data-r="${i}"]`);if(el)el.outerHTML=optRowHtml(OPT.rows[i],i);$("#opBarW").innerHTML=optBar();optSave()}
 function optShowFinal(item,scroll){RPC=item;const ch=new Set(item.s.replace.changedSp||[]);
 $("#optFinal").innerHTML=`<div class="box"><h2 style="margin-top:0">Final scene — your selected lines</h2><p class="row">${esc(item.s.title)} · ${item.s.scene.length} lines · saved in Saved scenes. Replaced characters' lines are highlighted. Change any pick above and tap Combine again to update it.</p>${rpCmp(item.s.replace.orig,item.s.scene,ch)}
-<div class="acts"><button class="btn" type="button" id="rpCopy">Copy final scene</button><a class="btn ghost" href="#compare" id="rpCmpLink">Open in Compare scenes</a></div><div class="acts"><button class="btn" type="button" id="rpPdfNew">Download PDF · final scene</button><button class="btn ghost" type="button" id="rpPdfBoth">Download PDF · original vs final</button></div><p class="row" id="rpMsg"></p></div>`;
+<div class="acts"><button class="btn" type="button" id="rpCopy">Copy final scene</button><a class="btn ghost" href="#compare" id="rpCmpLink">Open in Compare scenes</a></div><div class="rppdf"><p class="row" style="margin:0 0 6px"><b>Download PDF</b> — <b>Analysis:</b> for every changed line, the original line, the new line and how it was made, step by step. <b>Short:</b> only the cards (original → new, kept / changed / why). <b>New scene lines:</b> just the final scene, in order.</p><div class="acts" style="margin:0"><button class="btn sm" type="button" id="rpPdfAna">Old-to-New Analysis PDF</button><button class="btn sm" type="button" id="rpPdfShort">Short PDF (cards only)</button><button class="btn sm" type="button" id="rpPdfNew">New scene lines PDF</button></div><div class="acts" style="margin:6px 0 0"><button class="btn ghost sm" type="button" id="rpPdfBoth">Original vs new — side by side PDF</button></div></div><p class="row" id="rpMsg"></p></div>`;
 if(scroll)$("#optFinal").scrollIntoView({behavior:"smooth",block:"start"})}
 $("#rpOut").addEventListener("change",e=>{const inp=e.target.closest('.oprow input[type=radio]');if(!inp||!OPT)return;const i=+inp.closest(".oprow").dataset.r,v=inp.value;const r=OPT.rows[i];
 r.pick=/^\d$/.test(v)?+v:v;optRefreshRow(i);if(v==="own"){const t=document.querySelector(`.owntx[data-r="${i}"]`);if(t){if(!r.own){const base=r.rep?(r.pick==="own"&&(r.o[0]||r.half)||r.o[0]||r.half||r.orig.l):(r.adj||r.orig.l);t.value=base;r.own=base;optSave()}t.focus()}}});
@@ -1835,10 +1836,48 @@ $("#rpOut").scrollIntoView({behavior:"smooth",block:"start"})}
 catch(e){clearInterval(tk);$("#rpStatus").textContent=(e&&e.code?errText(e):(e&&e.message)||errText(e))}
 busy=false;$("#go").disabled=false;$("#rpGo").disabled=false;$("#rpHalf").disabled=false});
 
+/* ===== Replace characters: 3-way PDF ===== */
+function rpPairs(item){const R=item.s.replace||{},N=item.s.scene||[],O=R.orig||[],ch=new Set(R.changedSp||[]),pk=R.picks||[];
+const nm=v=>v==="half"?"⚖ 50% Original + 50% Character Style":v==="own"?"✎ My own line":typeof v==="number"?`Option ${v+1} · ${OPTNAME[v]||""}`:v==="adj"?"Adjusted to fit":v==="plus"?"Original + extra punch":"Rewritten scene (one version)";
+const out=[];N.forEach((w,i)=>{if(ch.has(w.s))out.push({n:i+1,o:O[i]||null,w,type:pk.length?nm(pk[i]):nm(null)})});return out}
+function rpAnaPrompt(item,P){const R=item.s.replace||{},map=R.map||{};const roles=Object.values(map).map(k=>ROLES.find(r=>r[0]===k)).filter(Boolean);
+const fl=roles.map(r=>{const set=/Tillu|Vicky/.test(r[0])?TILLU_F:/Babloo|Golu/.test(r[0])?BABLOO_F:null;const c=r[3]>=0?CH[r[3]]:null;const ids=set?[...set]:String(c?c[4]:"").split(/\s+/).filter(Boolean);return ids.slice(0,16).map(id=>{const f=fmap[id];return f?`${id} ${f[1]}`:""}).filter(Boolean).join("; ")}).join("; ");
+return `You explain, simply and clearly, how each line of a Telugu comedy scene was changed when a character was replaced (${R.desc||""}).
+NEW CHARACTER(S): ${roles.map(r=>rpProfile(r)).join(" ")}
+Useful formula IDs for this character: ${fl||"(none)"}
+
+THE FINAL SCENE (for context):
+${(item.s.scene||[]).map((x,i)=>`${i+1}. ${x.s}: ${x.l}`).join("\n")}
+
+LINES TO EXPLAIN (original → new):
+${P.map(p=>`Line ${p.n} [${p.type}]\n  ORIGINAL: ${p.o?`${p.o.s}: ${p.o.l}`:"(none)"}\n  NEW: ${p.w.s}: ${p.w.l}`).join("\n")}
+
+For each line give: kept (what of the original meaning, situation or punch idea was kept), changed (what was changed and how), style (which of the new character's slang, attitude or reactions it uses — quote the Telugu words), technique (the comedy technique, with a formula ID from the list if one fits), why (why it is funny, one sentence), explain30 (a 30-second explanation someone could read aloud, 2–3 sentences), steps (3–5 short steps: how the writer went from the original line to the new one).
+Be concrete and short. ${LANG()}
+Return ONLY valid JSON, no fences:
+{"overview":"2 sentences on the whole replacement","lines":[{"n":1,"kept":"","changed":"","style":"","technique":"","why":"","explain30":"","steps":["",""]}]}`}
+const rpSig=item=>JSON.stringify([item.s.scene,item.s.replace&&item.s.replace.picks]);
+async function rpAnalysis(item,msg){const R=item.s.replace;if(R.ana&&R.ana.sig===rpSig(item))return R.ana;
+const P=rpPairs(item),SZ=8,all={overview:"",lines:[]};const t0=Date.now();let pi=0;const parts=[];for(let i=0;i<P.length;i+=SZ)parts.push(P.slice(i,i+SZ));
+const tk=setInterval(()=>{msg.textContent=`Writing the analysis… part ${pi+1} of ${parts.length} · ${Math.round((Date.now()-t0)/1000)}s`},1000);
+try{for(pi=0;pi<parts.length;pi++){let j=null;for(let tr=0;tr<2&&!j;tr++){try{const res=await ask(rpAnaPrompt(item,parts[pi]),{cache:false});j=parse(res.text);if(!Array.isArray(j.lines))j=null}catch(e){if(e&&e.code)throw e;j=null}}
+if(!j)throw {message:`The analysis part ${pi+1} came back in a broken format. Tap the button again.`};if(!all.overview&&j.overview)all.overview=j.overview;all.lines.push(...j.lines)}}
+finally{clearInterval(tk)}
+all.sig=rpSig(item);R.ana=all;saveHist();return all}
+$("#rpOut").addEventListener("click",async e=>{const id=e.target.id;if(id!=="rpPdfAna"&&id!=="rpPdfShort")return;if(!RPC)return;const msg=$("#rpMsg")||$("#rpStatus");
+const item=RPC,P=rpPairs(item);if(!P.length){msg.textContent="No line of a replaced character was found in this scene.";return}
+let ana=null;const R=item.s.replace;
+if(id==="rpPdfAna"||!(R.ana&&R.ana.sig===rpSig(item))){if(busy){msg.textContent="Wait for the current writing to finish.";return}if(!sample){msg.textContent="Writing isn't available in this view.";return}
+busy=true;e.target.disabled=true;try{ana=await rpAnalysis(item,msg)}catch(err){busy=false;e.target.disabled=false;msg.textContent=(err&&err.code?errText(err):(err&&err.message)||errText(err));return}busy=false;e.target.disabled=false}
+else ana=R.ana;
+const nm=(item.s.title||"replaced-scene").replace(/[^\wఀ-౿ -]+/g,"").trim().replace(/\s+/g,"-").slice(0,50)||"replaced-scene";
+msg.textContent="Making the PDF…";
+await window.CFL.scenePdf([{kind:"rpana",pairs:P,ana,compact:id==="rpPdfShort",desc:R.desc,title:item.s.title,at:Date.now()}],(id==="rpPdfShort"?"Short PDF · ":"Old-to-New Analysis · ")+(item.s.title||"Replaced scene"),nm+(id==="rpPdfShort"?"-short":"-analysis")+".pdf",msg)});
+
 ["#rpClear","#rpClear1"].forEach(k=>$(k).addEventListener("click",()=>{if(busy){$("#rpStatus").textContent="Wait for the current replacement to finish.";return}
 RPC=null;OPT=null;optSave();$("#rpFrom").value="";$("#rpText").value="";$("#rpChars").innerHTML="";$("#rpOut").innerHTML="";$("#rpStatus").textContent="Cleared. Paste or pick a new scene. (Your result is still in Saved scenes.)";
 $("#rpText").dispatchEvent(new Event("input",{bubbles:true}));$("#v-replace").scrollIntoView({behavior:"smooth",block:"start"});$("#rpText").focus({preventScroll:true})}));
-$("#rpOut").addEventListener("click",async e=>{if((e.target.id==="rpPdfNew"||e.target.id==="rpPdfBoth")&&RPC){const both=e.target.id==="rpPdfBoth";const nm=(RPC.s.title||"replaced-scene").replace(/[^\w\u0C00-\u0C7F -]+/g,"").trim().replace(/\s+/g,"-").slice(0,60)||"replaced-scene";await makePdf([Object.assign({},RPC,{kind:"replace",pdfMode:both?"both":"new"})],RPC.s.title||"Replaced scene",nm+(both?"-original-vs-new":"-new")+".pdf",$("#rpMsg"));return}if(e.target.id==="rpCopy"&&RPC){try{await copyAny(RPC.s.scene.map(x=>`${x.s}: ${x.l}`).join("\n"));$("#rpMsg").textContent=`Copied the new scene (${RPC.s.scene.length} lines).`}catch(err){{const t=RPC.s.scene.map(x=>`${x.s}: ${x.l}`).join("\n");$("#rpMsg").innerHTML=`Copy was blocked on this device. The scene is selected below — long-press and choose Copy.<textarea id="rpManual" class="cta" readonly style="min-height:160px;margin-top:8px"></textarea>`;const m=$("#rpManual");m.value=t;m.focus();m.select()}}}
+$("#rpOut").addEventListener("click",async e=>{if((e.target.id==="rpPdfNew"||e.target.id==="rpPdfBoth")&&RPC){const both=e.target.id==="rpPdfBoth";const nm=(RPC.s.title||"replaced-scene").replace(/[^\w\u0C00-\u0C7F -]+/g,"").trim().replace(/\s+/g,"-").slice(0,60)||"replaced-scene";await window.CFL.scenePdf([Object.assign({},RPC,{kind:"replace",pdfMode:both?"both":"new"})],RPC.s.title||"Replaced scene",nm+(both?"-original-vs-new":"-new")+".pdf",$("#rpMsg"));return}if(e.target.id==="rpCopy"&&RPC){try{await copyAny(RPC.s.scene.map(x=>`${x.s}: ${x.l}`).join("\n"));$("#rpMsg").textContent=`Copied the new scene (${RPC.s.scene.length} lines).`}catch(err){{const t=RPC.s.scene.map(x=>`${x.s}: ${x.l}`).join("\n");$("#rpMsg").innerHTML=`Copy was blocked on this device. The scene is selected below — long-press and choose Copy.<textarea id="rpManual" class="cta" readonly style="min-height:160px;margin-top:8px"></textarea>`;const m=$("#rpManual");m.value=t;m.focus();m.select()}}}
 if(e.target.id==="rpAgain")$("#rpGo").click();
 if(e.target.id==="rpCmpLink"&&RPC){setTimeout(()=>{try{$("#cmpSel1").value="h:"+RPC.t;$("#cmpSel1").dispatchEvent(new Event("change"))}catch(err){}},80)}});
 $("#go").addEventListener("click",()=>{const r=req();if(!r.idea){$("#status").innerHTML='<span class="err">Write your scene idea first.</span>';$("#idea").focus();return}genScene(r)});
@@ -2129,6 +2168,20 @@ B.push(`<table style="width:100%;border-collapse:collapse;font-size:15px;line-he
 else{for(let i=0;i<N.length;i+=14)B.push(`${i?"":"<p><b>New scene (కొత్త సీన్)</b></p>"}<div class="dl">${N.slice(i,i+14).map((d,k)=>`<p style="${ch.has(d.s)?hl:""}"><span>${i+k+1}</span><b>${E(d.s)}:</b> ${E(d.l)}</p>`).join("")}</div>`)}
 if((R.changes||[]).length)B.push(`<h2>How the replaced characters were rewritten</h2>${R.changes.map(c=>`<p><b>${E(c.was||"")} → ${E(c.char||"")}:</b> ${E(c.how||"")}</p>`).join("")}${R.kept?`<p><b>Kept characters:</b> ${E(R.kept)}</p>`:""}`);
 return B}
+function rablocks(X){const B=[],P=X.pairs||[],R=X.ana||{};
+if(!X.compact)B.push(`<div class="fx"><div class="fh"><b>How to read this PDF · ఈ PDF ఎలా చదవాలి</b></div><p>${E(X.desc||"")}. For every line where the character was replaced you get: the <b>original line</b>, the <b>new line</b> and which option you picked, then a <b>30-second explanation</b> (easy to tell someone), then <b>step by step</b> how it was made.</p>${R.overview?`<p><b>Overview:</b> ${E(R.overview)}</p>`:""}</div>`);
+B.push(`<p class="mt">${new Date(X.at).toLocaleString()} · ${E(X.title||"")} · ${P.length} changed line${P.length===1?"":"s"}</p>`);
+P.forEach(p=>{const a=(R.lines||[]).find(x=>+x.n===p.n)||{};const ln=(x)=>`${x.s?`<b>${E(x.s)}:</b> `:""}${E(x.l)}`;
+const rows=[["అసలు లైన్","Original line",p.o?ln(p.o):"—"],["కొత్త లైన్","New line",`<span style="font-size:17px">${ln(p.w)}</span>`],["ఏ ఆప్షన్?","Which option",E(p.type||"")]];
+if(a.kept)rows.push(["ఏం ఉంచాను?","What was kept",E(a.kept)]);if(a.changed)rows.push(["ఏం మార్చాను?","What changed",E(a.changed)]);
+if(!X.compact){if(a.style)rows.push(["క్యారెక్టర్ స్టైల్","Character style used",E(a.style)]);if(a.technique)rows.push(["ట్రిక్ ఏంటి?","Comedy technique",E(a.technique)])}
+if(a.why)rows.push(["ఎందుకు నవ్వొస్తుంది?","Why it is funny",E(a.why)]);
+let h=`<h2>Line ${p.n}</h2><table>${rows.map(r=>`<tr><th style="width:30%;text-align:left;vertical-align:top">${r[0]}<br><span class="mt">${r[1]}</span></th><td>${r[2]}</td></tr>`).join("")}</table>`;
+if(!X.compact&&a.explain30)h+=`<div class="fx"><div class="fh"><b>30-second explanation</b></div><p>${E(a.explain30)}</p></div>`;
+if(!X.compact&&(a.steps||[]).length)h+=`<div class="fx"><div class="fh"><b>How I thought — step by step</b></div><ol>${a.steps.map(t=>`<li>${E(t)}</li>`).join("")}</ol></div>`;
+B.push(h)});
+if(!P.length)B.push(`<p>No line of a replaced character was found in this scene.</p>`);
+return B}
 function sblocks(X){const B=[`<p class="mt">${new Date(X.at).toLocaleString()} · ${X.sel.length} line${X.sel.length>1?"s":""} · in the order you picked them</p>`];
 for(let i=0;i<X.sel.length;i+=12)B.push(`<div class="dl">${X.sel.slice(i,i+12).map((x,k)=>`<p style="margin:10px 0;font-size:18px;line-height:1.7"><span>${i+k+1}</span>${x.s&&x.s!=="—"?`<b>${E(x.s)}:</b> `:""}${E(x.l)} <i class="mt">[${E(x.tag)}${x.t?" · "+E(x.t):""}]</i></p>`).join("")}</div>`);
 return B}
@@ -2209,7 +2262,7 @@ async function makePdf(items,title,fname,msgEl){const dl=await getDl();if(!dl){m
 msgEl.textContent="Making the PDF…";try{await libs()}catch(e){msgEl.textContent="Couldn't load the PDF maker. Check your internet and try again.";return}
 const host=document.createElement("div");host.style.cssText="position:fixed;left:-12000px;top:0;z-index:-1";host.innerHTML=`<style>${CSS}</style>`;document.body.appendChild(host);
 try{const {jsPDF}=window.jspdf;const pdf=new jsPDF({unit:"mm",format:"a4"});const W=190,X=10,TOP=10,BOT=287;let y=TOP;
-const all=[`<h1>${E(title)}</h1><p class="mt">Comedy Formula Library · ${new Date().toLocaleDateString()}</p>`];items.forEach((it,i)=>all.push(...(it.kind==="sellines"?sblocks(it):it.kind==="lineexp"?lblocks(it):(it.kind==="replace"||(it.s&&it.s.replace&&!it.kind))?rblocks(it):it.s&&it.s.transform?tblocks(it):blocks(it,items.length>1?i+1:0))));
+const all=[`<h1>${E(title)}</h1><p class="mt">Comedy Formula Library · ${new Date().toLocaleDateString()}</p>`];items.forEach((it,i)=>all.push(...(it.kind==="sellines"?sblocks(it):it.kind==="lineexp"?lblocks(it):it.kind==="rpana"?rablocks(it):(it.kind==="replace"||(it.s&&it.s.replace&&!it.kind))?rblocks(it):it.s&&it.s.transform?tblocks(it):blocks(it,items.length>1?i+1:0))));
 for(let i=0;i<all.length;i++){msgEl.textContent=`Making the PDF… ${Math.round(100*i/all.length)}%`;const el=document.createElement("div");el.className="pr";el.innerHTML=all[i];host.appendChild(el);
 const c=await snap(el);host.removeChild(el);
 const h=c.height*W/c.width;
