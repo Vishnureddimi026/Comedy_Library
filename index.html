@@ -296,6 +296,7 @@ main>section:not([hidden]),.page:not([hidden]){animation:rise3d .35s cubic-bezie
 .opt.best{border-color:color-mix(in srgb,#b5523b 45%,var(--line))}.opt.best .otag{color:#a4462f}.opt.best.on{border-color:#b5523b;background:rgba(181,82,59,.09);box-shadow:inset 0 0 0 1px #b5523b}
 #rpBest{background:#8e4a3a;color:#fff;box-shadow:0 1px 0 rgba(255,255,255,.3) inset,0 -2px 0 rgba(0,0,0,.18) inset,0 3px 0 #5e2e23,0 6px 12px -2px rgba(80,30,20,.3)}
 .fament{border:1.5px solid var(--line);border-radius:12px;padding:10px;margin-top:10px;background:var(--card)}.fament textarea{width:100%;min-height:180px;margin:6px 0;font-size:16px;line-height:1.6}.fament .acts{align-items:center}
+.famrow{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:6px 0}.famrow label{display:flex;flex-direction:column;gap:4px;font-size:14px}.famrow input{width:100%}@media(max-width:560px){.famrow{grid-template-columns:1fr}}
 </style>
 </head>
 <body class="locked">
@@ -492,8 +493,8 @@ setTimeout(function(){var i=document.getElementById("lockP");if(i)i.focus()},100
 
 <section id="v-characters" class="band" hidden>
 <div class="box" id="famBox" style="margin-bottom:22px"><h2 style="margin-top:0">👨‍👩‍👦 Character Family Details</h2>
-<p class="row" style="margin:0 0 8px">Tap a name and write about that person: personality, behaviour, way of speaking, slang, relationship with other characters, habits and how they react in different situations. Each one saves on its own as you type (and syncs to your other devices). The AI uses these details whenever these people appear in a scene or the situation involves the family — in Write a scene and in Replace characters.</p>
-<div class="chips" id="famChips"></div><div id="famEdit"></div><p class="row" id="famMsg" style="margin:6px 0 0"></p></div>
+<p class="row" style="margin:0 0 8px">Tap a name and write about that person — or add your own with ➕ (any relative or new family member): personality, behaviour, way of speaking, slang, relationship with other characters, habits and how they react in different situations. Each one saves on its own as you type (and syncs to your other devices). The AI uses these details whenever these people appear in a scene or the situation involves the family — in Write a scene and in Replace characters.</p>
+<div class="chips" id="famChips"></div><div class="acts" style="margin:8px 0 0"><button class="btn ghost sm" type="button" id="famAddBtn">➕ Add a family member</button></div><div id="famAdd" hidden class="fament"><b>Who is this person?</b><div class="famrow"><label>Name / relation (English)<input type="text" id="famName" class="cin" placeholder="e.g. Vicky's Father, Golu's Grandmother"></label><label>Telugu name (optional)<input type="text" id="famTel" class="cin" placeholder="e.g. విక్కీ నాన్న"></label></div><div class="acts"><button class="btn" type="button" id="famAddOk">Add</button><button class="btn ghost" type="button" id="famAddNo">Cancel</button></div></div><div id="famEdit"></div><p class="row" id="famMsg" style="margin:6px 0 0"></p></div>
 <h2 style="font-size:28px;margin:0 0 6px">Character & slang analysis</h2>
 <p class="row" style="margin:0 0 14px">How each character speaks, how the pairs create comedy, and how to make fresh slang. Choose a slang type in the scene writer: 5 Uttarandhra types (U1 keeps the original slang), 4 other regional dialects and 5 comic speaking styles. Each character keeps his personality while his tags are converted.</p>
 <div class="grid" id="voices"></div>
@@ -2371,21 +2372,29 @@ const P=[["MadhuFather","మధు నాన్న","Madhu's Father"],["MadhuMot
 const K="cfl-family";let FAM={};try{FAM=JSON.parse(localStorage.getItem(K)||"{}")||{}}catch(e){FAM={}}
 let open=null,tmr=null,cloud=null;const $=q=>document.querySelector(q);
 const E=t=>String(t==null?"":t).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
-const txt=k=>(FAM[k]&&FAM[k].text||"").trim();
+const txt=k=>(FAM[k]&&!FAM[k].deleted&&FAM[k].text||"").trim();
+const ALL=()=>P.concat(Object.keys(FAM).filter(k=>FAM[k]&&FAM[k].custom&&!FAM[k].deleted).sort((a,b)=>(FAM[a].made||0)-(FAM[b].made||0)).map(k=>[k,FAM[k].tel||FAM[k].name,FAM[k].name||FAM[k].tel,1]));
 window.CFL_FAM={text:txt,
- block(){const f=P.filter(p=>txt(p[0]));if(!f.length)return "";return `\nFAMILY DETAILS (written by the user — follow them exactly whenever any of these people appear in the scene, are mentioned, or the situation involves the family: their personality, way of speaking, slang, habits, reactions and relationships. Keep them consistent with these notes. Do not force them into a scene where they do not fit):\n${f.map(p=>`- ${p[1]} (${p[2]}): ${txt(p[0])}`).join("\n")}\n\n`}};
+ block(){const f=ALL().filter(p=>txt(p[0]));if(!f.length)return "";return `\nFAMILY DETAILS (written by the user — follow them exactly whenever any of these people appear in the scene, are mentioned, or the situation involves the family: their personality, way of speaking, slang, habits, reactions and relationships. Keep them consistent with these notes. Do not force them into a scene where they do not fit):\n${f.map(p=>`- ${p[1]} (${p[2]}): ${txt(p[0])}`).join("\n")}\n\n`}};
 function saveLocal(){try{localStorage.setItem(K,JSON.stringify(FAM))}catch(e){}}
-function chips(){const c=$("#famChips");if(!c)return;c.innerHTML=P.map(p=>`<button class="chip" type="button" data-fam="${p[0]}" aria-pressed="${open===p[0]}">${txt(p[0])?"✓ ":""}${p[1]} · ${p[2]}</button>`).join("")}
-function edit(){const box=$("#famEdit");if(!box)return;if(!open){box.innerHTML="";return}const p=P.find(x=>x[0]===open);const f=FAM[open]||{};
-box.innerHTML=`<div class="fament"><label for="famTx"><b>${p[1]} · ${p[2]}</b></label>
-<textarea id="famTx" class="cta" rows="9" placeholder="Write about ${p[2]}: personality, behaviour, way of speaking and slang (sample words or phrases), relationship with Madhu, Mahesh and others, habits, and how he/she reacts when angry, happy, worried, embarrassed…">${E(f.text||"")}</textarea>
-<div class="acts"><button class="btn" type="button" id="famDone">Done</button><button class="btn ghost" type="button" id="famClr">Clear this person</button><span class="mt" id="famSt">${f.t?`Last saved ${new Date(f.t).toLocaleString()}`:"Not written yet"}</span></div></div>`;
+function chips(){const c=$("#famChips");if(!c)return;c.innerHTML=ALL().map(p=>`<button class="chip" type="button" data-fam="${p[0]}" aria-pressed="${open===p[0]}">${txt(p[0])?"✓ ":""}${p[1]===p[2]?E(p[1]):`${E(p[1])} · ${E(p[2])}`}</button>`).join("")}
+function edit(){const box=$("#famEdit");if(!box)return;if(!open){box.innerHTML="";return}const p=ALL().find(x=>x[0]===open);if(!p){open=null;box.innerHTML="";return}const f=FAM[open]||{};
+box.innerHTML=`<div class="fament">${p[3]?`<div class="famrow"><label>Name / relation<input type="text" class="cin" id="famEN" value="${E(f.name||"")}"></label><label>Telugu name<input type="text" class="cin" id="famET" value="${E(f.tel||"")}"></label></div>`:""}<label for="famTx"><b>${E(p[1])}${p[1]===p[2]?"":" · "+E(p[2])}</b></label>
+<textarea id="famTx" class="cta" rows="9" placeholder="Write about ${E(p[2])}: personality, behaviour, way of speaking and slang (sample words or phrases), relationship with Madhu, Mahesh and others, habits, and how he/she reacts when angry, happy, worried, embarrassed…">${E(f.text||"")}</textarea>
+<div class="acts"><button class="btn" type="button" id="famDone">Done</button><button class="btn ghost" type="button" id="famClr">Clear the paragraph</button>${p[3]?`<button class="btn ghost" type="button" id="famDel">Remove this person</button>`:""}<span class="mt" id="famSt">${f.t?`Last saved ${new Date(f.t).toLocaleString()}`:"Not written yet"}</span></div></div>`;
 $("#famTx").focus()}
-function put(k,text){FAM[k]={text,t:Date.now()};saveLocal();chips();const st=$("#famSt");if(st)st.textContent="Saved ✓ "+new Date().toLocaleTimeString();pushCloud()}
-document.addEventListener("click",e=>{const b=e.target.closest("[data-fam]");if(b){open=open===b.dataset.fam?null:b.dataset.fam;chips();edit();return}
+function put(k,text){const o=FAM[k]||{};FAM[k]=Object.assign({},o,{text,t:Date.now()});saveLocal();chips();const st=$("#famSt");if(st)st.textContent="Saved ✓ "+new Date().toLocaleTimeString();pushCloud()}
+document.addEventListener("click",e=>{
+if(e.target.id==="famAddBtn"){const a=$("#famAdd");a.hidden=!a.hidden;if(!a.hidden)$("#famName").focus();return}
+if(e.target.id==="famAddNo"){$("#famAdd").hidden=true;return}
+if(e.target.id==="famAddOk"){const n=$("#famName").value.trim(),t=$("#famTel").value.trim();if(!n&&!t){$("#famMsg").textContent="Type who this person is first.";return}
+const k="c"+Date.now();FAM[k]={custom:true,name:n||t,tel:t,text:"",made:Date.now(),t:Date.now()};saveLocal();pushCloud();$("#famName").value="";$("#famTel").value="";$("#famAdd").hidden=true;open=k;chips();edit();$("#famMsg").textContent=`Added ${n||t}. Write about them below.`;return}
+if(e.target.id==="famDel"&&open){const nm=(FAM[open]&&FAM[open].name)||"";FAM[open]={deleted:true,t:Date.now()};saveLocal();pushCloud();open=null;chips();edit();$("#famMsg").textContent=`Removed ${nm}.`;return}
+const b=e.target.closest("[data-fam]");if(b){open=open===b.dataset.fam?null:b.dataset.fam;chips();edit();return}
 if(e.target.id==="famDone"){const t=$("#famTx");if(t)put(open,t.value);open=null;chips();edit();$("#famMsg").textContent="Saved. The AI will use it in new scenes."}
 if(e.target.id==="famClr"){const t=$("#famTx");if(t){t.value="";put(open,"")}$("#famMsg").textContent="Cleared."}});
-document.addEventListener("input",e=>{if(e.target.id!=="famTx")return;const k=open,v=e.target.value;clearTimeout(tmr);const st=$("#famSt");if(st)st.textContent="Saving…";tmr=setTimeout(()=>put(k,v),600)});
+document.addEventListener("input",e=>{if((e.target.id==="famEN"||e.target.id==="famET")&&open&&FAM[open]){FAM[open].name=$("#famEN").value.trim()||FAM[open].name;FAM[open].tel=$("#famET").value.trim();FAM[open].t=Date.now();saveLocal();clearTimeout(tmr);tmr=setTimeout(()=>{chips();pushCloud();const st=$("#famSt");if(st)st.textContent="Saved ✓ "+new Date().toLocaleTimeString()},600);return}
+if(e.target.id!=="famTx")return;const k=open,v=e.target.value;clearTimeout(tmr);const st=$("#famSt");if(st)st.textContent="Saving…";tmr=setTimeout(()=>put(k,v),600)});
 async function pushCloud(){if(!cloud)return;clearTimeout(pushCloud.t);pushCloud.t=setTimeout(async()=>{try{await cloud.set({fam:FAM,t:Date.now()})}catch(e){const m=$("#famMsg");if(m)m.textContent="Saved on this device; couldn't sync to your account just now."}},800)}
 chips();
 (async()=>{if(window.parent===window)return;try{for(let i=0;i<50&&!window.claude;i++)await new Promise(r=>setTimeout(r,100));if(!window.claude)return;const db=await window.claude.use("db"),u=await window.claude.use("user"),uid=u?await u.id():null;if(!db||!uid)return;
