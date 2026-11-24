@@ -220,6 +220,61 @@ nav a[aria-current=true]{color:#2f3863;box-shadow:0 2px 8px rgba(0,0,0,.12)}
 #lock button{background:#93a0e6!important;color:#151821!important}
 ::selection{background:color-mix(in srgb,var(--teal) 25%,transparent)}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}.btn:hover,.slip:hover,.chip:hover{transform:none}}
+
+/* ===== THEME 4 · "Soft 3D" — depth, light from top-left, calm colours ===== */
+:root{
+--d-hi:light-dark(rgba(255,255,255,.95),rgba(255,255,255,.06));
+--d-lo:light-dark(rgba(30,36,70,.10),rgba(0,0,0,.45));
+--shadow:0 1px 0 var(--d-hi) inset,0 -1px 0 rgba(0,0,0,.03) inset,0 1px 2px var(--d-lo),0 6px 14px -4px var(--d-lo),0 14px 28px -12px var(--d-lo);
+--shadow-h:0 1px 0 var(--d-hi) inset,0 2px 4px var(--d-lo),0 12px 22px -6px var(--d-lo),0 24px 40px -18px var(--d-lo);
+--press:inset 0 2px 5px var(--d-lo),inset 0 -1px 0 var(--d-hi)}
+body{background:
+ radial-gradient(1200px 600px at 10% -10%,light-dark(#eceef8,#1b1f2b),transparent 60%),
+ radial-gradient(900px 500px at 110% 10%,light-dark(#f6efe1,#1e1c18),transparent 55%),var(--bg);background-attachment:fixed}
+/* header: layered glass slab */
+header{background:linear-gradient(160deg,#3a4478 0%,#2f3863 55%,#283055 100%);
+ box-shadow:0 1px 0 rgba(255,255,255,.12) inset,0 -3px 0 rgba(0,0,0,.18) inset,0 10px 24px -8px rgba(20,24,50,.45);position:relative}
+header h1{text-shadow:0 1px 0 rgba(0,0,0,.35),0 2px 10px rgba(0,0,0,.25)}
+nav{background:rgba(0,0,0,.14);box-shadow:inset 0 2px 6px rgba(0,0,0,.25),0 1px 0 rgba(255,255,255,.08)}
+nav a{transition:transform .15s,box-shadow .15s,background .15s}
+nav a[aria-current=true]{box-shadow:0 1px 0 #fff inset,0 3px 0 #c9cde3,0 6px 12px rgba(0,0,0,.25);transform:translateY(-1px)}
+/* raised surfaces */
+.slip,.box,.char,details,.ask,.rpcol,.cmpcol,.srow,.rprow,.cmpbar{box-shadow:var(--shadow);border-color:light-dark(#e6e6ef,#2c3140);
+ background-image:linear-gradient(180deg,light-dark(rgba(255,255,255,.9),rgba(255,255,255,.025)),transparent 40%);
+ transition:transform .2s cubic-bezier(.2,.8,.2,1),box-shadow .2s}
+.slip:hover,.char:hover,.cmpcol:hover,.rpcol:hover{transform:translateY(-3px);box-shadow:var(--shadow-h)}
+/* 3D tilt (set by JS) */
+.tilt{transform:perspective(900px) rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg)) translateY(-3px)!important;box-shadow:var(--shadow-h)!important}
+.tilt::after{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;
+ background:radial-gradient(400px 200px at var(--mx,50%) var(--my,0%),rgba(255,255,255,.18),transparent 60%)}
+.slip,.char{position:relative}
+/* buttons: physical keys */
+.btn{border-radius:12px;transition:transform .12s,box-shadow .12s,filter .12s;
+ box-shadow:0 1px 0 rgba(255,255,255,.35) inset,0 -2px 0 rgba(0,0,0,.18) inset,0 3px 0 color-mix(in srgb,var(--teal) 70%,#000),0 6px 12px -2px rgba(30,36,80,.3);
+ background-image:linear-gradient(180deg,rgba(255,255,255,.16),rgba(255,255,255,0) 55%)}
+.btn:hover{transform:translateY(-1px);box-shadow:0 1px 0 rgba(255,255,255,.35) inset,0 -2px 0 rgba(0,0,0,.18) inset,0 4px 0 color-mix(in srgb,var(--teal) 70%,#000),0 10px 18px -4px rgba(30,36,80,.35)}
+.btn:active{transform:translateY(3px);box-shadow:0 1px 0 rgba(255,255,255,.2) inset,0 0 0 color-mix(in srgb,var(--teal) 70%,#000),0 2px 4px rgba(30,36,80,.25)}
+#go,#comboGo,#rpGo{box-shadow:0 1px 0 rgba(255,255,255,.5) inset,0 -2px 0 rgba(0,0,0,.12) inset,0 4px 0 #9b6c1c,0 8px 16px -4px rgba(120,80,20,.4);
+ background-image:linear-gradient(180deg,rgba(255,255,255,.28),rgba(255,255,255,0) 60%)}
+#go:hover,#comboGo:hover,#rpGo:hover{box-shadow:0 1px 0 rgba(255,255,255,.5) inset,0 -2px 0 rgba(0,0,0,.12) inset,0 5px 0 #9b6c1c,0 12px 20px -4px rgba(120,80,20,.45)}
+#go:active,#comboGo:active,#rpGo:active{transform:translateY(4px);box-shadow:0 1px 0 rgba(255,255,255,.3) inset,0 0 0 #9b6c1c,0 2px 4px rgba(120,80,20,.3)}
+.btn.ghost{box-shadow:0 1px 0 var(--d-hi) inset,0 3px 0 light-dark(#d9dbe6,#11131a),0 5px 10px -3px var(--d-lo);background-image:none}
+.btn.ghost:hover{box-shadow:0 1px 0 var(--d-hi) inset,0 4px 0 light-dark(#d9dbe6,#11131a),0 8px 14px -4px var(--d-lo)}
+.btn.ghost:active{transform:translateY(3px);box-shadow:0 0 0 light-dark(#d9dbe6,#11131a),inset 0 2px 4px var(--d-lo)}
+/* chips: pill keys */
+.chip{transition:transform .12s,box-shadow .12s;box-shadow:0 1px 0 var(--d-hi) inset,0 2px 0 light-dark(#dcdee8,#14161d),0 3px 6px -2px var(--d-lo)}
+.chip:active{transform:translateY(2px);box-shadow:0 0 0 transparent}
+.chip[aria-pressed=true]{box-shadow:var(--press),0 0 0 2px color-mix(in srgb,var(--teal) 30%,transparent);transform:translateY(1px)}
+/* inputs: carved in */
+textarea,select,input[type=number],input[type=search],input[type=text],.cin{box-shadow:inset 0 2px 4px var(--d-lo),inset 0 -1px 0 var(--d-hi)!important;border-color:light-dark(#dfe0e8,#2c3140)}
+textarea:focus,select:focus,input:focus,.cin:focus{box-shadow:inset 0 2px 4px var(--d-lo),0 0 0 3px color-mix(in srgb,var(--teal) 22%,transparent)!important}
+/* clapper & output boxes get a stacked-paper edge */
+.clap{box-shadow:0 1px 0 rgba(255,255,255,.12) inset,0 4px 0 #1c2038,0 10px 20px -6px rgba(10,12,30,.4)}
+.box.b1{box-shadow:var(--shadow),6px 6px 0 -2px light-dark(#efe4cc,#221f18),12px 12px 0 -5px light-dark(#e8dcc0,#1c1a14)}
+/* section entrance */
+@keyframes rise3d{from{opacity:0;transform:perspective(800px) rotateX(8deg) translateY(10px)}to{opacity:1;transform:none}}
+main>section:not([hidden]),.page:not([hidden]){animation:rise3d .35s cubic-bezier(.2,.8,.2,1)}
+@media (prefers-reduced-motion:reduce){.tilt{transform:none!important}main>section,.page{animation:none!important}.btn:active,.chip:active{transform:none}}
 </style>
 </head>
 <body class="locked">
@@ -1187,7 +1242,7 @@ const save=()=>{try{localStorage.setItem(K,JSON.stringify([...used]))}catch(e){}
 let cat="all",who="all",bat="all";
 const TILLU_F=new Set("F362 F365 F366 F369 F370 F376 F377 F378 F379 F384 F387 F407 F412 F413 F414 F247".split(" "));
 const BABLOO_F=new Set("F311 F371 F373 F279 F569 F617 F633 F504 F386 F411".split(" "));
-const whoList=["all","Madhu","Mahesh","DJ Tillu","Babloo","Master","Budatha","Venki","Lead","Sidekick","Authority","Boss","Rival","Group","Father","AI","Side role"];
+const whoList=["all","Madhu","Mahesh","DJ Vicky","Golu","Master","Budatha","Venki","Lead","Sidekick","Authority","Boss","Rival","Group","Father","AI","Side role"];
 const pow=n=>`<span class="pow" aria-label="Punch strength ${n} of 10">${Array.from({length:10},(_,i)=>`<i class="${i<n?'on':''}"></i>`).join('')}</span>`;
 const slip=(f,swap)=>`<article class="slip ${used.has(f[0])?'used':''}">
 <div class="top"><h3>${f[1]}</h3><span class="id">${f[0]} · ${f[9]}</span></div>
@@ -1992,6 +2047,23 @@ window.CFL.scenePdf=makePdf;
 document.addEventListener("click",e=>{const b=e.target.closest("[data-scenepdf]");if(!b)return;const it=window._rs;if(!it)return;const m=b.parentElement.querySelector(".pdfmsg");
 const nm=((it.s&&it.s.title)||"scene").replace(/[^\wఀ-౿]+/g,"_").slice(0,40);makePdf([it],"Old → New: "+((it.s&&it.s.title)||"Scene"),`Scene_${nm}_old_to_new.pdf`,m)});
 }
+</script>
+
+<script>
+/* 3D tilt for cards: mouse only, calm angles */
+(function(){
+ if(matchMedia('(prefers-reduced-motion:reduce)').matches||!matchMedia('(hover:hover) and (pointer:fine)').matches)return;
+ const SEL='.slip,.char,.cmpcol,.rpcol';let cur=null;
+ document.addEventListener('pointermove',e=>{
+  const el=e.target.closest&&e.target.closest(SEL);
+  if(cur&&cur!==el){cur.classList.remove('tilt');cur=null}
+  if(!el)return;cur=el;const r=el.getBoundingClientRect();
+  const x=(e.clientX-r.left)/r.width,y=(e.clientY-r.top)/r.height;
+  el.style.setProperty('--ry',((x-.5)*5).toFixed(2)+'deg');el.style.setProperty('--rx',((.5-y)*4).toFixed(2)+'deg');
+  el.style.setProperty('--mx',(x*100).toFixed(0)+'%');el.style.setProperty('--my',(y*100).toFixed(0)+'%');
+  el.classList.add('tilt')},{passive:true});
+ document.addEventListener('pointerleave',()=>{if(cur){cur.classList.remove('tilt');cur=null}});
+})();
 </script>
 </body>
 
