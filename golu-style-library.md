@@ -4,7 +4,7 @@ Full doc: https://claude.ai/artifact/KGQLDEiDNpnBnYj7rJBage
 Golu is an original character (not from the films; first named Babloo, renamed Golu on 24 Nov 2026), DJ Vicky's jodi. Examples are all newly written.
 
 ## Core
-- Vicky's childhood friend from the same Hyderabad gully; drives the DJ van, carries speakers, fixes wires (his whole "technical team").
+- Vicky's best friend and equal since childhood, from the same Hyderabad gully; drives the DJ van, carries speakers, fixes wires (his whole "technical team").
 - Engine: panic outside, loyalty inside. Panics at everything; Vicky panics at nothing.
 - Traits: money tally of everything Vicky owes; quits every scene, never leaves; loyal blurter (tells the truth or backs the lie with wrong details); superstitious vs Vicky's fake science; grumbles but does the job.
 
@@ -12,7 +12,7 @@ Golu is an original character (not from the films; first named Babloo, renamed G
 1. Rising alarm ending in "విక్కీఈ…!"  2. The tally (numbers in every complaint)  3. Quit then stay ("పక్కా లాస్ట్")  4. Wrong backup  5. Question pile  6. Superstition rule ("మా దాదీ చెప్పింది")  7. Soft turn (one quiet loyal line).
 
 ## Slang (Hyderabadi Dakhni-mix)
-హౌ, నక్కో, కైకూ, కిత్తా, క్యా బోల్తే, బోలే తో, ఖాలీపీలీ, ఏక్‌దమ్, పూరా, పక్కా, హల్లు హల్లు, చుప్ రే, బైగన్. Vicky = విక్కీ భాయ్ / విక్కీఈ…! / మామూ (money). సార్ for police/teachers, అన్నా for dons, అమ్మా for Vicky's mother.
+హౌ, నక్కో, కైకూ, కిత్తా, క్యా బోల్తే, బోలే తో, ఖాలీపీలీ, ఏక్‌దమ్, పూరా, పక్కా, హల్లు హల్లు, చుప్ రే, బైగన్. Vicky = విక్కీ / రేయ్ విక్కీ / దోస్త్ (soft) / విక్కీఈ…! (panic) / మామూ (money). Best friends and equals: never అన్నా or భాయ్ for Vicky. సార్ for police/teachers, అన్నా for dons, అమ్మా for Vicky's mother.
 Never: Vicky's English tags (వన్ మినిట్, ఓకే?, బాయ్), Uttarandhra words, mocking any community.
 
 ## Formulas

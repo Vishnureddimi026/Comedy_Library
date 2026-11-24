@@ -797,9 +797,9 @@ Use these as top-quality references for every new scene. Rules:
 2. DJ Vicky & Golu — new pair.
 
 ## New character: Golu (గోలు) — DJ Vicky's jodi (added 24 Nov 2026 as Babloo, renamed Golu the same day)
-- Who: Vicky's childhood friend from the same Hyderabad gully; drives the DJ van, carries speakers, fixes wires — Vicky's whole "technical team".
+- Who: Vicky's best friend and equal since childhood from the same Hyderabad gully; drives the DJ van, carries speakers, fixes wires — Vicky's whole "technical team".
 - Personality: loud, emotional, practical panicker. Panics at everything while Vicky panics at nothing; keeps a running money tally (gigs, biryanis, petrol, van EMI); threatens to quit in every scene and never quits; loyal blurter (tells the truth Vicky hides, or backs the bluff with wrong details); superstitious vs Vicky's fake science; grumbles but always does the job.
-- Slang: Hyderabadi Dakhni-mix Telugu — హౌ, నక్కో, కైకూ, క్యా బోల్తే, బోలే తో, ఖాలీపీలీ, ఏక్‌దమ్, హల్లు హల్లు, చుప్ రే, కిత్తా, బైగన్, పక్కా, పూరా; calls Vicky విక్కీ భాయ్ / విక్కీఈ…! / మామూ (for money); numbers in every argument. Never Vicky's English tags; never mocking any community.
+- Slang: Hyderabadi Dakhni-mix Telugu — హౌ, నక్కో, కైకూ, క్యా బోల్తే, బోలే తో, ఖాలీపీలీ, ఏక్‌దమ్, హల్లు హల్లు, చుప్ రే, కిత్తా, బైగన్, పక్కా, పూరా; calls Vicky విక్కీ / రేయ్ విక్కీ / దోస్త్ / విక్కీఈ…! (panic) / మామూ (for money) — they are best friends and equals, so never అన్నా or భాయ్ (rule set 24 Nov 2026); numbers in every argument. Never Vicky's English tags; never mocking any community.
 - Rhythm: long rising panic → one cool Vicky line → bigger panic → gives in ("pakka last").
 - Signature formulas: F311 F371 F373 F279 F569 F617 F633 F504 F386 F411.
 - Pair engine "Cool vs Panic": alarm → Vicky turns it into vibe; money tally vs lifestyle bluff; quit-and-return loop; loyalty exposes Vicky, Vicky escapes with a topic change; superstition vs fake science.

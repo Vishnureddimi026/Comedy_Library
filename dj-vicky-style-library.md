@@ -46,4 +46,4 @@ Line checklist: cooler/shorter/less expected than the other line? dodges or twis
 ## 10. Jodi design
 Partner must: raise the stakes constantly; use a different register (loud, emotional, practical — not cool, not English-heavy); know the truth about Vicky; be unable to walk away (money, business, loyalty); win sometimes. Avoid: another cool show-off; a pure deadpan truth-teller (Vicky never admits, the scene stalls).
 Engines: panic vs vibe; money tally vs lifestyle bluff; quit-and-return; loyal blurter; superstition vs fake science.
-Built: Golu (గోలు) — Vicky's childhood friend and DJ "technical team", loud practical panicker in Hyderabadi Dakhni-mix Telugu (హౌ, నక్కో, కైకూ, క్యా బోల్తే, ఖాలీపీలీ, పక్కా, కిత్తా), counts every rupee, quits and never leaves. In the web app. See golu-style-library.md.
+Built: Golu (గోలు) — Vicky's best friend and equal since childhood (calls him విక్కీ / రేయ్ విక్కీ / దోస్త్, never అన్నా or భాయ్) and DJ "technical team", loud practical panicker in Hyderabadi Dakhni-mix Telugu (హౌ, నక్కో, కైకూ, క్యా బోల్తే, ఖాలీపీలీ, పక్కా, కిత్తా), counts every rupee, quits and never leaves. In the web app. See golu-style-library.md.
