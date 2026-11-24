@@ -1662,15 +1662,15 @@ try{const res=await ask(rpPrompt(L,map,title),{cache:false,onText:({text})=>{ch=
 if(!j.scene||!j.scene.length)throw {message:"The rewritten scene came back empty. Tap Replace characters again."};
 const newNames=new Set(Object.values(map).map(k=>(ROLES.find(r=>r[0]===k)||[])[1]).filter(Boolean));const changed=new Set(j.scene.map(x=>x.s).filter(sp=>[...newNames].some(n=>String(sp).startsWith(n))));
 const desc=Object.entries(map).map(([a,b])=>`${a} → ${(ROLES.find(r=>r[0]===b)||[])[1]}`).join(", ");
-const item={t:Date.now(),idea:`Character replacement: ${desc}${title?` (from “${title}”)`:""}`,r:{idea:"replace",n:j.scene.length,cast:"",replace:{map}},s:{title:j.title||((title||"Scene")+" — "+desc),box1:`Same scene with characters replaced: ${desc}.`,scene:j.scene,formulas:[],scan:{shortlist:[]},replace:{orig:L,map,desc,changes:j.changes||[],kept:j.kept||""}},a:null};
+const item={t:Date.now(),idea:`Character replacement: ${desc}${title?` (from “${title}”)`:""}`,r:{idea:"replace",n:j.scene.length,cast:"",replace:{map}},s:{title:j.title||((title||"Scene")+" — "+desc),box1:`Same scene with characters replaced: ${desc}.`,scene:j.scene,formulas:[],scan:{shortlist:[]},replace:{orig:L,map,desc,changes:j.changes||[],kept:j.kept||"",changedSp:[...changed]}},a:null};
 hist.unshift(item);saveHist();drawHist();RPC=item;
 $("#rpOut").innerHTML=`<div class="box"><h2 style="margin-top:0">${esc(item.s.title)}</h2><p class="row">${esc(desc)} · saved in Saved scenes. Changed characters' lines are highlighted.</p>${rpCmp(L,j.scene,changed)}
 ${(j.changes||[]).length?`<h3>How the replaced characters were rewritten</h3>${j.changes.map(c=>`<p><b>${esc(c.was||"")} → ${esc(c.char||"")}:</b> ${esc(c.how||"")}</p>`).join("")}`:""}${j.kept?`<p><b>Kept characters:</b> ${esc(j.kept)}</p>`:""}
-<div class="acts"><button class="btn" type="button" id="rpCopy">Copy new scene</button><button class="btn ghost" type="button" id="rpAgain">Try another version</button><a class="btn ghost" href="#compare" id="rpCmpLink">Open in Compare scenes</a></div><p class="row" id="rpMsg"></p></div>`;
+<div class="acts"><button class="btn" type="button" id="rpCopy">Copy new scene</button><button class="btn ghost" type="button" id="rpAgain">Try another version</button><a class="btn ghost" href="#compare" id="rpCmpLink">Open in Compare scenes</a></div><div class="acts"><button class="btn" type="button" id="rpPdfNew">Download PDF · new scene</button><button class="btn ghost" type="button" id="rpPdfBoth">Download PDF · original vs new</button></div><p class="row" id="rpMsg"></p></div>`;
 $("#rpStatus").textContent="Done.";$("#rpOut").scrollIntoView({behavior:"smooth",block:"start"})}
 catch(e){clearInterval(tk);$("#rpStatus").textContent=(e&&e.code?errText(e):(e&&e.message)||errText(e))}
 busy=false;$("#go").disabled=false;$("#rpGo").disabled=false});
-$("#rpOut").addEventListener("click",async e=>{if(e.target.id==="rpCopy"&&RPC){try{await navigator.clipboard.writeText(RPC.s.scene.map(x=>`${x.s}: ${x.l}`).join("\n"));$("#rpMsg").textContent="Copied."}catch(err){$("#rpMsg").textContent="Copy was blocked here — open it from Saved scenes and use Copy scene."}}
+$("#rpOut").addEventListener("click",async e=>{if((e.target.id==="rpPdfNew"||e.target.id==="rpPdfBoth")&&RPC){const both=e.target.id==="rpPdfBoth";const nm=(RPC.s.title||"replaced-scene").replace(/[^\w\u0C00-\u0C7F -]+/g,"").trim().replace(/\s+/g,"-").slice(0,60)||"replaced-scene";await makePdf([Object.assign({},RPC,{kind:"replace",pdfMode:both?"both":"new"})],RPC.s.title||"Replaced scene",nm+(both?"-original-vs-new":"-new")+".pdf",$("#rpMsg"));return}if(e.target.id==="rpCopy"&&RPC){try{await navigator.clipboard.writeText(RPC.s.scene.map(x=>`${x.s}: ${x.l}`).join("\n"));$("#rpMsg").textContent="Copied."}catch(err){$("#rpMsg").textContent="Copy was blocked here — open it from Saved scenes and use Copy scene."}}
 if(e.target.id==="rpAgain")$("#rpGo").click();
 if(e.target.id==="rpCmpLink"&&RPC){setTimeout(()=>{try{$("#cmpSel1").value="h:"+RPC.t;$("#cmpSel1").dispatchEvent(new Event("change"))}catch(err){}},80)}});
 $("#go").addEventListener("click",()=>{const r=req();if(!r.idea){$("#status").innerHTML='<span class="err">Write your scene idea first.</span>';$("#idea").focus();return}genScene(r)});
@@ -1953,6 +1953,14 @@ ${f[12]?`<div class="sm"><b>Library sample (${E(f[6]||"")}):</b> ${E(f[12])}</di
 const rest=sl.filter(x=>!used.includes(x));if(rest.length)B.push(`<p><b>Shortlisted, not used:</b> ${rest.map(x=>E(x.id)+" "+E((fm[x.id]||[])[1]||"")).join(" · ")}</p>`);
 const L=sc.scene||[];for(let i=0;i<L.length;i+=14)B.push(`${i?"":"<p><b>పూర్తి సీన్ (full scene)</b></p>"}<div class="dl">${L.slice(i,i+14).map((d,j)=>`<p><span>${i+j+1}</span><b>${E(d.s)}:</b> ${E(d.l)}</p>`).join("")}</div>`);
 return B}
+function rblocks(X){const sc=X.s||{},R=sc.replace||{},N=sc.scene||[],O=R.orig||[],B=[],ch=new Set(R.changedSp||[]);
+const hl="background:#fbefd3;border-left:4px solid #c8902a;padding:4px 8px;border-radius:4px";
+B.push(`<p><b>Characters replaced:</b> ${E(R.desc||"")}</p><p class="mt">Highlighted lines belong to the new character. The original scene is unchanged.</p>`);
+if(X.pdfMode==="both"){for(let i=0;i<Math.max(N.length,O.length);i+=10){let rows="";for(let k=i;k<Math.min(i+10,Math.max(N.length,O.length));k++){const o=O[k],n=N[k];rows+=`<tr><td style="vertical-align:top;padding:6px;border-bottom:1px solid #ddd;width:50%">${o?`<span class="mt">${k+1}</span> ${o.s?`<b>${E(o.s)}:</b> `:""}${E(o.l)}`:""}</td><td style="vertical-align:top;padding:6px;border-bottom:1px solid #ddd;width:50%"><div style="${n&&ch.has(n.s)?hl:""}">${n?`<span class="mt">${k+1}</span> ${n.s?`<b>${E(n.s)}:</b> `:""}${E(n.l)}`:""}</div></td></tr>`}
+B.push(`<table style="width:100%;border-collapse:collapse;font-size:15px;line-height:1.6">${i?"":`<tr><th style="text-align:left;padding:6px;border-bottom:2px solid #999">Original</th><th style="text-align:left;padding:6px;border-bottom:2px solid #999">With replaced characters</th></tr>`}${rows}</table>`)}}
+else{for(let i=0;i<N.length;i+=14)B.push(`${i?"":"<p><b>New scene (కొత్త సీన్)</b></p>"}<div class="dl">${N.slice(i,i+14).map((d,k)=>`<p style="${ch.has(d.s)?hl:""}"><span>${i+k+1}</span><b>${E(d.s)}:</b> ${E(d.l)}</p>`).join("")}</div>`)}
+if((R.changes||[]).length)B.push(`<h2>How the replaced characters were rewritten</h2>${R.changes.map(c=>`<p><b>${E(c.was||"")} → ${E(c.char||"")}:</b> ${E(c.how||"")}</p>`).join("")}${R.kept?`<p><b>Kept characters:</b> ${E(R.kept)}</p>`:""}`);
+return B}
 function sblocks(X){const B=[`<p class="mt">${new Date(X.at).toLocaleString()} · ${X.sel.length} line${X.sel.length>1?"s":""} · in the order you picked them</p>`];
 for(let i=0;i<X.sel.length;i+=12)B.push(`<div class="dl">${X.sel.slice(i,i+12).map((x,k)=>`<p style="margin:10px 0;font-size:18px;line-height:1.7"><span>${i+k+1}</span>${x.s&&x.s!=="—"?`<b>${E(x.s)}:</b> `:""}${E(x.l)} <i class="mt">[${E(x.tag)}${x.t?" · "+E(x.t):""}]</i></p>`).join("")}</div>`);
 return B}
@@ -2033,7 +2041,7 @@ async function makePdf(items,title,fname,msgEl){const dl=await getDl();if(!dl){m
 msgEl.textContent="Making the PDF…";try{await libs()}catch(e){msgEl.textContent="Couldn't load the PDF maker. Check your internet and try again.";return}
 const host=document.createElement("div");host.style.cssText="position:fixed;left:-12000px;top:0;z-index:-1";host.innerHTML=`<style>${CSS}</style>`;document.body.appendChild(host);
 try{const {jsPDF}=window.jspdf;const pdf=new jsPDF({unit:"mm",format:"a4"});const W=190,X=10,TOP=10,BOT=287;let y=TOP;
-const all=[`<h1>${E(title)}</h1><p class="mt">Comedy Formula Library · ${new Date().toLocaleDateString()}</p>`];items.forEach((it,i)=>all.push(...(it.kind==="sellines"?sblocks(it):it.kind==="lineexp"?lblocks(it):it.s&&it.s.transform?tblocks(it):blocks(it,items.length>1?i+1:0))));
+const all=[`<h1>${E(title)}</h1><p class="mt">Comedy Formula Library · ${new Date().toLocaleDateString()}</p>`];items.forEach((it,i)=>all.push(...(it.kind==="sellines"?sblocks(it):it.kind==="lineexp"?lblocks(it):(it.kind==="replace"||(it.s&&it.s.replace&&!it.kind))?rblocks(it):it.s&&it.s.transform?tblocks(it):blocks(it,items.length>1?i+1:0))));
 for(let i=0;i<all.length;i++){msgEl.textContent=`Making the PDF… ${Math.round(100*i/all.length)}%`;const el=document.createElement("div");el.className="pr";el.innerHTML=all[i];host.appendChild(el);
 const c=await snap(el);host.removeChild(el);
 const h=c.height*W/c.width;
