@@ -295,6 +295,7 @@ main>section:not([hidden]),.page:not([hidden]){animation:rise3d .35s cubic-bezie
 .rppdf{border:1.5px dashed var(--line);border-radius:12px;padding:10px;margin-top:10px}
 .opt.best{border-color:color-mix(in srgb,#b5523b 45%,var(--line))}.opt.best .otag{color:#a4462f}.opt.best.on{border-color:#b5523b;background:rgba(181,82,59,.09);box-shadow:inset 0 0 0 1px #b5523b}
 #rpBest{background:#8e4a3a;color:#fff;box-shadow:0 1px 0 rgba(255,255,255,.3) inset,0 -2px 0 rgba(0,0,0,.18) inset,0 3px 0 #5e2e23,0 6px 12px -2px rgba(80,30,20,.3)}
+.fament{border:1.5px solid var(--line);border-radius:12px;padding:10px;margin-top:10px;background:var(--card)}.fament textarea{width:100%;min-height:180px;margin:6px 0;font-size:16px;line-height:1.6}.fament .acts{align-items:center}
 </style>
 </head>
 <body class="locked">
@@ -490,6 +491,9 @@ setTimeout(function(){var i=document.getElementById("lockP");if(i)i.focus()},100
 </section>
 
 <section id="v-characters" class="band" hidden>
+<div class="box" id="famBox" style="margin-bottom:22px"><h2 style="margin-top:0">👨‍👩‍👦 Character Family Details</h2>
+<p class="row" style="margin:0 0 8px">Tap a name and write about that person: personality, behaviour, way of speaking, slang, relationship with other characters, habits and how they react in different situations. Each one saves on its own as you type (and syncs to your other devices). The AI uses these details whenever these people appear in a scene or the situation involves the family — in Write a scene and in Replace characters.</p>
+<div class="chips" id="famChips"></div><div id="famEdit"></div><p class="row" id="famMsg" style="margin:6px 0 0"></p></div>
 <h2 style="font-size:28px;margin:0 0 6px">Character & slang analysis</h2>
 <p class="row" style="margin:0 0 14px">How each character speaks, how the pairs create comedy, and how to make fresh slang. Choose a slang type in the scene writer: 5 Uttarandhra types (U1 keeps the original slang), 4 other regional dialects and 5 comic speaking styles. Each character keeps his personality while his tags are converted.</p>
 <div class="grid" id="voices"></div>
@@ -1334,7 +1338,7 @@ const errText=e=>e&&e.code==="cancelled"?"Stopped.":e&&e.code==="not_granted"?"P
 const LIB=F.map(f=>`${f[0]} [${f[9]}] | ${f[1]} | family: ${CATS[f[3]]} | ${f[4]} | use when: ${f[5]} | voice: ${f[6]} | ref scenes: ${/^\d/.test(f[7])?f[7].split(", ").map(x=>"S"+x).join(", "):f[7]}${f[11]?" | also in "+f[11]:""}`).join("\n");
 const CHARSF=()=>{const ok=SFIDS();return CH.map(c=>{const sig=String(c[4]).split(/\s+/).filter(x=>ok.has(x)).join(" ");return `${c[0]} (${c[1]}): ${c[2]} Traits: ${c[3].join("; ")}.${sig?` Signature formulas: ${sig}`:""}`}).join("\n")};const CHARS=CH.map(c=>`${c[0]} (${c[1]}): ${c[2]} Traits: ${c[3].join("; ")}. Signature formulas: ${c[4]}`).join("\n");
 // [key, Telugu name, English label, CH index or -1, default on]
-const ROLES=[["Master","మాస్టర్","Master",3,1],["Madhu","మధు","Madhu",0,1],["Mahesh","మహేష్","Mahesh",1,1],["Budatha","బుడత","Budatha",2,1],["Principal","ప్రిన్సిపాల్","Principal",4,0],["Venki","వెంకి","Venki (rival)",5,0],["Newcomer","కొత్త స్టూడెంట్","New student",6,0],["Father","నాన్న","Father",7,0],["GoogleAI","గూగుల్/ఏఐ","Google/AI",8,0],["Tapana","తపన","Tapana",9,0],["Mechanic","మెకానిక్","Mechanic",10,0],["Golu","గోలు","Golu (Vicky's best friend)",12,0],["Vicky","విక్కీ","DJ Vicky",11,0],["Mother","అమ్మ","Mother",-1,0],["PetrolBoy","పెట్రోల్ బాయ్","Petrol boy",-1,0],["Shopkeeper","షాప్ ఓనర్","Shopkeeper",-1,0],["Customer","కస్టమర్","Customer",-1,0],["TC","టీసీ","Ticket collector",-1,0]];
+const ROLES=[["Master","మాస్టర్","Master",3,1],["Madhu","మధు","Madhu",0,1],["Mahesh","మహేష్","Mahesh",1,1],["Budatha","బుడత","Budatha",2,1],["Principal","ప్రిన్సిపాల్","Principal",4,0],["Venki","వెంకి","Venki (rival)",5,0],["Newcomer","కొత్త స్టూడెంట్","New student",6,0],["Father","నాన్న","Father",7,0],["GoogleAI","గూగుల్/ఏఐ","Google/AI",8,0],["Tapana","తపన","Tapana",9,0],["Mechanic","మెకానిక్","Mechanic",10,0],["Golu","గోలు","Golu (Vicky's best friend)",12,0],["Vicky","విక్కీ","DJ Vicky",11,0],["Mother","అమ్మ","Mother",-1,0],["MadhuFather","మధు నాన్న","Madhu's Father",-1,0],["MadhuMother","మధు అమ్మ","Madhu's Mother",-1,0],["MaheshFather","మహేష్ నాన్న","Mahesh's Father",-1,0],["MaheshMother","మహేష్ అమ్మ","Mahesh's Mother",-1,0],["PetrolBoy","పెట్రోల్ బాయ్","Petrol boy",-1,0],["Shopkeeper","షాప్ ఓనర్","Shopkeeper",-1,0],["Customer","కస్టమర్","Customer",-1,0],["TC","టీసీ","Ticket collector",-1,0]];
 const RK="cfl-roles";let sel=new Set(ROLES.filter(r=>r[4]).map(r=>r[0])),extra=[];
 try{const o=JSON.parse(localStorage.getItem(RK)||"null");if(o){sel=new Set(o.sel);extra=o.extra||[]}}catch(e){}
 const saveRoles=()=>{try{localStorage.setItem(RK,JSON.stringify({sel:[...sel],extra}))}catch(e){}};
@@ -1352,7 +1356,7 @@ const lines=[],picked=[];
 ROLES.forEach(r=>{if(!sel.has(r[0]))return;picked.push(r[0]);
 if(r[3]>=0){const c=CH[r[3]],v=STYLE.voices.find(x=>x.k===r[0]);
 lines.push(`- ${orig?`${r[1]} (${r[0]})`:`a NEW Telugu name for the ${r[0]} character (invent it)`}: ${c[1]}. ${c[2]} Traits: ${c[3].join("; ")}.${(CHADD[r[0]]||[]).length?` NEWER FORMULAS THIS CHARACTER OWNS (use where they fit): ${CHADD[r[0]].map(id=>{const f=F.find(x=>x[0]===id);return f?`${id} ${f[1]} — ${f[4]}`:id}).join("; ")}.`:""}${v?` SPEAKING STYLE: ${v.core} ${v.traits.join(" ")} Rhythm: ${v.rhythm}`:""} ${sk==='ref'?`SLANG AND SPEECH HABITS TO KEEP: ${c[5]}.`:`REFERENCE SLANG (convert each item into ${SLT.name.replace(/^[A-Z]?\d+\. /,"")} slang that does the same job — same kind of tag, nickname or exclamation, new dialect): ${c[5]}.`}`)}
-else lines.push(`- ${r[1]} (${r[2]}): new side character; give a distinct, believable voice that fits the idea.`)});
+else{const ft=window.CFL_FAM&&window.CFL_FAM.text(r[0]);lines.push(ft?`- ${r[1]} (${r[2]}): ${ft}`:`- ${r[1]} (${r[2]}): new side character; give a distinct, believable voice that fits the idea.`)}});
 extra.forEach(x=>{if(sel.has("x:"+x))lines.push(`- ${x}: character added by the user; give a distinct voice that fits the idea.`)});
 if(!lines.length)return "Use the characters described in the idea; give each a distinct voice, borrowing archetypes from the character notes where they fit."+(fresh?" Invent fresh slang for every character.":"");
 const pairs=[];if(picked.includes("Madhu")&&picked.includes("Mahesh"))pairs.push(STYLE.pairs[0]);if(picked.includes("Madhu")&&picked.includes("Master"))pairs.push(STYLE.pairs[1]);
@@ -1456,7 +1460,7 @@ ${r.idea}
 ${r.combo?comboBlock(r):""}${r.prev?prevBlock(r):""}${r.transform?transformBlock(r):""}
 CAST:
 ${r.cast}
-LENGTH: exactly ${r.n} dialogues (each speaker turn counts as one). Do not shorten.
+${window.CFL_FAM?window.CFL_FAM.block():""}LENGTH: exactly ${r.n} dialogues (each speaker turn counts as one). Do not shorten.
 ${pinned.length?`MUST USE these formulas: ${pinned.join(", ")}.`:""}
 Recently used formulas to avoid unless they fit perfectly: ${[...used].filter(x=>!pinned.includes(x)).join(", ")||"none"}.
 
@@ -1650,7 +1654,7 @@ $("#rpText").addEventListener("input",rpDraw);
 $("#rpChars").addEventListener("change",e=>{const x=e.target.closest("select");if(x)x.closest(".rprow").classList.toggle("on",!!x.value)});
 $("#rpFrom").addEventListener("change",()=>{const h=hist.find(x=>String(x.t)===$("#rpFrom").value);if(!h)return;$("#rpText").value=h.s.scene.map(x=>`${x.s}: ${x.l}`).join("\n");$("#rpText").dataset.title=h.s.title;rpDraw()});
 function rpFill(){const v=$("#rpFrom").value;$("#rpFrom").innerHTML='<option value="">Choose a saved scene…</option>'+hist.map(h=>`<option value="${h.t}">${esc(h.s.title.slice(0,50))} · ${h.s.scene.length} lines</option>`).join("");$("#rpFrom").value=v}
-function rpProfile(r){if(!r)return "";const c=r[3]>=0?CH[r[3]]:null,v=STYLE.voices.find(x=>x.k===r[0]);if(!c)return `${r[1]} (${r[2]}): side character — give a believable, distinct voice that fits the role.`;
+function rpProfile(r){if(!r)return "";const c=r[3]>=0?CH[r[3]]:null,v=STYLE.voices.find(x=>x.k===r[0]);if(!c){const ft=window.CFL_FAM&&window.CFL_FAM.text(r[0]);return ft?`${r[1]} (${r[2]}): ${ft}`:`${r[1]} (${r[2]}): side character — give a believable, distinct voice that fits the role.`}
 const sig=String(c[4]).split(/\s+/).filter(Boolean).slice(0,10).map(id=>{const f=fmap[id];return f?`${id} ${f[1]} — ${f[4]}`:""}).filter(Boolean).join("; ");
 return `${r[1]} (${r[2]}): ${c[1]}. ${c[2]} Traits: ${c[3].join("; ")}.${v?` SPEAKING STYLE: ${v.core} ${v.traits.join(" ")} Rhythm: ${v.rhythm}`:""} SLANG AND SPEECH HABITS: ${c[5]}.${sig?` HIS SIGNATURE FORMULAS: ${sig}.`:""}`}
 function rpPrompt(L,map,title){const names=[...new Set(L.filter(x=>x.s).map(x=>x.s))];const repl=names.filter(n=>map[n]);const keep=names.filter(n=>!map[n]);
@@ -1665,7 +1669,7 @@ REPLACEMENTS:
 ${repl.map(n=>`- ${n} → ${newOf(n)[1]} (${newOf(n)[2]})`).join("\n")}
 ${keep.length?`KEEP UNCHANGED: ${keep.join(", ")}`:""}
 
-THE NEW CHARACTER(S):
+${window.CFL_FAM?window.CFL_FAM.block():""}THE NEW CHARACTER(S):
 ${repl.map(n=>"- "+rpProfile(newOf(n))).join("\n")}
 ${repl.map(n=>newOf(n)).filter(r=>/Vicky|Golu|Tillu|Babloo/.test(r[0])).map(r=>`\n=== SAVED CHARACTER & SLANG LIBRARY: ${r[1]} — FOLLOW THIS EXACTLY ===\n${window.SLANGLIB_GET?window.SLANGLIB_GET(r):""}`).join("\n")}
 
@@ -2357,6 +2361,37 @@ const nm=((it.s&&it.s.title)||"scene").replace(/[^\wఀ-౿]+/g,"_").slice(0,40)
   if(b.classList.contains("cpaste")){go(n,null);return}
   try{const t=await navigator.clipboard.readText();if(t&&t.trim()){go(n,t.trim());return}}catch(_){}
   go(n,null);const ta=document.getElementById("cmpTxt"+n);ta.placeholder="Clipboard couldn't be read here — long-press in this box and choose Paste. One line each, like: మధు: dialogue"});
+})();
+</script>
+
+<script>
+/* ===== Character Family Details ===== */
+(function(){
+const P=[["MadhuFather","మధు నాన్న","Madhu's Father"],["MadhuMother","మధు అమ్మ","Madhu's Mother"],["MaheshFather","మహేష్ నాన్న","Mahesh's Father"],["MaheshMother","మహేష్ అమ్మ","Mahesh's Mother"]];
+const K="cfl-family";let FAM={};try{FAM=JSON.parse(localStorage.getItem(K)||"{}")||{}}catch(e){FAM={}}
+let open=null,tmr=null,cloud=null;const $=q=>document.querySelector(q);
+const E=t=>String(t==null?"":t).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const txt=k=>(FAM[k]&&FAM[k].text||"").trim();
+window.CFL_FAM={text:txt,
+ block(){const f=P.filter(p=>txt(p[0]));if(!f.length)return "";return `\nFAMILY DETAILS (written by the user — follow them exactly whenever any of these people appear in the scene, are mentioned, or the situation involves the family: their personality, way of speaking, slang, habits, reactions and relationships. Keep them consistent with these notes. Do not force them into a scene where they do not fit):\n${f.map(p=>`- ${p[1]} (${p[2]}): ${txt(p[0])}`).join("\n")}\n\n`}};
+function saveLocal(){try{localStorage.setItem(K,JSON.stringify(FAM))}catch(e){}}
+function chips(){const c=$("#famChips");if(!c)return;c.innerHTML=P.map(p=>`<button class="chip" type="button" data-fam="${p[0]}" aria-pressed="${open===p[0]}">${txt(p[0])?"✓ ":""}${p[1]} · ${p[2]}</button>`).join("")}
+function edit(){const box=$("#famEdit");if(!box)return;if(!open){box.innerHTML="";return}const p=P.find(x=>x[0]===open);const f=FAM[open]||{};
+box.innerHTML=`<div class="fament"><label for="famTx"><b>${p[1]} · ${p[2]}</b></label>
+<textarea id="famTx" class="cta" rows="9" placeholder="Write about ${p[2]}: personality, behaviour, way of speaking and slang (sample words or phrases), relationship with Madhu, Mahesh and others, habits, and how he/she reacts when angry, happy, worried, embarrassed…">${E(f.text||"")}</textarea>
+<div class="acts"><button class="btn" type="button" id="famDone">Done</button><button class="btn ghost" type="button" id="famClr">Clear this person</button><span class="mt" id="famSt">${f.t?`Last saved ${new Date(f.t).toLocaleString()}`:"Not written yet"}</span></div></div>`;
+$("#famTx").focus()}
+function put(k,text){FAM[k]={text,t:Date.now()};saveLocal();chips();const st=$("#famSt");if(st)st.textContent="Saved ✓ "+new Date().toLocaleTimeString();pushCloud()}
+document.addEventListener("click",e=>{const b=e.target.closest("[data-fam]");if(b){open=open===b.dataset.fam?null:b.dataset.fam;chips();edit();return}
+if(e.target.id==="famDone"){const t=$("#famTx");if(t)put(open,t.value);open=null;chips();edit();$("#famMsg").textContent="Saved. The AI will use it in new scenes."}
+if(e.target.id==="famClr"){const t=$("#famTx");if(t){t.value="";put(open,"")}$("#famMsg").textContent="Cleared."}});
+document.addEventListener("input",e=>{if(e.target.id!=="famTx")return;const k=open,v=e.target.value;clearTimeout(tmr);const st=$("#famSt");if(st)st.textContent="Saving…";tmr=setTimeout(()=>put(k,v),600)});
+async function pushCloud(){if(!cloud)return;clearTimeout(pushCloud.t);pushCloud.t=setTimeout(async()=>{try{await cloud.set({fam:FAM,t:Date.now()})}catch(e){const m=$("#famMsg");if(m)m.textContent="Saved on this device; couldn't sync to your account just now."}},800)}
+chips();
+(async()=>{if(window.parent===window)return;try{for(let i=0;i<50&&!window.claude;i++)await new Promise(r=>setTimeout(r,100));if(!window.claude)return;const db=await window.claude.use("db"),u=await window.claude.use("user"),uid=u?await u.id():null;if(!db||!uid)return;
+cloud=db.collection("data/users/"+uid).doc("family");const d=await cloud.get();const r=d&&d.exists!==false&&(typeof d.data==="function"?d.data():d)||null;let changed=false,mine=false;
+const R=(r&&r.fam)||{};for(const k of new Set([...Object.keys(R),...Object.keys(FAM)])){const a=FAM[k],b=R[k];if(b&&(!a||(b.t||0)>(a.t||0))){FAM[k]=b;changed=true}else if(a&&(!b||(a.t||0)>(b.t||0)))mine=true}
+if(changed){saveLocal();chips();if(open&&!document.activeElement?.id?.startsWith("famTx"))edit()}if(mine)pushCloud()}catch(e){}})();
 })();
 </script>
 </body>

@@ -811,3 +811,8 @@ Use these as top-quality references for every new scene. Rules:
 - Golu: TELUGU FIRST: every Golu line is Hyderabadi Telugu (Telangana grammar) with only 1–3 Dakhni/Hindi words sprinkled in. Never full Hindi or Urdu sentences or Hindi grammar — banned: దేఖ్ రహా హూ, క్యా కరేంగే, ఛోడ్ కే, లేకిన్, భీ, ఠీక్ హై, యాద్ రఖ్, డరో నక్కో, హూ/హై/థా endings. Good: 'నక్కో రే, ఇయాల మంగళవారం, పూరా బ్యాడ్ లక్!' Bad: 'డరో నక్కో, మై దేఖ్ రహా హూ.' (rule added 24 Nov 2026)
 - Vicky: TELUGU FIRST: Telangana Telugu with 1–2 English words per line; never Golu's Dakhni words (హౌ, నక్కో, కైకూ, కిత్తా). Self-praise tag at most ONCE per scene and varied, never the same tag in two lines. (rule added 24 Nov 2026)
 - The web app now sends the full Vicky and Golu style libraries plus a per-line SLANG CHECK in every Replace characters mode (options, 50/50, Better Comedy, quick). Vicky's in-app profile name fixed from the old 'DJ Tillu'.
+
+
+## Character Family Details (24 Nov 2026)
+- New box at the top of the Characters tab: Madhu's Father (మధు నాన్న), Madhu's Mother (మధు అమ్మ), Mahesh's Father (మహేష్ నాన్న), Mahesh's Mother (మహేష్ అమ్మ). The user writes a paragraph for each; it autosaves per person and syncs to the account (doc data/users/<id>/family).
+- The four are also cast roles (Write a scene chips, Replace characters lists). Their text goes into the scene prompt and Replace prompt as FAMILY DETAILS whenever filled.
