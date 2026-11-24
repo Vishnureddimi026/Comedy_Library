@@ -803,3 +803,5 @@ Use these as top-quality references for every new scene. Rules:
 - Rhythm: long rising panic → one cool Tillu line → bigger panic → gives in ("pakka last").
 - Signature formulas: F311 F371 F373 F279 F569 F617 F633 F504 F386 F411.
 - Pair engine "Cool vs Panic": alarm → Tillu turns it into vibe; money tally vs lifestyle bluff; quit-and-return loop; loyalty exposes Tillu, Tillu escapes with a topic change; superstition vs fake science.
+
+- Tillu with the Master / teachers / Principal / police (rule set 24 Nov 2026): he calls them సార్ in his cool, casual way (one సార్ at the start, e.g. సార్, వన్ మినిట్…), never అంకుల్. అంకుల్ / ఆంటీ only for strangers outside college. Never Madhu's సార్ at the end of every line.
