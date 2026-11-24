@@ -805,3 +805,9 @@ Use these as top-quality references for every new scene. Rules:
 - Pair engine "Cool vs Panic": alarm → Vicky turns it into vibe; money tally vs lifestyle bluff; quit-and-return loop; loyalty exposes Vicky, Vicky escapes with a topic change; superstition vs fake science.
 
 - Vicky with the Master / teachers / Principal / police (rule set 24 Nov 2026): he calls them సార్ in his cool, casual way (one సార్ at the start, e.g. సార్, వన్ మినిట్…), never అంకుల్. అంకుల్ / ఆంటీ only for strangers outside college. Never Madhu's సార్ at the end of every line.
+
+
+## Slang rule for Vicky & Golu (24 Nov 2026)
+- Golu: TELUGU FIRST: every Golu line is Hyderabadi Telugu (Telangana grammar) with only 1–3 Dakhni/Hindi words sprinkled in. Never full Hindi or Urdu sentences or Hindi grammar — banned: దేఖ్ రహా హూ, క్యా కరేంగే, ఛోడ్ కే, లేకిన్, భీ, ఠీక్ హై, యాద్ రఖ్, డరో నక్కో, హూ/హై/థా endings. Good: 'నక్కో రే, ఇయాల మంగళవారం, పూరా బ్యాడ్ లక్!' Bad: 'డరో నక్కో, మై దేఖ్ రహా హూ.' (rule added 24 Nov 2026)
+- Vicky: TELUGU FIRST: Telangana Telugu with 1–2 English words per line; never Golu's Dakhni words (హౌ, నక్కో, కైకూ, కిత్తా). Self-praise tag at most ONCE per scene and varied, never the same tag in two lines. (rule added 24 Nov 2026)
+- The web app now sends the full Vicky and Golu style libraries plus a per-line SLANG CHECK in every Replace characters mode (options, 50/50, Better Comedy, quick). Vicky's in-app profile name fixed from the old 'DJ Tillu'.

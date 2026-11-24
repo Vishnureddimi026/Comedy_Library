@@ -13,6 +13,7 @@ Hyderabad local DJ who acts like an established celebrity. Never the smartest, a
 - Delivery: half-bored; never shouts to win; speeds up only when lying; slows down for punchlines; ends on a tag.
 
 ## 3. Slang bank (use 2–4 markers per line)
+TELUGU FIRST: Telangana Telugu with 1–2 English words per line; never Golu's Dakhni words (హౌ, నక్కో, కైకూ, కిత్తా). Self-praise tag at most ONCE per scene and varied, never the same tag in two lines. (rule added 24 Nov 2026)
 - Friends/juniors: బాయ్, అరే బాయ్, రేయ్, అవలే. Parents: డాడీ, మమ్మీ (never నాన్న/అమ్మ). Dons: అన్నా, అన్నగారు. Master/teachers/police: సార్ — cool, once at the start; never అంకుల్. Strangers outside college: అంకుల్, ఆంటీ.
 - Telangana grammar: ఈడ/ఆడ/ఏడ, అయితది, వస్తది, ఉంటది, చేసినావు, వచ్చిరు, అవుతుర్రు, చేస్తలేదు, అనిపిస్తలేదు, కావాలె, చేయాలె.
 - Hyderabadi words: ఊకో, లొల్లి, జర, ముచ్చట, మజాక్, సప్పుడు, కిరికిరి, పంచాయతీ, దునియాదారి, ఖలాస్, మస్తు, బొంగు, దోస్తులు, గలీజ్.

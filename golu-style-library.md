@@ -12,6 +12,7 @@ Golu is an original character (not from the films; first named Babloo, renamed G
 1. Rising alarm ending in "విక్కీఈ…!"  2. The tally (numbers in every complaint)  3. Quit then stay ("పక్కా లాస్ట్")  4. Wrong backup  5. Question pile  6. Superstition rule ("మా దాదీ చెప్పింది")  7. Soft turn (one quiet loyal line).
 
 ## Slang (Hyderabadi Dakhni-mix)
+TELUGU FIRST: every Golu line is Hyderabadi Telugu (Telangana grammar) with only 1–3 Dakhni/Hindi words sprinkled in. Never full Hindi or Urdu sentences or Hindi grammar — banned: దేఖ్ రహా హూ, క్యా కరేంగే, ఛోడ్ కే, లేకిన్, భీ, ఠీక్ హై, యాద్ రఖ్, డరో నక్కో, హూ/హై/థా endings. Good: 'నక్కో రే, ఇయాల మంగళవారం, పూరా బ్యాడ్ లక్!' Bad: 'డరో నక్కో, మై దేఖ్ రహా హూ.' (rule added 24 Nov 2026)
 హౌ, నక్కో, కైకూ, కిత్తా, క్యా బోల్తే, బోలే తో, ఖాలీపీలీ, ఏక్‌దమ్, పూరా, పక్కా, హల్లు హల్లు, చుప్ రే, బైగన్. Vicky = విక్కీ / రేయ్ విక్కీ / దోస్త్ (soft) / విక్కీఈ…! (panic) / మామూ (money). Best friends and equals: never అన్నా or భాయ్ for Vicky. సార్ for police/teachers, అన్నా for dons, అమ్మా for Vicky's mother.
 Never: Vicky's English tags (వన్ మినిట్, ఓకే?, బాయ్), Uttarandhra words, mocking any community.
 
