@@ -280,6 +280,16 @@ main>section:not([hidden]),.page:not([hidden]){animation:rise3d .35s cubic-bezie
 <body class="locked">
 <style>body.locked>*:not(#lock){display:none!important}#lock{position:fixed;inset:0;z-index:99999;display:none;align-items:center;justify-content:center;background:#14110d;padding:20px}body.locked #lock{display:flex}#lock form{width:100%;max-width:340px;background:#211c16;border:1.5px solid #4a3f30;border-radius:16px;padding:24px;color:#f3ead9;font-family:system-ui,sans-serif;text-align:center}#lock h1{font-size:22px;margin:0 0 6px}#lock p{margin:0 0 16px;color:#bfb29b;font-size:15px}#lock input{width:100%;box-sizing:border-box;font-size:24px;letter-spacing:8px;text-align:center;padding:12px;border-radius:10px;border:1.5px solid #4a3f30;background:#14110d;color:#f3ead9}#lock button{width:100%;margin-top:12px;font-size:17px;font-weight:700;padding:12px;border:0;border-radius:10px;background:#5fd3c6;color:#0b1f1d;cursor:pointer}#lock .e{color:#ff8a9a;min-height:20px;margin:10px 0 0;font-size:14px}</style>
 <div id="lock"><form id="lockF" autocomplete="off"><h1>Comedy Formula Library</h1><p>Enter the password to open.</p><input id="lockP" type="password" inputmode="numeric" maxlength="12" aria-label="Password" autofocus><button type="submit">Open</button><p class="e" id="lockE" role="alert"></p></form></div>
+<script>
+/* Robust copy: clipboard API, then hidden-textarea execCommand fallback */
+window.copyAny=async function(t){t=String(t==null?"":t);
+ try{if(navigator.clipboard&&window.isSecureContext!==false){await copyAny(t);return true}}catch(e){}
+ const ta=document.createElement("textarea");ta.value=t;ta.setAttribute("readonly","");ta.style.cssText="position:fixed;top:0;left:0;width:1px;height:1px;opacity:0;font-size:16px";
+ document.body.appendChild(ta);const sel=document.getSelection(),rg=sel&&sel.rangeCount?sel.getRangeAt(0):null;
+ ta.focus();ta.select();ta.setSelectionRange(0,t.length);let ok=false;try{ok=document.execCommand("copy")}catch(e){}
+ document.body.removeChild(ta);if(rg){sel.removeAllRanges();sel.addRange(rg)}
+ if(!ok)throw new Error("blocked");return true};
+</script>
 <script>(function(){var H="1fd4f5a4e87e556dd705a2d31ee8f514325eafb97b6b6ed094d252bb71c0ef83";
 function hex(b){return Array.from(new Uint8Array(b)).map(function(x){return x.toString(16).padStart(2,"0")}).join("")}
 async function ok(v){try{if(window.crypto&&crypto.subtle){return hex(await crypto.subtle.digest("SHA-256",new TextEncoder().encode("cfl:"+v)))===H}}catch(e){}return v==="66"+"01"}
@@ -1274,7 +1284,7 @@ function drawCombo(){$("#combo").innerHTML=combo.map(f=>slip(f,true)).join('')}
 $("#combo").addEventListener("click",e=>{const b=e.target.closest("[data-swap]");if(!b)return;const i=combo.findIndex(f=>f[0]===b.dataset.swap);const n=pick(combo[i][3],combo.map(f=>f[0]));if(n)combo[i]=n;drawCombo()});
 $("#roll").addEventListener("click",()=>{roll();$("#cmsg").textContent=""});
 $("#markAll").addEventListener("click",()=>{combo.forEach(f=>used.add(f[0]));save();render();drawCombo();$("#cmsg").textContent="Marked as used. They'll be skipped in future combos."});
-$("#copy").addEventListener("click",async()=>{const t=combo.map(f=>`${f[0]} ${f[1]} — ${f[4]}`).join("\n");try{await navigator.clipboard.writeText(t);$("#cmsg").textContent="Copied. Paste it into the chat with your scene request."}catch(e){$("#cmsg").textContent="Copy was blocked here. The IDs are: "+combo.map(f=>f[0]).join(", ")}});
+$("#copy").addEventListener("click",async()=>{const t=combo.map(f=>`${f[0]} ${f[1]} — ${f[4]}`).join("\n");try{await copyAny(t);$("#cmsg").textContent="Copied. Paste it into the chat with your scene request."}catch(e){$("#cmsg").textContent="Copy was blocked here. The IDs are: "+combo.map(f=>f[0]).join(", ")}});
 $("#reset").addEventListener("click",()=>{used.clear();save();render();drawCombo()});
 $("#voices").innerHTML=STYLE.voices.map(v=>`<div class="char"><h3>${esc(v.title)}</h3><p>${esc(v.core)}</p><ul>${v.traits.map(t=>`<li>${esc(t)}</li>`).join("")}</ul><div class="row" style="margin-top:8px"><b>Rhythm:</b> ${esc(v.rhythm)}</div></div>`).join("");
 $("#adds").innerHTML=Object.entries(CHADD).map(([k,ids])=>`<div class="char"><h3>${k==="Vicky"?"DJ Vicky":k}</h3>${ids.map(id=>{const f=F.find(x=>x[0]===id);return `<div class="brow"><span class="ids">${id}</span> <b>${esc(f[1])}</b> — ${esc(f[4])}<div class="q new" style="margin-top:6px">${esc(f[12])}</div></div>`}).join("")}</div>`).join("");
@@ -1583,7 +1593,7 @@ t+=`\n\nA. New scene – as above.\n\nB. Formula sources\n`+(a.B||[]).map(b=>{if
 return t}
 let cur=null,sample=null,busy=false;
 $("#out").addEventListener("click",e=>{const f=e.target.closest("[data-full]");if(!f)return;const d=$("#full"+f.dataset.full);d.hidden=!d.hidden;f.textContent=f.textContent.replace(d.hidden?"Hide":"Show",d.hidden?"Show":"Hide").replace(d.hidden?"▴":"▾",d.hidden?"▾":"▴");if(!d.hidden){const h=d.querySelector(".hl");if(h&&h.scrollIntoView)setTimeout(()=>h.scrollIntoView({behavior:"smooth",block:"center"}),50)}});
-$("#out").addEventListener("click",async e=>{const b=e.target.closest("[data-cp]");if(!b||!cur)return;const txt=b.dataset.cp==="dlg"?dlgText(cur):asText(cur,b.dataset.cp==="all");try{await navigator.clipboard.writeText(txt);b.textContent="Copied"}catch(err){b.textContent="Copy blocked here"}});
+$("#out").addEventListener("click",async e=>{const b=e.target.closest("[data-cp]");if(!b||!cur)return;const txt=b.dataset.cp==="dlg"?dlgText(cur):asText(cur,b.dataset.cp==="all");try{await copyAny(txt);b.textContent="Copied"}catch(err){b.textContent="Copy blocked here"}});
 async function runAnalysis(item){
 item.aerr=null;renderScene(item);
 startTimer(()=>$("#anaBox"),"Thinking about the analysis");
@@ -1670,7 +1680,7 @@ ${(j.changes||[]).length?`<h3>How the replaced characters were rewritten</h3>${j
 $("#rpStatus").textContent="Done.";$("#rpOut").scrollIntoView({behavior:"smooth",block:"start"})}
 catch(e){clearInterval(tk);$("#rpStatus").textContent=(e&&e.code?errText(e):(e&&e.message)||errText(e))}
 busy=false;$("#go").disabled=false;$("#rpGo").disabled=false});
-$("#rpOut").addEventListener("click",async e=>{if((e.target.id==="rpPdfNew"||e.target.id==="rpPdfBoth")&&RPC){const both=e.target.id==="rpPdfBoth";const nm=(RPC.s.title||"replaced-scene").replace(/[^\w\u0C00-\u0C7F -]+/g,"").trim().replace(/\s+/g,"-").slice(0,60)||"replaced-scene";await makePdf([Object.assign({},RPC,{kind:"replace",pdfMode:both?"both":"new"})],RPC.s.title||"Replaced scene",nm+(both?"-original-vs-new":"-new")+".pdf",$("#rpMsg"));return}if(e.target.id==="rpCopy"&&RPC){try{await navigator.clipboard.writeText(RPC.s.scene.map(x=>`${x.s}: ${x.l}`).join("\n"));$("#rpMsg").textContent="Copied."}catch(err){$("#rpMsg").textContent="Copy was blocked here — open it from Saved scenes and use Copy scene."}}
+$("#rpOut").addEventListener("click",async e=>{if((e.target.id==="rpPdfNew"||e.target.id==="rpPdfBoth")&&RPC){const both=e.target.id==="rpPdfBoth";const nm=(RPC.s.title||"replaced-scene").replace(/[^\w\u0C00-\u0C7F -]+/g,"").trim().replace(/\s+/g,"-").slice(0,60)||"replaced-scene";await makePdf([Object.assign({},RPC,{kind:"replace",pdfMode:both?"both":"new"})],RPC.s.title||"Replaced scene",nm+(both?"-original-vs-new":"-new")+".pdf",$("#rpMsg"));return}if(e.target.id==="rpCopy"&&RPC){try{await copyAny(RPC.s.scene.map(x=>`${x.s}: ${x.l}`).join("\n"));$("#rpMsg").textContent=`Copied the new scene (${RPC.s.scene.length} lines).`}catch(err){{const t=RPC.s.scene.map(x=>`${x.s}: ${x.l}`).join("\n");$("#rpMsg").innerHTML=`Copy was blocked on this device. The scene is selected below — long-press and choose Copy.<textarea id="rpManual" class="cta" readonly style="min-height:160px;margin-top:8px"></textarea>`;const m=$("#rpManual");m.value=t;m.focus();m.select()}}}
 if(e.target.id==="rpAgain")$("#rpGo").click();
 if(e.target.id==="rpCmpLink"&&RPC){setTimeout(()=>{try{$("#cmpSel1").value="h:"+RPC.t;$("#cmpSel1").dispatchEvent(new Event("change"))}catch(err){}},80)}});
 $("#go").addEventListener("click",()=>{const r=req();if(!r.idea){$("#status").innerHTML='<span class="err">Write your scene idea first.</span>';$("#idea").focus();return}genScene(r)});
@@ -1698,7 +1708,7 @@ await runAnalysis(cur);$("#status").textContent="Done. Tap any section A–F to 
 stopTimer();$("#stop").hidden=true;busy=false;$("#go").disabled=false;
 }
 $("#copyReq").addEventListener("click",async()=>{const r=req();const t=`Scene Creation – My Scene Idea Input\n\nBOX 1: My Scene Idea\n${r.idea||"(write your idea)"}\n\nLength: ${r.n} dialogues\nCharacters:
-${r.cast}\n${pinned.length?"Must use formulas: "+pinned.join(", ")+"\n":""}\nUse the saved formula library. Output: BOX 1 one-line description, BOX 2 full scene, then complete A–F analysis.`;try{await navigator.clipboard.writeText(t);$("#status").textContent="Request copied. Paste it into the chat."}catch(e){$("#status").textContent="Copy was blocked here."}});
+${r.cast}\n${pinned.length?"Must use formulas: "+pinned.join(", ")+"\n":""}\nUse the saved formula library. Output: BOX 1 one-line description, BOX 2 full scene, then complete A–F analysis.`;try{await copyAny(t);$("#status").textContent="Request copied. Paste it into the chat."}catch(e){$("#status").textContent="Copy was blocked here."}});
 function dlgText(item){const sc=item.s;return `${sc.title}\n`+sc.scene.map(x=>`${x.s}: ${x.l}`).join("\n")}
 const CK="cfl-combo-boxes";
 function saveCombo(){try{localStorage.setItem(CK,JSON.stringify([1,2,3,4,5].map(i=>$("#cs"+i).value).concat([$("#csit").value])))}catch(e){}}
@@ -1733,7 +1743,7 @@ const cols=[[A,"a"],[B,"b"]].concat(C?[[C,"c"]]:[]).concat(D?[[D,"d"]]:[]);o.inn
 ["#cmpSel1","#cmpSel2","#cmpSel3","#cmpSel4"].forEach(k=>$(k).addEventListener("change",cmpDraw));
 $("#cmpOut").addEventListener("click",e=>{const c=e.target.closest(".cl[data-ck]");if(c)selToggle(c.dataset.ck,c)});
 $("#cmpOut").addEventListener("keydown",e=>{if(e.key!=="Enter"&&e.key!==" ")return;const c=e.target.closest(".cl[data-ck]");if(c){e.preventDefault();selToggle(c.dataset.ck,c)}});
-$("#selCopy").addEventListener("click",async()=>{const t=selText();try{await navigator.clipboard.writeText(t);$("#selMsg").textContent=`Copied ${SELK.length} line${SELK.length===1?"":"s"}.`}catch(e){const b=$("#selBox");b.hidden=false;b.value=t;b.focus();b.select();$("#selMsg").textContent="Copy was blocked here — the lines are selected in the box; long-press and choose Copy."}});
+$("#selCopy").addEventListener("click",async()=>{const t=selText();try{await copyAny(t);$("#selMsg").textContent=`Copied ${SELK.length} line${SELK.length===1?"":"s"}.`}catch(e){const b=$("#selBox");b.hidden=false;b.value=t;b.focus();b.select();$("#selMsg").textContent="Copy was blocked here — the lines are selected in the box; long-press and choose Copy."}});
 $("#selClear").addEventListener("click",()=>{SELK.length=0;for(const k in SELD)delete SELD[k];document.querySelectorAll("#cmpOut .cl.sel").forEach(c=>{c.classList.remove("sel");c.setAttribute("aria-pressed","false");c.querySelector(".n").textContent=+c.dataset.ck.split("|").pop()+1});selBar()});
 $("#selCombo").addEventListener("click",()=>{const t=selText();const boxes=[1,2,3,4,5].map(i=>$("#cs"+i));const k=boxes.findIndex(b=>!b.value.trim());if(k<0){$("#selMsg").textContent="All five Scene combo boxes are full. Clear one first.";return}boxes[k].value=t;try{saveCombo()}catch(e){}$("#selMsg").innerHTML=`Added to Scene combo box ${k+1}. <a href="#combo">Open Scene combo</a>`});
 $("#selTag").addEventListener("change",()=>{$("#selBox").hidden=true});
