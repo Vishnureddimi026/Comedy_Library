@@ -1706,23 +1706,24 @@ const rpModeDraw=()=>document.querySelectorAll("#rpMode .chip").forEach(b=>b.set
 $("#rpMode").addEventListener("click",e=>{const b=e.target.closest(".chip");if(!b)return;RPMODE=b.dataset.m;try{localStorage.setItem("cfl-rpmode",RPMODE)}catch(_){}rpModeDraw()});
 let OPT=null;const OPTK="cfl-rpopt";
 const optSave=()=>{try{OPT?localStorage.setItem(OPTK,JSON.stringify(OPT)):localStorage.removeItem(OPTK)}catch(e){}};
-const OPTNAME=["Same meaning","Related dialogue","Completely different"];
+const OPTNAME=["Same meaning","Related dialogue","Completely different","Main line + extra punch"];
 function rpOptPrompt(L,map,title,from,to,prev){const base=rpPrompt(L,map,title).split("HOW TO REWRITE:")[0];
 const newOf=n=>ROLES.find(x=>x[0]===map[n]);
 return base+`TASK — LINE-BY-LINE OPTIONS for original lines ${from} to ${to} (numbers as in the original scene above). Write exactly one entry per original line in this range, same order, same numbering. Do not merge, skip or add lines.
 
-For a line spoken by a REPLACED character, the speaker becomes the new character (use his Telugu name: ${Object.keys(map).map(n=>`${n} → ${newOf(n)[1]}`).join(", ")}) and you give THREE options, all in the new character's own personality, slang, dialect, attitude and timing:
+For a line spoken by a REPLACED character, the speaker becomes the new character (use his Telugu name: ${Object.keys(map).map(n=>`${n} → ${newOf(n)[1]}`).join(", ")}) and you give FOUR options, all in the new character's own personality, slang, dialect, attitude and timing:
 - o[0] SAME MEANING: keeps the original line's meaning, information, context and comedy situation, but said the way the new character would say it.
 - o[1] RELATED DIALOGUE: a different line that fits the same moment and conversation, using a fresh expression or a different comedy technique.
 - o[2] COMPLETELY DIFFERENT: a bolder creative take — a stronger punchline or an unexpected counter — that still fits the scene's context and continuity.
-For a line spoken by a KEPT character (or a stage direction): do not give options; set "adj" to a lightly adjusted version ONLY if the original no longer fits after the new character's lines, otherwise "adj":"".
+- o[3] MAIN LINE + EXTRA PUNCH: keep o[0] (the main dialogue) fully — do not remove or change its point — and ADD 1–2 extra punches right after it in the same speech: a tag, a funny afterthought, a counter or a reaction in his style that makes the moment funnier. Up to about twice the original length.
+For a line spoken by a KEPT character (or a stage direction): do not give options; set "adj" to a lightly adjusted version ONLY if the original no longer fits after the new character's lines, otherwise "adj":"". Also set "plus" for a kept character's spoken line: the original line kept word for word, followed by 1 short extra punch in that character's own voice that adds comedy ("plus":"" for stage directions or when nothing funny fits).
 
-Rules: every option must work as a reply to the line before it and still lead into the line after it, so the user can mix options freely. Never copy the old character's words; never reuse film lines. Keep options about the original line's length, sharp and speakable. The three options must be clearly different from each other. Keep the voices of different characters clearly separate.
+Rules: every option must work as a reply to the line before it and still lead into the line after it, so the user can mix options freely. Never copy the old character's words; never reuse film lines. Keep options 1–3 about the original line's length, sharp and speakable. Options 1–3 must be clearly different from each other. Keep the voices of different characters clearly separate.
 ${prev?`Already chosen earlier in this scene (for continuity):\n${prev}\n`:""}
 Return ONLY valid JSON, no fences:
-{"title":"new scene title in Telugu","lines":[{"n":1,"s":"new speaker label","o":["option 1","option 2","option 3"]},{"n":2,"s":"kept speaker label","adj":""}]}`}
+{"title":"new scene title in Telugu","lines":[{"n":1,"s":"new speaker label","o":["option 1","option 2","option 3","option 1 + extra punch"]},{"n":2,"s":"kept speaker label","adj":"","plus":"original line + extra punch"}]}`}
 function rpLinePrompt(row,idx){const L=OPT.L,ctx=OPT.rows.map((r,i)=>`${i+1}. ${optText(r)}`).join("\n");
-return `You write Telugu comedy. One line of a scene needs three fresh options.
+return `You write Telugu comedy. One line of a scene needs four fresh options.
 CHARACTER: ${rpProfile(ROLES.find(x=>x[1]===row.s)||ROLES.find(x=>x[0]===OPT.map[row.orig.s])||["",row.s,row.s,0,0])}
 
 THE SCENE AS IT STANDS NOW (line ${idx+1} is the one to rewrite):
@@ -1731,24 +1732,24 @@ ${ctx}
 ORIGINAL LINE ${idx+1} (by ${row.orig.s}, before replacement): ${row.orig.l}
 Options already shown (do NOT repeat them): ${row.o.join(" | ")}
 
-Give three NEW options for line ${idx+1}, spoken by ${row.s}, in his personality, slang and timing:
-o[0] same meaning as the original line; o[1] a related line with a fresh expression or technique; o[2] completely different — stronger punch or unexpected counter — still fitting the lines before and after.
-Return ONLY JSON: {"o":["…","…","…"]}`}
-function optText(r){const sp=r.rep?r.s:r.orig.s;let t;if(r.pick==="own")t=r.own;else if(r.rep)t=r.o[r.pick==null?0:r.pick];else t=r.pick==="adj"&&r.adj?r.adj:r.orig.l;return (sp?sp+": ":"")+(t||"")}
-function optFinal(){return OPT.rows.map(r=>{const sp=r.rep?r.s:r.orig.s;let l;if(r.pick==="own"&&r.own.trim())l=r.own.trim();else if(r.rep)l=r.o[typeof r.pick==="number"?r.pick:0];else l=r.pick==="adj"&&r.adj?r.adj:r.orig.l;return {s:sp,l}})}
+Give four NEW options for line ${idx+1}, spoken by ${row.s}, in his personality, slang and timing:
+o[0] same meaning as the original line; o[1] a related line with a fresh expression or technique; o[2] completely different — stronger punch or unexpected counter — still fitting the lines before and after; o[3] o[0] kept fully as the main dialogue, plus 1–2 extra punches added right after it (a tag, afterthought, counter or reaction) to make it funnier.
+Return ONLY JSON: {"o":["…","…","…","…"]}`}
+function optText(r){const sp=r.rep?r.s:r.orig.s;let t;if(r.pick==="own")t=r.own;else if(r.rep)t=r.o[r.pick==null?0:r.pick];else t=r.pick==="adj"&&r.adj?r.adj:r.pick==="plus"&&r.plus?r.plus:r.orig.l;return (sp?sp+": ":"")+(t||"")}
+function optFinal(){return OPT.rows.map(r=>{const sp=r.rep?r.s:r.orig.s;let l;if(r.pick==="own"&&r.own.trim())l=r.own.trim();else if(r.rep)l=r.o[typeof r.pick==="number"?r.pick:0];else l=r.pick==="adj"&&r.adj?r.adj:r.pick==="plus"&&r.plus?r.plus:r.orig.l;return {s:sp,l}})}
 async function rpOptsRun(L,map,title){busy=true;$("#go").disabled=true;$("#rpGo").disabled=true;
 const desc=Object.entries(map).map(([a,b])=>`${a} → ${(ROLES.find(r=>r[0]===b)||[])[1]}`).join(", ");
 const SZ=10,parts=[];for(let i=0;i<L.length;i+=SZ)parts.push([i+1,Math.min(i+SZ,L.length)]);
 const rows=[];let ttl="";const t0=Date.now();let ch=0,pi=0;
-const tk=setInterval(()=>{$("#rpStatus").textContent=`Writing 3 options for every line… part ${pi+1} of ${parts.length} · ${Math.round((Date.now()-t0)/1000)}s${ch?` · ${ch} characters`:""}`},1000);
+const tk=setInterval(()=>{$("#rpStatus").textContent=`Writing 4 options for every line… part ${pi+1} of ${parts.length} · ${Math.round((Date.now()-t0)/1000)}s${ch?` · ${ch} characters`:""}`},1000);
 try{for(pi=0;pi<parts.length;pi++){const [a,b]=parts[pi];const prev=rows.length?rows.slice(-4).map(r=>"- "+optText(r)).join("\n"):"";
 let j=null;for(let tr=0;tr<2&&!j;tr++){try{const res=await ask(rpOptPrompt(L,map,title,a,b,prev),{cache:false,onText:({text})=>{ch=text.length}});j=parse(res.text);if(!Array.isArray(j.lines))j=null}catch(e){if(e&&e.code&&!/broken|JSON/i.test(e.message||""))throw e;j=null}}
 if(!j)throw {message:`Part ${pi+1} came back in a broken format. Tap Replace characters again.`};
 if(!ttl&&j.title)ttl=j.title;
 for(let n=a;n<=b;n++){const o=L[n-1],g=j.lines.find(x=>+x.n===n)||j.lines[n-a]||{};const rep=!!(o.s&&map[o.s]);
 const ns=rep?((ROLES.find(r=>r[0]===map[o.s])||[])[1]||g.s||o.s):o.s;
-const opts=rep?(Array.isArray(g.o)?g.o.map(x=>String(x||"").trim()).filter(Boolean):[]).slice(0,3):[];
-rows.push({orig:o,rep,s:ns,o:rep?(opts.length?opts:[o.l]):[],adj:rep?"":String(g.adj||"").trim(),pick:rep?null:(g.adj&&String(g.adj).trim()?"adj":"orig"),own:""})}}
+const opts=rep?(Array.isArray(g.o)?g.o.map(x=>String(x||"").trim()).filter(Boolean):[]).slice(0,4):[];
+rows.push({orig:o,rep,s:ns,o:rep?(opts.length?opts:[o.l]):[],adj:rep?"":String(g.adj||"").trim(),plus:rep||!o.s?"":String(g.plus||"").trim(),pick:rep?null:(g.adj&&String(g.adj).trim()?"adj":"orig"),own:""})}}
 clearInterval(tk);OPT={t:Date.now(),L,map,desc,title:ttl||((title||"Scene")+" — "+desc),src:title,rows,itemT:null};optSave();optDraw();
 $("#rpStatus").textContent="Options ready. Choose one option for every line, then tap Combine.";$("#rpOut").scrollIntoView({behavior:"smooth",block:"start"})}
 catch(e){clearInterval(tk);$("#rpStatus").textContent=(e&&e.code?errText(e):(e&&e.message)||errText(e))}
@@ -1757,16 +1758,17 @@ function optRowHtml(r,i){const opt=(v,tag,txt,cls)=>`<label class="opt${cls||""}
 let h=`<div class="oprow${r.rep?" rep":""}${r.pick!=null?" done":""}" data-r="${i}"><div class="opor"><span class="n">${i+1}</span><span><span class="mt">Original</span> ${r.orig.s?`<b>${esc(r.orig.s)}:</b> `:""}${esc(r.orig.l)}</span></div>`;
 if(r.rep){h+=r.o.map((t,k)=>opt(k,`${k+1} · ${OPTNAME[k]||"Option"}`,`<b>${esc(r.s)}:</b> ${esc(t)}`)).join("");
 h+=opt("own","✎ My own line",r.pick==="own"?`<textarea class="cin owntx" data-r="${i}" rows="2" placeholder="Write your own line for ${esc(r.s)}">${esc(r.own)}</textarea>`:`<span class="mt">Write your own version</span>`," own");
-h+=`<div class="oacts"><button class="btn ghost sm" type="button" data-more="${i}">↻ 3 new options for this line</button></div>`}
+h+=`<div class="oacts"><button class="btn ghost sm" type="button" data-more="${i}">↻ New options for this line</button></div>`}
 else{h+=opt("orig","Keep original",`${r.orig.s?`<b>${esc(r.orig.s)}:</b> `:""}${esc(r.orig.l)}`);
 if(r.adj)h+=opt("adj","Adjusted to fit",`${r.orig.s?`<b>${esc(r.orig.s)}:</b> `:""}${esc(r.adj)}`);
+if(r.plus)h+=opt("plus","Original + extra punch",`${r.orig.s?`<b>${esc(r.orig.s)}:</b> `:""}${esc(r.plus)}`);
 h+=opt("own","✎ My own line",r.pick==="own"?`<textarea class="cin owntx" data-r="${i}" rows="2" placeholder="Write your own line">${esc(r.own)}</textarea>`:`<span class="mt">Write your own version</span>`," own")}
 return h+`</div>`}
 function optCount(){const R=OPT.rows.filter(r=>r.rep);return {done:R.filter(r=>r.pick!=null&&!(r.pick==="own"&&!r.own.trim())).length,all:R.length}}
 function optBar(){const c=optCount();return `<div class="opbar"><b>${c.done} of ${c.all}</b> replaced-character lines chosen${c.done<c.all?` · unchosen lines will use Option 1`:" ✓"}<div class="opprog"><i style="width:${c.all?Math.round(c.done/c.all*100):100}%"></i></div></div>`}
 function optDraw(){if(!OPT){return}
 $("#rpOut").innerHTML=`<div class="box" id="optBox"><h2 style="margin-top:0">${esc(OPT.title)}</h2><p class="row">${esc(OPT.desc)} · Pick the version you like for every line. Your picks are kept exactly as chosen — nothing is rewritten when you combine.</p>
-<div class="chips" style="margin:6px 0"><button class="chip" type="button" data-fill="0">Option 1 for all unchosen</button><button class="chip" type="button" data-fill="1">Option 2 for all unchosen</button><button class="chip" type="button" data-fill="2">Option 3 for all unchosen</button></div>
+<div class="chips" style="margin:6px 0"><button class="chip" type="button" data-fill="0">Option 1 for all unchosen</button><button class="chip" type="button" data-fill="1">Option 2 for all unchosen</button><button class="chip" type="button" data-fill="2">Option 3 for all unchosen</button><button class="chip" type="button" data-fill="3">Option 4 (extra punch) for all unchosen</button><button class="chip" type="button" data-plus="1">Add extra punch to kept lines</button></div>
 <div id="opBarW">${optBar()}</div><div id="opRows">${OPT.rows.map(optRowHtml).join("")}</div>
 <div class="acts opfoot"><button class="btn" type="button" id="optCombine">Combine selected lines into one scene</button></div><p class="row" id="optMsg"></p></div><div id="optFinal"></div>`;
 if(OPT.itemT){const it=hist.find(h=>h.t===OPT.itemT);if(it)optShowFinal(it,false)}}
@@ -1779,11 +1781,12 @@ $("#rpOut").addEventListener("change",e=>{const inp=e.target.closest('.oprow inp
 r.pick=/^\d$/.test(v)?+v:v;optRefreshRow(i);if(v==="own"){const t=document.querySelector(`.owntx[data-r="${i}"]`);if(t){if(!r.own){const base=r.rep?r.o[0]:(r.adj||r.orig.l);t.value=base;r.own=base;optSave()}t.focus()}}});
 $("#rpOut").addEventListener("input",e=>{const t=e.target.closest(".owntx");if(!t||!OPT)return;OPT.rows[+t.dataset.r].own=t.value;$("#opBarW").innerHTML=optBar();optSave()});
 $("#rpOut").addEventListener("click",async e=>{if(!OPT)return;const f=e.target.closest("[data-fill]");
+const pl=e.target.closest("[data-plus]");if(pl){OPT.rows.forEach(r=>{if(!r.rep&&r.plus&&r.pick==="orig")r.pick="plus"});optSave();$("#opRows").innerHTML=OPT.rows.map(optRowHtml).join("");return}
 if(f){const k=+f.dataset.fill;OPT.rows.forEach(r=>{if(r.rep&&r.pick==null)r.pick=Math.min(k,r.o.length-1)});optSave();$("#opRows").innerHTML=OPT.rows.map(optRowHtml).join("");$("#opBarW").innerHTML=optBar();return}
 const m=e.target.closest("[data-more]");
 if(m){if(busy){$("#optMsg").textContent="Wait for the current writing to finish.";return}const i=+m.dataset.more,r=OPT.rows[i];busy=true;m.disabled=true;m.textContent="Writing new options…";
-try{const res=await ask(rpLinePrompt(r,i),{cache:false});const j=parse(res.text);const o=(j.o||[]).map(x=>String(x||"").trim()).filter(Boolean).slice(0,3);if(o.length<1)throw {message:"No options came back. Try again."};r.o=o;if(typeof r.pick==="number")r.pick=null;optRefreshRow(i)}
-catch(err){m.disabled=false;m.textContent="↻ 3 new options for this line";$("#optMsg").textContent=(err&&err.code?errText(err):(err&&err.message)||errText(err))}busy=false;return}
+try{const res=await ask(rpLinePrompt(r,i),{cache:false});const j=parse(res.text);const o=(j.o||[]).map(x=>String(x||"").trim()).filter(Boolean).slice(0,4);if(o.length<1)throw {message:"No options came back. Try again."};r.o=o;if(typeof r.pick==="number")r.pick=null;optRefreshRow(i)}
+catch(err){m.disabled=false;m.textContent="↻ New options for this line";$("#optMsg").textContent=(err&&err.code?errText(err):(err&&err.message)||errText(err))}busy=false;return}
 if(e.target.id==="optCombine"){const sc=optFinal().filter(x=>x.l&&String(x.l).trim());if(!sc.length){$("#optMsg").textContent="Nothing to combine yet.";return}
 const c=optCount();const ch=[...new Set(OPT.rows.filter(r=>r.rep).map(r=>r.s))];
 let item=OPT.itemT&&hist.find(h=>h.t===OPT.itemT);
