@@ -394,11 +394,12 @@ setTimeout(function(){var i=document.getElementById("lockP");if(i)i.focus()},100
 <label for="rpText"><b>Or paste the scene</b> (one line each, like <span lang="te">మధు: dialogue</span>)</label>
 <textarea id="rpText" class="cta" style="min-height:200px" placeholder="మధు: …&#10;మహేష్: …&#10;మాస్టర్: …"></textarea>
 <div id="rpChars"></div>
-<div class="acts"><button class="btn" type="button" id="rpGo">Replace characters</button></div>
+<div class="acts"><button class="btn" type="button" id="rpGo">Replace characters</button><button class="btn ghost" type="button" id="rpClear1">✕ Clear</button></div>
 <p class="row" id="rpStatus" role="status"></p>
 <p class="row">Speed and analysis language follow your settings on Write a scene.</p>
 </div>
 <div id="rpOut"></div>
+<div class="acts" style="margin-top:14px"><button class="btn ghost" type="button" id="rpClear">✕ Clear — start a new replacement</button></div>
 </section>
 
 <section id="v-compare" class="band" hidden>
@@ -1680,6 +1681,9 @@ ${(j.changes||[]).length?`<h3>How the replaced characters were rewritten</h3>${j
 $("#rpStatus").textContent="Done.";$("#rpOut").scrollIntoView({behavior:"smooth",block:"start"})}
 catch(e){clearInterval(tk);$("#rpStatus").textContent=(e&&e.code?errText(e):(e&&e.message)||errText(e))}
 busy=false;$("#go").disabled=false;$("#rpGo").disabled=false});
+["#rpClear","#rpClear1"].forEach(k=>$(k).addEventListener("click",()=>{if(busy){$("#rpStatus").textContent="Wait for the current replacement to finish.";return}
+RPC=null;$("#rpFrom").value="";$("#rpText").value="";$("#rpChars").innerHTML="";$("#rpOut").innerHTML="";$("#rpStatus").textContent="Cleared. Paste or pick a new scene. (Your result is still in Saved scenes.)";
+$("#rpText").dispatchEvent(new Event("input",{bubbles:true}));$("#v-replace").scrollIntoView({behavior:"smooth",block:"start"});$("#rpText").focus({preventScroll:true})}));
 $("#rpOut").addEventListener("click",async e=>{if((e.target.id==="rpPdfNew"||e.target.id==="rpPdfBoth")&&RPC){const both=e.target.id==="rpPdfBoth";const nm=(RPC.s.title||"replaced-scene").replace(/[^\w\u0C00-\u0C7F -]+/g,"").trim().replace(/\s+/g,"-").slice(0,60)||"replaced-scene";await makePdf([Object.assign({},RPC,{kind:"replace",pdfMode:both?"both":"new"})],RPC.s.title||"Replaced scene",nm+(both?"-original-vs-new":"-new")+".pdf",$("#rpMsg"));return}if(e.target.id==="rpCopy"&&RPC){try{await copyAny(RPC.s.scene.map(x=>`${x.s}: ${x.l}`).join("\n"));$("#rpMsg").textContent=`Copied the new scene (${RPC.s.scene.length} lines).`}catch(err){{const t=RPC.s.scene.map(x=>`${x.s}: ${x.l}`).join("\n");$("#rpMsg").innerHTML=`Copy was blocked on this device. The scene is selected below — long-press and choose Copy.<textarea id="rpManual" class="cta" readonly style="min-height:160px;margin-top:8px"></textarea>`;const m=$("#rpManual");m.value=t;m.focus();m.select()}}}
 if(e.target.id==="rpAgain")$("#rpGo").click();
 if(e.target.id==="rpCmpLink"&&RPC){setTimeout(()=>{try{$("#cmpSel1").value="h:"+RPC.t;$("#cmpSel1").dispatchEvent(new Event("change"))}catch(err){}},80)}});
