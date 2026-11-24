@@ -791,3 +791,15 @@ Use these as top-quality references for every new scene. Rules:
 - Signature formulas (taken from his lines): F362 F365 F366 F369 F370 F376 F377 F378 F379 F384 F387 F407 F412 F413 F414 F247.
 - Voice separation (rule in every scene with Tillu): Madhu = sincere fool, long earnest logic, సార్ tags, punch = wrong conclusion. Mahesh = sarcastic realist, short flat lines, Uttarandhra deadpan, punch = cold truth. Tillu = cool show-off, fast Hyderabadi + English, punch = cool twist or sudden topic change. Madhu/Mahesh never use Tillu's tags; Tillu never uses Uttarandhra words or humble సార్ endings unless scared.
 - Pair dynamics: Tillu & Madhu (sincere fool vs cool bluffer), Tillu & Mahesh (the bluff and the X-ray), Tillu & Master (bored celebrity vs melodrama).
+
+## Two independent comedy pairs (set 24 Nov 2026)
+1. Madhu & Mahesh — established friends; keep separate from Tillu's pair.
+2. DJ Tillu & Babloo — new pair.
+
+## New character: Babloo (బబ్లూ) — DJ Tillu's jodi (added 24 Nov 2026)
+- Who: Tillu's childhood friend from the same Hyderabad gully; drives the DJ van, carries speakers, fixes wires — Tillu's whole "technical team".
+- Personality: loud, emotional, practical panicker. Panics at everything while Tillu panics at nothing; keeps a running money tally (gigs, biryanis, petrol, van EMI); threatens to quit in every scene and never quits; loyal blurter (tells the truth Tillu hides, or backs the bluff with wrong details); superstitious vs Tillu's fake science; grumbles but always does the job.
+- Slang: Hyderabadi Dakhni-mix Telugu — హౌ, నక్కో, కైకూ, క్యా బోల్తే, బోలే తో, ఖాలీపీలీ, ఏక్‌దమ్, హల్లు హల్లు, చుప్ రే, కిత్తా, బైగన్, పక్కా, పూరా; calls Tillu టిల్లూ భాయ్ / టిల్లూఊ…! / మామూ (for money); numbers in every argument. Never Tillu's English tags; never mocking any community.
+- Rhythm: long rising panic → one cool Tillu line → bigger panic → gives in ("pakka last").
+- Signature formulas: F311 F371 F373 F279 F569 F617 F633 F504 F386 F411.
+- Pair engine "Cool vs Panic": alarm → Tillu turns it into vibe; money tally vs lifestyle bluff; quit-and-return loop; loyalty exposes Tillu, Tillu escapes with a topic change; superstition vs fake science.
