@@ -290,6 +290,8 @@ main>section:not([hidden]),.page:not([hidden]){animation:rise3d .35s cubic-bezie
 .opbar{position:sticky;top:0;z-index:5;background:var(--card);border:1.5px solid var(--line);border-radius:12px;padding:8px 12px;margin:8px 0;box-shadow:var(--shadow);font-size:15px}
 .opprog{height:6px;border-radius:3px;background:var(--line);margin-top:6px;overflow:hidden}.opprog i{display:block;height:100%;background:linear-gradient(90deg,var(--teal),#4a8a5a);transition:width .3s}
 .opfoot{position:sticky;bottom:8px;z-index:5}.opfoot .btn{max-width:calc(100% - 118px);white-space:normal;line-height:1.25}@media(min-width:700px){.opfoot .btn{max-width:none}}
+.opt.half{border-style:dashed;border-color:color-mix(in srgb,#c8902a 60%,var(--line))}.opt.half .otag{color:#9b6c1c}.opt.half.on{border-style:solid;border-color:#c8902a;background:rgba(224,165,42,.12);box-shadow:inset 0 0 0 1px #c8902a}
+#rpHalf{background:var(--teal);color:#fff}
 </style>
 </head>
 <body class="locked">
@@ -411,7 +413,7 @@ setTimeout(function(){var i=document.getElementById("lockP");if(i)i.focus()},100
 <div id="rpChars"></div>
 <p class="row" style="margin-bottom:4px"><b>Result type</b></p>
 <div class="chips" id="rpMode"><button class="chip" type="button" data-m="opts" aria-pressed="true">Line-by-line options — choose each line</button><button class="chip" type="button" data-m="one" aria-pressed="false">One rewritten scene (quick)</button></div>
-<div class="acts"><button class="btn" type="button" id="rpGo">Replace characters</button><button class="btn ghost" type="button" id="rpClear1">✕ Clear</button></div>
+<div class="acts"><button class="btn" type="button" id="rpGo">Replace characters</button><button class="btn" type="button" id="rpHalf" title="Separate mode: one balanced version per line">⚖ 50% Original + 50% Character Style</button><button class="btn ghost" type="button" id="rpClear1">✕ Clear</button></div>
 <p class="row" id="rpStatus" role="status"></p>
 <p class="row">Speed and analysis language follow your settings on Write a scene.</p>
 </div>
@@ -1735,8 +1737,8 @@ Options already shown (do NOT repeat them): ${row.o.join(" | ")}
 Give four NEW options for line ${idx+1}, spoken by ${row.s}, in his personality, slang and timing:
 o[0] same meaning as the original line; o[1] a related line with a fresh expression or technique; o[2] completely different — stronger punch or unexpected counter — still fitting the lines before and after; o[3] o[0] kept fully as the main dialogue, plus 1–2 extra punches added right after it (a tag, afterthought, counter or reaction) to make it funnier.
 Return ONLY JSON: {"o":["…","…","…","…"]}`}
-function optText(r){const sp=r.rep?r.s:r.orig.s;let t;if(r.pick==="own")t=r.own;else if(r.rep)t=r.o[r.pick==null?0:r.pick];else t=r.pick==="adj"&&r.adj?r.adj:r.pick==="plus"&&r.plus?r.plus:r.orig.l;return (sp?sp+": ":"")+(t||"")}
-function optFinal(){return OPT.rows.map(r=>{const sp=r.rep?r.s:r.orig.s;let l;if(r.pick==="own"&&r.own.trim())l=r.own.trim();else if(r.rep)l=r.o[typeof r.pick==="number"?r.pick:0];else l=r.pick==="adj"&&r.adj?r.adj:r.pick==="plus"&&r.plus?r.plus:r.orig.l;return {s:sp,l}})}
+function optText(r){const sp=r.rep?r.s:r.orig.s;let t;if(r.pick==="own")t=r.own;else if(r.rep)t=r.pick==="half"?r.half:typeof r.pick==="number"?r.o[r.pick]:(r.o[0]||r.half||r.orig.l);else t=r.pick==="adj"&&r.adj?r.adj:r.pick==="plus"&&r.plus?r.plus:r.orig.l;return (sp?sp+": ":"")+(t||"")}
+function optFinal(){return OPT.rows.map(r=>{const sp=r.rep?r.s:r.orig.s;let l;if(r.pick==="own"&&r.own.trim())l=r.own.trim();else if(r.rep)l=r.pick==="half"&&r.half?r.half:typeof r.pick==="number"&&r.o[r.pick]?r.o[r.pick]:(r.o[0]||r.half||r.orig.l);else l=r.pick==="adj"&&r.adj?r.adj:r.pick==="plus"&&r.plus?r.plus:r.orig.l;return {s:sp,l}})}
 async function rpOptsRun(L,map,title){busy=true;$("#go").disabled=true;$("#rpGo").disabled=true;
 const desc=Object.entries(map).map(([a,b])=>`${a} → ${(ROLES.find(r=>r[0]===b)||[])[1]}`).join(", ");
 const SZ=10,parts=[];for(let i=0;i<L.length;i+=SZ)parts.push([i+1,Math.min(i+SZ,L.length)]);
@@ -1750,25 +1752,25 @@ for(let n=a;n<=b;n++){const o=L[n-1],g=j.lines.find(x=>+x.n===n)||j.lines[n-a]||
 const ns=rep?((ROLES.find(r=>r[0]===map[o.s])||[])[1]||g.s||o.s):o.s;
 const opts=rep?(Array.isArray(g.o)?g.o.map(x=>String(x||"").trim()).filter(Boolean):[]).slice(0,4):[];
 rows.push({orig:o,rep,s:ns,o:rep?(opts.length?opts:[o.l]):[],adj:rep?"":String(g.adj||"").trim(),plus:rep||!o.s?"":String(g.plus||"").trim(),pick:rep?null:(g.adj&&String(g.adj).trim()?"adj":"orig"),own:""})}}
-clearInterval(tk);OPT={t:Date.now(),L,map,desc,title:ttl||((title||"Scene")+" — "+desc),src:title,rows,itemT:null};optSave();optDraw();
+clearInterval(tk);const key=sceneKey(L,map);if(OPT&&!OPT.key&&OPT.L&&OPT.map)OPT.key=sceneKey(OPT.L,OPT.map);if(OPT&&OPT.key===key)OPT.rows.forEach((r,i)=>{if(r.half&&rows[i])rows[i].half=r.half});OPT={t:Date.now(),key,L,map,desc,title:ttl||((title||"Scene")+" — "+desc),src:title,rows,itemT:null};optSave();optDraw();
 $("#rpStatus").textContent="Options ready. Choose one option for every line, then tap Combine.";$("#rpOut").scrollIntoView({behavior:"smooth",block:"start"})}
 catch(e){clearInterval(tk);$("#rpStatus").textContent=(e&&e.code?errText(e):(e&&e.message)||errText(e))}
 busy=false;$("#go").disabled=false;$("#rpGo").disabled=false}
 function optRowHtml(r,i){const opt=(v,tag,txt,cls)=>`<label class="opt${cls||""}${r.pick===v?" on":""}"><input type="radio" name="op${i}" value="${v}" ${r.pick===v?"checked":""}><span class="otag">${tag}</span><span class="otx">${txt}</span></label>`;
 let h=`<div class="oprow${r.rep?" rep":""}${r.pick!=null?" done":""}" data-r="${i}"><div class="opor"><span class="n">${i+1}</span><span><span class="mt">Original</span> ${r.orig.s?`<b>${esc(r.orig.s)}:</b> `:""}${esc(r.orig.l)}</span></div>`;
-if(r.rep){h+=r.o.map((t,k)=>opt(k,`${k+1} · ${OPTNAME[k]||"Option"}`,`<b>${esc(r.s)}:</b> ${esc(t)}`)).join("");
+if(r.rep){if(r.half)h+=opt("half","⚖ 50% Original + 50% Character Style",`<b>${esc(r.s)}:</b> ${esc(r.half)}`," half");h+=r.o.map((t,k)=>opt(k,`${k+1} · ${OPTNAME[k]||"Option"}`,`<b>${esc(r.s)}:</b> ${esc(t)}`)).join("");
 h+=opt("own","✎ My own line",r.pick==="own"?`<textarea class="cin owntx" data-r="${i}" rows="2" placeholder="Write your own line for ${esc(r.s)}">${esc(r.own)}</textarea>`:`<span class="mt">Write your own version</span>`," own");
-h+=`<div class="oacts"><button class="btn ghost sm" type="button" data-more="${i}">↻ New options for this line</button></div>`}
+if(r.o.length)h+=`<div class="oacts"><button class="btn ghost sm" type="button" data-more="${i}">↻ New options for this line</button></div>`}
 else{h+=opt("orig","Keep original",`${r.orig.s?`<b>${esc(r.orig.s)}:</b> `:""}${esc(r.orig.l)}`);
 if(r.adj)h+=opt("adj","Adjusted to fit",`${r.orig.s?`<b>${esc(r.orig.s)}:</b> `:""}${esc(r.adj)}`);
 if(r.plus)h+=opt("plus","Original + extra punch",`${r.orig.s?`<b>${esc(r.orig.s)}:</b> `:""}${esc(r.plus)}`);
 h+=opt("own","✎ My own line",r.pick==="own"?`<textarea class="cin owntx" data-r="${i}" rows="2" placeholder="Write your own line">${esc(r.own)}</textarea>`:`<span class="mt">Write your own version</span>`," own")}
 return h+`</div>`}
 function optCount(){const R=OPT.rows.filter(r=>r.rep);return {done:R.filter(r=>r.pick!=null&&!(r.pick==="own"&&!r.own.trim())).length,all:R.length}}
-function optBar(){const c=optCount();return `<div class="opbar"><b>${c.done} of ${c.all}</b> replaced-character lines chosen${c.done<c.all?` · unchosen lines will use Option 1`:" ✓"}<div class="opprog"><i style="width:${c.all?Math.round(c.done/c.all*100):100}%"></i></div></div>`}
+function optBar(){const c=optCount();return `<div class="opbar"><b>${c.done} of ${c.all}</b> replaced-character lines chosen${c.done<c.all?` · unchosen lines will use ${OPT.rows.some(r=>r.rep&&r.o.length)?"Option 1":"the 50/50 version"}`:" ✓"}<div class="opprog"><i style="width:${c.all?Math.round(c.done/c.all*100):100}%"></i></div></div>`}
 function optDraw(){if(!OPT){return}
 $("#rpOut").innerHTML=`<div class="box" id="optBox"><h2 style="margin-top:0">${esc(OPT.title)}</h2><p class="row">${esc(OPT.desc)} · Pick the version you like for every line. Your picks are kept exactly as chosen — nothing is rewritten when you combine.</p>
-<div class="chips" style="margin:6px 0"><button class="chip" type="button" data-fill="0">Option 1 for all unchosen</button><button class="chip" type="button" data-fill="1">Option 2 for all unchosen</button><button class="chip" type="button" data-fill="2">Option 3 for all unchosen</button><button class="chip" type="button" data-fill="3">Option 4 (extra punch) for all unchosen</button><button class="chip" type="button" data-plus="1">Add extra punch to kept lines</button></div>
+<div class="chips" style="margin:6px 0">${OPT.rows.some(r=>r.half)?`<button class="chip" type="button" data-halfall="1">⚖ 50/50 for all unchosen</button>`:""}<button class="chip" type="button" data-fill="0">Option 1 for all unchosen</button><button class="chip" type="button" data-fill="1">Option 2 for all unchosen</button><button class="chip" type="button" data-fill="2">Option 3 for all unchosen</button><button class="chip" type="button" data-fill="3">Option 4 (extra punch) for all unchosen</button><button class="chip" type="button" data-plus="1">Add extra punch to kept lines</button></div>
 <div id="opBarW">${optBar()}</div><div id="opRows">${OPT.rows.map(optRowHtml).join("")}</div>
 <div class="acts opfoot"><button class="btn" type="button" id="optCombine">Combine selected lines into one scene</button></div><p class="row" id="optMsg"></p></div><div id="optFinal"></div>`;
 if(OPT.itemT){const it=hist.find(h=>h.t===OPT.itemT);if(it)optShowFinal(it,false)}}
@@ -1778,11 +1780,12 @@ $("#optFinal").innerHTML=`<div class="box"><h2 style="margin-top:0">Final scene 
 <div class="acts"><button class="btn" type="button" id="rpCopy">Copy final scene</button><a class="btn ghost" href="#compare" id="rpCmpLink">Open in Compare scenes</a></div><div class="acts"><button class="btn" type="button" id="rpPdfNew">Download PDF · final scene</button><button class="btn ghost" type="button" id="rpPdfBoth">Download PDF · original vs final</button></div><p class="row" id="rpMsg"></p></div>`;
 if(scroll)$("#optFinal").scrollIntoView({behavior:"smooth",block:"start"})}
 $("#rpOut").addEventListener("change",e=>{const inp=e.target.closest('.oprow input[type=radio]');if(!inp||!OPT)return;const i=+inp.closest(".oprow").dataset.r,v=inp.value;const r=OPT.rows[i];
-r.pick=/^\d$/.test(v)?+v:v;optRefreshRow(i);if(v==="own"){const t=document.querySelector(`.owntx[data-r="${i}"]`);if(t){if(!r.own){const base=r.rep?r.o[0]:(r.adj||r.orig.l);t.value=base;r.own=base;optSave()}t.focus()}}});
+r.pick=/^\d$/.test(v)?+v:v;optRefreshRow(i);if(v==="own"){const t=document.querySelector(`.owntx[data-r="${i}"]`);if(t){if(!r.own){const base=r.rep?(r.pick==="own"&&(r.o[0]||r.half)||r.o[0]||r.half||r.orig.l):(r.adj||r.orig.l);t.value=base;r.own=base;optSave()}t.focus()}}});
 $("#rpOut").addEventListener("input",e=>{const t=e.target.closest(".owntx");if(!t||!OPT)return;OPT.rows[+t.dataset.r].own=t.value;$("#opBarW").innerHTML=optBar();optSave()});
 $("#rpOut").addEventListener("click",async e=>{if(!OPT)return;const f=e.target.closest("[data-fill]");
+const hf=e.target.closest("[data-halfall]");if(hf){OPT.rows.forEach(r=>{if(r.rep&&r.pick==null&&r.half)r.pick="half"});optSave();$("#opRows").innerHTML=OPT.rows.map(optRowHtml).join("");$("#opBarW").innerHTML=optBar();return}
 const pl=e.target.closest("[data-plus]");if(pl){OPT.rows.forEach(r=>{if(!r.rep&&r.plus&&r.pick==="orig")r.pick="plus"});optSave();$("#opRows").innerHTML=OPT.rows.map(optRowHtml).join("");return}
-if(f){const k=+f.dataset.fill;OPT.rows.forEach(r=>{if(r.rep&&r.pick==null)r.pick=Math.min(k,r.o.length-1)});optSave();$("#opRows").innerHTML=OPT.rows.map(optRowHtml).join("");$("#opBarW").innerHTML=optBar();return}
+if(f){const k=+f.dataset.fill;OPT.rows.forEach(r=>{if(r.rep&&r.pick==null&&r.o.length)r.pick=Math.min(k,r.o.length-1)});optSave();$("#opRows").innerHTML=OPT.rows.map(optRowHtml).join("");$("#opBarW").innerHTML=optBar();return}
 const m=e.target.closest("[data-more]");
 if(m){if(busy){$("#optMsg").textContent="Wait for the current writing to finish.";return}const i=+m.dataset.more,r=OPT.rows[i];busy=true;m.disabled=true;m.textContent="Writing new options…";
 try{const res=await ask(rpLinePrompt(r,i),{cache:false});const j=parse(res.text);const o=(j.o||[]).map(x=>String(x||"").trim()).filter(Boolean).slice(0,4);if(o.length<1)throw {message:"No options came back. Try again."};r.o=o;if(typeof r.pick==="number")r.pick=null;optRefreshRow(i)}
@@ -1793,8 +1796,44 @@ let item=OPT.itemT&&hist.find(h=>h.t===OPT.itemT);
 if(!item){item={t:Date.now(),idea:`Character replacement (line by line): ${OPT.desc}${OPT.src?` (from “${OPT.src}”)`:""}`,r:{idea:"replace",n:sc.length,cast:"",replace:{map:OPT.map}},s:{title:OPT.title,box1:`Same scene with characters replaced, line by line: ${OPT.desc}.`,scene:sc,formulas:[],scan:{shortlist:[]},replace:{orig:OPT.L,map:OPT.map,desc:OPT.desc,changes:[],kept:"",changedSp:ch}},a:null};hist.unshift(item);OPT.itemT=item.t}
 else{item.s.scene=sc;item.s.replace.changedSp=ch;item.r.n=sc.length}
 item.s.replace.picks=OPT.rows.map(r=>r.rep?(r.pick==null?0:r.pick):r.pick);
-saveHist();drawHist();optSave();optShowFinal(item,true);$("#optMsg").textContent=c.done<c.all?`Combined. ${c.all-c.done} unchosen line${c.all-c.done===1?"":"s"} used Option 1.`:"Combined with all your picks."}});
+saveHist();drawHist();optSave();optShowFinal(item,true);$("#optMsg").textContent=c.done<c.all?`Combined. ${c.all-c.done} unchosen line${c.all-c.done===1?"":"s"} used ${OPT.rows.some(r=>r.rep&&r.o.length)?"Option 1":"the 50/50 version"}.`:"Combined with all your picks."}});
 try{const sv=JSON.parse(localStorage.getItem(OPTK)||"null");if(sv&&sv.rows&&sv.rows.length){OPT=sv;optDraw();$("#rpStatus").textContent="Your line-by-line choices from last time are below."}}catch(e){}
+
+/* ===== 50% Original + 50% Character Style (separate generation mode) ===== */
+const sceneKey=(L,map)=>JSON.stringify([L.map(x=>[x.s,x.l]),Object.entries(map).sort()]);
+function rpHalfPrompt(L,map,title,from,to,prev){const base=rpPrompt(L,map,title).split("HOW TO REWRITE:")[0];const newOf=n=>ROLES.find(x=>x[0]===map[n]);
+return base+`TASK — "50% ORIGINAL + 50% CHARACTER STYLE" for original lines ${from} to ${to} (numbers as in the original scene above).
+For every line in this range spoken by a REPLACED character (${Object.keys(map).map(n=>`${n} → ${newOf(n)[1]}`).join(", ")}), write ONE balanced version "h":
+- 50% ORIGINAL: keep the original line's meaning, information, situation, context, comedy structure and its important punchline idea (the joke must still land the same way).
+- 50% CHARACTER STYLE: deliver it the new character's way — his personality, slang, vocabulary, attitude, reactions, expressions and conversation style.
+It must feel like the same scene, naturally spoken by the new character. Not just a name change and not the original words copied; also not a totally new joke. Keep about the original length, and keep it a natural reply to the line before and a lead into the line after.
+Skip lines of kept characters and stage directions (do not include them).
+${prev?`Already written earlier in this scene (for continuity):\n${prev}\n`:""}Return ONLY valid JSON, no fences:
+{"title":"new scene title in Telugu","lines":[{"n":2,"h":"balanced line"}]}`}
+$("#rpHalf").addEventListener("click",async()=>{const L=rpParse($("#rpText").value);if(!L.length){$("#rpStatus").textContent="Paste a scene or choose a saved one first.";return}
+const map={};document.querySelectorAll("#rpChars select").forEach(x=>{if(x.value)map[x.dataset.sp]=x.value});
+if(!Object.keys(map).length){$("#rpStatus").textContent="Choose at least one character to replace.";return}
+const tg=Object.values(map);if(new Set(tg).size<tg.length){$("#rpStatus").textContent="Two characters are being replaced by the same person. Pick a different replacement for one of them.";return}
+if(busy){$("#rpStatus").textContent="A scene is already being written. Wait for it to finish.";return}
+if(!sample){$("#rpStatus").textContent="Writing isn't available in this view.";return}
+const title=$("#rpText").dataset.title||"",key=sceneKey(L,map),desc=Object.entries(map).map(([a,b])=>`${a} → ${(ROLES.find(r=>r[0]===b)||[])[1]}`).join(", ");
+busy=true;$("#go").disabled=true;$("#rpGo").disabled=true;$("#rpHalf").disabled=true;
+const SZ=12,parts=[];for(let i=0;i<L.length;i+=SZ)parts.push([i+1,Math.min(i+SZ,L.length)]);
+const half={};let ttl="",pi=0,ch=0;const t0=Date.now();
+const tk=setInterval(()=>{$("#rpStatus").textContent=`Writing the 50/50 version of every line… part ${pi+1} of ${parts.length} · ${Math.round((Date.now()-t0)/1000)}s${ch?` · ${ch} characters`:""}`},1000);
+try{for(pi=0;pi<parts.length;pi++){const [a,b]=parts[pi];const done=Object.keys(half).map(Number).sort((x,y)=>x-y).slice(-4);const prev=done.map(n=>`- ${(ROLES.find(r=>r[0]===map[L[n-1].s])||[])[1]}: ${half[n]}`).join("\n");
+let j=null;for(let tr=0;tr<2&&!j;tr++){try{const res=await ask(rpHalfPrompt(L,map,title,a,b,prev),{cache:false,onText:({text})=>{ch=text.length}});j=parse(res.text);if(!Array.isArray(j.lines))j=null}catch(e){if(e&&e.code)throw e;j=null}}
+if(!j)throw {message:`Part ${pi+1} came back in a broken format. Tap the 50/50 button again.`};
+if(!ttl&&j.title)ttl=j.title;j.lines.forEach(x=>{const n=+x.n,h=String(x.h||"").trim();if(n>=a&&n<=b&&h&&L[n-1]&&L[n-1].s&&map[L[n-1].s])half[n]=h})}
+clearInterval(tk);
+if(OPT&&!OPT.key&&OPT.L&&OPT.map)OPT.key=sceneKey(OPT.L,OPT.map);
+if(!OPT||OPT.key!==key){OPT={t:Date.now(),key,L,map,desc,title:ttl||((title||"Scene")+" — "+desc),src:title,itemT:null,
+ rows:L.map(o=>{const rep=!!(o.s&&map[o.s]);return {orig:o,rep,s:rep?((ROLES.find(r=>r[0]===map[o.s])||[])[1]||o.s):o.s,o:[],adj:"",plus:"",pick:rep?null:"orig",own:""}})}}
+let miss=0;OPT.rows.forEach((r,i)=>{if(!r.rep)return;if(half[i+1])r.half=half[i+1];else miss++});
+optSave();optDraw();$("#rpStatus").textContent=`50/50 versions ready for every line${miss?` (${miss} line${miss===1?"":"s"} missing — tap the button again)`:""}. They appear as “⚖ 50/50” next to the other options.${OPT.rows.some(r=>r.rep&&!r.o.length)?" Tap Replace characters too if you also want options 1–4.":""}`;
+$("#rpOut").scrollIntoView({behavior:"smooth",block:"start"})}
+catch(e){clearInterval(tk);$("#rpStatus").textContent=(e&&e.code?errText(e):(e&&e.message)||errText(e))}
+busy=false;$("#go").disabled=false;$("#rpGo").disabled=false;$("#rpHalf").disabled=false});
 
 ["#rpClear","#rpClear1"].forEach(k=>$(k).addEventListener("click",()=>{if(busy){$("#rpStatus").textContent="Wait for the current replacement to finish.";return}
 RPC=null;OPT=null;optSave();$("#rpFrom").value="";$("#rpText").value="";$("#rpChars").innerHTML="";$("#rpOut").innerHTML="";$("#rpStatus").textContent="Cleared. Paste or pick a new scene. (Your result is still in Saved scenes.)";
