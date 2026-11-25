@@ -139,7 +139,7 @@ nav a{color:#fff;border-radius:12px;padding:8px 14px;min-height:40px;font-size:1
 nav a:hover{background:rgba(255,255,255,.18)}
 nav a[aria-current=true]{background:#fff;color:#6d28d9;box-shadow:0 4px 14px rgba(0,0,0,.15)}
 nav a::before{margin-right:6px;font-size:16px;line-height:1}
-nav a[data-v=write]::before{content:"✍️"}nav a[data-v=formulas]::before{content:"📚"}nav a[data-v=combo]::before{content:"🎬"}nav a[data-v=compare]::before{content:"⚖️"}nav a[data-v=replace]::before{content:"🔄"}nav a[data-v=old]::before{content:"🎞️"}nav a[data-v=breakdowns]::before{content:"🧩"}nav a[data-v=characters]::before{content:"🎭"}nav a[data-v=rules]::before{content:"📜"}
+nav a[data-v=write]::before{content:"✍️"}nav a[data-v=formulas]::before{content:"📚"}nav a[data-v=combo]::before{content:"🎬"}nav a[data-v=compare]::before{content:"⚖️"}nav a[data-v=replace]::before{content:"🔄"}nav a[data-v=old]::before{content:"🎞️"}nav a[data-v=breakdowns]::before{content:"🧩"}nav a[data-v=characters]::before{content:"🎭"}nav a[data-v=rules]::before{content:"📜"}nav a[data-v=anime]::before{content:"🎨"}
 .btn{background:var(--grad);color:#fff;border-radius:12px;box-shadow:0 4px 14px rgba(192,38,211,.28);transition:transform .15s,box-shadow .15s,filter .15s}
 .btn:hover{transform:translateY(-1px);box-shadow:0 8px 22px rgba(192,38,211,.38);filter:brightness(1.05)}
 .btn:active{transform:translateY(0)}
@@ -297,6 +297,17 @@ main>section:not([hidden]),.page:not([hidden]){animation:rise3d .35s cubic-bezie
 #rpBest{background:#8e4a3a;color:#fff;box-shadow:0 1px 0 rgba(255,255,255,.3) inset,0 -2px 0 rgba(0,0,0,.18) inset,0 3px 0 #5e2e23,0 6px 12px -2px rgba(80,30,20,.3)}
 .fament{border:1.5px solid var(--line);border-radius:12px;padding:10px;margin-top:10px;background:var(--card)}.fament textarea{width:100%;min-height:180px;margin:6px 0;font-size:16px;line-height:1.6}.fament .acts{align-items:center}
 .famrow{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:6px 0}.famrow label{display:flex;flex-direction:column;gap:4px;font-size:14px}.famrow input{width:100%}@media(max-width:560px){.famrow{grid-template-columns:1fr}}
+.anwrap{display:grid;grid-template-columns:minmax(260px,420px) 1fr;gap:18px;align-items:start}@media(max-width:760px){.anwrap{grid-template-columns:1fr}}
+.anprev svg{width:100%;height:auto;border-radius:16px;box-shadow:var(--shadow);display:block}
+.anright{display:grid;grid-template-columns:1fr 1fr;gap:10px}@media(max-width:560px){.anright{grid-template-columns:1fr}}
+.ansel{display:flex;flex-direction:column;gap:4px;font-size:14px;margin:6px 0}.ansel span,.ancol>span{font-weight:700;font-size:14px}
+.ansel select,.ansel input,.ansel textarea{width:100%}.ancol{grid-column:1/-1;display:flex;flex-direction:column;gap:6px}
+.sw{display:flex;flex-wrap:wrap;gap:6px;align-items:center}.swb{width:32px;height:32px;border-radius:50%;border:2px solid rgba(0,0,0,.15);cursor:pointer;box-shadow:0 2px 0 rgba(0,0,0,.15)}
+.swb.on{outline:3px solid var(--teal);outline-offset:2px}.sw input[type=color]{width:40px;height:34px;border:none;background:none;padding:0;cursor:pointer}
+.anright .ancol:has(.swb){grid-column:auto}.anright .ancol:last-child{grid-column:1/-1}
+.ansheet{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}@media(max-width:560px){.ansheet{grid-template-columns:repeat(2,1fr)}}.ansheet svg{width:100%;height:auto;border-radius:10px;display:block}
+.anlist{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:10px}.ancard{border:1.5px solid var(--line);border-radius:12px;padding:6px;background:var(--card);cursor:pointer;display:flex;flex-direction:column;gap:4px;align-items:center;box-shadow:var(--shadow);font:inherit;color:inherit}
+.ancard svg{width:100%;height:auto;border-radius:8px}.ancard.on{outline:3px solid var(--teal)}
 </style>
 </head>
 <body class="locked">
@@ -331,6 +342,7 @@ setTimeout(function(){var i=document.getElementById("lockP");if(i)i.focus()},100
 <a href="#old" data-v="old">Old scenes</a>
 <a href="#breakdowns" data-v="breakdowns">Breakdowns</a>
 <a href="#characters" data-v="characters">Characters &amp; slang</a>
+<a href="#anime" data-v="anime">Anime</a>
 <a href="#rules" data-v="rules">Rules &amp; batches</a>
 </nav>
 </header>
@@ -509,6 +521,21 @@ setTimeout(function(){var i=document.getElementById("lockP");if(i)i.focus()},100
 <div class="note" style="margin-top:16px"><b>Dialect layer:</b> the reference speaks North-Andhra (Uttarandhra) Telugu — ఏటి / ఏటవుదాం / పోద్ది / ఉంటది / ఉండింది — with heavy Tenglish. The Master and Mahesh carry it most. New scenes can keep the dialect but should invent their own pet phrases.</div>
 </section>
 
+<section id="v-anime" class="band" hidden>
+<h2 style="font-size:28px;margin:0 0 6px">🎨 Anime studio</h2>
+<p class="row" style="margin:0 0 14px">Step 1 of the 2D anime project: create your characters. Claude designs each character from its personality, and the app draws it in a clean 2D anime style. Change any part by hand, see all 12 expressions, save your cast, and download pictures. These saved characters will be used later for animated scenes and videos.</p>
+<div class="box"><h3 style="margin-top:0">✨ Design a character with Claude</h3>
+<label class="ansel"><span>Use a character from the library (optional)</span><select class="cin" id="anWho"></select></label>
+<label class="ansel"><span>Describe the look (optional)</span><textarea id="anDesc" class="cta" rows="3" placeholder="e.g. DJ Vicky — cool Hyderabad DJ, spiky hair, sunglasses, gold chain, black jacket. Or: Madhu's father — strict retired head constable, bald, thick mustache, white kurta."></textarea></label>
+<div class="acts"><button class="btn" type="button" id="anGo">✨ Design with Claude</button><button class="btn ghost" type="button" id="anBlank">Start blank</button><button class="btn ghost" type="button" id="anRandom">🎲 Random look</button></div></div>
+<div class="box" id="anStudio"><div class="anwrap"><div class="anleft"><div id="anPrev" class="anprev"></div>
+<p class="row" style="margin:8px 0 4px"><b>Expression</b></p><div class="chips" id="anExpr"></div>
+<div class="acts"><button class="btn" type="button" id="anSave">💾 Save character</button><button class="btn ghost" type="button" id="anSheetBtn">Show all 12 expressions</button></div>
+<div class="acts" style="margin-top:4px"><button class="btn ghost sm" type="button" id="anPng">Download picture (PNG)</button><button class="btn ghost sm" type="button" id="anSvg">Download vector (SVG)</button><button class="btn ghost sm" type="button" id="anDel" hidden>Delete from saved</button></div>
+<p class="row" id="anMsg"></p><p class="row mt" id="anNotes"></p></div>
+<div class="anright" id="anCtl"></div></div><div id="anSheet"></div></div>
+<div class="box"><h3 style="margin-top:0">My anime characters</h3><div id="anList" class="anlist"></div></div>
+</section>
 <section id="v-rules" class="band" hidden>
 <div class="rules">
 <h2>Batch log</h2>
@@ -1893,6 +1920,7 @@ await window.CFL.scenePdf([{kind:"rpana",pairs:P,ana,compact:id==="rpPdfShort",d
 /* ===== Character Style – Better Comedy (separate generation mode) ===== */
 const SLANGLIB={"Vicky": "Source: the 22 scenes of the film character Tillu in the user's reference scripts (Q2–Q20 DJ Tillu, R1–R6 Tillu Square), 163 lines, read with the lines around them. DJ Vicky is that style under a new name. Patterns only; never reuse film lines; all examples are original.\n\n## 1. Core identity\nHyderabad local DJ who acts like an established celebrity. Never the smartest, always the calmest. Engine: calm inside chaos — the worse it gets, the cooler and more irrelevant his reply.\n- Effortless confidence (lowers voice, acts bored); self-made legend (everything becomes a brand, mission, superpower); never admits (changes topic, lectures, claims it was his plan); street-smart not book-smart (mangles science, English, big words); fake sophistication (corporate words, keto, golf, highlights); instant switch (rude → grovel when power appears); soft core (loves Daddy, Mummy, friends — says it via a messenger or a joke).\n\n## 2. Dialogue style\n- Two sizes only: 2–3 word jab, or a long confident ramble that drifts off topic.\n- Question back instead of answer; Telugu frame with English nouns; numbered step lectures on nonsense; repeat-for-control (one word ×3 to take over a panicking room); self-praise tag at the end of small wins; formal English politeness as a dismissal (thank you, take care).\n- Delivery: half-bored; never shouts to win; speeds up only when lying; slows down for punchlines; ends on a tag.\n\n## 3. Slang bank (use 2–4 markers per line)\nTELUGU FIRST: Hyderabadi Telangana Telugu with 1–2 English words per line; never Dakhni/Hindi words (హౌ, నక్కో, కైకూ, కిత్తా, పక్కా-style are Golu's). Self-praise tag at most ONCE per scene and varied (అట్ల ఉంటది మనతోని / ఇదే మన స్టైల్ / చూసినవా బాయ్…), never the same tag in two lines. Friends బాయ్; Master/teachers/police సార్ (cool, once at the start, never అంకుల్).\n- Friends/juniors: బాయ్, అరే బాయ్, రేయ్, అవలే. Parents: డాడీ, మమ్మీ (never నాన్న/అమ్మ). Dons: అన్నా, అన్నగారు. Master/teachers/police: సార్ — cool, once at the start; never అంకుల్. Strangers outside college: అంకుల్, ఆంటీ.\n- Telangana grammar: ఈడ/ఆడ/ఏడ, అయితది, వస్తది, ఉంటది, చేసినావు, వచ్చిరు, అవుతుర్రు, చేస్తలేదు, అనిపిస్తలేదు, కావాలె, చేయాలె.\n- Hyderabadi words: ఊకో, లొల్లి, జర, ముచ్చట, మజాక్, సప్పుడు, కిరికిరి, పంచాయతీ, దునియాదారి, ఖలాస్, మస్తు, బొంగు, దోస్తులు, గలీజ్.\n- Dismissals: ఊకో, మజాక్ చేయకు, ఒకటే లొల్లి పెట్టకు, పెట్టేయ్ (phone), చీప్ డిస్కషన్.\n- English inserts: వన్ మినిట్, ఐ హావ్ వన్ డౌట్, ఓకే?, రైట్?, వాట్స్ అప్, సో స్వీట్, టేక్ కేర్, ప్లీజ్, ఎస్పెషల్లీ, ఆబ్వియస్లీ, ఇఫ్ యూ డోంట్ మైండ్.\n- Corporate/lifestyle: ప్రొఫెషనల్ స్పేస్, డెడికేషన్, ఫాలోయింగ్, కార్పొరేట్, సింక్, ఆపరేషన్, మిషన్, కీటో, ఫ్యాట్ లూస్, హైలైట్స్, గోల్ఫ్. Hindi bits: యార్, క్యా, భేజో.\n- Mild insults: బిత్తిరి మొఖం/చూపులు, పూర్ ఫెలో, పిచ్చోడిలాగా. Time: త్రీ, టూ, వన్… / exact clock time. Self-praise tag: అట్ల ఉంటది మనతోని (vary it).\n\n## 4. Reactions\nThreat → literal time / countdown. Caught lying → upgrades the lie (spy, agent, superhero). Insult → corrects one small detail of it. Direct question → answers an easier one or asks back. Real panic (rare) → rapid begging, repeating a name, shrinking requests, then cool returns. Power appears → instant grovel, back to cool after. Others panic → mocks how they react (like TV-serial actors). Emotional moment → through a messenger or a silly practical comment. Grand plan → shrinks it with its tiny tool or the local shop.\n\n## 5. Comedy techniques (formula IDs)\n1 Corporate boundary F362 · 2 Confident wrong science F363 · 3 Over-engineered instruction F365 · 4 Self-flattering proverb F366 · 5 Entitled-son logic F369 · 6 Lazy-expert shortcut F370 · 7 Selective memory F377 · 8 Possession word trap F378 · 9 Employee isn't owner F379 · 10 Literal clock reply F384 · 11 Rude-then-grovel F412 · 12 Epic voice-over for cowardice F414 · 13 Grand mission vs tiny tool / local shop F407 F408 · 14 Fake title escalation F375. Also: small-talk dodge F247, practical comfort F386, muttered curse + polite take-care F300.\n\n## 6. Attitude and body language\nConfidence is a performance he enjoys (unlike Madhu's sincere, collapsing confidence). Narrates life like a film; money and status measure everything; truth is optional; keeps score and cheats back bigger, calmly. Staging: leans back, half-closed eyes, eyebrow up; checks phone/hair while scolded; two-finger point when lecturing; mutters the real insult then smiles politely; poses after a tag.\n\n## 7. Conversation by person\nParents: flatmates who embarrass him; lectures, demands money, loves secretly. Friends/juniors: boss and fake expert; cuts them off. Love interest: suspicious, keeps accounts, begs in trouble. Authority (police, Master, judge): cool casual సార్, literal replies, points out their mistakes. Dons: grovels, mutters after, \"take care\". Strangers/shopkeepers: treats as staff or fans, tests and corrects them. Defeated enemies: gloats calmly, waves bye.\n\n## 8. Timing\nBasic beat: someone raises the stakes → Vicky pauses/acts bored → least expected reply (literal, irrelevant, calm correction) → self-praise tag or topic change, leaving nothing to answer.\nPatterns: two-word counter to a long rant; ramble-and-drift; rule of three where the third breaks; grovel switch; countdown close; delayed reveal (it was his plan).\nScene shape: calm open → others escalate → Vicky stays cool for 3–4 counters → one real crack → calm recovery and win. Short lines mid-scene; at most one long ramble per scene.\n\n## 9. Rules\nDo: calm when others panic; literal/topic-change answers to threats; 1–2 English words per Telugu line; fresh self-praise tags; crack once in real danger; Hyderabadi Telangana grammar; సార్ to the Master coolly, once; new lines in his style.\nDon't: shout to win; admit plainly; whole English or pure Telugu lines; same tag every scene; brave or wise Vicky; Uttarandhra words (ఏటి, పోద్ది, ఉండింది); అంకుల్ to the Master or సార్ at every line end; film lines.\nLine checklist: cooler/shorter/less expected than the other line? dodges or twists? ≥1 Hyderabadi marker, ≤2 English words? Madhu/Mahesh would never say it this way? leaves nothing to answer or sets up the next panic?\n\n## 10. Jodi design\nPartner must: raise the stakes constantly; use a different register (loud, emotional, practical — not cool, not English-heavy); know the truth about Vicky; be unable to walk away (money, business, loyalty); win sometimes. Avoid: another cool show-off; a pure deadpan truth-teller (Vicky never admits, the scene stalls).\nEngines: panic vs vibe; money tally vs lifestyle bluff; quit-and-return; loyal blurter; superstition vs fake science.\nBuilt: Golu (గోలు) — Vicky's best friend and equal since childhood (calls him విక్కీ / రేయ్ విక్కీ / దోస్త్, never అన్నా or భాయ్) and DJ \"technical team\", loud practical panicker in Hyderabadi Dakhni-mix Telugu (హౌ, నక్కో, కైకూ, క్యా బోల్తే, ఖాలీపీలీ, పక్కా, కిత్తా), counts every rupee, quits and never leaves. In the web app. See golu-style-library.md.", "Golu": "Golu is an original character (not from the films; first named Babloo, renamed Golu on 24 Nov 2026), DJ Vicky's jodi. Examples are all newly written.\n\n## Core\n- Vicky's best friend and equal since childhood, from the same Hyderabad gully; drives the DJ van, carries speakers, fixes wires (his whole \"technical team\").\n- Engine: panic outside, loyalty inside. Panics at everything; Vicky panics at nothing.\n- Traits: money tally of everything Vicky owes; quits every scene, never leaves; loyal blurter (tells the truth or backs the lie with wrong details); superstitious vs Vicky's fake science; grumbles but does the job.\n\n## Dialogue patterns\n1. Rising alarm ending in \"విక్కీఈ…!\"  2. The tally (numbers in every complaint)  3. Quit then stay (\"పక్కా లాస్ట్\")  4. Wrong backup  5. Question pile  6. Superstition rule (\"మా దాదీ చెప్పింది\")  7. Soft turn (one quiet loyal line).\n\n## Slang (Hyderabadi Dakhni-mix)\nTELUGU FIRST: every Golu line is Hyderabadi Telugu (Telangana grammar: ఉంది/ఉన్నది, చేస్తుండు, వస్తది, కావాలె) with only 1–3 Dakhni/Hindi words from his bank sprinkled in. NEVER full Hindi or Urdu sentences and never Hindi grammar — banned: దేఖ్ రహా హూ, క్యా కరేంగే, ఛోడ్ కే, లేకిన్, భీ, ఠీక్ హై, యాద్ రఖ్, డరో నక్కో, యే హై, ఖుల్‌నా నై, హూ/హై/థా endings. Good: 'నక్కో రే, ఇయాల మంగళవారం, పూరా బ్యాడ్ లక్!' Bad: 'డరో నక్కో, మై దేఖ్ రహా హూ.'\nహౌ, నక్కో, కైకూ, కిత్తా, క్యా బోల్తే, బోలే తో, ఖాలీపీలీ, ఏక్‌దమ్, పూరా, పక్కా, హల్లు హల్లు, చుప్ రే, బైగన్. Vicky = విక్కీ / రేయ్ విక్కీ / దోస్త్ (soft) / విక్కీఈ…! (panic) / మామూ (money). Best friends and equals: never అన్నా or భాయ్ for Vicky. సార్ for police/teachers, అన్నా for dons, అమ్మా for Vicky's mother.\nNever: Vicky's English tags (వన్ మినిట్, ఓకే?, బాయ్), Uttarandhra words, mocking any community.\n\n## Formulas\nF311 panic over-disclosure · F633 lender's exact tally · F617 running total of cuts · F279 percentage blame split · F373 threat to tell the truth · F371 shrinking plea · F569 petty regret in danger · F504 a gift means bad news · F386 practical comfort · F411 gig-worker analogy. Own: quit-and-return, wrong backup, superstition vs fake science, suspicious of kindness.\n\n## Timing with Vicky\nBeat: Golu long rising panic → Vicky one cool line → Golu bigger panic with a number → Golu gives in. Patterns: interrupted tally, echo panic, delayed blurt, quit at the peak, role-swap ending (Golu calm, Vicky panics).\nScene shape: Golu alarm → Vicky plan → Golu's wrong backup worsens it → twist only Golu's worry prepared for → Vicky takes credit.\n\n## Rules\nNumbers in every argument; practical worries; his worry is right once per scene; insults Vicky but never betrays him; not stupid (only he knows the equipment); never actually leaves.\nCheck: louder/longer than Vicky? number or practical worry? Dakhni not English? sets up or lands a punch? only Golu could say it?\n\n## Pair engines (Cool vs Panic)\nAlarm vs vibe · money tally vs lifestyle bluff · quit-and-return · loyal blurter vs topic change · superstition vs fake science · childhood friends trading insults, same side at the end."};
 window.SLANGLIB_GET=r=>slangLib(r);
+window.CFL_AI={ask:(p)=>ask(p,{cache:false}),parse,errText,ROLES,rpProfile,ready:()=>!!sample,isBusy:()=>busy};
 function slangLib(r){if(!r)return "";const k=/Vicky|Tillu/.test(r[0])?"Vicky":/Golu|Babloo/.test(r[0])?"Golu":null;return k?SLANGLIB[k]:rpProfile(r)}
 function rpBestPrompt(L,map,title,from,to,prev){const base=rpPrompt(L,map,title).split("HOW TO REWRITE:")[0];const newOf=n=>ROLES.find(x=>x[0]===map[n]);
 const libs=[...new Set(Object.values(map))].map(k=>ROLES.find(r=>r[0]===k)).filter(Boolean).map(r=>`=== SAVED CHARACTER & SLANG LIBRARY: ${r[1]} (${r[2]}) ===\n${slangLib(r)}`).join("\n\n");
@@ -2162,7 +2190,7 @@ window.CFL={fm:()=>fmap};const BDALL=BD.concat(BD4,BD6);const bdOne=b=>{const R=
 </div></details>`};
 $("#bdList").innerHTML=[["U","Script 3 — Wedding curse & the lion husband"],["V","Script 4 — Wedding escape & police-station marriage"],["W","Script 5 — College days"],["X","Script 6 — The cockroach in the bottle"],["Y","Script 7 — EAMCET long term"],["Z","Script 8 — The train journey"],["Q","Script 9 — DJ Tillu"],["P","Script 10 — Family and marks"],["R","Script 11 — Tillu Square"],["N","Script 12 — The ten-year degree"],["K","Script 13 — Bheeshma"],["J","Script 14 — 24 subjects"],["H","Script 15 — Balu's degree"],["G","Script 16 — TV studio"],["E","Script 17 — Annavaram trip"],["D","Script 18 — The bag on the train"],["C","Script 19 — The village feud"],["A","Script 20 — The station wedding"],["B","Script 21 — The miser"],["L","Script 22 — The miser, part 2"],["M","Script 23 — The debtor"]].map(([p,t])=>`<h2 style="font-size:24px;margin:16px 0 10px">${t}</h2>`+BDALL.filter(b=>b.id[0]===p).map(bdOne).join("")).join("");
 try{const e=document.getElementById("old12");e.checked=localStorage.getItem("cfl-old12")==="1";e.addEventListener("change",()=>{try{localStorage.setItem("cfl-old12",e.checked?"1":"0")}catch(_){}})}catch(_){}
-const views=["write","formulas","combo","compare","replace","old","breakdowns","characters","rules"];
+const views=["write","formulas","combo","compare","replace","old","breakdowns","characters","anime","rules"];
 const navScroll=()=>setTimeout(()=>{const n=document.querySelector("nav"),a=n&&n.querySelector("a[aria-current=true]");if(n&&a&&n.scrollWidth>n.clientWidth)n.scrollTo({left:Math.max(0,a.offsetLeft-16),behavior:"smooth"})},0);window.addEventListener("hashchange",navScroll);window.addEventListener("load",navScroll);
 function route(){const v=views.includes(location.hash.slice(1))?location.hash.slice(1):"write";views.forEach(x=>{$("#v-"+x).hidden=x!==v});document.querySelectorAll("nav a").forEach(a=>a.setAttribute("aria-current",a.dataset.v===v))}
 window.addEventListener("hashchange",route);
@@ -2374,7 +2402,7 @@ let open=null,tmr=null,cloud=null;const $=q=>document.querySelector(q);
 const E=t=>String(t==null?"":t).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const txt=k=>(FAM[k]&&!FAM[k].deleted&&FAM[k].text||"").trim();
 const ALL=()=>P.concat(Object.keys(FAM).filter(k=>FAM[k]&&FAM[k].custom&&!FAM[k].deleted).sort((a,b)=>(FAM[a].made||0)-(FAM[b].made||0)).map(k=>[k,FAM[k].tel||FAM[k].name,FAM[k].name||FAM[k].tel,1]));
-window.CFL_FAM={text:txt,
+window.CFL_FAM={text:txt,list:()=>ALL().map(p=>[p[0],p[1],p[2]]),
  block(){const f=ALL().filter(p=>txt(p[0]));if(!f.length)return "";return `\nFAMILY DETAILS (written by the user — follow them exactly whenever any of these people appear in the scene, are mentioned, or the situation involves the family: their personality, way of speaking, slang, habits, reactions and relationships. Keep them consistent with these notes. Do not force them into a scene where they do not fit):\n${f.map(p=>`- ${p[1]} (${p[2]}): ${txt(p[0])}`).join("\n")}\n\n`}};
 function saveLocal(){try{localStorage.setItem(K,JSON.stringify(FAM))}catch(e){}}
 function chips(){const c=$("#famChips");if(!c)return;c.innerHTML=ALL().map(p=>`<button class="chip" type="button" data-fam="${p[0]}" aria-pressed="${open===p[0]}">${txt(p[0])?"✓ ":""}${p[1]===p[2]?E(p[1]):`${E(p[1])} · ${E(p[2])}`}</button>`).join("")}
@@ -2402,6 +2430,277 @@ cloud=db.collection("data/users/"+uid).doc("family");const d=await cloud.get();c
 const R=(r&&r.fam)||{};for(const k of new Set([...Object.keys(R),...Object.keys(FAM)])){const a=FAM[k],b=R[k];if(b&&(!a||(b.t||0)>(a.t||0))){FAM[k]=b;changed=true}else if(a&&(!b||(a.t||0)>(b.t||0)))mine=true}
 if(changed){saveLocal();chips();if(open&&!document.activeElement?.id?.startsWith("famTx"))edit()}if(mine)pushCloud()}catch(e){}})();
 })();
+</script>
+<script>
+/* ===== Anime character rig: draws a 2D anime bust from parameters ===== */
+(function(){
+const OPT={
+ gender:["boy","girl","man","woman"],
+ age:["teen","young","adult","old"],
+ face:["oval","round","sharp","square"],
+ skin:["#f6d7bf","#eec3a0","#dfab84","#c98f67","#a8714d","#7f5236"],
+ eyes:["big","sharp","sleepy","round"],
+ eyeColor:["#3b2a20","#4b3626","#1f2a44","#2d4a2f","#6b3a1f","#111111"],
+ hair:["spiky","side","messy","short","long","ponytail","bun","bald","curly","mohawk"],
+ hairColor:["#1b1b1f","#3a2618","#5a3a22","#8a5a2b","#c9a14a","#7a1f2b","#2b3a6b","#e8e8e8","#9a9a9a"],
+ outfit:["tshirt","shirt","hoodie","jacket","kurta","saree","vest","uniform"],
+ outfitColor:["#2f3863","#b5523b","#2f6b4f","#c8902a","#6b3fa0","#1d1d24","#e9e4d8","#3b82c4","#c2417a","#7a5a3a"],
+ accent:["#c8902a","#ffffff","#1d1d24","#e04a3a","#3fb5c9","#9ad14b"],
+ extras:["sunglasses","glasses","goldChain","headphones","mustache","beard","bindi","earrings","cap","blush","mole","scar","pen","towel","flowers"],
+ expr:["neutral","happy","laugh","cool","angry","shock","panic","sad","smirk","worried","love","sleepy"],
+ bg:["#dfe5f5","#f5e6d0","#e3f1e6","#f3dede","#ece3f5","#1f2438","#fff4c9","#d9eef2"]
+};
+const DEF={name:"New character",gender:"boy",age:"young",face:"oval",skin:"#dfab84",eyes:"big",eyeColor:"#3b2a20",hair:"spiky",hairColor:"#1b1b1f",outfit:"tshirt",outfitColor:"#2f3863",accent:"#c8902a",extras:[],expr:"neutral",bg:"#dfe5f5"};
+const sh=(hex,a)=>{const n=parseInt(hex.slice(1),16);let r=n>>16,g=n>>8&255,b=n&255;const f=v=>Math.max(0,Math.min(255,Math.round(a<0?v*(1+a):v+(255-v)*a)));return "#"+[f(r),f(g),f(b)].map(v=>v.toString(16).padStart(2,"0")).join("")};
+const EX={ // brows, eyes mode, mouth, effects
+ neutral:{b:"flat",e:"open",m:"small",fx:[]},
+ happy:{b:"up",e:"open",m:"smile",fx:["blush"]},
+ laugh:{b:"up",e:"closed",m:"laugh",fx:["blush"]},
+ cool:{b:"flat",e:"half",m:"smirk",fx:[]},
+ angry:{b:"angry",e:"open",m:"shout",fx:["vein"]},
+ shock:{b:"raised",e:"shock",m:"o",fx:["lines"]},
+ panic:{b:"worried",e:"shock",m:"wavy",fx:["sweat","sweat2"]},
+ sad:{b:"worried",e:"open",m:"frown",fx:["tear"]},
+ smirk:{b:"oneup",e:"half",m:"smirk",fx:[]},
+ worried:{b:"worried",e:"open",m:"wavy",fx:["sweat"]},
+ love:{b:"up",e:"heart",m:"smile",fx:["blush"]},
+ sleepy:{b:"flat",e:"sleep",m:"small",fx:["zzz"]}
+};
+function draw(p0,exprOver,opts){
+ const p=Object.assign({},DEF,p0||{});p.extras=p.extras||[];const ex=EX[exprOver||p.expr]||EX.neutral;const has=x=>p.extras.includes(x);
+ const fem=p.gender==="girl"||p.gender==="woman",old=p.age==="old",adult=p.age==="adult"||old;
+ const S=p.skin,Sd=sh(S,-.16),Sdd=sh(S,-.3),H=p.hairColor,Hd=sh(H,-.35),Hl=sh(H,.28),O=p.outfitColor,Od=sh(O,-.28),Ol=sh(O,.18),A=p.accent;
+ const W=400,Hh=500,id="a"+Math.random().toString(36).slice(2,7);
+ const cy=0; // head offset
+ // face shape
+ const chin={oval:[300,165,235],round:[296,158,242],sharp:[306,172,228],square:[296,150,250]}[p.face]||[300,165,235];
+ const jawW=adult?6:0;
+ const face=`M120 170 Q118 95 200 88 Q282 95 280 170 Q${281+jawW} 228 ${chin[2]+jawW} ${chin[0]-28} Q215 ${chin[0]} 200 ${chin[0]} Q185 ${chin[0]} ${chin[1]-jawW} ${chin[0]-28} Q${119-jawW} 228 120 170Z`;
+ let o=`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${Hh}" ${opts&&opts.size?`width="${opts.size}" height="${opts.size*1.25}"`:""}><defs>
+<linearGradient id="${id}bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${sh(p.bg,.25)}"/><stop offset="1" stop-color="${sh(p.bg,-.08)}"/></linearGradient>
+<radialGradient id="${id}ir" cx=".5" cy=".38" r=".62"><stop offset="0" stop-color="${sh(p.eyeColor,.55)}"/><stop offset=".55" stop-color="${p.eyeColor}"/><stop offset="1" stop-color="${sh(p.eyeColor,-.5)}"/></radialGradient>
+<linearGradient id="${id}hr" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${Hl}"/><stop offset=".5" stop-color="${H}"/><stop offset="1" stop-color="${Hd}"/></linearGradient>
+<clipPath id="${id}fc"><path d="${face}"/></clipPath></defs>
+<rect width="${W}" height="${Hh}" fill="url(#${id}bg)"/>`;
+ if(!(opts&&opts.plain))o+=`<g opacity=".18" fill="#fff"><circle cx="58" cy="70" r="26"/><circle cx="350" cy="120" r="14"/><circle cx="330" cy="420" r="34"/><circle cx="40" cy="380" r="10"/></g>`;
+ // back hair
+ const hb={
+  spiky:`M110 190 L88 150 L112 140 L92 96 L130 104 L132 58 L168 84 L196 40 L218 82 L258 52 L262 100 L304 92 L288 138 L314 150 L292 196 Z`,
+  side:`M112 200 Q96 120 140 84 Q200 46 262 78 Q306 104 290 200 Z`,
+  messy:`M108 205 L92 168 L106 156 L96 118 L126 112 L132 72 L170 86 L196 52 L222 84 L262 66 L270 108 L302 112 L294 160 L310 176 L292 205 Z`,
+  short:`M114 190 Q104 118 150 90 Q200 66 250 90 Q298 118 286 190 Z`,
+  long:`M108 200 Q92 110 150 82 Q200 62 252 82 Q310 110 292 200 Q306 300 318 380 L262 380 Q276 300 280 230 L120 230 Q124 300 138 380 L82 380 Q94 300 108 200Z`,
+  ponytail:`M112 196 Q100 112 152 86 Q200 66 250 86 Q302 112 288 196 Z M282 120 Q340 140 330 240 Q326 300 300 330 Q312 260 290 180Z`,
+  bun:`M112 196 Q100 112 152 86 Q200 66 250 86 Q302 112 288 196 Z M200 70 m-40 0 a40 34 0 1 0 80 0 a40 34 0 1 0 -80 0`,
+  bald:`M116 196 Q114 170 122 150 L130 196 Z M284 196 Q286 170 278 150 L270 196 Z`,
+  curly:`M110 200 Q86 170 104 140 Q88 108 122 96 Q122 62 160 66 Q176 40 206 52 Q236 38 252 66 Q290 62 286 98 Q318 108 300 142 Q318 172 290 200 Z`,
+  mohawk:`M118 196 Q112 150 128 128 L272 128 Q288 150 282 196 Z M176 130 L170 40 L200 64 L214 30 L230 70 L240 46 L232 130Z`
+ }[p.hair]||"";
+ const HT="translate(200 200) scale(1.14) translate(-200 -200)";
+ if(p.hair!=="bald")o+=`<g transform="${HT}"><path d="${hb}" fill="url(#${id}hr)" stroke="${Hd}" stroke-width="3" stroke-linejoin="round"/></g>`;
+ o+=`<g transform="translate(0 6)">`;
+ // body
+ const sw=fem?0:14;
+ o+=`<path d="M${44-sw} 500 Q${52-sw/2} 372 168 340 L232 340 Q${348+sw/2} 372 ${356+sw} 500Z" fill="${O}" stroke="${Od}" stroke-width="3"/>`;
+ o+=`<path d="M300 380 Q${336+sw/2} 420 ${350+sw} 500 L310 500Z" fill="${Od}" opacity=".45"/>`;
+ // neck
+ o+=`<path d="M176 268 L176 344 Q200 362 224 344 L224 268Z" fill="${S}" stroke="${Sdd}" stroke-width="2.5"/><path d="M176 290 Q200 312 224 290 L224 270 L176 270Z" fill="${Sd}" opacity=".75"/>`;
+ // outfit details
+ const of={
+  tshirt:`<path d="M162 342 Q200 382 238 342" fill="none" stroke="${Od}" stroke-width="7"/><path d="M162 342 Q200 376 238 342" fill="none" stroke="${A}" stroke-width="3"/><path d="M168 420 L232 420 L222 470 L178 470Z" fill="${A}" opacity=".85"/><text x="200" y="455" font-family="Arial Black,Arial" font-weight="900" font-size="26" text-anchor="middle" fill="${O}">DJ</text>`,
+  shirt:`<path d="M168 338 L200 380 L232 338 L248 352 L214 400 L200 384 L186 400 L152 352Z" fill="${Ol}" stroke="${Od}" stroke-width="2.5"/><line x1="200" y1="384" x2="200" y2="500" stroke="${Od}" stroke-width="3"/><circle cx="208" cy="420" r="4" fill="${A}"/><circle cx="208" cy="452" r="4" fill="${A}"/><circle cx="208" cy="484" r="4" fill="${A}"/><path d="M110 430 L150 430 L150 470 L110 470Z" fill="none" stroke="${Od}" stroke-width="2.5"/>`,
+  hoodie:`<path d="M124 362 Q200 300 276 362 Q260 392 200 392 Q140 392 124 362Z" fill="${Od}" stroke="${sh(O,-.45)}" stroke-width="3"/><path d="M184 392 L180 450 M216 392 L220 450" stroke="${A}" stroke-width="4" stroke-linecap="round"/><circle cx="180" cy="454" r="5" fill="${A}"/><circle cx="220" cy="454" r="5" fill="${A}"/><path d="M150 470 Q200 456 250 470 L250 500 L150 500Z" fill="${Od}" opacity=".6"/>`,
+  jacket:`<path d="M168 340 L200 400 L232 340Z" fill="${A}"/><path d="M200 500 L200 400 L168 340 L140 350 L176 420 L160 500Z" fill="${Od}"/><path d="M200 500 L200 400 L232 340 L260 350 L224 420 L240 500Z" fill="${Od}"/><path d="M168 340 L150 372 L176 386 L200 400Z M232 340 L250 372 L224 386 L200 400Z" fill="${Ol}" stroke="${sh(O,-.45)}" stroke-width="2.5"/>`,
+  kurta:`<path d="M176 340 Q200 352 224 340 L224 352 Q200 364 176 352Z" fill="${A}"/><path d="M200 356 L200 440" stroke="${A}" stroke-width="5"/><circle cx="200" cy="378" r="3.5" fill="${Od}"/><circle cx="200" cy="400" r="3.5" fill="${Od}"/><circle cx="200" cy="422" r="3.5" fill="${Od}"/><path d="M60 470 Q200 452 340 470" fill="none" stroke="${A}" stroke-width="4" stroke-dasharray="10 6"/>`,
+  saree:`<path d="M232 340 Q290 360 312 500 L262 500 Q250 420 200 380Z" fill="${A}" opacity=".95"/><path d="M240 352 Q286 380 300 500" fill="none" stroke="${sh(A,-.3)}" stroke-width="4" stroke-dasharray="2 8"/><path d="M168 342 Q200 370 232 342" fill="none" stroke="${Od}" stroke-width="5"/>`,
+  vest:`<path d="M168 340 Q200 372 232 340 L232 500 L168 500Z" fill="#f2efe8"/><path d="M168 340 L150 352 L176 500 L196 500 L200 380Z M232 340 L250 352 L224 500 L204 500 L200 380Z" fill="${Od}"/><circle cx="210" cy="420" r="3.5" fill="${A}"/><circle cx="210" cy="450" r="3.5" fill="${A}"/>`,
+  uniform:`<path d="M168 338 L200 376 L232 338 L246 350 L214 392 L200 380 L186 392 L154 350Z" fill="#f4f4f4" stroke="#bdbdbd" stroke-width="2"/><path d="M194 380 L206 380 L212 470 L200 486 L188 470Z" fill="${A}"/><path d="M110 430 L150 430 L150 466 L110 466Z" fill="none" stroke="${Od}" stroke-width="2.5"/><circle cx="130" cy="446" r="7" fill="${A}"/>`
+ }[p.outfit]||"";
+ o+=of;
+ if(has("goldChain"))o+=`<path d="M170 346 Q200 404 230 346" fill="none" stroke="#e6b83a" stroke-width="5" stroke-dasharray="7 3"/><circle cx="200" cy="394" r="9" fill="#f2c94c" stroke="#a8801f" stroke-width="2.5"/>`;
+ if(has("towel"))o+=`<path d="M150 340 Q130 380 140 500 L176 500 Q166 400 182 346Z" fill="#ffffff" stroke="#c9c9c9" stroke-width="2"/><path d="M146 380 L170 380 M144 420 L168 420" stroke="${A}" stroke-width="4"/>`;
+ if(has("pen"))o+=`<rect x="118" y="410" width="6" height="38" rx="2" fill="#2b62c4" transform="rotate(8 121 429)"/>`;
+ if(has("flowers"))o+=`<g fill="#fff6d6" stroke="#e0b84a" stroke-width="1.5"><circle cx="284" cy="132" r="7"/><circle cx="296" cy="142" r="7"/><circle cx="288" cy="156" r="7"/></g>`;
+ o+=`</g><g transform="${HT}">`;
+ // ears
+ o+=`<ellipse cx="121" cy="196" rx="13" ry="20" fill="${S}" stroke="${Sdd}" stroke-width="2.5"/><ellipse cx="279" cy="196" rx="13" ry="20" fill="${S}" stroke="${Sdd}" stroke-width="2.5"/><path d="M118 188 Q124 196 120 206" fill="none" stroke="${Sd}" stroke-width="3"/><path d="M282 188 Q276 196 280 206" fill="none" stroke="${Sd}" stroke-width="3"/>`;
+ if(has("earrings"))o+=`<circle cx="121" cy="220" r="6" fill="#f2c94c" stroke="#a8801f" stroke-width="2"/><circle cx="279" cy="220" r="6" fill="#f2c94c" stroke="#a8801f" stroke-width="2"/>`;
+ // face
+ o+=`<path d="${face}" fill="${S}" stroke="${Sdd}" stroke-width="3" stroke-linejoin="round"/>`;
+ o+=`<g clip-path="url(#${id}fc)"><path d="M110 150 Q200 ${p.hair==="bald"?150:178} 290 150 L290 80 L110 80Z" fill="${Sd}" opacity="${p.hair==="bald"?0:.55}"/><ellipse cx="200" cy="${chin[0]+6}" rx="70" ry="22" fill="${Sd}" opacity=".35"/></g>`;
+ if(old)o+=`<path d="M150 150 Q170 144 186 150 M214 150 Q230 144 250 150" fill="none" stroke="${Sd}" stroke-width="2.5"/><path d="M146 248 Q152 262 150 272 M254 248 Q248 262 250 272" fill="none" stroke="${Sd}" stroke-width="2.5"/>`;
+ // blush
+ if(ex.fx.includes("blush")||has("blush"))o+=`<g fill="#ff7a8a" opacity=".38"><ellipse cx="150" cy="236" rx="20" ry="9"/><ellipse cx="250" cy="236" rx="20" ry="9"/></g><g stroke="#ff6b7d" stroke-width="2" opacity=".6"><path d="M140 232 l6 -6 M150 232 l6 -6 M160 232 l6 -6 M240 232 l6 -6 M250 232 l6 -6 M260 232 l6 -6"/></g>`;
+ // eyes
+ const eye=(x,flip)=>{const f=flip?-1:1;const st=p.eyes;let g="";const em=ex.e;
+  if(em==="closed")return `<path d="M${x-22} 202 Q${x} 180 ${x+22} 202" fill="none" stroke="#1d1416" stroke-width="5" stroke-linecap="round"/>`;
+  if(em==="sleep")return `<path d="M${x-22} 198 Q${x} 210 ${x+22} 198" fill="none" stroke="#1d1416" stroke-width="5" stroke-linecap="round"/>`;
+  if(em==="heart")return `<path d="M${x} 214 C${x-30} 194 ${x-18} 172 ${x} 186 C${x+18} 172 ${x+30} 194 ${x} 214Z" fill="#e8406b" stroke="#a0213f" stroke-width="2.5"/><circle cx="${x-8}" cy="188" r="3.5" fill="#fff"/>`;
+  const ry={big:24,sharp:17,sleepy:19,round:22}[st]||22,rx={big:19,sharp:18,sleepy:18,round:18}[st]||18;
+  const shock=em==="shock";
+  g+=`<ellipse cx="${x}" cy="200" rx="${rx+3}" ry="${ry+2}" fill="#fff" stroke="#2a1d1f" stroke-width="2"/>`;
+  if(shock)g+=`<circle cx="${x}" cy="202" r="7" fill="url(#${id}ir)" stroke="#120b0c" stroke-width="2"/><circle cx="${x-2}" cy="199" r="2" fill="#fff"/>`;
+  else g+=`<ellipse cx="${x+f*1}" cy="${204}" rx="${rx-3}" ry="${ry-3}" fill="url(#${id}ir)"/><ellipse cx="${x+f*1}" cy="206" rx="${(rx-3)*.5}" ry="${(ry-3)*.55}" fill="#120b0c"/><ellipse cx="${x-6*f}" cy="194" rx="6" ry="7.5" fill="#fff"/><circle cx="${x+7*f}" cy="214" r="3" fill="#fff" opacity=".85"/>`;
+  // upper lid / lashes
+  const lidY=em==="half"||st==="sleepy"?194:180;
+  if(em==="half"||st==="sleepy")g+=`<path d="M${x-rx-6} 184 L${x+rx+6} 184 L${x+rx+6} ${lidY+4} Q${x} ${lidY-2} ${x-rx-6} ${lidY+4}Z" fill="${S}"/>`;
+  const tilt=st==="sharp"?(flip?-8:8):0;
+  g+=`<path d="M${x-rx-7} ${lidY+8+(flip?-tilt:tilt)*.4} Q${x} ${lidY-10} ${x+rx+8} ${lidY+6-(flip?-tilt:tilt)*.4}" fill="none" stroke="#1d1416" stroke-width="${st==="sharp"?7:6}" stroke-linecap="round"/>`;
+  g+=`<path d="M${x+(rx+6)*f} ${lidY+4} l${8*f} -6" stroke="#1d1416" stroke-width="4" stroke-linecap="round"/>`;
+  g+=`<path d="M${x-rx+2} ${200+ry} Q${x} ${204+ry} ${x+rx-2} ${200+ry}" fill="none" stroke="#3a2a2c" stroke-width="2" opacity=".7"/>`;
+  return g};
+ o+=eye(165,false)+eye(235,true);
+ // brows
+ const bw={flat:["M140 160 Q165 152 188 160","M212 160 Q235 152 260 160"],up:["M140 154 Q165 142 188 152","M212 152 Q235 142 260 154"],angry:["M142 150 Q168 158 190 170","M210 170 Q232 158 258 150"],raised:["M140 146 Q165 132 188 144","M212 144 Q235 132 260 146"],worried:["M142 162 Q168 150 188 146","M212 146 Q232 150 258 162"],oneup:["M140 160 Q165 154 188 160","M212 150 Q235 138 260 148"]}[ex.b]||["M140 160 Q165 152 188 160","M212 160 Q235 152 260 160"];
+ const bc=p.hair==="bald"?"#8a8a8a":Hd;
+ o+=`<path d="${bw[0]}" fill="none" stroke="${bc}" stroke-width="${old?8:6}" stroke-linecap="round"/><path d="${bw[1]}" fill="none" stroke="${bc}" stroke-width="${old?8:6}" stroke-linecap="round"/>`;
+ // nose
+ o+=`<path d="M202 222 Q206 236 198 240" fill="none" stroke="${Sdd}" stroke-width="2.5" stroke-linecap="round"/>`;
+ // mouth
+ const mo={small:`<path d="M188 262 Q200 266 212 262" fill="none" stroke="#5a2a2a" stroke-width="3.5" stroke-linecap="round"/>`,
+  smile:`<path d="M180 258 Q200 276 220 258" fill="none" stroke="#5a2a2a" stroke-width="4" stroke-linecap="round"/>`,
+  laugh:`<path d="M176 254 Q200 254 224 254 Q220 288 200 290 Q180 288 176 254Z" fill="#7a2230" stroke="#4a1418" stroke-width="3"/><path d="M178 256 L222 256 L218 264 L182 264Z" fill="#fff"/><ellipse cx="200" cy="280" rx="12" ry="6" fill="#ff7a8a"/>`,
+  smirk:`<path d="M184 264 Q204 266 220 254" fill="none" stroke="#5a2a2a" stroke-width="4" stroke-linecap="round"/>`,
+  shout:`<path d="M178 252 L222 252 L214 284 L186 284Z" fill="#7a2230" stroke="#4a1418" stroke-width="3" stroke-linejoin="round"/><path d="M180 254 L220 254 L218 260 L182 260Z" fill="#fff"/>`,
+  o:`<ellipse cx="200" cy="266" rx="11" ry="15" fill="#7a2230" stroke="#4a1418" stroke-width="3"/>`,
+  wavy:`<path d="M180 264 Q186 256 192 264 Q198 272 204 264 Q210 256 216 264 Q220 270 224 264" fill="none" stroke="#5a2a2a" stroke-width="3.5" stroke-linecap="round"/>`,
+  frown:`<path d="M184 270 Q200 256 216 270" fill="none" stroke="#5a2a2a" stroke-width="4" stroke-linecap="round"/>`}[ex.m];
+ o+=mo||"";
+ if(has("mustache"))o+=`<path d="M200 246 Q182 238 168 252 Q182 252 200 250 Q218 252 232 252 Q218 238 200 246Z" fill="${p.hair==="bald"?"#7d7d7d":Hd}"/>`;
+ if(has("beard"))o+=`<path d="M128 214 Q136 270 170 292 Q200 ${chin[0]+18} 230 292 Q264 270 272 214 Q266 262 236 276 Q220 284 200 284 Q180 284 164 276 Q134 262 128 214Z" fill="${p.hair==="bald"?"#7d7d7d":Hd}" opacity=".95"/>`;
+ if(has("mole"))o+=`<circle cx="232" cy="250" r="3.5" fill="#3a2418"/>`;
+ if(has("scar"))o+=`<path d="M246 150 L262 182 M248 166 L260 160 M252 176 L262 170" stroke="#a8523d" stroke-width="3" stroke-linecap="round"/>`;
+ if(has("bindi"))o+=`<circle cx="200" cy="150" r="5" fill="#d8202f"/>`;
+ // front hair
+ const hf={
+  spiky:`M116 178 L124 120 L140 150 L148 98 L170 140 L182 92 L198 136 L214 90 L226 138 L246 96 L254 146 L268 112 L284 178 Q292 120 260 92 Q200 62 140 92 Q108 120 116 178Z`,
+  side:`M116 190 Q110 110 170 92 Q236 78 278 120 Q290 150 284 190 Q272 150 248 140 Q214 168 150 160 Q178 150 190 128 Q150 150 116 190Z`,
+  messy:`M116 186 L128 132 L142 156 L152 118 L170 150 L186 112 L200 148 L218 110 L230 150 L250 118 L258 156 L274 132 L284 186 Q296 112 250 88 Q200 66 150 88 Q104 112 116 186Z`,
+  short:`M118 170 Q114 104 200 92 Q286 104 282 170 Q262 136 230 132 Q214 146 200 140 Q186 146 170 132 Q138 136 118 170Z`,
+  long:`M116 200 Q108 108 200 90 Q292 108 284 200 Q270 140 240 130 L224 160 L210 128 Q200 124 190 128 L176 160 L160 130 Q130 140 116 200Z`,
+  ponytail:`M116 186 Q108 108 200 92 Q292 108 284 186 Q268 136 220 132 Q190 150 150 146 Q128 160 116 186Z`,
+  bun:`M118 184 Q110 106 200 94 Q290 106 282 184 Q262 138 226 134 Q200 150 174 134 Q138 138 118 184Z`,
+  bald:`M126 160 Q132 120 160 112 M274 160 Q268 120 240 112`,
+  curly:`M112 186 Q100 150 122 134 Q118 104 148 104 Q156 80 184 90 Q200 74 218 90 Q246 80 254 104 Q284 104 280 134 Q300 150 288 186 Q272 156 250 152 Q246 168 226 160 Q214 176 200 164 Q186 176 174 160 Q154 168 150 152 Q128 156 112 186Z`,
+  mohawk:`M150 132 Q200 118 250 132 L246 150 Q200 140 154 150Z`
+ }[p.hair]||"";
+ if(p.hair==="bald")o+=`<path d="${hf}" fill="none" stroke="#9a9a9a" stroke-width="10" stroke-linecap="round"/><ellipse cx="176" cy="112" rx="22" ry="8" fill="#fff" opacity=".45" transform="rotate(-18 176 112)"/>`;
+ else o+=`<path d="${hf}" fill="url(#${id}hr)" stroke="${Hd}" stroke-width="3" stroke-linejoin="round"/><path d="M150 112 Q176 100 204 106" fill="none" stroke="#fff" stroke-width="5" opacity=".35" stroke-linecap="round"/>`;
+ // accessories on head
+ if(has("headphones"))o+=`<path d="M108 196 Q104 70 200 64 Q296 70 292 196" fill="none" stroke="#1d1d24" stroke-width="12" stroke-linecap="round"/><rect x="94" y="172" width="30" height="52" rx="12" fill="${A}" stroke="#1d1d24" stroke-width="4"/><rect x="276" y="172" width="30" height="52" rx="12" fill="${A}" stroke="#1d1d24" stroke-width="4"/>`;
+ if(has("cap"))o+=`<path d="M112 150 Q114 74 200 70 Q286 74 288 150 Q200 128 112 150Z" fill="${A}" stroke="${sh(A,-.4)}" stroke-width="3"/><path d="M112 150 Q200 128 288 150 Q300 158 312 154 Q296 168 200 152 Q120 160 112 150Z" fill="${sh(A,-.25)}"/><circle cx="200" cy="74" r="6" fill="${sh(A,-.3)}"/>`;
+ if(has("sunglasses"))o+=`<path d="M132 184 L190 184 Q192 216 168 222 Q140 224 134 206Z M210 184 L268 184 L266 206 Q260 224 232 222 Q208 216 210 184Z" fill="#14141c" stroke="#05050a" stroke-width="3"/><path d="M190 190 Q200 184 210 190" fill="none" stroke="#05050a" stroke-width="4"/><path d="M132 186 L118 184 M268 186 L282 184" stroke="#05050a" stroke-width="4"/><path d="M144 192 L160 192 M222 192 L238 192" stroke="#fff" stroke-width="4" opacity=".55" stroke-linecap="round"/>`;
+ if(has("glasses"))o+=`<rect x="138" y="180" width="54" height="42" rx="12" fill="#ffffff" fill-opacity=".12" stroke="#2a2a2a" stroke-width="4"/><rect x="208" y="180" width="54" height="42" rx="12" fill="#ffffff" fill-opacity=".12" stroke="#2a2a2a" stroke-width="4"/><path d="M192 196 Q200 190 208 196" fill="none" stroke="#2a2a2a" stroke-width="4"/>`;
+ // effects
+ if(ex.fx.includes("sweat"))o+=`<path d="M292 140 Q304 162 300 172 Q292 182 284 172 Q280 162 292 140Z" fill="#8fd3ff" stroke="#3a8fc4" stroke-width="2.5"/>`;
+ if(ex.fx.includes("sweat2"))o+=`<path d="M110 150 Q120 168 116 176 Q110 184 104 176 Q100 168 110 150Z" fill="#8fd3ff" stroke="#3a8fc4" stroke-width="2.5"/>`;
+ if(ex.fx.includes("vein"))o+=`<g stroke="#d8202f" stroke-width="5" stroke-linecap="round" fill="none"><path d="M258 110 q6 8 0 16 M270 110 q-6 8 0 16 M252 120 q8 -6 16 0 M252 132 q8 6 16 0"/></g>`;
+ if(ex.fx.includes("lines"))o+=`<g stroke="#1d1d24" stroke-width="4" stroke-linecap="round"><path d="M80 120 L100 132 M74 160 L98 164 M320 120 L300 132 M326 160 L302 164 M200 30 L200 52"/></g>`;
+ if(ex.fx.includes("tear"))o+=`<path d="M244 220 Q250 240 246 250 Q240 258 236 250 Q234 240 244 220Z" fill="#8fd3ff" stroke="#3a8fc4" stroke-width="2"/>`;
+ if(ex.fx.includes("zzz"))o+=`<text x="300" y="110" font-family="Arial Black,Arial" font-size="30" fill="#2f3863" font-weight="900">Z<tspan font-size="22" dy="-14">z</tspan><tspan font-size="16" dy="-10">z</tspan></text>`;
+ o+=`</g>`;
+ if(opts&&opts.label)o+=`<rect x="0" y="456" width="400" height="44" fill="rgba(20,22,40,.72)"/><text x="200" y="486" font-family="Arial,sans-serif" font-size="24" font-weight="700" text-anchor="middle" fill="#fff">${String(opts.label).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]))}</text>`;
+ return o+`</svg>`}
+window.ANIME={OPT,DEF,draw,EXPR:Object.keys(EX)};
+})();
+
+</script>
+<script>
+/* ===== Anime studio: character creator ===== */
+(function(){
+const A=window.ANIME,$=q=>document.querySelector(q),E=t=>String(t==null?"":t).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const K="cfl-anime";let LIST=[],DEL=[];try{LIST=JSON.parse(localStorage.getItem(K)||"[]")||[];DEL=JSON.parse(localStorage.getItem(K+"-del")||"[]")||[]}catch(e){LIST=[];DEL=[]}
+let cur=Object.assign({},A.DEF,{id:null}),cloud=null,tmr=null;
+const LAB={gender:"Body type",age:"Age",face:"Face shape",skin:"Skin tone",eyes:"Eye style",eyeColor:"Eye colour",hair:"Hair style",hairColor:"Hair colour",outfit:"Outfit",outfitColor:"Outfit colour",accent:"Accent colour",bg:"Background"};
+const NICE={gender:{boy:"Boy",girl:"Girl",man:"Man",woman:"Woman"},age:{teen:"Teen",young:"Young (college)",adult:"Adult (parent)",old:"Old"},face:{oval:"Oval",round:"Round",sharp:"Sharp / pointed",square:"Square / strong"},eyes:{big:"Big anime",sharp:"Sharp cool",sleepy:"Sleepy / half",round:"Round innocent"},hair:{spiky:"Spiky",side:"Side-swept",messy:"Messy",short:"Short neat",long:"Long",ponytail:"Ponytail",bun:"Bun",bald:"Bald (sides only)",curly:"Curly",mohawk:"Mohawk"},outfit:{tshirt:"T-shirt (DJ print)",shirt:"Shirt",hoodie:"Hoodie",jacket:"Open jacket",kurta:"Kurta",saree:"Saree",vest:"Vest over shirt",uniform:"Uniform with tie"}};
+const XN={sunglasses:"Sunglasses",glasses:"Glasses",goldChain:"Gold chain",headphones:"Headphones",mustache:"Mustache",beard:"Beard",bindi:"Bindi",earrings:"Earrings",cap:"Cap",blush:"Always blushing",mole:"Mole",scar:"Scar",pen:"Pen in pocket",towel:"Towel on shoulder",flowers:"Flowers in hair"};
+const EXN={neutral:"Neutral",happy:"Happy",laugh:"Laughing",cool:"Cool",angry:"Angry",shock:"Shocked",panic:"Panic",sad:"Sad",smirk:"Smirk",worried:"Worried",love:"In love",sleepy:"Sleepy"};
+const isHex=v=>/^#[0-9a-f]{6}$/i.test(v||"");
+function clean(p){const o=Object.assign({},A.DEF);for(const k of ["gender","age","face","eyes","hair","outfit","expr"])if(A.OPT[k==="expr"?"expr":k].includes(p[k]))o[k]=p[k];
+for(const k of ["skin","eyeColor","hairColor","outfitColor","accent","bg"])if(isHex(p[k]))o[k]=p[k].toLowerCase();
+o.extras=Array.isArray(p.extras)?p.extras.filter(x=>A.OPT.extras.includes(x)):[];o.name=String(p.name||"New character").slice(0,60);o.notes=String(p.notes||"").slice(0,600);return o}
+function saveLocal(){try{localStorage.setItem(K,JSON.stringify(LIST));localStorage.setItem(K+"-del",JSON.stringify(DEL.slice(-300)))}catch(e){}}
+function pushCloud(){if(!cloud)return;clearTimeout(pushCloud.t);pushCloud.t=setTimeout(async()=>{try{await cloud.set({list:LIST,del:DEL.slice(-300),t:Date.now()})}catch(e){msg("Saved on this device; couldn't sync to your account just now.")}},800)}
+const msg=t=>{const m=$("#anMsg");if(m)m.textContent=t};
+function sel(k){const vals=A.OPT[k];const col=/olor|skin|bg|accent/.test(k);
+ if(col)return `<div class="ancol"><span>${LAB[k]}</span><div class="sw">${vals.map(v=>`<button type="button" class="swb${cur[k]===v?" on":""}" data-k="${k}" data-v="${v}" style="background:${v}" aria-label="${v}"></button>`).join("")}<input type="color" data-k="${k}" value="${isHex(cur[k])?cur[k]:"#888888"}" aria-label="Custom ${LAB[k]}"></div></div>`;
+ return `<label class="ansel"><span>${LAB[k]}</span><select class="cin" data-k="${k}">${vals.map(v=>`<option value="${v}"${cur[k]===v?" selected":""}>${(NICE[k]&&NICE[k][v])||v}</option>`).join("")}</select></label>`}
+function drawEditor(){$("#anPrev").innerHTML=A.draw(cur);
+ $("#anCtl").innerHTML=`<label class="ansel"><span>Name</span><input class="cin" id="anName" value="${E(cur.name)}"></label>`+
+ ["gender","age","face","eyes","hair","outfit"].map(sel).join("")+["skin","eyeColor","hairColor","outfitColor","accent","bg"].map(sel).join("")+
+ `<div class="ancol"><span>Extras</span><div class="chips">${A.OPT.extras.map(x=>`<button type="button" class="chip" data-x="${x}" aria-pressed="${cur.extras.includes(x)}">${XN[x]}</button>`).join("")}</div></div>`;
+ $("#anExpr").innerHTML=A.EXPR.map(x=>`<button type="button" class="chip" data-e="${x}" aria-pressed="${cur.expr===x}">${EXN[x]}</button>`).join("");
+ $("#anNotes").textContent=cur.notes?`Claude's design notes: ${cur.notes}`:"";
+ $("#anDel").hidden=!cur.id}
+function drawList(){const L=$("#anList");if(!LIST.length){L.innerHTML=`<p class="row">No saved characters yet. Design one with Claude or start blank, then tap Save.</p>`;return}
+ L.innerHTML=LIST.map(c=>`<button type="button" class="ancard${cur.id===c.id?" on":""}" data-id="${c.id}">${A.draw(c,null,{plain:true})}<b>${E(c.name)}</b></button>`).join("")}
+function refresh(){$("#anPrev").innerHTML=A.draw(cur);clearTimeout(tmr);tmr=setTimeout(drawEditor,0)}
+document.addEventListener("change",e=>{const t=e.target;if(!t.closest||!t.closest("#v-anime"))return;
+ if(t.matches("select[data-k]")){cur[t.dataset.k]=t.value;refresh()}
+ if(t.matches("input[type=color][data-k]")){cur[t.dataset.k]=t.value;refresh()}});
+document.addEventListener("input",e=>{if(e.target.id==="anName"){cur.name=e.target.value;$("#anPrev").innerHTML=A.draw(cur)}});
+document.addEventListener("click",async e=>{const t=e.target;if(!t.closest||!t.closest("#v-anime"))return;
+ const sw=t.closest(".swb");if(sw){cur[sw.dataset.k]=sw.dataset.v;refresh();return}
+ const x=t.closest("[data-x]");if(x){const k=x.dataset.x;cur.extras=cur.extras.includes(k)?cur.extras.filter(v=>v!==k):cur.extras.concat(k);refresh();return}
+ const ex=t.closest("[data-e]");if(ex){cur.expr=ex.dataset.e;refresh();return}
+ const cd=t.closest(".ancard");if(cd){const c=LIST.find(v=>v.id===cd.dataset.id);if(c){cur=JSON.parse(JSON.stringify(c));drawEditor();drawList();$("#anSheet").innerHTML="";msg(`Opened ${c.name}.`);$("#anStudio").scrollIntoView({behavior:"smooth",block:"start"})}return}
+ if(t.id==="anBlank"){cur=Object.assign({},A.DEF,{id:null,extras:[]});drawEditor();drawList();$("#anSheet").innerHTML="";msg("Blank character. Change anything, then Save.");return}
+ if(t.id==="anRandom"){const r=k=>A.OPT[k][Math.floor(Math.random()*A.OPT[k].length)];cur=Object.assign({},cur,{gender:r("gender"),age:r("age"),face:r("face"),skin:r("skin"),eyes:r("eyes"),eyeColor:r("eyeColor"),hair:r("hair"),hairColor:r("hairColor"),outfit:r("outfit"),outfitColor:r("outfitColor"),accent:r("accent"),bg:r("bg"),extras:A.OPT.extras.filter(()=>Math.random()<.12)});refresh();return}
+ if(t.id==="anSave"){cur.name=($("#anName").value||"").trim()||"New character";if(!cur.id)cur.id="c"+Date.now();cur.t=Date.now();const i=LIST.findIndex(v=>v.id===cur.id);const copy=JSON.parse(JSON.stringify(cur));if(i>=0)LIST[i]=copy;else LIST.unshift(copy);saveLocal();pushCloud();drawList();drawEditor();msg(`Saved ${cur.name}.`);return}
+ if(t.id==="anDel"&&cur.id){const n=cur.name;DEL.push(cur.id);LIST=LIST.filter(v=>v.id!==cur.id);saveLocal();pushCloud();cur=Object.assign({},cur,{id:null});drawList();drawEditor();msg(`Deleted ${n} from saved characters (still open here — Save to keep it again).`);return}
+ if(t.id==="anSheetBtn"){$("#anSheet").innerHTML=`<h3 style="margin:14px 0 8px">Expression sheet · ${E(cur.name)}</h3><div class="ansheet">${A.EXPR.map(x=>`<div>${A.draw(cur,x,{label:EXN[x]})}</div>`).join("")}</div><div class="acts"><button class="btn" type="button" id="anSheetPng">Download expression sheet (PNG)</button></div>`;$("#anSheet").scrollIntoView({behavior:"smooth",block:"start"});return}
+ if(t.id==="anPng"){await savePng([[A.draw(cur,null,{label:cur.name})]],1,fn("png"));return}
+ if(t.id==="anSvg"){await saveBlob(new Blob([A.draw(cur)],{type:"image/svg+xml"}),fn("svg"));return}
+ if(t.id==="anSheetPng"){const cells=A.EXPR.map(x=>A.draw(cur,x,{label:EXN[x]}));await savePng(cells,4,fn("png","expressions"));return}
+ if(t.id==="anGo"){await design();return}});
+const fn=(ext,extra)=>`${(cur.name||"character").replace(/[^\wఀ-౿ -]+/g,"").trim().replace(/\s+/g,"-")||"character"}${extra?"-"+extra:""}.${ext}`;
+let dl=null;async function getDl(){if(dl)return dl;try{for(let i=0;i<50&&!window.claude&&window.parent!==window;i++)await new Promise(r=>setTimeout(r,100));dl=(window.claude&&window.parent!==window?await window.claude.use("downloads"):null)}catch(e){dl=null}return dl}
+async function saveBlob(blob,name){msg("Preparing the download…");const d=await getDl();try{if(d&&d.save){await d.save({filename:name,data:blob});msg("Saved: "+name)}else{const u=URL.createObjectURL(blob);const a=document.createElement("a");a.href=u;a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),4000);msg("Downloaded: "+name)}}catch(e){msg(e&&e.code==="declined"?"Download cancelled.":"The download was blocked here.")}}
+async function savePng(cells,cols,name){const rows=Math.ceil(cells.length/cols),cw=400,ch=500,sc=2;
+ const cv=document.createElement("canvas");cv.width=cw*cols*sc;cv.height=ch*rows*sc;const g=cv.getContext("2d");g.fillStyle="#fff";g.fillRect(0,0,cv.width,cv.height);
+ for(let i=0;i<cells.length;i++){const img=new Image();const u=URL.createObjectURL(new Blob([cells[i].replace("<svg ",`<svg width="${cw*sc}" height="${ch*sc}" `)],{type:"image/svg+xml"}));
+  await new Promise((ok,no)=>{img.onload=ok;img.onerror=no;img.src=u});g.drawImage(img,(i%cols)*cw*sc,Math.floor(i/cols)*ch*sc,cw*sc,ch*sc);URL.revokeObjectURL(u)}
+ const blob=await new Promise(r=>cv.toBlob(r,"image/png"));await saveBlob(blob,name)}
+function profileOf(key){const ai=window.CFL_AI;if(!ai||!key)return "";if(key.startsWith("fam:")){const k=key.slice(4);return window.CFL_FAM?window.CFL_FAM.text(k):""}
+ const r=ai.ROLES.find(x=>x[0]===key);if(!r)return "";const lib=window.SLANGLIB_GET?window.SLANGLIB_GET(r):"";return (ai.rpProfile(r)+(lib&&lib!==ai.rpProfile(r)?"\n"+lib.slice(0,2500):""))}
+function drawWho(){const ai=window.CFL_AI,s=$("#anWho");if(!s||!ai)return;const fam=window.CFL_FAM&&window.CFL_FAM.list?window.CFL_FAM.list():[];
+ s.innerHTML=`<option value="">— none (use only my description) —</option><optgroup label="Main characters">${ai.ROLES.filter(r=>r[3]>=0).map(r=>`<option value="${E(r[0])}">${E(r[1])} · ${E(r[2])}</option>`).join("")}</optgroup>${fam.length?`<optgroup label="Family details">${fam.map(f=>`<option value="fam:${E(f[0])}">${E(f[1])} · ${E(f[2])}</option>`).join("")}</optgroup>`:""}`}
+async function design(){const ai=window.CFL_AI;const desc=$("#anDesc").value.trim(),who=$("#anWho").value;
+ if(!desc&&!who){msg("Write a description or pick a character first.");return}
+ if(!ai||!ai.ready()){msg("Claude isn't available in this view. Open the library in claude.ai.");return}
+ if(ai.isBusy()){msg("Claude is busy with another job. Try again in a moment.");return}
+ const prof=profileOf(who),whoLab=who?($("#anWho").selectedOptions[0]||{}).textContent:"";
+ const O=A.OPT;const prompt=`You design 2D anime characters for a Telugu comedy YouTube channel. A drawing program will draw the character from the settings you choose, so pick the settings that best show this person's personality at a glance. Make him/her look like an Indian (Telugu) person in anime style: choose a realistic skin tone and colours that fit the role. Never copy a known anime, cartoon or film character's design.
+${whoLab?`CHARACTER: ${whoLab}\nPROFILE:\n${prof}\n`:""}${desc?`USER'S DESCRIPTION: ${desc}\n`:""}
+Choose ONE value for each setting from its list (colours may also be any hex like #a1b2c3):
+gender: ${O.gender.join(", ")}
+age: ${O.age.join(", ")} (college boys/girls = young; parents = adult or old)
+face: ${O.face.join(", ")}
+skin: ${O.skin.join(", ")} (light to dark)
+eyes: ${O.eyes.join(", ")}
+eyeColor: ${O.eyeColor.join(", ")}
+hair: ${O.hair.join(", ")}
+hairColor: ${O.hairColor.join(", ")}
+outfit: ${O.outfit.join(", ")}
+outfitColor, accent, bg: any hex colours (bg = soft background colour)
+extras (0–4 that fit the personality): ${O.extras.join(", ")}
+expr (his/her most typical expression): ${O.expr.join(", ")}
+Also give "name" (as the character is called, Telugu or English) and "notes" (2 sentences: why these choices fit the personality).
+Return ONLY JSON: {"name":"","gender":"","age":"","face":"","skin":"","eyes":"","eyeColor":"","hair":"","hairColor":"","outfit":"","outfitColor":"","accent":"","bg":"","extras":[],"expr":"","notes":""}`;
+ const b=$("#anGo");b.disabled=true;const t0=Date.now();const tk=setInterval(()=>msg(`Claude is designing the character… ${Math.round((Date.now()-t0)/1000)}s`),1000);
+ try{const res=await ai.ask(prompt);const j=ai.parse(res.text);clearInterval(tk);cur=Object.assign(clean(j),{id:null});drawEditor();drawList();$("#anSheet").innerHTML="";msg(`Designed: ${cur.name}. Change anything you like, then tap Save.`);$("#anStudio").scrollIntoView({behavior:"smooth",block:"start"})}
+ catch(err){clearInterval(tk);msg(err&&err.code?ai.errText(err):(err&&err.message)||"Something went wrong. Try again.")}
+ b.disabled=false}
+function init(){if(!$("#v-anime"))return;drawEditor();drawList();drawWho();
+ document.querySelector('nav a[data-v="anime"]').addEventListener("click",()=>setTimeout(drawWho,50))}
+init();
+(async()=>{if(window.parent===window)return;try{for(let i=0;i<50&&!window.claude;i++)await new Promise(r=>setTimeout(r,100));if(!window.claude)return;const db=await window.claude.use("db"),u=await window.claude.use("user"),uid=u?await u.id():null;if(!db||!uid)return;
+ cloud=db.collection("data/users/"+uid).doc("anime");const d=await cloud.get();const r=d&&d.exists!==false&&(typeof d.data==="function"?d.data():d)||null;const RD=(r&&r.del)||[];DEL=[...new Set(DEL.concat(RD))];const R=((r&&r.list)||[]).filter(c=>!DEL.includes(c.id));const before=LIST.length;LIST=LIST.filter(c=>!DEL.includes(c.id));
+ const map=new Map(LIST.map(c=>[c.id,c]));let changed=false,mine=false;R.forEach(c=>{const a=map.get(c.id);if(!a||(c.t||0)>(a.t||0)){map.set(c.id,c);changed=true}});
+ LIST.forEach(c=>{const b=R.find(x=>x.id===c.id);if(!b||(c.t||0)>(b.t||0))mine=true});
+ if(LIST.length!==before)changed=true;if(changed){LIST=[...map.values()].sort((a,b)=>(b.t||0)-(a.t||0));saveLocal();drawList()}if(mine||R.length!==LIST.length)pushCloud()}catch(e){}})();
+})();
+
 </script>
 </body>
 

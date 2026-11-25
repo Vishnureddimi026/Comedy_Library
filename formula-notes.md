@@ -816,3 +816,9 @@ Use these as top-quality references for every new scene. Rules:
 ## Character Family Details (24 Nov 2026)
 - New box at the top of the Characters tab: Madhu's Father (మధు నాన్న), Madhu's Mother (మధు అమ్మ), Mahesh's Father (మహేష్ నాన్న), Mahesh's Mother (మహేష్ అమ్మ). The user writes a paragraph for each; it autosaves per person and syncs to the account (doc data/users/<id>/family).
 - The four are also cast roles (Write a scene chips, Replace characters lists). Their text goes into the scene prompt and Replace prompt as FAMILY DETAILS whenever filled.
+
+
+## Anime studio (25 Nov 2026) — 2D anime project, step 1: characters
+- New "Anime" tab. Built-in 2D anime drawing system (SVG): body type, age, face, skin, eyes, hair, outfit, colours, 15 extras, 12 expressions. Claude designs a character from a library character profile (Vicky/Golu use their full style libraries; family members use the Family Details text) and/or a description, by choosing those settings; the user can change anything by hand.
+- Save characters (sync to account, doc data/users/<id>/anime), expression sheet of all 12, download PNG/SVG.
+- Limit told to the user: no real AI image generation in the app; the style is clean flat 2D anime vector. Planned next steps: poses/scene backgrounds, talking animation (mouth/blink), then video export from scenes.
