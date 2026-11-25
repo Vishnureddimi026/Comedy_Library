@@ -28,7 +28,8 @@ function save(silent){cur.name=(cur.name||"").trim()||"New character";if(!cur.id
 /* ---------- rendering of the studio ---------- */
 function sw(k,obj,vals,dis){return `<div class="ancol"><span>${LAB[k]}</span><div class="sw">${vals.map(v=>`<button type="button" class="swb${obj[k]===v?" on":""}" data-sw="${k}" data-v="${v}" style="background:${v}" aria-label="${v}" ${dis?"disabled":""}></button>`).join("")}<input type="color" data-col="${k}" value="${isHex(obj[k])?obj[k]:"#888888"}" ${dis?"disabled":""} aria-label="Custom ${LAB[k]}"></div></div>`}
 function selF(k,obj,vals,dis,attr){return `<label class="ansel"><span>${LAB[k]}</span><select class="cin" ${attr||`data-lk="${k}"`} ${dis?"disabled":""}>${vals.map(v=>`<option value="${v}"${obj[k]===v?" selected":""}>${(NICE[k]&&NICE[k][v])||v}</option>`).join("")}</select></label>`}
-function preview(){const p=flat(cur);$("#asPrev").innerHTML=A.drawFull(p,{view,pose,bg:cur.bgScene||"plain",base:cur.bg});$("#asHead").innerHTML=A.draw(p,null,{plain:true});
+const ovl=()=>({tag:cur.sceneTag?cur.name:null,tagSub:cur.sceneTag?(cur.profile.role||""):null,stamp:(cur.stampTxt||"").trim()||null});
+function preview(){const p=flat(cur);$("#asPrev").innerHTML=A.drawFull(p,Object.assign({view,pose,bg:cur.bgScene||"plain",base:cur.bg},ovl()));$("#asHead").innerHTML=A.draw(p,null,{plain:true});
  $("#asBadge").innerHTML=cur.locked?`<span class="lockb">🔒 Identity locked</span>`:`<span class="lockb off">Draft</span>`;$("#asTitle").textContent=cur.name+(cur.profile.ageNum?` · ${cur.profile.ageNum}`:"")}
 function drawSec(){$("#asTabs").innerHTML=SEC.map(s=>`<button type="button" class="chip" data-sec="${s[0]}" aria-pressed="${sec===s[0]}">${s[1]}</button>`).join("");
  const L=cur.locked,O=outfit(cur),P=cur.profile,box=$("#asBody");let h="";
@@ -79,6 +80,7 @@ function drawSec(){$("#asTabs").innerHTML=SEC.map(s=>`<button type="button" clas
  <label class="ansel"><span>Angle</span><select class="cin" id="asView">${A.VIEWS.map(v=>`<option value="${v}"${view===v?" selected":""}>${A.VIEWN[v]}</option>`).join("")}</select></label>
  <label class="ansel"><span>Pose</span><select class="cin" id="asPose">${Object.keys(A.POSES).map(k=>`<option value="${k}"${pose===k?" selected":""}>${A.POSES[k].n}</option>`).join("")}</select></label>
  <label class="ansel"><span>Expression</span><select class="cin" id="asExpr">${A.EXPR.map(x=>`<option value="${x}"${cur.expr===x?" selected":""}>${EXN[x]}</option>`).join("")}</select></label></div>
+ <div class="anpanel"><h4>Pop-up graphics (flat style)</h4><label class="ancheck"><input type="checkbox" id="asTagOn" ${cur.sceneTag?"checked":""}> Name tag (name + role)</label><label class="ansel"><span>Stamp text (optional)</span><input class="cin" id="asStamp" value="${E(cur.stampTxt||"")}" placeholder="e.g. బాకీ ₹500 · FAIL · CAUGHT"></label></div>
  <div class="acts"><button class="btn sm" type="button" data-png="one">Download this picture (PNG)</button></div>
  <div class="anpanel"><h4>Characters together</h4><p class="row">Pick 2–4 saved characters. Each keeps its own locked look.</p><div class="chips" id="asGroupPick">${LIST.map(c=>`<button type="button" class="chip" data-gp="${c.id}" aria-pressed="${(window.__asG||[]).includes(c.id)}">${E(c.name)}</button>`).join("")||`<span class="row">Save at least two characters first.</span>`}</div>
  <div class="acts"><button class="btn sm" type="button" id="asGroup">Make group picture</button></div><div id="asGroupOut"></div></div>`}
@@ -168,12 +170,14 @@ function sheetSvg(){const p=flat(cur),P=cur.profile,O=outfit(cur),W=2400,H=2000;
 /* ---------- events ---------- */
 function inStudio(t){return t.closest&&t.closest("#v-anime")}
 document.addEventListener("input",e=>{const t=e.target;if(!inStudio(t))return;
+ if(t.id==="asStamp"){cur.stampTxt=t.value;preview();return}
  if(t.dataset.pf==="name"){cur.name=t.value;preview()}else if(t.dataset.pr){cur.profile[t.dataset.pr]=t.value;if(["height","build"].includes(t.dataset.pr))preview()}else if(t.dataset.on){outfit(cur).name=t.value}});
 document.addEventListener("change",async e=>{const t=e.target;if(!inStudio(t))return;
  if(t.dataset.lk){cur.look[t.dataset.lk]=t.value;preview()}
  if(t.dataset.ok){outfit(cur)[t.dataset.ok]=t.value;drawSec()}
  if(t.dataset.col){if(t.dataset.col==="bg")cur.bg=t.value;else cur.look[t.dataset.col]=t.value;drawSec()}
  if(t.dataset.ocol){outfit(cur)[t.dataset.ocol]=t.value;drawSec()}
+ if(t.id==="asTagOn"){cur.sceneTag=t.checked;preview()}
  if(t.id==="asBg"){cur.bgScene=t.value;preview()}if(t.id==="asView"){view=t.value;preview()}if(t.id==="asPose"){pose=t.value;preview()}if(t.id==="asExpr"){cur.expr=t.value;preview()}
  if(t.id==="asPhoto"&&t.files[0]){const f=t.files[0];const blob=await shrink(f,1024);photo={blob,url:URL.createObjectURL(blob),keep:["hair","hairColor","face","skin"]};drawSec();msg("Picture ready. Tick the features to keep, then tap Analyse.")}
  if(t.id==="asArtUp"&&t.files[0]){await uploadArt(t.files[0])}});
@@ -207,7 +211,7 @@ document.addEventListener("click",async e=>{const t=e.target;if(!inStudio(t))ret
  if(t.id==="asSheet"){const [s,W,H]=sheetSvg();$("#asSheetOut").innerHTML=`<div class="ansheetbig">${s}</div><div class="acts"><button class="btn" type="button" id="asSheetPng">Download reference sheet (PNG)</button></div>`;window.__asSheet=[s,W,H];return}
  if(t.id==="asSheetPng"&&window.__asSheet){const [s,W,H]=window.__asSheet;await svgToPng(s,W,H,fn("reference-sheet"));return}
  if(b=c("[data-png]")){const k=b.dataset.png,p=flat(cur);
-  if(k==="one"){await svgToPng(A.drawFull(p,{view,pose,bg:cur.bgScene||"plain",base:cur.bg,label:cur.name}),400,800,fn(`${pose}-${view}`))}
+  if(k==="one"){await svgToPng(A.drawFull(p,Object.assign({view,pose,bg:cur.bgScene||"plain",base:cur.bg},ovl(),{label:cur.sceneTag?null:cur.name})),400,800,fn(`${pose}-${view}`))}
   if(k==="views"){const [s,W,H]=gridSvg(A.VIEWS.map(v=>A.drawFull(p,{view:v,pose,bg:"plain",base:cur.bg,label:A.VIEWN[v]})),6,400,800,`${cur.name} — turnaround`);await svgToPng(s,W,H,fn("turnaround"))}
   if(k==="expr"){const [s,W,H]=gridSvg(A.EXPR.map(x=>A.draw(p,x,{label:EXN[x]})),7,400,500,`${cur.name} — expressions`);await svgToPng(s,W,H,fn("expressions"))}
   if(k==="poses"){const ks=Object.keys(A.POSES);const [s,W,H]=gridSvg(ks.map(x=>A.drawFull(p,{view:A.POSES[x].best||"front",pose:x,bg:"plain",base:cur.bg,label:A.POSES[x].n})),7,400,800,`${cur.name} — poses`);await svgToPng(s,W,H,fn("poses"))}
