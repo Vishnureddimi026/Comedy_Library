@@ -822,3 +822,10 @@ Use these as top-quality references for every new scene. Rules:
 - New "Anime" tab. Built-in 2D anime drawing system (SVG): body type, age, face, skin, eyes, hair, outfit, colours, 15 extras, 12 expressions. Claude designs a character from a library character profile (Vicky/Golu use their full style libraries; family members use the Family Details text) and/or a description, by choosing those settings; the user can change anything by hand.
 - Save characters (sync to account, doc data/users/<id>/anime), expression sheet of all 12, download PNG/SVG.
 - Limit told to the user: no real AI image generation in the app; the style is clean flat 2D anime vector. Planned next steps: poses/scene backgrounds, talking animation (mouth/blink), then video export from scenes.
+
+
+## Anime Character Studio (25 Nov 2026, replaces the simple creator)
+- User has no budget for paid image APIs (Gemini image API free tier is 0 per developer reports; others are paid), so the studio uses the built-in vector engine; section 9 gives a free route to painted art (prompt + reference sheet for free apps like the Gemini app, upload results back via assets).
+- Engine: anime_rig.js (head, 21 expressions, headOnly/turn) + anime_body.js (full body, 6 views, 13 poses, 12 backgrounds, group pictures).
+- Studio: gallery; profile (name, age, gender, height, build, role, personality, background, special); appearance with identity lock (Approve & lock) and versions; multiple outfits with Claude outfit design; views; expressions; poses + custom pose (Claude picks nearest); scene & group; reference sheet PNG; reference photo analysis (Claude vision, choose features to keep); real-art prompt; artwork uploads.
+- Capabilities now: db, downloads, sample (images:true), user, assets.

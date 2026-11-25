@@ -308,6 +308,16 @@ main>section:not([hidden]),.page:not([hidden]){animation:rise3d .35s cubic-bezie
 .ansheet{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}@media(max-width:560px){.ansheet{grid-template-columns:repeat(2,1fr)}}.ansheet svg{width:100%;height:auto;border-radius:10px;display:block}
 .anlist{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:10px}.ancard{border:1.5px solid var(--line);border-radius:12px;padding:6px;background:var(--card);cursor:pointer;display:flex;flex-direction:column;gap:4px;align-items:center;box-shadow:var(--shadow);font:inherit;color:inherit}
 .ancard svg{width:100%;height:auto;border-radius:8px}.ancard.on{outline:3px solid var(--teal)}
+.anhead{display:flex;flex-wrap:wrap;gap:10px;justify-content:space-between;align-items:center;margin-bottom:6px}.lockb{display:inline-block;margin-top:4px;padding:2px 10px;border-radius:10px;background:#2f6b4f;color:#fff;font-size:13px;font-weight:700}.lockb.off{background:#8a8a95}
+.anright2{min-width:0}.antabs{margin-bottom:10px}.anleft{position:sticky;top:8px;align-self:start}.anhd svg{width:42%;height:auto;border-radius:12px;margin-top:8px;box-shadow:var(--shadow)}
+.angrid2{display:grid;grid-template-columns:1fr 1fr;gap:4px 12px}@media(max-width:560px){.angrid2{grid-template-columns:1fr}}
+.anpanel{border:1.5px dashed var(--line);border-radius:12px;padding:10px;margin:12px 0}.anpanel h4{margin:0 0 4px}
+.lockmsg{background:rgba(47,107,79,.1);border:1.5px solid #2f6b4f;border-radius:10px;padding:8px}
+.angal4{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}.angal6{display:grid;grid-template-columns:repeat(6,1fr);gap:8px}@media(max-width:900px){.angal6{grid-template-columns:repeat(3,1fr)}}@media(max-width:560px){.angal4,.angal6{grid-template-columns:repeat(2,1fr)}}
+.angal4 svg,.angal6 svg,.anvers svg,.angroup svg,.ansheetbig svg{width:100%;height:auto;display:block;border-radius:10px}.anpick{border:2px solid transparent;border-radius:12px;padding:0;background:none;cursor:pointer}.anpick.on{border-color:var(--teal)}
+.anvers{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:8px}.anvers>div{display:flex;flex-direction:column;gap:4px}
+.anref{max-width:180px;border-radius:10px;margin:6px 0;display:block}.anart img{width:100%;border-radius:10px;display:block}.anart{display:flex;flex-direction:column;gap:4px}
+.ancard.add{justify-content:center;min-height:150px}@media(max-width:760px){.anleft{position:static}.anprev{max-width:240px;margin:0 auto}.anhd{display:none}.anright2{margin-top:10px}}.ansheetbig{overflow:auto;margin-top:10px;border:1.5px solid var(--line);border-radius:10px}
 </style>
 </head>
 <body class="locked">
@@ -522,19 +532,13 @@ setTimeout(function(){var i=document.getElementById("lockP");if(i)i.focus()},100
 </section>
 
 <section id="v-anime" class="band" hidden>
-<h2 style="font-size:28px;margin:0 0 6px">🎨 Anime studio</h2>
-<p class="row" style="margin:0 0 14px">Step 1 of the 2D anime project: create your characters. Claude designs each character from its personality, and the app draws it in a clean 2D anime style. Change any part by hand, see all 12 expressions, save your cast, and download pictures. These saved characters will be used later for animated scenes and videos.</p>
-<div class="box"><h3 style="margin-top:0">✨ Design a character with Claude</h3>
-<label class="ansel"><span>Use a character from the library (optional)</span><select class="cin" id="anWho"></select></label>
-<label class="ansel"><span>Describe the look (optional)</span><textarea id="anDesc" class="cta" rows="3" placeholder="e.g. DJ Vicky — cool Hyderabad DJ, spiky hair, sunglasses, gold chain, black jacket. Or: Madhu's father — strict retired head constable, bald, thick mustache, white kurta."></textarea></label>
-<div class="acts"><button class="btn" type="button" id="anGo">✨ Design with Claude</button><button class="btn ghost" type="button" id="anBlank">Start blank</button><button class="btn ghost" type="button" id="anRandom">🎲 Random look</button></div></div>
-<div class="box" id="anStudio"><div class="anwrap"><div class="anleft"><div id="anPrev" class="anprev"></div>
-<p class="row" style="margin:8px 0 4px"><b>Expression</b></p><div class="chips" id="anExpr"></div>
-<div class="acts"><button class="btn" type="button" id="anSave">💾 Save character</button><button class="btn ghost" type="button" id="anSheetBtn">Show all 12 expressions</button></div>
-<div class="acts" style="margin-top:4px"><button class="btn ghost sm" type="button" id="anPng">Download picture (PNG)</button><button class="btn ghost sm" type="button" id="anSvg">Download vector (SVG)</button><button class="btn ghost sm" type="button" id="anDel" hidden>Delete from saved</button></div>
-<p class="row" id="anMsg"></p><p class="row mt" id="anNotes"></p></div>
-<div class="anright" id="anCtl"></div></div><div id="anSheet"></div></div>
-<div class="box"><h3 style="margin-top:0">My anime characters</h3><div id="anList" class="anlist"></div></div>
+<h2 style="font-size:28px;margin:0 0 6px">🎨 Anime Character Studio</h2>
+<p class="row" style="margin:0 0 12px">Create original 2D anime characters for your series: profile, full-body design, 6 viewing angles, 21 expressions, 13 poses, outfits, backgrounds, group pictures and a professional reference sheet. Approve a character to lock its identity, so every new picture keeps the same face, hair, skin and body. <b>Drawing style:</b> clean flat 2D vector, drawn by the app — for painted artwork, section 9 shows a free route.</p>
+<div class="box"><h3 style="margin-top:0">My characters</h3><div id="asGal" class="anlist"></div></div>
+<div class="box" id="asStudio"><div class="anhead"><div><h3 id="asTitle" style="margin:0"></h3><div id="asBadge"></div></div><div class="acts" style="margin:0"><button class="btn" type="button" id="asSave">💾 Save</button><button class="btn" type="button" id="asLock">✅ Approve &amp; lock identity</button><button class="btn ghost sm" type="button" id="asDup">Duplicate</button><button class="btn ghost sm" type="button" id="asDel">Delete</button></div></div>
+<p class="row" id="asMsg" aria-live="polite"></p>
+<div class="anwrap"><div class="anleft"><div id="asPrev" class="anprev"></div><div id="asHead" class="anhd"></div></div>
+<div class="anright2"><div class="chips antabs" id="asTabs"></div><div id="asBody"></div></div></div></div>
 </section>
 <section id="v-rules" class="band" hidden>
 <div class="rules">
@@ -1920,7 +1924,7 @@ await window.CFL.scenePdf([{kind:"rpana",pairs:P,ana,compact:id==="rpPdfShort",d
 /* ===== Character Style – Better Comedy (separate generation mode) ===== */
 const SLANGLIB={"Vicky": "Source: the 22 scenes of the film character Tillu in the user's reference scripts (Q2–Q20 DJ Tillu, R1–R6 Tillu Square), 163 lines, read with the lines around them. DJ Vicky is that style under a new name. Patterns only; never reuse film lines; all examples are original.\n\n## 1. Core identity\nHyderabad local DJ who acts like an established celebrity. Never the smartest, always the calmest. Engine: calm inside chaos — the worse it gets, the cooler and more irrelevant his reply.\n- Effortless confidence (lowers voice, acts bored); self-made legend (everything becomes a brand, mission, superpower); never admits (changes topic, lectures, claims it was his plan); street-smart not book-smart (mangles science, English, big words); fake sophistication (corporate words, keto, golf, highlights); instant switch (rude → grovel when power appears); soft core (loves Daddy, Mummy, friends — says it via a messenger or a joke).\n\n## 2. Dialogue style\n- Two sizes only: 2–3 word jab, or a long confident ramble that drifts off topic.\n- Question back instead of answer; Telugu frame with English nouns; numbered step lectures on nonsense; repeat-for-control (one word ×3 to take over a panicking room); self-praise tag at the end of small wins; formal English politeness as a dismissal (thank you, take care).\n- Delivery: half-bored; never shouts to win; speeds up only when lying; slows down for punchlines; ends on a tag.\n\n## 3. Slang bank (use 2–4 markers per line)\nTELUGU FIRST: Hyderabadi Telangana Telugu with 1–2 English words per line; never Dakhni/Hindi words (హౌ, నక్కో, కైకూ, కిత్తా, పక్కా-style are Golu's). Self-praise tag at most ONCE per scene and varied (అట్ల ఉంటది మనతోని / ఇదే మన స్టైల్ / చూసినవా బాయ్…), never the same tag in two lines. Friends బాయ్; Master/teachers/police సార్ (cool, once at the start, never అంకుల్).\n- Friends/juniors: బాయ్, అరే బాయ్, రేయ్, అవలే. Parents: డాడీ, మమ్మీ (never నాన్న/అమ్మ). Dons: అన్నా, అన్నగారు. Master/teachers/police: సార్ — cool, once at the start; never అంకుల్. Strangers outside college: అంకుల్, ఆంటీ.\n- Telangana grammar: ఈడ/ఆడ/ఏడ, అయితది, వస్తది, ఉంటది, చేసినావు, వచ్చిరు, అవుతుర్రు, చేస్తలేదు, అనిపిస్తలేదు, కావాలె, చేయాలె.\n- Hyderabadi words: ఊకో, లొల్లి, జర, ముచ్చట, మజాక్, సప్పుడు, కిరికిరి, పంచాయతీ, దునియాదారి, ఖలాస్, మస్తు, బొంగు, దోస్తులు, గలీజ్.\n- Dismissals: ఊకో, మజాక్ చేయకు, ఒకటే లొల్లి పెట్టకు, పెట్టేయ్ (phone), చీప్ డిస్కషన్.\n- English inserts: వన్ మినిట్, ఐ హావ్ వన్ డౌట్, ఓకే?, రైట్?, వాట్స్ అప్, సో స్వీట్, టేక్ కేర్, ప్లీజ్, ఎస్పెషల్లీ, ఆబ్వియస్లీ, ఇఫ్ యూ డోంట్ మైండ్.\n- Corporate/lifestyle: ప్రొఫెషనల్ స్పేస్, డెడికేషన్, ఫాలోయింగ్, కార్పొరేట్, సింక్, ఆపరేషన్, మిషన్, కీటో, ఫ్యాట్ లూస్, హైలైట్స్, గోల్ఫ్. Hindi bits: యార్, క్యా, భేజో.\n- Mild insults: బిత్తిరి మొఖం/చూపులు, పూర్ ఫెలో, పిచ్చోడిలాగా. Time: త్రీ, టూ, వన్… / exact clock time. Self-praise tag: అట్ల ఉంటది మనతోని (vary it).\n\n## 4. Reactions\nThreat → literal time / countdown. Caught lying → upgrades the lie (spy, agent, superhero). Insult → corrects one small detail of it. Direct question → answers an easier one or asks back. Real panic (rare) → rapid begging, repeating a name, shrinking requests, then cool returns. Power appears → instant grovel, back to cool after. Others panic → mocks how they react (like TV-serial actors). Emotional moment → through a messenger or a silly practical comment. Grand plan → shrinks it with its tiny tool or the local shop.\n\n## 5. Comedy techniques (formula IDs)\n1 Corporate boundary F362 · 2 Confident wrong science F363 · 3 Over-engineered instruction F365 · 4 Self-flattering proverb F366 · 5 Entitled-son logic F369 · 6 Lazy-expert shortcut F370 · 7 Selective memory F377 · 8 Possession word trap F378 · 9 Employee isn't owner F379 · 10 Literal clock reply F384 · 11 Rude-then-grovel F412 · 12 Epic voice-over for cowardice F414 · 13 Grand mission vs tiny tool / local shop F407 F408 · 14 Fake title escalation F375. Also: small-talk dodge F247, practical comfort F386, muttered curse + polite take-care F300.\n\n## 6. Attitude and body language\nConfidence is a performance he enjoys (unlike Madhu's sincere, collapsing confidence). Narrates life like a film; money and status measure everything; truth is optional; keeps score and cheats back bigger, calmly. Staging: leans back, half-closed eyes, eyebrow up; checks phone/hair while scolded; two-finger point when lecturing; mutters the real insult then smiles politely; poses after a tag.\n\n## 7. Conversation by person\nParents: flatmates who embarrass him; lectures, demands money, loves secretly. Friends/juniors: boss and fake expert; cuts them off. Love interest: suspicious, keeps accounts, begs in trouble. Authority (police, Master, judge): cool casual సార్, literal replies, points out their mistakes. Dons: grovels, mutters after, \"take care\". Strangers/shopkeepers: treats as staff or fans, tests and corrects them. Defeated enemies: gloats calmly, waves bye.\n\n## 8. Timing\nBasic beat: someone raises the stakes → Vicky pauses/acts bored → least expected reply (literal, irrelevant, calm correction) → self-praise tag or topic change, leaving nothing to answer.\nPatterns: two-word counter to a long rant; ramble-and-drift; rule of three where the third breaks; grovel switch; countdown close; delayed reveal (it was his plan).\nScene shape: calm open → others escalate → Vicky stays cool for 3–4 counters → one real crack → calm recovery and win. Short lines mid-scene; at most one long ramble per scene.\n\n## 9. Rules\nDo: calm when others panic; literal/topic-change answers to threats; 1–2 English words per Telugu line; fresh self-praise tags; crack once in real danger; Hyderabadi Telangana grammar; సార్ to the Master coolly, once; new lines in his style.\nDon't: shout to win; admit plainly; whole English or pure Telugu lines; same tag every scene; brave or wise Vicky; Uttarandhra words (ఏటి, పోద్ది, ఉండింది); అంకుల్ to the Master or సార్ at every line end; film lines.\nLine checklist: cooler/shorter/less expected than the other line? dodges or twists? ≥1 Hyderabadi marker, ≤2 English words? Madhu/Mahesh would never say it this way? leaves nothing to answer or sets up the next panic?\n\n## 10. Jodi design\nPartner must: raise the stakes constantly; use a different register (loud, emotional, practical — not cool, not English-heavy); know the truth about Vicky; be unable to walk away (money, business, loyalty); win sometimes. Avoid: another cool show-off; a pure deadpan truth-teller (Vicky never admits, the scene stalls).\nEngines: panic vs vibe; money tally vs lifestyle bluff; quit-and-return; loyal blurter; superstition vs fake science.\nBuilt: Golu (గోలు) — Vicky's best friend and equal since childhood (calls him విక్కీ / రేయ్ విక్కీ / దోస్త్, never అన్నా or భాయ్) and DJ \"technical team\", loud practical panicker in Hyderabadi Dakhni-mix Telugu (హౌ, నక్కో, కైకూ, క్యా బోల్తే, ఖాలీపీలీ, పక్కా, కిత్తా), counts every rupee, quits and never leaves. In the web app. See golu-style-library.md.", "Golu": "Golu is an original character (not from the films; first named Babloo, renamed Golu on 24 Nov 2026), DJ Vicky's jodi. Examples are all newly written.\n\n## Core\n- Vicky's best friend and equal since childhood, from the same Hyderabad gully; drives the DJ van, carries speakers, fixes wires (his whole \"technical team\").\n- Engine: panic outside, loyalty inside. Panics at everything; Vicky panics at nothing.\n- Traits: money tally of everything Vicky owes; quits every scene, never leaves; loyal blurter (tells the truth or backs the lie with wrong details); superstitious vs Vicky's fake science; grumbles but does the job.\n\n## Dialogue patterns\n1. Rising alarm ending in \"విక్కీఈ…!\"  2. The tally (numbers in every complaint)  3. Quit then stay (\"పక్కా లాస్ట్\")  4. Wrong backup  5. Question pile  6. Superstition rule (\"మా దాదీ చెప్పింది\")  7. Soft turn (one quiet loyal line).\n\n## Slang (Hyderabadi Dakhni-mix)\nTELUGU FIRST: every Golu line is Hyderabadi Telugu (Telangana grammar: ఉంది/ఉన్నది, చేస్తుండు, వస్తది, కావాలె) with only 1–3 Dakhni/Hindi words from his bank sprinkled in. NEVER full Hindi or Urdu sentences and never Hindi grammar — banned: దేఖ్ రహా హూ, క్యా కరేంగే, ఛోడ్ కే, లేకిన్, భీ, ఠీక్ హై, యాద్ రఖ్, డరో నక్కో, యే హై, ఖుల్‌నా నై, హూ/హై/థా endings. Good: 'నక్కో రే, ఇయాల మంగళవారం, పూరా బ్యాడ్ లక్!' Bad: 'డరో నక్కో, మై దేఖ్ రహా హూ.'\nహౌ, నక్కో, కైకూ, కిత్తా, క్యా బోల్తే, బోలే తో, ఖాలీపీలీ, ఏక్‌దమ్, పూరా, పక్కా, హల్లు హల్లు, చుప్ రే, బైగన్. Vicky = విక్కీ / రేయ్ విక్కీ / దోస్త్ (soft) / విక్కీఈ…! (panic) / మామూ (money). Best friends and equals: never అన్నా or భాయ్ for Vicky. సార్ for police/teachers, అన్నా for dons, అమ్మా for Vicky's mother.\nNever: Vicky's English tags (వన్ మినిట్, ఓకే?, బాయ్), Uttarandhra words, mocking any community.\n\n## Formulas\nF311 panic over-disclosure · F633 lender's exact tally · F617 running total of cuts · F279 percentage blame split · F373 threat to tell the truth · F371 shrinking plea · F569 petty regret in danger · F504 a gift means bad news · F386 practical comfort · F411 gig-worker analogy. Own: quit-and-return, wrong backup, superstition vs fake science, suspicious of kindness.\n\n## Timing with Vicky\nBeat: Golu long rising panic → Vicky one cool line → Golu bigger panic with a number → Golu gives in. Patterns: interrupted tally, echo panic, delayed blurt, quit at the peak, role-swap ending (Golu calm, Vicky panics).\nScene shape: Golu alarm → Vicky plan → Golu's wrong backup worsens it → twist only Golu's worry prepared for → Vicky takes credit.\n\n## Rules\nNumbers in every argument; practical worries; his worry is right once per scene; insults Vicky but never betrays him; not stupid (only he knows the equipment); never actually leaves.\nCheck: louder/longer than Vicky? number or practical worry? Dakhni not English? sets up or lands a punch? only Golu could say it?\n\n## Pair engines (Cool vs Panic)\nAlarm vs vibe · money tally vs lifestyle bluff · quit-and-return · loyal blurter vs topic change · superstition vs fake science · childhood friends trading insults, same side at the end."};
 window.SLANGLIB_GET=r=>slangLib(r);
-window.CFL_AI={ask:(p)=>ask(p,{cache:false}),parse,errText,ROLES,rpProfile,ready:()=>!!sample,isBusy:()=>busy};
+window.CFL_AI={vision:async(p,imgs)=>{if(!sample||typeof sample.limits!=="function")throw {message:"Picture analysis works in the library on claude.ai."};const l=await sample.limits();if(!l||!l.images)throw {message:"Picture analysis isn't available in this view."};return sample(p,{images:imgs,cache:false})},ask:(p)=>ask(p,{cache:false}),parse,errText,ROLES,rpProfile,ready:()=>!!sample,isBusy:()=>busy};
 function slangLib(r){if(!r)return "";const k=/Vicky|Tillu/.test(r[0])?"Vicky":/Golu|Babloo/.test(r[0])?"Golu":null;return k?SLANGLIB[k]:rpProfile(r)}
 function rpBestPrompt(L,map,title,from,to,prev){const base=rpPrompt(L,map,title).split("HOW TO REWRITE:")[0];const newOf=n=>ROLES.find(x=>x[0]===map[n]);
 const libs=[...new Set(Object.values(map))].map(k=>ROLES.find(r=>r[0]===k)).filter(Boolean).map(r=>`=== SAVED CHARACTER & SLANG LIBRARY: ${r[1]} (${r[2]}) ===\n${slangLib(r)}`).join("\n\n");
@@ -2447,7 +2451,7 @@ const OPT={
  outfitColor:["#2f3863","#b5523b","#2f6b4f","#c8902a","#6b3fa0","#1d1d24","#e9e4d8","#3b82c4","#c2417a","#7a5a3a"],
  accent:["#c8902a","#ffffff","#1d1d24","#e04a3a","#3fb5c9","#9ad14b"],
  extras:["sunglasses","glasses","goldChain","headphones","mustache","beard","bindi","earrings","cap","blush","mole","scar","pen","towel","flowers"],
- expr:["neutral","happy","laugh","cool","angry","shock","panic","sad","smirk","worried","love","sleepy"],
+ expr:["neutral","happy","smiling","laugh","angry","sad","crying","surprised","shock","scared","confident","confused","shy","serious","evil","cool","panic","smirk","worried","love","sleepy"],
  bg:["#dfe5f5","#f5e6d0","#e3f1e6","#f3dede","#ece3f5","#1f2438","#fff4c9","#d9eef2"]
 };
 const DEF={name:"New character",gender:"boy",age:"young",face:"oval",skin:"#dfab84",eyes:"big",eyeColor:"#3b2a20",hair:"spiky",hairColor:"#1b1b1f",outfit:"tshirt",outfitColor:"#2f3863",accent:"#c8902a",extras:[],expr:"neutral",bg:"#dfe5f5"};
@@ -2464,7 +2468,16 @@ const EX={ // brows, eyes mode, mouth, effects
  smirk:{b:"oneup",e:"half",m:"smirk",fx:[]},
  worried:{b:"worried",e:"open",m:"wavy",fx:["sweat"]},
  love:{b:"up",e:"heart",m:"smile",fx:["blush"]},
- sleepy:{b:"flat",e:"sleep",m:"small",fx:["zzz"]}
+ sleepy:{b:"flat",e:"sleep",m:"small",fx:["zzz"]},
+ smiling:{b:"flat",e:"open",m:"smile",fx:[]},
+ crying:{b:"worried",e:"closed",m:"cry",fx:["tears"]},
+ surprised:{b:"raised",e:"open",m:"o",fx:[]},
+ scared:{b:"worried",e:"shock",m:"wavy",fx:["sweat","shade"]},
+ confident:{b:"oneup",e:"half",m:"grin",fx:["sparkle"]},
+ confused:{b:"confused",e:"open",m:"side",fx:["question"]},
+ shy:{b:"worried",e:"look",m:"small",fx:["blush"]},
+ serious:{b:"serious",e:"open",m:"line",fx:[]},
+ evil:{b:"angry",e:"half",m:"evil",fx:["shade"]}
 };
 function draw(p0,exprOver,opts){
  const p=Object.assign({},DEF,p0||{});p.extras=p.extras||[];const ex=EX[exprOver||p.expr]||EX.neutral;const has=x=>p.extras.includes(x);
@@ -2497,8 +2510,9 @@ function draw(p0,exprOver,opts){
   mohawk:`M118 196 Q112 150 128 128 L272 128 Q288 150 282 196 Z M176 130 L170 40 L200 64 L214 30 L230 70 L240 46 L232 130Z`
  }[p.hair]||"";
  const HT="translate(200 200) scale(1.14) translate(-200 -200)";
+ const iB0=o.length;
  if(p.hair!=="bald")o+=`<g transform="${HT}"><path d="${hb}" fill="url(#${id}hr)" stroke="${Hd}" stroke-width="3" stroke-linejoin="round"/></g>`;
- o+=`<g transform="translate(0 6)">`;
+ const iBody0=o.length;o+=`<g transform="translate(0 6)">`;
  // body
  const sw=fem?0:14;
  o+=`<path d="M${44-sw} 500 Q${52-sw/2} 372 168 340 L232 340 Q${348+sw/2} 372 ${356+sw} 500Z" fill="${O}" stroke="${Od}" stroke-width="3"/>`;
@@ -2521,9 +2535,9 @@ function draw(p0,exprOver,opts){
  if(has("towel"))o+=`<path d="M150 340 Q130 380 140 500 L176 500 Q166 400 182 346Z" fill="#ffffff" stroke="#c9c9c9" stroke-width="2"/><path d="M146 380 L170 380 M144 420 L168 420" stroke="${A}" stroke-width="4"/>`;
  if(has("pen"))o+=`<rect x="118" y="410" width="6" height="38" rx="2" fill="#2b62c4" transform="rotate(8 121 429)"/>`;
  if(has("flowers"))o+=`<g fill="#fff6d6" stroke="#e0b84a" stroke-width="1.5"><circle cx="284" cy="132" r="7"/><circle cx="296" cy="142" r="7"/><circle cx="288" cy="156" r="7"/></g>`;
- o+=`</g><g transform="${HT}">`;
+ o+=`</g>`;const iBody1=o.length;o+=`<g transform="${HT}">`;
  // ears
- o+=`<ellipse cx="121" cy="196" rx="13" ry="20" fill="${S}" stroke="${Sdd}" stroke-width="2.5"/><ellipse cx="279" cy="196" rx="13" ry="20" fill="${S}" stroke="${Sdd}" stroke-width="2.5"/><path d="M118 188 Q124 196 120 206" fill="none" stroke="${Sd}" stroke-width="3"/><path d="M282 188 Q276 196 280 206" fill="none" stroke="${Sd}" stroke-width="3"/>`;
+ const TU=(opts&&opts.turn)||0;if(TU<=8)o+=`<ellipse cx="279" cy="196" rx="13" ry="20" fill="${S}" stroke="${Sdd}" stroke-width="2.5"/><path d="M282 188 Q276 196 280 206" fill="none" stroke="${Sd}" stroke-width="3"/>`;if(TU>=-8)o+=`<ellipse cx="121" cy="196" rx="13" ry="20" fill="${S}" stroke="${Sdd}" stroke-width="2.5"/><path d="M118 188 Q124 196 120 206" fill="none" stroke="${Sd}" stroke-width="3"/>`;
  if(has("earrings"))o+=`<circle cx="121" cy="220" r="6" fill="#f2c94c" stroke="#a8801f" stroke-width="2"/><circle cx="279" cy="220" r="6" fill="#f2c94c" stroke="#a8801f" stroke-width="2"/>`;
  // face
  o+=`<path d="${face}" fill="${S}" stroke="${Sdd}" stroke-width="3" stroke-linejoin="round"/>`;
@@ -2531,6 +2545,7 @@ function draw(p0,exprOver,opts){
  if(old)o+=`<path d="M150 150 Q170 144 186 150 M214 150 Q230 144 250 150" fill="none" stroke="${Sd}" stroke-width="2.5"/><path d="M146 248 Q152 262 150 272 M254 248 Q248 262 250 272" fill="none" stroke="${Sd}" stroke-width="2.5"/>`;
  // blush
  if(ex.fx.includes("blush")||has("blush"))o+=`<g fill="#ff7a8a" opacity=".38"><ellipse cx="150" cy="236" rx="20" ry="9"/><ellipse cx="250" cy="236" rx="20" ry="9"/></g><g stroke="#ff6b7d" stroke-width="2" opacity=".6"><path d="M140 232 l6 -6 M150 232 l6 -6 M160 232 l6 -6 M240 232 l6 -6 M250 232 l6 -6 M260 232 l6 -6"/></g>`;
+ const TX=(opts&&opts.turn)||0;o+=`<g transform="translate(${TX} 0)">`;
  // eyes
  const eye=(x,flip)=>{const f=flip?-1:1;const st=p.eyes;let g="";const em=ex.e;
   if(em==="closed")return `<path d="M${x-22} 202 Q${x} 180 ${x+22} 202" fill="none" stroke="#1d1416" stroke-width="5" stroke-linecap="round"/>`;
@@ -2540,6 +2555,7 @@ function draw(p0,exprOver,opts){
   const shock=em==="shock";
   g+=`<ellipse cx="${x}" cy="200" rx="${rx+3}" ry="${ry+2}" fill="#fff" stroke="#2a1d1f" stroke-width="2"/>`;
   if(shock)g+=`<circle cx="${x}" cy="202" r="7" fill="url(#${id}ir)" stroke="#120b0c" stroke-width="2"/><circle cx="${x-2}" cy="199" r="2" fill="#fff"/>`;
+  else if(em==="look")g+=`<ellipse cx="${x-6}" cy="210" rx="${rx-4}" ry="${ry-5}" fill="url(#${id}ir)"/><ellipse cx="${x-6}" cy="212" rx="${(rx-4)*.5}" ry="${(ry-5)*.55}" fill="#120b0c"/><ellipse cx="${x-11}" cy="203" rx="5" ry="6" fill="#fff"/>`;
   else g+=`<ellipse cx="${x+f*1}" cy="${204}" rx="${rx-3}" ry="${ry-3}" fill="url(#${id}ir)"/><ellipse cx="${x+f*1}" cy="206" rx="${(rx-3)*.5}" ry="${(ry-3)*.55}" fill="#120b0c"/><ellipse cx="${x-6*f}" cy="194" rx="6" ry="7.5" fill="#fff"/><circle cx="${x+7*f}" cy="214" r="3" fill="#fff" opacity=".85"/>`;
   // upper lid / lashes
   const lidY=em==="half"||st==="sleepy"?194:180;
@@ -2551,7 +2567,7 @@ function draw(p0,exprOver,opts){
   return g};
  o+=eye(165,false)+eye(235,true);
  // brows
- const bw={flat:["M140 160 Q165 152 188 160","M212 160 Q235 152 260 160"],up:["M140 154 Q165 142 188 152","M212 152 Q235 142 260 154"],angry:["M142 150 Q168 158 190 170","M210 170 Q232 158 258 150"],raised:["M140 146 Q165 132 188 144","M212 144 Q235 132 260 146"],worried:["M142 162 Q168 150 188 146","M212 146 Q232 150 258 162"],oneup:["M140 160 Q165 154 188 160","M212 150 Q235 138 260 148"]}[ex.b]||["M140 160 Q165 152 188 160","M212 160 Q235 152 260 160"];
+ const bw={flat:["M140 160 Q165 152 188 160","M212 160 Q235 152 260 160"],up:["M140 154 Q165 142 188 152","M212 152 Q235 142 260 154"],angry:["M142 150 Q168 158 190 170","M210 170 Q232 158 258 150"],raised:["M140 146 Q165 132 188 144","M212 144 Q235 132 260 146"],worried:["M142 162 Q168 150 188 146","M212 146 Q232 150 258 162"],oneup:["M140 160 Q165 154 188 160","M212 150 Q235 138 260 148"],confused:["M140 150 Q165 140 188 150","M212 164 Q235 160 260 166"],serious:["M140 156 Q165 156 190 164","M210 164 Q235 156 260 156"]}[ex.b]||["M140 160 Q165 152 188 160","M212 160 Q235 152 260 160"];
  const bc=p.hair==="bald"?"#8a8a8a":Hd;
  o+=`<path d="${bw[0]}" fill="none" stroke="${bc}" stroke-width="${old?8:6}" stroke-linecap="round"/><path d="${bw[1]}" fill="none" stroke="${bc}" stroke-width="${old?8:6}" stroke-linecap="round"/>`;
  // nose
@@ -2564,13 +2580,19 @@ function draw(p0,exprOver,opts){
   shout:`<path d="M178 252 L222 252 L214 284 L186 284Z" fill="#7a2230" stroke="#4a1418" stroke-width="3" stroke-linejoin="round"/><path d="M180 254 L220 254 L218 260 L182 260Z" fill="#fff"/>`,
   o:`<ellipse cx="200" cy="266" rx="11" ry="15" fill="#7a2230" stroke="#4a1418" stroke-width="3"/>`,
   wavy:`<path d="M180 264 Q186 256 192 264 Q198 272 204 264 Q210 256 216 264 Q220 270 224 264" fill="none" stroke="#5a2a2a" stroke-width="3.5" stroke-linecap="round"/>`,
-  frown:`<path d="M184 270 Q200 256 216 270" fill="none" stroke="#5a2a2a" stroke-width="4" stroke-linecap="round"/>`}[ex.m];
+  frown:`<path d="M184 270 Q200 256 216 270" fill="none" stroke="#5a2a2a" stroke-width="4" stroke-linecap="round"/>`,
+  cry:`<path d="M180 270 Q190 254 200 262 Q210 254 220 270 Q210 282 200 278 Q190 282 180 270Z" fill="#7a2230" stroke="#4a1418" stroke-width="3"/>`,
+  grin:`<path d="M178 256 Q200 274 224 252 Q214 270 200 272 Q186 272 178 256Z" fill="#fff" stroke="#4a1418" stroke-width="3"/><path d="M186 262 L188 268 M196 264 L196 271 M206 264 L206 270 M215 260 L214 266" stroke="#c9b9b9" stroke-width="1.5"/>`,
+  line:`<path d="M186 264 L214 264" stroke="#5a2a2a" stroke-width="4" stroke-linecap="round"/>`,
+  side:`<path d="M188 266 Q200 262 214 258" fill="none" stroke="#5a2a2a" stroke-width="3.5" stroke-linecap="round"/>`,
+  evil:`<path d="M172 252 Q200 268 230 248 Q222 276 200 278 Q180 278 172 252Z" fill="#fff" stroke="#4a1418" stroke-width="3"/><path d="M180 258 L184 266 L188 258 M212 258 L216 266 L220 256" fill="none" stroke="#4a1418" stroke-width="2"/>`}[ex.m];
  o+=mo||"";
  if(has("mustache"))o+=`<path d="M200 246 Q182 238 168 252 Q182 252 200 250 Q218 252 232 252 Q218 238 200 246Z" fill="${p.hair==="bald"?"#7d7d7d":Hd}"/>`;
  if(has("beard"))o+=`<path d="M128 214 Q136 270 170 292 Q200 ${chin[0]+18} 230 292 Q264 270 272 214 Q266 262 236 276 Q220 284 200 284 Q180 284 164 276 Q134 262 128 214Z" fill="${p.hair==="bald"?"#7d7d7d":Hd}" opacity=".95"/>`;
  if(has("mole"))o+=`<circle cx="232" cy="250" r="3.5" fill="#3a2418"/>`;
  if(has("scar"))o+=`<path d="M246 150 L262 182 M248 166 L260 160 M252 176 L262 170" stroke="#a8523d" stroke-width="3" stroke-linecap="round"/>`;
  if(has("bindi"))o+=`<circle cx="200" cy="150" r="5" fill="#d8202f"/>`;
+ o+=`</g>`;
  // front hair
  const hf={
   spiky:`M116 178 L124 120 L140 150 L148 98 L170 140 L182 92 L198 136 L214 90 L226 138 L246 96 L254 146 L268 112 L284 178 Q292 120 260 92 Q200 62 140 92 Q108 120 116 178Z`,
@@ -2597,111 +2619,458 @@ function draw(p0,exprOver,opts){
  if(ex.fx.includes("vein"))o+=`<g stroke="#d8202f" stroke-width="5" stroke-linecap="round" fill="none"><path d="M258 110 q6 8 0 16 M270 110 q-6 8 0 16 M252 120 q8 -6 16 0 M252 132 q8 6 16 0"/></g>`;
  if(ex.fx.includes("lines"))o+=`<g stroke="#1d1d24" stroke-width="4" stroke-linecap="round"><path d="M80 120 L100 132 M74 160 L98 164 M320 120 L300 132 M326 160 L302 164 M200 30 L200 52"/></g>`;
  if(ex.fx.includes("tear"))o+=`<path d="M244 220 Q250 240 246 250 Q240 258 236 250 Q234 240 244 220Z" fill="#8fd3ff" stroke="#3a8fc4" stroke-width="2"/>`;
+ if(ex.fx.includes("tears"))o+=`<path d="M150 206 Q146 250 156 300 L168 300 Q160 250 162 206Z M250 206 Q254 250 244 300 L232 300 Q240 250 238 206Z" fill="#8fd3ff" opacity=".85" stroke="#3a8fc4" stroke-width="2"/>`;
+ if(ex.fx.includes("shade"))o+=`<g stroke="#4a3a7a" stroke-width="3" opacity=".55"><path d="M150 108 L150 146 M164 104 L164 142 M178 102 L178 138 M222 102 L222 138 M236 104 L236 142 M250 108 L250 146"/></g>`;
+ if(ex.fx.includes("sparkle"))o+=`<path d="M300 110 l6 16 l16 6 l-16 6 l-6 16 l-6 -16 l-16 -6 l16 -6Z" fill="#f2c94c" stroke="#c8902a" stroke-width="2"/>`;
+ if(ex.fx.includes("question"))o+=`<text x="296" y="128" font-family="Arial Black,Arial" font-size="56" font-weight="900" fill="#3b82c4" stroke="#fff" stroke-width="3" paint-order="stroke">?</text>`;
  if(ex.fx.includes("zzz"))o+=`<text x="300" y="110" font-family="Arial Black,Arial" font-size="30" fill="#2f3863" font-weight="900">Z<tspan font-size="22" dy="-14">z</tspan><tspan font-size="16" dy="-10">z</tspan></text>`;
  o+=`</g>`;
+ if(opts&&opts.headOnly){const defs=(o.match(/<defs>[\s\S]*?<\/defs>/)||[""])[0];return defs+o.slice(iB0,iBody0)+o.slice(iBody1)}
  if(opts&&opts.label)o+=`<rect x="0" y="456" width="400" height="44" fill="rgba(20,22,40,.72)"/><text x="200" y="486" font-family="Arial,sans-serif" font-size="24" font-weight="700" text-anchor="middle" fill="#fff">${String(opts.label).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]))}</text>`;
  return o+`</svg>`}
-window.ANIME={OPT,DEF,draw,EXPR:Object.keys(EX)};
+window.ANIME={OPT,DEF,draw,EXPR:Object.keys(EX),EXDEF:k=>EX[k]||EX.neutral};
 })();
 
 </script>
 <script>
-/* ===== Anime studio: character creator ===== */
+/* ===== Anime full-body rig: views, poses, backgrounds, groups ===== */
 (function(){
-const A=window.ANIME,$=q=>document.querySelector(q),E=t=>String(t==null?"":t).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-const K="cfl-anime";let LIST=[],DEL=[];try{LIST=JSON.parse(localStorage.getItem(K)||"[]")||[];DEL=JSON.parse(localStorage.getItem(K+"-del")||"[]")||[]}catch(e){LIST=[];DEL=[]}
-let cur=Object.assign({},A.DEF,{id:null}),cloud=null,tmr=null;
-const LAB={gender:"Body type",age:"Age",face:"Face shape",skin:"Skin tone",eyes:"Eye style",eyeColor:"Eye colour",hair:"Hair style",hairColor:"Hair colour",outfit:"Outfit",outfitColor:"Outfit colour",accent:"Accent colour",bg:"Background"};
-const NICE={gender:{boy:"Boy",girl:"Girl",man:"Man",woman:"Woman"},age:{teen:"Teen",young:"Young (college)",adult:"Adult (parent)",old:"Old"},face:{oval:"Oval",round:"Round",sharp:"Sharp / pointed",square:"Square / strong"},eyes:{big:"Big anime",sharp:"Sharp cool",sleepy:"Sleepy / half",round:"Round innocent"},hair:{spiky:"Spiky",side:"Side-swept",messy:"Messy",short:"Short neat",long:"Long",ponytail:"Ponytail",bun:"Bun",bald:"Bald (sides only)",curly:"Curly",mohawk:"Mohawk"},outfit:{tshirt:"T-shirt (DJ print)",shirt:"Shirt",hoodie:"Hoodie",jacket:"Open jacket",kurta:"Kurta",saree:"Saree",vest:"Vest over shirt",uniform:"Uniform with tie"}};
-const XN={sunglasses:"Sunglasses",glasses:"Glasses",goldChain:"Gold chain",headphones:"Headphones",mustache:"Mustache",beard:"Beard",bindi:"Bindi",earrings:"Earrings",cap:"Cap",blush:"Always blushing",mole:"Mole",scar:"Scar",pen:"Pen in pocket",towel:"Towel on shoulder",flowers:"Flowers in hair"};
-const EXN={neutral:"Neutral",happy:"Happy",laugh:"Laughing",cool:"Cool",angry:"Angry",shock:"Shocked",panic:"Panic",sad:"Sad",smirk:"Smirk",worried:"Worried",love:"In love",sleepy:"Sleepy"};
-const isHex=v=>/^#[0-9a-f]{6}$/i.test(v||"");
-function clean(p){const o=Object.assign({},A.DEF);for(const k of ["gender","age","face","eyes","hair","outfit","expr"])if(A.OPT[k==="expr"?"expr":k].includes(p[k]))o[k]=p[k];
-for(const k of ["skin","eyeColor","hairColor","outfitColor","accent","bg"])if(isHex(p[k]))o[k]=p[k].toLowerCase();
-o.extras=Array.isArray(p.extras)?p.extras.filter(x=>A.OPT.extras.includes(x)):[];o.name=String(p.name||"New character").slice(0,60);o.notes=String(p.notes||"").slice(0,600);return o}
-function saveLocal(){try{localStorage.setItem(K,JSON.stringify(LIST));localStorage.setItem(K+"-del",JSON.stringify(DEL.slice(-300)))}catch(e){}}
-function pushCloud(){if(!cloud)return;clearTimeout(pushCloud.t);pushCloud.t=setTimeout(async()=>{try{await cloud.set({list:LIST,del:DEL.slice(-300),t:Date.now()})}catch(e){msg("Saved on this device; couldn't sync to your account just now.")}},800)}
-const msg=t=>{const m=$("#anMsg");if(m)m.textContent=t};
-function sel(k){const vals=A.OPT[k];const col=/olor|skin|bg|accent/.test(k);
- if(col)return `<div class="ancol"><span>${LAB[k]}</span><div class="sw">${vals.map(v=>`<button type="button" class="swb${cur[k]===v?" on":""}" data-k="${k}" data-v="${v}" style="background:${v}" aria-label="${v}"></button>`).join("")}<input type="color" data-k="${k}" value="${isHex(cur[k])?cur[k]:"#888888"}" aria-label="Custom ${LAB[k]}"></div></div>`;
- return `<label class="ansel"><span>${LAB[k]}</span><select class="cin" data-k="${k}">${vals.map(v=>`<option value="${v}"${cur[k]===v?" selected":""}>${(NICE[k]&&NICE[k][v])||v}</option>`).join("")}</select></label>`}
-function drawEditor(){$("#anPrev").innerHTML=A.draw(cur);
- $("#anCtl").innerHTML=`<label class="ansel"><span>Name</span><input class="cin" id="anName" value="${E(cur.name)}"></label>`+
- ["gender","age","face","eyes","hair","outfit"].map(sel).join("")+["skin","eyeColor","hairColor","outfitColor","accent","bg"].map(sel).join("")+
- `<div class="ancol"><span>Extras</span><div class="chips">${A.OPT.extras.map(x=>`<button type="button" class="chip" data-x="${x}" aria-pressed="${cur.extras.includes(x)}">${XN[x]}</button>`).join("")}</div></div>`;
- $("#anExpr").innerHTML=A.EXPR.map(x=>`<button type="button" class="chip" data-e="${x}" aria-pressed="${cur.expr===x}">${EXN[x]}</button>`).join("");
- $("#anNotes").textContent=cur.notes?`Claude's design notes: ${cur.notes}`:"";
- $("#anDel").hidden=!cur.id}
-function drawList(){const L=$("#anList");if(!LIST.length){L.innerHTML=`<p class="row">No saved characters yet. Design one with Claude or start blank, then tap Save.</p>`;return}
- L.innerHTML=LIST.map(c=>`<button type="button" class="ancard${cur.id===c.id?" on":""}" data-id="${c.id}">${A.draw(c,null,{plain:true})}<b>${E(c.name)}</b></button>`).join("")}
-function refresh(){$("#anPrev").innerHTML=A.draw(cur);clearTimeout(tmr);tmr=setTimeout(drawEditor,0)}
-document.addEventListener("change",e=>{const t=e.target;if(!t.closest||!t.closest("#v-anime"))return;
- if(t.matches("select[data-k]")){cur[t.dataset.k]=t.value;refresh()}
- if(t.matches("input[type=color][data-k]")){cur[t.dataset.k]=t.value;refresh()}});
-document.addEventListener("input",e=>{if(e.target.id==="anName"){cur.name=e.target.value;$("#anPrev").innerHTML=A.draw(cur)}});
-document.addEventListener("click",async e=>{const t=e.target;if(!t.closest||!t.closest("#v-anime"))return;
- const sw=t.closest(".swb");if(sw){cur[sw.dataset.k]=sw.dataset.v;refresh();return}
- const x=t.closest("[data-x]");if(x){const k=x.dataset.x;cur.extras=cur.extras.includes(k)?cur.extras.filter(v=>v!==k):cur.extras.concat(k);refresh();return}
- const ex=t.closest("[data-e]");if(ex){cur.expr=ex.dataset.e;refresh();return}
- const cd=t.closest(".ancard");if(cd){const c=LIST.find(v=>v.id===cd.dataset.id);if(c){cur=JSON.parse(JSON.stringify(c));drawEditor();drawList();$("#anSheet").innerHTML="";msg(`Opened ${c.name}.`);$("#anStudio").scrollIntoView({behavior:"smooth",block:"start"})}return}
- if(t.id==="anBlank"){cur=Object.assign({},A.DEF,{id:null,extras:[]});drawEditor();drawList();$("#anSheet").innerHTML="";msg("Blank character. Change anything, then Save.");return}
- if(t.id==="anRandom"){const r=k=>A.OPT[k][Math.floor(Math.random()*A.OPT[k].length)];cur=Object.assign({},cur,{gender:r("gender"),age:r("age"),face:r("face"),skin:r("skin"),eyes:r("eyes"),eyeColor:r("eyeColor"),hair:r("hair"),hairColor:r("hairColor"),outfit:r("outfit"),outfitColor:r("outfitColor"),accent:r("accent"),bg:r("bg"),extras:A.OPT.extras.filter(()=>Math.random()<.12)});refresh();return}
- if(t.id==="anSave"){cur.name=($("#anName").value||"").trim()||"New character";if(!cur.id)cur.id="c"+Date.now();cur.t=Date.now();const i=LIST.findIndex(v=>v.id===cur.id);const copy=JSON.parse(JSON.stringify(cur));if(i>=0)LIST[i]=copy;else LIST.unshift(copy);saveLocal();pushCloud();drawList();drawEditor();msg(`Saved ${cur.name}.`);return}
- if(t.id==="anDel"&&cur.id){const n=cur.name;DEL.push(cur.id);LIST=LIST.filter(v=>v.id!==cur.id);saveLocal();pushCloud();cur=Object.assign({},cur,{id:null});drawList();drawEditor();msg(`Deleted ${n} from saved characters (still open here — Save to keep it again).`);return}
- if(t.id==="anSheetBtn"){$("#anSheet").innerHTML=`<h3 style="margin:14px 0 8px">Expression sheet · ${E(cur.name)}</h3><div class="ansheet">${A.EXPR.map(x=>`<div>${A.draw(cur,x,{label:EXN[x]})}</div>`).join("")}</div><div class="acts"><button class="btn" type="button" id="anSheetPng">Download expression sheet (PNG)</button></div>`;$("#anSheet").scrollIntoView({behavior:"smooth",block:"start"});return}
- if(t.id==="anPng"){await savePng([[A.draw(cur,null,{label:cur.name})]],1,fn("png"));return}
- if(t.id==="anSvg"){await saveBlob(new Blob([A.draw(cur)],{type:"image/svg+xml"}),fn("svg"));return}
- if(t.id==="anSheetPng"){const cells=A.EXPR.map(x=>A.draw(cur,x,{label:EXN[x]}));await savePng(cells,4,fn("png","expressions"));return}
- if(t.id==="anGo"){await design();return}});
-const fn=(ext,extra)=>`${(cur.name||"character").replace(/[^\wఀ-౿ -]+/g,"").trim().replace(/\s+/g,"-")||"character"}${extra?"-"+extra:""}.${ext}`;
-let dl=null;async function getDl(){if(dl)return dl;try{for(let i=0;i<50&&!window.claude&&window.parent!==window;i++)await new Promise(r=>setTimeout(r,100));dl=(window.claude&&window.parent!==window?await window.claude.use("downloads"):null)}catch(e){dl=null}return dl}
-async function saveBlob(blob,name){msg("Preparing the download…");const d=await getDl();try{if(d&&d.save){await d.save({filename:name,data:blob});msg("Saved: "+name)}else{const u=URL.createObjectURL(blob);const a=document.createElement("a");a.href=u;a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),4000);msg("Downloaded: "+name)}}catch(e){msg(e&&e.code==="declined"?"Download cancelled.":"The download was blocked here.")}}
-async function savePng(cells,cols,name){const rows=Math.ceil(cells.length/cols),cw=400,ch=500,sc=2;
- const cv=document.createElement("canvas");cv.width=cw*cols*sc;cv.height=ch*rows*sc;const g=cv.getContext("2d");g.fillStyle="#fff";g.fillRect(0,0,cv.width,cv.height);
- for(let i=0;i<cells.length;i++){const img=new Image();const u=URL.createObjectURL(new Blob([cells[i].replace("<svg ",`<svg width="${cw*sc}" height="${ch*sc}" `)],{type:"image/svg+xml"}));
-  await new Promise((ok,no)=>{img.onload=ok;img.onerror=no;img.src=u});g.drawImage(img,(i%cols)*cw*sc,Math.floor(i/cols)*ch*sc,cw*sc,ch*sc);URL.revokeObjectURL(u)}
- const blob=await new Promise(r=>cv.toBlob(r,"image/png"));await saveBlob(blob,name)}
-function profileOf(key){const ai=window.CFL_AI;if(!ai||!key)return "";if(key.startsWith("fam:")){const k=key.slice(4);return window.CFL_FAM?window.CFL_FAM.text(k):""}
- const r=ai.ROLES.find(x=>x[0]===key);if(!r)return "";const lib=window.SLANGLIB_GET?window.SLANGLIB_GET(r):"";return (ai.rpProfile(r)+(lib&&lib!==ai.rpProfile(r)?"\n"+lib.slice(0,2500):""))}
-function drawWho(){const ai=window.CFL_AI,s=$("#anWho");if(!s||!ai)return;const fam=window.CFL_FAM&&window.CFL_FAM.list?window.CFL_FAM.list():[];
- s.innerHTML=`<option value="">— none (use only my description) —</option><optgroup label="Main characters">${ai.ROLES.filter(r=>r[3]>=0).map(r=>`<option value="${E(r[0])}">${E(r[1])} · ${E(r[2])}</option>`).join("")}</optgroup>${fam.length?`<optgroup label="Family details">${fam.map(f=>`<option value="fam:${E(f[0])}">${E(f[1])} · ${E(f[2])}</option>`).join("")}</optgroup>`:""}`}
-async function design(){const ai=window.CFL_AI;const desc=$("#anDesc").value.trim(),who=$("#anWho").value;
- if(!desc&&!who){msg("Write a description or pick a character first.");return}
- if(!ai||!ai.ready()){msg("Claude isn't available in this view. Open the library in claude.ai.");return}
- if(ai.isBusy()){msg("Claude is busy with another job. Try again in a moment.");return}
- const prof=profileOf(who),whoLab=who?($("#anWho").selectedOptions[0]||{}).textContent:"";
- const O=A.OPT;const prompt=`You design 2D anime characters for a Telugu comedy YouTube channel. A drawing program will draw the character from the settings you choose, so pick the settings that best show this person's personality at a glance. Make him/her look like an Indian (Telugu) person in anime style: choose a realistic skin tone and colours that fit the role. Never copy a known anime, cartoon or film character's design.
-${whoLab?`CHARACTER: ${whoLab}\nPROFILE:\n${prof}\n`:""}${desc?`USER'S DESCRIPTION: ${desc}\n`:""}
-Choose ONE value for each setting from its list (colours may also be any hex like #a1b2c3):
-gender: ${O.gender.join(", ")}
-age: ${O.age.join(", ")} (college boys/girls = young; parents = adult or old)
-face: ${O.face.join(", ")}
-skin: ${O.skin.join(", ")} (light to dark)
-eyes: ${O.eyes.join(", ")}
-eyeColor: ${O.eyeColor.join(", ")}
-hair: ${O.hair.join(", ")}
-hairColor: ${O.hairColor.join(", ")}
-outfit: ${O.outfit.join(", ")}
-outfitColor, accent, bg: any hex colours (bg = soft background colour)
-extras (0–4 that fit the personality): ${O.extras.join(", ")}
-expr (his/her most typical expression): ${O.expr.join(", ")}
-Also give "name" (as the character is called, Telugu or English) and "notes" (2 sentences: why these choices fit the personality).
-Return ONLY JSON: {"name":"","gender":"","age":"","face":"","skin":"","eyes":"","eyeColor":"","hair":"","hairColor":"","outfit":"","outfitColor":"","accent":"","bg":"","extras":[],"expr":"","notes":""}`;
- const b=$("#anGo");b.disabled=true;const t0=Date.now();const tk=setInterval(()=>msg(`Claude is designing the character… ${Math.round((Date.now()-t0)/1000)}s`),1000);
- try{const res=await ai.ask(prompt);const j=ai.parse(res.text);clearInterval(tk);cur=Object.assign(clean(j),{id:null});drawEditor();drawList();$("#anSheet").innerHTML="";msg(`Designed: ${cur.name}. Change anything you like, then tap Save.`);$("#anStudio").scrollIntoView({behavior:"smooth",block:"start"})}
- catch(err){clearInterval(tk);msg(err&&err.code?ai.errText(err):(err&&err.message)||"Something went wrong. Try again.")}
- b.disabled=false}
-function init(){if(!$("#v-anime"))return;drawEditor();drawList();drawWho();
- document.querySelector('nav a[data-v="anime"]').addEventListener("click",()=>setTimeout(drawWho,50))}
-init();
-(async()=>{if(window.parent===window)return;try{for(let i=0;i<50&&!window.claude;i++)await new Promise(r=>setTimeout(r,100));if(!window.claude)return;const db=await window.claude.use("db"),u=await window.claude.use("user"),uid=u?await u.id():null;if(!db||!uid)return;
- cloud=db.collection("data/users/"+uid).doc("anime");const d=await cloud.get();const r=d&&d.exists!==false&&(typeof d.data==="function"?d.data():d)||null;const RD=(r&&r.del)||[];DEL=[...new Set(DEL.concat(RD))];const R=((r&&r.list)||[]).filter(c=>!DEL.includes(c.id));const before=LIST.length;LIST=LIST.filter(c=>!DEL.includes(c.id));
- const map=new Map(LIST.map(c=>[c.id,c]));let changed=false,mine=false;R.forEach(c=>{const a=map.get(c.id);if(!a||(c.t||0)>(a.t||0)){map.set(c.id,c);changed=true}});
- LIST.forEach(c=>{const b=R.find(x=>x.id===c.id);if(!b||(c.t||0)>(b.t||0))mine=true});
- if(LIST.length!==before)changed=true;if(changed){LIST=[...map.values()].sort((a,b)=>(b.t||0)-(a.t||0));saveLocal();drawList()}if(mine||R.length!==LIST.length)pushCloud()}catch(e){}})();
+const A=window.ANIME;
+const sh=(hex,a)=>{const n=parseInt(String(hex||"#888888").slice(1),16);let r=n>>16,g=n>>8&255,b=n&255;const f=v=>Math.max(0,Math.min(255,Math.round(a<0?v*(1+a):v+(255-v)*a)));return "#"+[f(r),f(g),f(b)].map(v=>v.toString(16).padStart(2,"0")).join("")};
+const R=Math.PI/180,pt=(x,y,len,a)=>[x+Math.sin(a*R)*len,y+Math.cos(a*R)*len];
+const VIEWS=["front","three","side","back","side2","threeback"];
+const VIEWN={front:"Front · 0°",three:"Three-quarter · 45°",side:"Side · 90°",back:"Back · 180°",side2:"Other side · 270°",threeback:"Three-quarter back"};
+/* pose: front angles (deg, 0=down, + toward viewer's right) for left arm (la1 upper, la2 forearm), right arm, left leg, right leg;
+   side angles (s): near arm a1/a2, far arm b1/b2, near leg l1/l2, far leg m1/m2 (+ = forward); y offset; sit; props */
+const POSES={
+ stand:{n:"Standing",la:[-8,-3],ra:[8,3],ll:[-3,-1],rl:[3,1],s:{a:[-4,4],b:[4,8],l:[2,0],m:[-2,-2]}},
+ walk:{n:"Walking",la:[-12,-6],ra:[12,20],ll:[-6,-2],rl:[8,-4],lift:"r",s:{a:[-24,-8],b:[24,40],l:[22,-2],m:[-18,-30]},best:"side"},
+ run:{n:"Running",la:[-30,40],ra:[30,-40],ll:[-10,-4],rl:[14,-30],lift:"r",y:-10,s:{a:[-45,40],b:[45,110],l:[50,-5],m:[-30,-70]},lean:8,best:"side",fx:"speed"},
+ sit:{n:"Sitting",la:[-10,30],ra:[10,-30],ll:[-6,-2],rl:[6,2],sit:true,s:{a:[10,60],b:[14,70],l:[90,0],m:[88,-4]},best:"three"},
+ study:{n:"Studying",la:[-4,60],ra:[4,-60],ll:[-6,-2],rl:[6,2],sit:true,prop:"book",s:{a:[20,110],b:[24,116],l:[90,0],m:[88,-4]},best:"three"},
+ talk:{n:"Talking",la:[-8,-3],ra:[40,140],ll:[-4,-1],rl:[5,2],fx:"talk",s:{a:[30,120],b:[4,8],l:[3,0],m:[-3,-2]}},
+ laugh:{n:"Laughing",la:[-6,70],ra:[6,-70],ll:[-5,-2],rl:[5,2],lean:-6,s:{a:[10,80],b:[14,86],l:[4,0],m:[-4,-2]}},
+ fight:{n:"Fighting",la:[-28,170],ra:[34,-165],ll:[-20,-12],rl:[20,12],fx:"fight",s:{a:[60,150],b:[40,160],l:[24,6],m:[-26,-10]},best:"three"},
+ jump:{n:"Jumping",la:[-140,-160],ra:[140,160],ll:[-24,30],rl:[24,-30],y:-40,s:{a:[150,170],b:[140,160],l:[50,-40],m:[30,-60]},fx:"jump"},
+ think:{n:"Thinking",la:[-4,70],ra:[-18,-168],ll:[-3,-1],rl:[4,1],fx:"think",s:{a:[10,175],b:[20,90],l:[2,0],m:[-2,-2]}},
+ lookback:{n:"Looking backwards",la:[-8,-3],ra:[8,3],ll:[-3,-1],rl:[3,1],look:true,s:{a:[-4,4],b:[4,8],l:[2,0],m:[-2,-2]},best:"back"},
+ pockets:{n:"Hands in pockets",la:[-14,18],ra:[14,-18],ll:[-6,-2],rl:[6,2],pockets:true,s:{a:[-8,16],b:[-6,18],l:[4,0],m:[-6,-4]}},
+ relaxed:{n:"Relaxed (hand behind head)",la:[-14,18],ra:[150,-120],ll:[-4,-1],rl:[8,14],pockets:"l",s:{a:[160,-60],b:[-6,18],l:[4,0],m:[-6,-4]},best:"three"}
+};
+const BGS={none:"No background",plain:"Plain colour",campus:"College campus",classroom:"Classroom",corridor:"College corridor",canteen:"Canteen",bedroom:"Bedroom",home:"Home (living room)",street:"Street",park:"Park",city:"City at night",village:"Village",fantasy:"Fantasy"};
+function bgArt(k,W,H,base){const sky=(a,b)=>`<defs><linearGradient id="bgs${k}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${a}"/><stop offset="1" stop-color="${b}"/></linearGradient></defs><rect width="${W}" height="${H}" fill="url(#bgs${k})"/>`;const gy=H*.78;
+ const win=(x,y,w,h,c)=>`<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="4" fill="${c||"#cfe8f7"}" stroke="#8a7a6a" stroke-width="4"/><path d="M${x+w/2} ${y} V${y+h} M${x} ${y+h/2} H${x+w}" stroke="#8a7a6a" stroke-width="3"/>`;
+ switch(k){
+ case "none":return `<rect width="${W}" height="${H}" fill="#ffffff"/>`;
+ case "plain":return sky(sh(base||"#dfe5f5",.3),sh(base||"#dfe5f5",-.06));
+ case "campus":return sky("#9fd3f5","#e4f4fb")+`<circle cx="${W*.82}" cy="${H*.14}" r="34" fill="#fff3b0"/><rect x="${W*.08}" y="${H*.28}" width="${W*.84}" height="${H*.5}" fill="#e9dcc4" stroke="#b9a37f" stroke-width="5"/><path d="M${W*.04} ${H*.3} L${W*.5} ${H*.16} L${W*.96} ${H*.3}Z" fill="#b5523b" stroke="#7a3424" stroke-width="5"/>${[.16,.34,.58,.76].map(f=>win(W*f,H*.36,W*.12,H*.12)).join("")}<rect x="${W*.44}" y="${H*.54}" width="${W*.12}" height="${H*.24}" fill="#7a5a3a" stroke="#4a3420" stroke-width="4"/><text x="${W*.5}" y="${H*.33}" text-anchor="middle" font-family="Arial Black,Arial" font-size="${W*.04}" fill="#7a3424">COLLEGE</text><rect y="${gy}" width="${W}" height="${H-gy}" fill="#8fc46a"/><path d="M0 ${gy} H${W}" stroke="#6a9c4a" stroke-width="5"/>`+tree(W*.06,gy,1)+tree(W*.94,gy,.9);
+ case "classroom":return sky("#f3ead6","#e9dcc0")+`<rect x="${W*.1}" y="${H*.12}" width="${W*.8}" height="${H*.3}" rx="6" fill="#2f5a46" stroke="#7a5a3a" stroke-width="10"/><text x="${W*.18}" y="${H*.22}" font-family="Comic Sans MS,Arial" font-size="${W*.04}" fill="#e8f3ec">x² + 2x + 1 = 0</text><path d="M${W*.6} ${H*.32} q20 -30 40 0 t40 0" stroke="#e8f3ec" stroke-width="3" fill="none"/><rect y="${gy}" width="${W}" height="${H-gy}" fill="#c9a77a"/>${[.12,.5,.86].map(f=>`<rect x="${W*f-46}" y="${gy-46}" width="92" height="16" fill="#8a5a2b" stroke="#5a3a1a" stroke-width="3"/><rect x="${W*f-40}" y="${gy-30}" width="8" height="30" fill="#5a3a1a"/><rect x="${W*f+32}" y="${gy-30}" width="8" height="30" fill="#5a3a1a"/>`).join("")}`;
+ case "corridor":return sky("#efe7d8","#ddd2bd")+`<path d="M0 ${H*.1} L${W*.36} ${H*.36} L${W*.64} ${H*.36} L${W} ${H*.1}" fill="none" stroke="#b9a37f" stroke-width="5"/><path d="M0 ${gy} L${W*.36} ${H*.62} L${W*.64} ${H*.62} L${W} ${gy}Z" fill="#c9b48f"/><rect x="${W*.36}" y="${H*.36}" width="${W*.28}" height="${H*.26}" fill="#f7f2e6" stroke="#b9a37f" stroke-width="4"/>${[0,1,2].map(i=>`<rect x="${W*(.04+i*.1)}" y="${H*(.3+i*.03)}" width="${W*.07}" height="${H*(.36-i*.05)}" fill="#7a5a3a" opacity=".85"/>`).join("")}${[0,1,2].map(i=>`<rect x="${W*(.89-i*.1)}" y="${H*(.3+i*.03)}" width="${W*.07}" height="${H*(.36-i*.05)}" fill="#3b82c4" opacity=".6"/>`).join("")}<rect y="${gy}" width="${W}" height="${H-gy}" fill="#b9a37f"/>`;
+ case "canteen":return sky("#fbe7c8","#f1d3a6")+`<rect x="${W*.06}" y="${H*.14}" width="${W*.5}" height="${H*.14}" rx="8" fill="#b5523b"/><text x="${W*.31}" y="${H*.23}" text-anchor="middle" font-family="Arial Black,Arial" font-size="${W*.045}" fill="#fff4c9">CANTEEN · టీ ₹10</text><rect x="${W*.62}" y="${H*.12}" width="${W*.3}" height="${H*.3}" rx="8" fill="#fff" stroke="#c8902a" stroke-width="5"/><text x="${W*.77}" y="${H*.2}" text-anchor="middle" font-family="Arial" font-weight="700" font-size="${W*.032}" fill="#7a3424">MENU</text><text x="${W*.77}" y="${H*.27}" text-anchor="middle" font-family="Arial" font-size="${W*.028}" fill="#5a3a1a">Samosa · Biryani</text><rect y="${gy}" width="${W}" height="${H-gy}" fill="#d9b98a"/><rect x="${W*.05}" y="${gy-70}" width="${W*.9}" height="20" fill="#8a5a2b"/>${[.15,.45,.75].map(f=>`<circle cx="${W*f}" cy="${gy-80}" r="10" fill="#fff" stroke="#999" stroke-width="2"/>`).join("")}`;
+ case "bedroom":return sky("#e7def5","#d6c9ec")+win(W*.62,H*.12,W*.26,H*.24,"#2b3a6b")+`<circle cx="${W*.72}" cy="${H*.2}" r="12" fill="#fff6c9"/><rect x="${W*.06}" y="${H*.16}" width="${W*.2}" height="${H*.14}" fill="#fff" stroke="#c2417a" stroke-width="4"/><text x="${W*.16}" y="${H*.25}" text-anchor="middle" font-family="Arial Black" font-size="${W*.04}" fill="#c2417a">DJ</text><rect y="${gy}" width="${W}" height="${H-gy}" fill="#b08968"/><rect x="${W*.02}" y="${gy-60}" width="${W*.44}" height="60" rx="10" fill="#6b3fa0"/><rect x="${W*.02}" y="${gy-80}" width="${W*.12}" height="30" rx="10" fill="#fff"/>`;
+ case "home":return sky("#f6ecd8","#ead9b8")+win(W*.08,H*.12,W*.22,H*.22)+`<rect x="${W*.4}" y="${H*.1}" width="${W*.2}" height="${H*.14}" fill="#fff" stroke="#c8902a" stroke-width="5"/><circle cx="${W*.5}" cy="${H*.17}" r="${W*.04}" fill="#f2c94c"/><rect x="${W*.68}" y="${H*.16}" width="${W*.26}" height="${H*.18}" rx="4" fill="#1d1d24" stroke="#555" stroke-width="5"/><rect y="${gy}" width="${W}" height="${H-gy}" fill="#c9a77a"/><path d="M${W*.06} ${gy} q${W*.2} -90 ${W*.42} 0" fill="#b5523b" opacity=".9"/>`;
+ case "street":return sky("#a6d8f5","#e9f6fb")+[.02,.22,.46,.7].map((f,i)=>`<rect x="${W*f}" y="${H*(.18+i%2*.06)}" width="${W*.2}" height="${H*(.6-i%2*.06)}" fill="${["#e8c99a","#c9d6e8","#f2c4b0","#d6e8c9"][i]}" stroke="#8a7a6a" stroke-width="4"/>${win(W*f+W*.04,H*(.26+i%2*.06),W*.12,H*.1)}`).join("")+`<rect y="${gy}" width="${W}" height="${H-gy}" fill="#6b6b74"/><path d="M0 ${gy+(H-gy)/2} H${W}" stroke="#f2f2f2" stroke-width="6" stroke-dasharray="30 22"/><rect x="${W*.9}" y="${H*.3}" width="8" height="${gy-H*.3}" fill="#444"/><circle cx="${W*.9+4}" cy="${H*.3}" r="14" fill="#f2c94c"/>`;
+ case "park":return sky("#9fd3f5","#e4f4fb")+`<circle cx="${W*.15}" cy="${H*.14}" r="30" fill="#fff3b0"/><path d="M0 ${H*.6} Q${W*.3} ${H*.46} ${W*.6} ${H*.58} T${W} ${H*.54} V${gy} H0Z" fill="#a8d88a"/><rect y="${gy}" width="${W}" height="${H-gy}" fill="#7fb85a"/>`+tree(W*.18,gy,1.2)+tree(W*.82,gy,1)+`<rect x="${W*.52}" y="${gy-40}" width="${W*.3}" height="12" fill="#8a5a2b"/><rect x="${W*.54}" y="${gy-28}" width="8" height="28" fill="#5a3a1a"/><rect x="${W*.78}" y="${gy-28}" width="8" height="28" fill="#5a3a1a"/>`;
+ case "city":return sky("#1f2438","#3b3f66")+`<circle cx="${W*.8}" cy="${H*.12}" r="26" fill="#f4efd0"/>`+[0,1,2,3,4,5].map(i=>{const x=W*i/6,h=H*(.3+((i*37)%5)*.06);return `<rect x="${x}" y="${gy-h}" width="${W/6-6}" height="${h}" fill="${["#2c3150","#343a5e","#272b46"][i%3]}"/>`+[0,1,2,3,4].map(j=>`<rect x="${x+10+(j%2)*24}" y="${gy-h+16+j*30}" width="14" height="14" fill="${(i+j)%3?"#f2c94c":"#444a70"}"/>`).join("")}).join("")+`<rect y="${gy}" width="${W}" height="${H-gy}" fill="#2a2a33"/>`;
+ case "village":return sky("#ffd8a8","#fff1d6")+`<circle cx="${W*.5}" cy="${H*.3}" r="40" fill="#ffb347" opacity=".9"/><path d="M0 ${H*.56} Q${W*.25} ${H*.44} ${W*.5} ${H*.56} T${W} ${H*.52} V${gy} H0Z" fill="#9cc97a"/><rect y="${gy}" width="${W}" height="${H-gy}" fill="#c99a6a"/><rect x="${W*.06}" y="${H*.46}" width="${W*.26}" height="${gy-H*.46}" fill="#e9d2a8" stroke="#8a6a3a" stroke-width="4"/><path d="M${W*.02} ${H*.48} L${W*.19} ${H*.34} L${W*.36} ${H*.48}Z" fill="#a8823a" stroke="#6a4a1a" stroke-width="4"/>`+tree(W*.88,gy,1.1).replace(/#3f8a4a/g,"#2f7a3a");
+ case "fantasy":return sky("#3b2b6b","#c07ad8")+[...Array(14)].map((_,i)=>`<circle cx="${(i*73)%W}" cy="${(i*41)%(H*.5)}" r="${2+i%3}" fill="#fff" opacity=".8"/>`).join("")+`<path d="M${W*.1} ${gy} L${W*.22} ${H*.3} L${W*.34} ${gy}Z M${W*.62} ${gy} L${W*.78} ${H*.22} L${W*.94} ${gy}Z" fill="#5a3a8a" stroke="#2b1a4a" stroke-width="5"/><circle cx="${W*.5}" cy="${H*.22}" r="30" fill="#f7e9ff" opacity=".9"/><rect y="${gy}" width="${W}" height="${H-gy}" fill="#4a2b6b"/>`;
+ }return sky("#dfe5f5","#eef2fb")}
+function tree(x,gy,s){return `<rect x="${x-8*s}" y="${gy-90*s}" width="${16*s}" height="${90*s}" fill="#7a5a3a"/><circle cx="${x}" cy="${gy-110*s}" r="${46*s}" fill="#3f8a4a"/><circle cx="${x-30*s}" cy="${gy-90*s}" r="${30*s}" fill="#4f9a5a"/><circle cx="${x+30*s}" cy="${gy-92*s}" r="${30*s}" fill="#4f9a5a"/>`}
+
+/* side-view head (facing right), in the same 400x500 space as the front head */
+function headSide(p,ex){const S=p.skin,Sd=sh(S,-.16),Sdd=sh(S,-.3),H=p.hairColor,Hd=sh(H,-.35),Hl=sh(H,.25),has=x=>(p.extras||[]).includes(x);const bald=p.hair==="bald";
+ let o="";
+ const back={long:`M150 120 Q90 200 120 380 L210 380 Q190 300 200 230Z`,ponytail:`M150 130 Q90 150 96 260 Q100 320 130 350 Q118 270 160 200Z`,bun:`M130 110 m-34 0 a34 30 0 1 0 68 0 a34 30 0 1 0 -68 0`,curly:`M120 210 Q90 190 104 160 Q90 120 128 108Z`}[p.hair]||"";
+ if(back&&!bald)o+=`<path d="${back}" fill="${H}" stroke="${Hd}" stroke-width="3"/>`;
+ // head base
+ o+=`<path d="M200 90 Q282 92 286 160 L288 184 L304 220 Q300 226 290 228 L292 242 Q284 246 290 254 Q286 262 280 268 Q270 300 236 304 Q200 300 186 270 Q142 250 128 200 Q118 120 200 90Z" fill="${S}" stroke="${Sdd}" stroke-width="3" stroke-linejoin="round"/>`;
+ o+=`<ellipse cx="188" cy="206" rx="15" ry="22" fill="${S}" stroke="${Sdd}" stroke-width="2.5"/><path d="M184 196 Q194 206 186 218" fill="none" stroke="${Sd}" stroke-width="3"/>`;
+ if(has("earrings"))o+=`<circle cx="188" cy="232" r="6" fill="#f2c94c" stroke="#a8801f" stroke-width="2"/>`;
+ // eye
+ const em=ex.e;
+ if(em==="closed"||em==="sleep")o+=`<path d="M252 202 Q264 ${em==="closed"?192:210} 276 202" fill="none" stroke="#1d1416" stroke-width="5" stroke-linecap="round"/>`;
+ else o+=`<path d="M258 186 Q276 190 276 204 Q274 222 260 222 Q254 206 258 186Z" fill="#fff" stroke="#2a1d1f" stroke-width="2"/><ellipse cx="${em==="shock"?268:266}" cy="206" rx="${em==="shock"?4:7}" ry="${em==="shock"?6:13}" fill="${p.eyeColor}"/><ellipse cx="268" cy="198" rx="3" ry="4" fill="#fff"/><path d="M252 ${em==="half"?194:184} Q270 178 282 194" fill="none" stroke="#1d1416" stroke-width="6" stroke-linecap="round"/>`;
+ const by={angry:178,serious:176,raised:156,worried:166,up:160}[ex.b]||168;
+ o+=`<path d="M248 ${by} Q264 ${by-6} 280 ${by+ (ex.b==="angry"?8:0)}" fill="none" stroke="${bald?"#8a8a8a":Hd}" stroke-width="6" stroke-linecap="round"/>`;
+ // mouth
+ const m=ex.m;o+=({smile:`<path d="M272 256 Q282 262 288 254" fill="none" stroke="#5a2a2a" stroke-width="3.5" stroke-linecap="round"/>`,grin:`<path d="M270 254 Q282 266 290 252" fill="#fff" stroke="#4a1418" stroke-width="3"/>`,laugh:`<path d="M268 250 L292 250 Q290 272 276 272 Q268 266 268 250Z" fill="#7a2230" stroke="#4a1418" stroke-width="3"/>`,shout:`<path d="M268 248 L292 248 L288 270 L272 270Z" fill="#7a2230" stroke="#4a1418" stroke-width="3"/>`,o:`<ellipse cx="282" cy="258" rx="6" ry="9" fill="#7a2230" stroke="#4a1418" stroke-width="2.5"/>`,evil:`<path d="M266 252 Q282 262 292 248 Q288 268 276 268Z" fill="#fff" stroke="#4a1418" stroke-width="3"/>`,cry:`<path d="M270 262 Q280 250 290 262Z" fill="#7a2230" stroke="#4a1418" stroke-width="3"/>`,frown:`<path d="M272 262 Q280 254 288 262" fill="none" stroke="#5a2a2a" stroke-width="3.5" stroke-linecap="round"/>`}[m])||`<path d="M274 258 L288 256" stroke="#5a2a2a" stroke-width="3.5" stroke-linecap="round"/>`;
+ if(has("mustache"))o+=`<path d="M266 240 Q282 234 296 242 Q284 248 266 246Z" fill="${bald?"#7d7d7d":Hd}"/>`;
+ if(has("beard"))o+=`<path d="M200 250 Q214 300 246 304 Q276 300 284 270 Q262 286 238 286 Q214 280 200 250Z" fill="${bald?"#7d7d7d":Hd}"/>`;
+ if(has("bindi"))o+=`<circle cx="284" cy="166" r="4" fill="#d8202f"/>`;
+ if(ex.fx.includes("blush")||has("blush"))o+=`<ellipse cx="256" cy="236" rx="14" ry="7" fill="#ff7a8a" opacity=".4"/>`;
+ if(ex.fx.includes("tears")||ex.fx.includes("tear"))o+=`<path d="M266 222 Q262 250 268 290 L276 290 Q270 250 272 222Z" fill="#8fd3ff" stroke="#3a8fc4" stroke-width="2"/>`;
+ if(ex.fx.includes("sweat")||ex.fx.includes("sweat2"))o+=`<path d="M232 140 Q244 160 240 170 Q232 180 224 170 Q220 160 232 140Z" fill="#8fd3ff" stroke="#3a8fc4" stroke-width="2.5"/>`;
+ // hair (side)
+ const hs={spiky:`M120 210 L96 190 L118 172 L92 140 L126 136 L118 100 L156 108 L162 70 L196 92 L222 64 L234 98 L270 86 L262 118 L292 128 L270 150 L282 170 L258 160 Q220 130 180 150 Q160 180 168 212 Z`,
+  side:`M122 214 Q100 120 170 92 Q250 74 290 130 Q296 160 280 176 Q260 140 230 136 Q200 150 176 170 Q160 200 168 222Z`,
+  messy:`M120 212 L98 186 L114 170 L100 136 L132 130 L132 98 L168 104 L184 72 L212 94 L246 78 L252 110 L286 112 L276 140 L290 160 L262 150 Q220 136 186 154 Q164 186 170 214Z`,
+  short:`M128 212 Q108 120 180 94 Q252 80 286 136 Q270 130 250 132 Q220 128 196 144 Q170 170 172 214Z`,
+  long:`M124 220 Q100 110 186 92 Q262 82 288 140 Q272 132 252 136 Q234 160 214 150 Q186 160 178 220Z`,
+  ponytail:`M126 214 Q106 116 186 94 Q256 84 286 138 Q266 132 246 134 Q216 136 194 152 Q174 176 174 214Z`,
+  bun:`M126 214 Q106 116 186 96 Q256 86 286 138 Q266 132 246 134 Q216 136 194 152 Q174 176 174 214Z`,
+  curly:`M118 214 Q98 186 112 160 Q100 126 132 116 Q138 84 172 88 Q196 64 226 80 Q262 72 274 104 Q300 118 286 148 Q264 140 240 146 Q206 150 186 172 Q168 196 174 216Z`,
+  mohawk:`M150 130 Q200 120 262 132 L256 148 Q200 140 156 148Z M176 132 L168 50 L200 74 L214 40 L232 80 L250 60 L246 132Z`}[p.hair];
+ if(bald)o+=`<path d="M130 200 Q128 170 140 150" fill="none" stroke="#9a9a9a" stroke-width="12" stroke-linecap="round"/><ellipse cx="224" cy="104" rx="26" ry="8" fill="#fff" opacity=".45" transform="rotate(10 224 104)"/>`;
+ else if(hs)o+=`<path d="${hs}" fill="${H}" stroke="${Hd}" stroke-width="3" stroke-linejoin="round"/><path d="M170 112 Q206 100 238 106" fill="none" stroke="${Hl}" stroke-width="5" opacity=".5" stroke-linecap="round"/>`;
+ if(has("headphones"))o+=`<path d="M190 200 Q170 80 260 70" fill="none" stroke="#1d1d24" stroke-width="12" stroke-linecap="round"/><rect x="172" y="180" width="32" height="50" rx="12" fill="${p.accent}" stroke="#1d1d24" stroke-width="4"/>`;
+ if(has("cap"))o+=`<path d="M124 150 Q130 76 210 76 Q280 84 284 140 Q200 128 124 150Z" fill="${p.accent}" stroke="${sh(p.accent,-.4)}" stroke-width="3"/><path d="M270 136 Q310 140 330 152 Q300 156 268 150Z" fill="${sh(p.accent,-.25)}"/>`;
+ if(has("sunglasses"))o+=`<path d="M246 186 L292 186 L290 206 Q282 220 262 218 Q248 212 246 196Z" fill="#14141c"/><path d="M246 190 L196 196" stroke="#05050a" stroke-width="4"/>`;
+ if(has("glasses"))o+=`<rect x="248" y="182" width="40" height="36" rx="10" fill="#fff" fill-opacity=".12" stroke="#2a2a2a" stroke-width="4"/><path d="M248 196 L198 200" stroke="#2a2a2a" stroke-width="4"/>`;
+ return `<g transform="translate(200 200) scale(1.14) translate(-200 -200)">${o}</g>`}
+function headBack(p,turn){const H=p.hairColor,Hd=sh(H,-.35),Hl=sh(H,.25),S=p.skin,Sdd=sh(S,-.3),has=x=>(p.extras||[]).includes(x);const bald=p.hair==="bald";
+ let o=`<ellipse cx="${121+(turn||0)}" cy="196" rx="13" ry="20" fill="${S}" stroke="${Sdd}" stroke-width="2.5"/><ellipse cx="${279+(turn||0)}" cy="196" rx="13" ry="20" fill="${S}" stroke="${Sdd}" stroke-width="2.5"/>`;
+ o+=`<path d="M122 190 Q118 92 200 86 Q282 92 278 190 Q276 260 236 290 Q200 300 164 290 Q124 260 122 190Z" fill="${S}" stroke="${Sdd}" stroke-width="3"/>`;
+ if(bald)o+=`<path d="M126 200 Q128 230 160 270 Q200 280 240 270 Q272 230 274 200 Q240 240 200 240 Q160 240 126 200Z" fill="#9a9a9a"/><ellipse cx="190" cy="120" rx="30" ry="10" fill="#fff" opacity=".4"/>`;
+ else{const base={spiky:`M112 230 L92 190 L112 176 L92 130 L128 124 L124 80 L164 92 L196 48 L228 90 L268 70 L270 116 L306 126 L286 168 L308 192 L288 232 Q200 260 112 230Z`,long:`M110 210 Q96 100 200 84 Q304 100 290 210 Q300 300 316 384 L84 384 Q100 300 110 210Z`,curly:`M110 240 Q88 200 106 170 Q90 130 120 110 Q126 70 170 72 Q200 46 232 70 Q276 70 282 110 Q310 130 294 170 Q312 204 290 240 Q200 270 110 240Z`,mohawk:`M150 236 Q140 160 150 60 L170 40 L200 60 L230 40 L250 60 Q260 160 250 236Z`}[p.hair]||`M112 236 Q100 110 200 86 Q300 110 288 236 Q200 262 112 236Z`;
+  o+=`<path d="${base}" fill="${H}" stroke="${Hd}" stroke-width="3" stroke-linejoin="round"/><path d="M160 110 Q200 96 236 108" fill="none" stroke="${Hl}" stroke-width="6" opacity=".45" stroke-linecap="round"/>`;
+  if(p.hair==="ponytail")o+=`<path d="M186 220 Q170 300 200 360 Q230 300 214 220Z" fill="${H}" stroke="${Hd}" stroke-width="3"/><rect x="188" y="210" width="24" height="12" rx="5" fill="${p.accent}"/>`;
+  if(p.hair==="bun")o+=`<circle cx="200" cy="128" r="40" fill="${H}" stroke="${Hd}" stroke-width="3"/><path d="M170 120 Q200 100 230 122" fill="none" stroke="${Hl}" stroke-width="4" opacity=".5"/>`}
+ if(has("headphones"))o+=`<path d="M108 196 Q104 70 200 64 Q296 70 292 196" fill="none" stroke="#1d1d24" stroke-width="12" stroke-linecap="round"/>`;
+ if(has("cap"))o+=`<path d="M112 150 Q114 74 200 70 Q286 74 288 150 Q200 128 112 150Z" fill="${p.accent}" stroke="${sh(p.accent,-.4)}" stroke-width="3"/>`;
+ return `<g transform="translate(200 200) scale(1.14) translate(-200 -200)">${o}</g>`}
+
+/* body: returns svg group drawn in a 400x800 frame, feet near y=760 */
+function body(p,view,poseK,expr){const P=POSES[poseK]||POSES.stand,ex=A.EXDEF(expr||p.expr);
+ const fem=p.gender==="girl"||p.gender==="woman",old=p.age==="old";
+ const bt=p.build||"average",wide={slim:.88,average:1,broad:1.14,chubby:1.2}[bt]||1,tall={short:.9,average:1,tall:1.08}[p.height]||1;
+ const S=p.skin,Sdd=sh(S,-.3),O=p.outfitColor,Od=sh(O,-.3),Ol=sh(O,.18),Ac=p.accent,Bt=p.bottomColor||(p.outfit==="kurta"?"#efeadc":"#2e3a5c"),Btd=sh(Bt,-.3),Sh=p.shoeColor||"#1d1d24";
+ const longSleeve=["shirt","hoodie","jacket","kurta","uniform"].includes(p.outfit),dress=p.outfit==="saree";
+ const side=view==="side"||view==="side2",back=view==="back"||view==="threeback",three=view==="three"||view==="threeback";
+ let y0=(P.y||0)+(P.sit?110:0);const cx=200;
+ const neckY=228,shY=250+y0*0,lean=P.lean||0;
+ let o="";
+ const lw={arm:fem?20:24,leg:fem?26:30}; lw.arm*=wide;lw.leg*=wide;
+ const limb=(x,y,a1,a2,l1,l2,cu,cl,w,end)=>{const [ex1,ey1]=pt(x,y,l1,a1),[ex2,ey2]=pt(ex1,ey1,l2,a2);
+  let g=`<path d="M${x} ${y} L${ex1} ${ey1}" stroke="${sh(cu,-.35)}" stroke-width="${w+5}" stroke-linecap="round"/><path d="M${ex1} ${ey1} L${ex2} ${ey2}" stroke="${sh(cl,-.35)}" stroke-width="${w+3}" stroke-linecap="round"/><path d="M${x} ${y} L${ex1} ${ey1}" stroke="${cu}" stroke-width="${w}" stroke-linecap="round"/><path d="M${ex1} ${ey1} L${ex2} ${ey2}" stroke="${cl}" stroke-width="${w-2}" stroke-linecap="round"/>`;
+  if(end==="hand")g+=`<circle cx="${ex2}" cy="${ey2}" r="${w*.62}" fill="${S}" stroke="${Sdd}" stroke-width="2.5"/>`;
+  if(end==="fist")g+=`<circle cx="${ex2}" cy="${ey2}" r="${w*.72}" fill="${S}" stroke="${Sdd}" stroke-width="3"/><path d="M${ex2-6} ${ey2-4} h12 M${ex2-6} ${ey2+2} h12" stroke="${Sdd}" stroke-width="2"/>`;
+  if(end==="shoe")g+=`<ellipse cx="${ex2+(side?10:0)}" cy="${ey2+6}" rx="${w*.8+(side?8:0)}" ry="${w*.42}" fill="${Sh}" stroke="${sh(Sh,-.4)}" stroke-width="2.5"/><path d="M${ex2-w*.6} ${ey2+6} h${w*1.2}" stroke="#fff" stroke-width="2" opacity=".5"/>`;
+  return {g,end:[ex2,ey2]}};
+ const X=v=>three?cx+(v-cx)*.8+(view==="threeback"?-8:8):v;
+ const armC=[longSleeve?O:O,longSleeve?O:S],legLen=[128*tall,124*tall],armLen=[86,80];
+ const shW=(fem?58:72)*wide,hpW=(fem?42:38)*wide,hipY=420+y0;
+ const sitBench=P.sit?`<rect x="${side?150:90}" y="${hipY+6}" width="${side?140:220}" height="22" rx="6" fill="#8a5a2b" stroke="#5a3a1a" stroke-width="3"/><rect x="${side?160:100}" y="${hipY+28}" width="12" height="${760-hipY-28}" fill="#5a3a1a"/><rect x="${side?268:288}" y="${hipY+28}" width="12" height="${760-hipY-28}" fill="#5a3a1a"/>`:"";
+ if(!side){
+  const sL=[X(cx-shW),shY+y0],sR=[X(cx+shW),shY+y0],hL=[X(cx-hpW),hipY],hR=[X(cx+hpW),hipY];
+  o+=sitBench;
+  // legs
+  const legs=[["ll",hL,-1],["rl",hR,1]].map(([k,h,sg])=>{let a=P[k];let l1=legLen[0],l2=legLen[1];
+   if(P.sit){l1*=.42}
+   return limb(h[0],h[1],a[0],a[1],l1,l2,dress?S:Bt,dress?S:Bt,lw.leg,"shoe")});
+  if(!dress)legs.forEach(l=>o+=l.g);
+  // torso
+  const wY=hipY-70,ww=shW*.78;
+  const torso=`M${sL[0]} ${sL[1]} Q${X(cx)} ${shY+y0-18} ${sR[0]} ${sR[1]} Q${sR[0]+6} ${wY-60} ${X(cx+ww)} ${wY} L${hR[0]+8} ${hipY+(p.outfit==="kurta"?80:14)} L${hL[0]-8} ${hipY+(p.outfit==="kurta"?80:14)} L${X(cx-ww)} ${wY} Q${sL[0]-6} ${wY-60} ${sL[0]} ${sL[1]}Z`;
+  if(dress){o+=`<path d="M${X(cx-ww)} ${wY} L${X(cx+ww)} ${wY} L${X(cx+ww*1.5)} ${P.sit?hipY+90:745} L${X(cx-ww*1.5)} ${P.sit?hipY+90:745}Z" fill="${O}" stroke="${Od}" stroke-width="3"/><path d="M${X(cx-10)} ${wY+10} L${X(cx-26)} ${P.sit?hipY+90:745} M${X(cx+6)} ${wY+10} L${X(cx+2)} ${P.sit?hipY+90:745} M${X(cx+20)} ${wY+10} L${X(cx+30)} ${P.sit?hipY+90:745}" stroke="${Od}" stroke-width="2.5"/><path d="M${X(cx-ww*1.5)} ${(P.sit?hipY+90:745)-10} L${X(cx+ww*1.5)} ${(P.sit?hipY+90:745)-10}" stroke="${Ac}" stroke-width="10"/>`;legs.forEach(l=>{o+=`<ellipse cx="${l.end[0]}" cy="${l.end[1]+6}" rx="16" ry="8" fill="${Sh}"/>`})}
+  o+=`<path d="${torso}" fill="${O}" stroke="${Od}" stroke-width="3" stroke-linejoin="round"/>`;
+  if(!back)o+=outfitFront(p,X,cx,shY+y0,wY,hipY,ww,O,Od,Ol,Ac);
+  else o+=`<path d="M${X(cx)} ${shY+y0+20} L${X(cx)} ${hipY}" stroke="${Od}" stroke-width="2" opacity=".5"/>`+(p.outfit==="hoodie"?`<path d="M${X(cx-40)} ${shY+y0-6} Q${X(cx)} ${shY+y0+60} ${X(cx+40)} ${shY+y0-6}" fill="${Od}" stroke="${sh(O,-.45)}" stroke-width="3"/>`:"")+(dress?`<path d="M${sR[0]} ${sR[1]} Q${X(cx+20)} ${wY} ${X(cx-30)} ${hipY+40}" stroke="${Ac}" stroke-width="30" fill="none" opacity=".9"/>`:"");
+  if(p.extras&&p.extras.includes("goldChain")&&!back)o+=`<path d="M${X(cx-22)} ${neckY+12+y0} Q${X(cx)} ${neckY+62+y0} ${X(cx+22)} ${neckY+12+y0}" fill="none" stroke="#e6b83a" stroke-width="4" stroke-dasharray="6 3"/><circle cx="${X(cx)}" cy="${neckY+56+y0}" r="7" fill="#f2c94c" stroke="#a8801f" stroke-width="2"/>`;
+  if(p.extras&&p.extras.includes("towel"))o+=`<path d="M${sL[0]+4} ${sL[1]-6} Q${sL[0]-10} ${sL[1]+60} ${sL[0]} ${sL[1]+130} L${sL[0]+26} ${sL[1]+130} Q${sL[0]+20} ${sL[1]+60} ${sL[0]+30} ${sL[1]-2}Z" fill="#fff" stroke="#c9c9c9" stroke-width="2"/>`;
+  // arms
+  [["la",sL],["ra",sR]].forEach(([k,s])=>{let a=P[k];const fistPose=P.fx==="fight";let end=P.pockets===true||(P.pockets==="l"&&k==="la")?"none":fistPose?"fist":"hand";
+   const L=limb(s[0],s[1],a[0]*(back?-1:1)*(back?-1:1),a[1],armLen[0],armLen[1],armC[0],armC[1],lw.arm,end);o+=L.g;
+   if(P.prop==="book"&&k==="ra")o+=`<g transform="translate(${X(cx)} ${L.end[1]-10})"><path d="M-46 -6 L0 4 L46 -6 L46 34 L0 44 L-46 34Z" fill="#fff" stroke="#3b3b4a" stroke-width="3"/><path d="M0 4 L0 44" stroke="#3b3b4a" stroke-width="3"/><path d="M-38 6 h28 M-38 14 h28 M10 6 h28 M10 14 h28" stroke="#9aa" stroke-width="2"/><rect x="-50" y="34" width="100" height="10" fill="${Ac}"/></g>`;
+   if(P.fx==="talk"&&k==="ra")o+=`<g><path d="M${L.end[0]+20} ${L.end[1]-120} h120 a16 16 0 0 1 16 16 v40 a16 16 0 0 1 -16 16 h-80 l-24 20 l4 -20 h-20 a16 16 0 0 1 -16 -16 v-40 a16 16 0 0 1 16 -16z" fill="#fff" stroke="#1d1d24" stroke-width="3" transform="translate(-110 0)"/><text x="${L.end[0]-20}" y="${L.end[1]-82}" font-family="Arial Black" font-size="24" text-anchor="middle" fill="#1d1d24">…!</text></g>`});
+ }else{
+  // side view (facing right; side2 mirrored by caller)
+  const s=P.s,sx=cx-(back?0:4),sY=shY+y0,hX=cx-2;
+  o+=sitBench;
+  const farLeg=limb(hX-6,hipY,s.m[0]*-1,s.m[1]*-1,P.sit?legLen[0]*.95:legLen[0],legLen[1],dress?S:sh(Bt,-.15),dress?S:sh(Bt,-.15),lw.leg,"shoe");
+  const nearLeg=limb(hX+6,hipY,s.l[0]*-1,s.l[1]*-1,P.sit?legLen[0]*.95:legLen[0],legLen[1],dress?S:Bt,dress?S:Bt,lw.leg,"shoe");
+  // in side view positive = forward (+x): convert angle (0 down, + right) -> forward means negative rotation sign in pt? pt uses sin(a): + => +x, so forward = +a
+  const fl=limb(hX-6,hipY,s.m[0],s.m[1],P.sit?legLen[0]*.95:legLen[0],legLen[1],dress?S:sh(Bt,-.15),dress?S:sh(Bt,-.15),lw.leg,"shoe"),nl=limb(hX+6,hipY,s.l[0],s.l[1],P.sit?legLen[0]*.95:legLen[0],legLen[1],dress?S:Bt,dress?S:Bt,lw.leg,"shoe");
+  const farArm=limb(sx-4,sY+6,s.b[0],s.b[1],armLen[0],armLen[1],sh(armC[0],-.15),sh(armC[1],-.12),lw.arm,P.fx==="fight"?"fist":P.pockets?"none":"hand");
+  o+=farArm.g;
+  if(!dress){o+=fl.g;o+=nl.g}
+  const tw=(fem?44:52)*wide;
+  o+=`<path d="M${sx-tw*.55} ${sY} Q${sx} ${sY-16} ${sx+tw*.6} ${sY+4} Q${sx+tw*.72} ${sY+80} ${sx+tw*.5} ${hipY-60} L${sx+tw*.55} ${hipY+(p.outfit==="kurta"?80:14)} L${sx-tw*.6} ${hipY+(p.outfit==="kurta"?80:14)} L${sx-tw*.5} ${hipY-60} Q${sx-tw*.72} ${sY+60} ${sx-tw*.55} ${sY}Z" fill="${O}" stroke="${Od}" stroke-width="3" transform="rotate(${lean} ${sx} ${hipY})"/>`;
+  if(dress){o+=`<path d="M${sx-tw*.6} ${hipY-60} L${sx+tw*.55} ${hipY-60} L${sx+tw*1.1} ${P.sit?hipY+90:745} L${sx-tw} ${P.sit?hipY+90:745}Z" fill="${O}" stroke="${Od}" stroke-width="3"/><path d="M${sx-tw} ${(P.sit?hipY+90:745)-10} L${sx+tw*1.1} ${(P.sit?hipY+90:745)-10}" stroke="${Ac}" stroke-width="10"/>`+[fl,nl].map(l=>`<ellipse cx="${l.end[0]+8}" cy="${l.end[1]+6}" rx="18" ry="8" fill="${Sh}"/>`).join("")}
+  if(p.outfit==="hoodie")o+=`<path d="M${sx-tw*.7} ${sY-4} Q${sx-tw*.9} ${sY+40} ${sx-tw*.4} ${sY+44} Q${sx-tw*.2} ${sY+10} ${sx-tw*.3} ${sY-8}Z" fill="${Od}"/>`;
+  if(p.outfit==="jacket"||p.outfit==="shirt"||p.outfit==="uniform")o+=`<path d="M${sx+tw*.5} ${sY+4} L${sx+tw*.66} ${sY+40}" stroke="${Ol}" stroke-width="8"/>`;
+  const nearArm=limb(sx+4,sY+8,s.a[0],s.a[1],armLen[0],armLen[1],armC[0],armC[1],lw.arm,P.fx==="fight"?"fist":P.pockets===true?"none":"hand");
+  o+=nearArm.g;
+  if(P.prop==="book")o+=`<rect x="${nearArm.end[0]-6}" y="${nearArm.end[1]-40}" width="12" height="54" fill="#fff" stroke="#3b3b4a" stroke-width="3" transform="rotate(-20 ${nearArm.end[0]} ${nearArm.end[1]})"/>`;
+ }
+ // neck
+ const nx=side?cx+8:X(cx);
+ o=`<path d="M${nx-16} ${neckY-20+y0} L${nx-16} ${shY+y0} Q${nx} ${shY+y0+10} ${nx+16} ${shY+y0} L${nx+16} ${neckY-20+y0}Z" fill="${S}" stroke="${Sdd}" stroke-width="2.5"/>`+o;
+ return {g:o,y0,headX:side?cx+8:X(cx),turn:three?(view==="threeback"?-24:24):0}}
+function outfitFront(p,X,cx,shY,wY,hipY,ww,O,Od,Ol,Ac){const c=X(cx);
+ switch(p.outfit){
+ case "tshirt":return `<path d="M${c-22} ${shY-8} Q${c} ${shY+18} ${c+22} ${shY-8}" fill="none" stroke="${Ac}" stroke-width="4"/><rect x="${c-26}" y="${shY+50}" width="52" height="40" rx="6" fill="${Ac}"/><text x="${c}" y="${shY+80}" text-anchor="middle" font-family="Arial Black" font-size="22" fill="${O}">DJ</text>`;
+ case "shirt":return `<path d="M${c-22} ${shY-10} L${c} ${shY+20} L${c+22} ${shY-10} L${c+30} ${shY} L${c+8} ${shY+28} L${c} ${shY+20} L${c-8} ${shY+28} L${c-30} ${shY}Z" fill="${Ol}" stroke="${Od}" stroke-width="2.5"/><path d="M${c} ${shY+20} L${c} ${hipY+14}" stroke="${Od}" stroke-width="3"/>${[50,90,130].map(d=>`<circle cx="${c+6}" cy="${shY+d}" r="3.5" fill="${Ac}"/>`).join("")}<rect x="${c-ww+14}" y="${hipY+2}" width="${ww*2-28}" height="12" fill="#3a2a1a"/>`;
+ case "hoodie":return `<path d="M${c-44} ${shY-4} Q${c} ${shY-30} ${c+44} ${shY-4} Q${c+30} ${shY+20} ${c} ${shY+22} Q${c-30} ${shY+20} ${c-44} ${shY-4}Z" fill="${Od}"/><path d="M${c-10} ${shY+20} L${c-12} ${shY+70} M${c+10} ${shY+20} L${c+12} ${shY+70}" stroke="${Ac}" stroke-width="4" stroke-linecap="round"/><path d="M${c-40} ${wY+10} Q${c} ${wY} ${c+40} ${wY+10} L${c+40} ${wY+50} L${c-40} ${wY+50}Z" fill="${Od}" opacity=".6"/>`;
+ case "jacket":return `<path d="M${c-20} ${shY-6} L${c} ${shY+40} L${c+20} ${shY-6} L${c+14} ${hipY+14} L${c-14} ${hipY+14}Z" fill="${Ac}"/><path d="M${c-20} ${shY-6} L${c-36} ${shY+30} L${c-12} ${shY+50} M${c+20} ${shY-6} L${c+36} ${shY+30} L${c+12} ${shY+50}" fill="none" stroke="${Ol}" stroke-width="6"/><path d="M${c-14} ${shY+40} L${c-14} ${hipY+14} M${c+14} ${shY+40} L${c+14} ${hipY+14}" stroke="${Od}" stroke-width="4"/>`;
+ case "kurta":return `<path d="M${c-16} ${shY-6} Q${c} ${shY+2} ${c+16} ${shY-6}" stroke="${Ac}" stroke-width="7" fill="none"/><path d="M${c} ${shY} L${c} ${shY+80}" stroke="${Ac}" stroke-width="5"/>${[20,40,60].map(d=>`<circle cx="${c}" cy="${shY+d}" r="3" fill="${Od}"/>`).join("")}<path d="M${c-ww-6} ${hipY+60} Q${c} ${hipY+50} ${c+ww+6} ${hipY+60}" stroke="${Ac}" stroke-width="4" stroke-dasharray="8 5" fill="none"/>`;
+ case "saree":return `<path d="M${c+30} ${shY-8} Q${c+10} ${wY-20} ${c-40} ${wY+30} L${c-20} ${wY+44} Q${c+30} ${wY} ${c+46} ${shY}Z" fill="${Ac}"/>`;
+ case "vest":return `<path d="M${c-22} ${shY-6} Q${c} ${shY+20} ${c+22} ${shY-6} L${c+20} ${hipY} L${c-20} ${hipY}Z" fill="#f2efe8"/><path d="M${c-22} ${shY-6} L${c-4} ${hipY} M${c+22} ${shY-6} L${c+4} ${hipY}" stroke="${Od}" stroke-width="10"/>`;
+ case "uniform":return `<path d="M${c-22} ${shY-10} L${c} ${shY+18} L${c+22} ${shY-10} L${c+30} ${shY} L${c+8} ${shY+26} L${c} ${shY+18} L${c-8} ${shY+26} L${c-30} ${shY}Z" fill="#f4f4f4" stroke="#bdbdbd" stroke-width="2"/><path d="M${c-6} ${shY+18} L${c+6} ${shY+18} L${c+10} ${shY+100} L${c} ${shY+112} L${c-10} ${shY+100}Z" fill="${Ac}"/><rect x="${c-ww+14}" y="${hipY+2}" width="${ww*2-28}" height="12" fill="#2a2a2a"/>`;
+ }return ""}
+function addFx(P,hx){if(P.fx==="speed")return `<g stroke="#9aa" stroke-width="5" stroke-linecap="round" opacity=".7"><path d="M40 330 h70 M24 400 h90 M50 470 h60"/></g>`;
+ if(P.fx==="jump")return `<ellipse cx="200" cy="770" rx="70" ry="12" fill="#000" opacity=".15"/><g stroke="#c8902a" stroke-width="4" stroke-linecap="round"><path d="M120 740 l-20 20 M280 740 l20 20 M200 748 v24"/></g>`;
+ if(P.fx==="think")return `<text x="${hx+90}" y="90" font-family="Arial Black" font-size="64" fill="#3b82c4" stroke="#fff" stroke-width="3" paint-order="stroke">?</text>`;
+ if(P.fx==="fight")return `<g fill="#f2c94c" stroke="#c8902a" stroke-width="2"><path d="M60 300 l10 24 l24 6 l-24 6 l-10 24 l-10 -24 l-24 -6 l24 -6Z"/><path d="M340 280 l8 18 l18 5 l-18 5 l-8 18 l-8 -18 l-18 -5 l18 -5Z"/></g>`;return ""}
+/* full character in a W x H frame */
+function full(p0,o){o=o||{};const p=Object.assign({},A.DEF,p0||{});const view=o.view||"front",poseK=o.pose||"stand",P=POSES[poseK]||POSES.stand,exK=o.expr||p.expr;
+ let v=view;if(P.look&&view==="front")v="back";
+ const b=body(p,v==="side2"?"side":v,poseK,exK),ex=A.EXDEF(exK);
+ const side=v==="side"||v==="side2",back=v==="back"||v==="threeback";
+ // head
+ let head;if(P.look&&back)head=`<g transform="translate(-14 0)">${headSide(p,ex)}</g>`;else if(side)head=headSide(p,ex);else if(back)head=headBack(p,b.turn?-14:0);else head=A.draw(p,exK,{headOnly:true,turn:b.turn});
+ const defs=(head.match(/<defs>[\s\S]*?<\/defs>/)||[""])[0];head=head.replace(defs,"");
+ const hs=.56,hx=b.headX,hy=0+b.y0+(P.sit?0:0);
+ const headG=`<g transform="translate(${hx-200*hs} ${hy+22}) scale(${hs})">${head}</g>`;
+ // back hair for front: long hair behind body handled inside head (drawn first) - fine
+ let inner=`${defs}<g transform="rotate(${(P.lean||0)*(side?1:0)} 200 ${420+b.y0})">${back?headG+b.g:b.g+headG}</g>`;
+ if(back&&!(P.look))inner=`${defs}${b.g}${headG}`;
+ inner+=addFx(P,hx);
+ if(v==="side2")inner=`<g transform="translate(400 0) scale(-1 1)">${inner}</g>`;
+ return inner}
+function frame(inner,o){o=o||{};const W=o.w||400,H=o.h||800;const bg=bgArt(o.bg||"plain",W,H,o.base);
+ const label=o.label?`<rect x="0" y="${H-46}" width="${W}" height="46" fill="rgba(20,22,40,.72)"/><text x="${W/2}" y="${H-15}" font-family="Arial,sans-serif" font-size="24" font-weight="700" text-anchor="middle" fill="#fff">${String(o.label).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]))}</text>`:"";
+ return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}">${bg}${inner}${label}</svg>`}
+function drawFull(p,o){o=o||{};return frame(`<g transform="translate(0 10)">${full(p,o)}</g>`,Object.assign({bg:o.bg||(p&&p.bgScene)||"plain",base:p&&p.bg},o))}
+function group(chars,o){o=o||{};const n=chars.length,W=Math.max(800,n*330),H=800;let inner="";
+ chars.forEach((c,i)=>{const x=(W/(n+1))*(i+1)-200*.95;inner+=`<g transform="translate(${x} 30) scale(.95)">${full(c.p,{view:c.view||"three",pose:c.pose||"stand",expr:c.expr})}</g>`});
+ return frame(inner,{w:W,h:H,bg:o.bg||"campus",label:o.label})}
+Object.assign(A,{VIEWS,VIEWN,POSES,BGS,drawFull,group,bgArt});
 })();
 
 </script>
+<script>
+/* ===== Anime Character Studio ===== */
+(function(){
+const A=window.ANIME,$=q=>document.querySelector(q),$$=q=>[...document.querySelectorAll(q)];
+const E=t=>String(t==null?"":t).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const isHex=v=>/^#[0-9a-f]{6}$/i.test(v||"");
+const LOOK=["gender","age","face","skin","eyes","eyeColor","hair","hairColor"],IDX=["mustache","beard","mole","scar","bindi","blush","earrings","glasses"],OUTK=["outfit","outfitColor","accent","bottomColor","shoeColor"],OUTX=["sunglasses","goldChain","headphones","cap","towel","pen","flowers"];
+const LAB={gender:"Gender / body",age:"Age group",face:"Face shape",skin:"Skin tone",eyes:"Eye shape",eyeColor:"Eye colour",hair:"Hairstyle",hairColor:"Hair colour",outfit:"Outfit type",outfitColor:"Outfit colour",accent:"Accent colour",bottomColor:"Trousers / bottom colour",shoeColor:"Shoe colour",bg:"Background colour"};
+const NICE={gender:{boy:"Boy",girl:"Girl",man:"Man",woman:"Woman"},age:{teen:"Teen (school)",young:"Young (college)",adult:"Adult (parent)",old:"Old"},face:{oval:"Oval",round:"Round",sharp:"Sharp / pointed",square:"Square / strong"},eyes:{big:"Big anime",sharp:"Sharp cool",sleepy:"Sleepy / half",round:"Round innocent"},hair:{spiky:"Spiky",side:"Side-swept",messy:"Messy",short:"Short neat",long:"Long",ponytail:"Ponytail",bun:"Bun",bald:"Bald (sides only)",curly:"Curly",mohawk:"Mohawk"},outfit:{tshirt:"T-shirt (casual)",shirt:"Shirt (college)",hoodie:"Hoodie (casual / winter)",jacket:"Open jacket (cool / action)",kurta:"Kurta (traditional)",saree:"Saree (traditional)",vest:"Vest over shirt (formal)",uniform:"Uniform with tie (school / office)"}};
+const XN={sunglasses:"Sunglasses",glasses:"Glasses",goldChain:"Gold chain",headphones:"Headphones",mustache:"Mustache",beard:"Beard",bindi:"Bindi",earrings:"Earrings",cap:"Cap",blush:"Always blushing",mole:"Mole",scar:"Scar",pen:"Pen in pocket",towel:"Towel on shoulder",flowers:"Flowers in hair"};
+const EXN={neutral:"Neutral",happy:"Happy",smiling:"Smiling",laugh:"Laughing",angry:"Angry",sad:"Sad",crying:"Crying",surprised:"Surprised",shock:"Shocked",scared:"Scared",confident:"Confident",confused:"Confused",shy:"Shy",serious:"Serious",evil:"Evil smile",cool:"Cool",panic:"Panic",smirk:"Smirk",worried:"Worried",love:"In love",sleepy:"Sleepy"};
+const ROLE=["College student","School student","Hero","Villain","Comedian / sidekick","Parent","Teacher / lecturer","Shopkeeper","DJ / musician","Other"];
+const SEC=[["profile","1 · Profile"],["look","2 · Appearance"],["outfits","3 · Outfits"],["views","4 · Views"],["expr","5 · Expressions"],["poses","6 · Poses"],["scene","7 · Scene & group"],["sheet","8 · Reference sheet"],["art","9 · Real AI art (free)"]];
+const K="cfl-anime";let LIST=[],DEL=[];try{LIST=JSON.parse(localStorage.getItem(K)||"[]")||[];DEL=JSON.parse(localStorage.getItem(K+"-del")||"[]")||[]}catch(e){}
+const uid=()=>"c"+Date.now()+Math.random().toString(36).slice(2,5);
+function blank(){return {id:null,name:"New character",profile:{ageNum:"",height:"average",heightCm:"",build:"average",role:"College student",personality:"",background:"",special:"",customOutfit:""},look:{gender:"boy",age:"young",face:"oval",skin:"#dfab84",eyes:"big",eyeColor:"#3b2a20",hair:"spiky",hairColor:"#1b1b1f",extras:[]},outfits:[{id:"o1",name:"College outfit",outfit:"shirt",outfitColor:"#2f3863",accent:"#c8902a",bottomColor:"#2e3a5c",shoeColor:"#1d1d24",extras:[]}],oi:0,expr:"neutral",bg:"#dfe5f5",bgScene:"plain",locked:false,versions:[],images:[],notes:"",t:0}}
+function migrate(c){if(c.look)return c;const n=blank();n.id=c.id||uid();n.name=c.name||"Character";LOOK.forEach(k=>{if(c[k])n.look[k]=c[k]});n.look.extras=(c.extras||[]).filter(x=>IDX.includes(x));
+ n.outfits=[{id:"o1",name:"Main outfit",outfit:c.outfit||"tshirt",outfitColor:c.outfitColor||"#2f3863",accent:c.accent||"#c8902a",bottomColor:"#2e3a5c",shoeColor:"#1d1d24",extras:(c.extras||[]).filter(x=>OUTX.includes(x))}];n.expr=c.expr||"neutral";n.bg=c.bg||"#dfe5f5";n.notes=c.notes||"";n.t=c.t||Date.now();return n}
+LIST=LIST.map(migrate);
+let cur=LIST[0]?JSON.parse(JSON.stringify(LIST[0])):blank(),sec="profile",cloud=null,assets=null,view="front",pose="stand",photo=null,cmpV=null;
+const outfit=(c)=>c.outfits[c.oi]||c.outfits[0];
+function flat(c,over){const o=outfit(c)||{};return Object.assign({},A.DEF,c.look,{outfit:o.outfit,outfitColor:o.outfitColor,accent:o.accent,bottomColor:o.bottomColor,shoeColor:o.shoeColor},{extras:(c.look.extras||[]).concat(o.extras||[]),expr:c.expr,bg:c.bg,bgScene:c.bgScene,build:c.profile.build,height:c.profile.height,name:c.name},over||{})}
+const msg=t=>{const m=$("#asMsg");if(m)m.textContent=t};
+function saveLocal(){try{localStorage.setItem(K,JSON.stringify(LIST));localStorage.setItem(K+"-del",JSON.stringify(DEL.slice(-300)))}catch(e){msg("This device's storage is full — delete old versions or characters.")}}
+function pushCloud(){if(!cloud)return;clearTimeout(pushCloud.t);pushCloud.t=setTimeout(async()=>{try{await cloud.set({list:LIST,del:DEL.slice(-300),t:Date.now(),v:2})}catch(e){msg("Saved on this device; couldn't sync to your account just now.")}},900)}
+function save(silent){cur.name=(cur.name||"").trim()||"New character";if(!cur.id)cur.id=uid();cur.t=Date.now();const i=LIST.findIndex(v=>v.id===cur.id);
+ if(i>=0){const old=LIST[i];if(JSON.stringify(old.look)!==JSON.stringify(cur.look)){cur.versions=[{t:old.t||Date.now(),look:old.look,label:"Before "+new Date().toLocaleString()}].concat(cur.versions||[]).slice(0,12)}LIST[i]=JSON.parse(JSON.stringify(cur))}else LIST.unshift(JSON.parse(JSON.stringify(cur)));
+ saveLocal();pushCloud();drawGallery();if(!silent)msg(`Saved ${cur.name}.`)}
+/* ---------- rendering of the studio ---------- */
+function sw(k,obj,vals,dis){return `<div class="ancol"><span>${LAB[k]}</span><div class="sw">${vals.map(v=>`<button type="button" class="swb${obj[k]===v?" on":""}" data-sw="${k}" data-v="${v}" style="background:${v}" aria-label="${v}" ${dis?"disabled":""}></button>`).join("")}<input type="color" data-col="${k}" value="${isHex(obj[k])?obj[k]:"#888888"}" ${dis?"disabled":""} aria-label="Custom ${LAB[k]}"></div></div>`}
+function selF(k,obj,vals,dis,attr){return `<label class="ansel"><span>${LAB[k]}</span><select class="cin" ${attr||`data-lk="${k}"`} ${dis?"disabled":""}>${vals.map(v=>`<option value="${v}"${obj[k]===v?" selected":""}>${(NICE[k]&&NICE[k][v])||v}</option>`).join("")}</select></label>`}
+function preview(){const p=flat(cur);$("#asPrev").innerHTML=A.drawFull(p,{view,pose,bg:cur.bgScene||"plain",base:cur.bg});$("#asHead").innerHTML=A.draw(p,null,{plain:true});
+ $("#asBadge").innerHTML=cur.locked?`<span class="lockb">🔒 Identity locked</span>`:`<span class="lockb off">Draft</span>`;$("#asTitle").textContent=cur.name+(cur.profile.ageNum?` · ${cur.profile.ageNum}`:"")}
+function drawSec(){$("#asTabs").innerHTML=SEC.map(s=>`<button type="button" class="chip" data-sec="${s[0]}" aria-pressed="${sec===s[0]}">${s[1]}</button>`).join("");
+ const L=cur.locked,O=outfit(cur),P=cur.profile,box=$("#asBody");let h="";
+ if(sec==="profile"){h=`<div class="angrid2"><label class="ansel"><span>Character name</span><input class="cin" data-pf="name" value="${E(cur.name)}"></label>
+ <label class="ansel"><span>Age</span><input class="cin" data-pr="ageNum" value="${E(P.ageNum)}" placeholder="e.g. 20"></label>
+ ${selF("gender",cur.look,A.OPT.gender,L)}${selF("age",cur.look,A.OPT.age,L)}
+ <label class="ansel"><span>Height</span><select class="cin" data-pr="height">${["short","average","tall"].map(v=>`<option${P.height===v?" selected":""}>${v}</option>`).join("")}</select></label>
+ <label class="ansel"><span>Height (cm, optional)</span><input class="cin" data-pr="heightCm" value="${E(P.heightCm)}" placeholder="e.g. 175"></label>
+ <label class="ansel"><span>Body type</span><select class="cin" data-pr="build" ${L?"disabled":""}>${["slim","average","broad","chubby"].map(v=>`<option${P.build===v?" selected":""}>${v}</option>`).join("")}</select></label>
+ <label class="ansel"><span>Character role</span><input class="cin" data-pr="role" list="asRoles" value="${E(P.role)}"><datalist id="asRoles">${ROLE.map(r=>`<option value="${r}">`).join("")}</datalist></label></div>
+ <label class="ansel"><span>Personality</span><textarea class="cta" rows="2" data-pr="personality" placeholder="e.g. calm show-off, never admits a mistake, talks in English tags">${E(P.personality)}</textarea></label>
+ <label class="ansel"><span>Background</span><textarea class="cta" rows="2" data-pr="background" placeholder="e.g. Hyderabad local DJ, lives with parents, best friend Golu">${E(P.background)}</textarea></label>
+ <label class="ansel"><span>Special characteristics</span><textarea class="cta" rows="2" data-pr="special" placeholder="e.g. always wears sunglasses, scar on eyebrow, gold chain">${E(P.special)}</textarea></label>
+ <div class="anpanel"><h4>✨ Design the look with Claude</h4><p class="row">Claude reads the profile above (and a library character, if you pick one) and chooses the face, eyes, hair, skin, outfit, colours and accessories.</p>
+ <label class="ansel"><span>Use a character from the library (optional)</span><select class="cin" id="asWho"></select></label>
+ <label class="ansel"><span>Extra description (optional)</span><textarea class="cta" rows="2" id="asDesc" placeholder="Anything about the look you want"></textarea></label>
+ <div class="acts"><button class="btn" type="button" data-ai="all">✨ Design whole character</button><button class="btn ghost" type="button" id="asRandom">🎲 Random look</button></div></div>
+ <div class="anpanel"><h4>📷 Start from a reference picture</h4><p class="row">Upload a photo or drawing. Claude looks at it and makes an <b>original</b> anime character — only the features you tick are taken from the picture.</p>
+ <input type="file" accept="image/*" id="asPhoto" class="cin">${photo?`<img src="${photo.url}" alt="Reference" class="anref">`:""}
+ <div class="chips" style="margin:6px 0">${[["hair","Hairstyle"],["hairColor","Hair colour"],["face","Face shape"],["skin","Skin tone"],["eyes","Eyes"],["facial","Beard / mustache / glasses"],["outfit","Outfit"],["colours","Outfit colours"]].map(([k,n])=>`<button type="button" class="chip" data-keep="${k}" aria-pressed="${(photo&&photo.keep||["hair","hairColor","face","skin"]).includes(k)}">${n}</button>`).join("")}</div>
+ <div class="acts"><button class="btn" type="button" data-ai="photo" ${photo?"":"disabled"}>Analyse picture and design</button></div></div>`}
+ if(sec==="look"){h=`${L?`<p class="lockmsg">🔒 Identity locked — face, eyes, hair, skin and body stay fixed. Outfits, expressions, poses and backgrounds can still change. <button class="btn ghost sm" type="button" id="asUnlock">Unlock to edit</button></p>`:""}
+ <div class="angrid2">${selF("face",cur.look,A.OPT.face,L)}${selF("eyes",cur.look,A.OPT.eyes,L)}${selF("hair",cur.look,A.OPT.hair,L)}</div>
+ ${sw("skin",cur.look,A.OPT.skin,L)}${sw("eyeColor",cur.look,A.OPT.eyeColor,L)}${sw("hairColor",cur.look,A.OPT.hairColor,L)}
+ <div class="ancol"><span>Distinctive features</span><div class="chips">${IDX.map(x=>`<button type="button" class="chip" data-ix="${x}" aria-pressed="${cur.look.extras.includes(x)}" ${L?"disabled":""}>${XN[x]}</button>`).join("")}</div></div>
+ ${sw("bg",cur,A.OPT.bg,false)}
+ <div class="anpanel"><h4>Regenerate with Claude — only the part you choose</h4><p class="row">Everything else stays exactly as it is.</p><label class="ansel"><span>What to change (optional)</span><input class="cin" id="asReDesc" placeholder="e.g. make him look older and stricter"></label>
+ <div class="acts"><button class="btn sm" type="button" data-ai="all" ${L?"disabled":""}>Whole character</button><button class="btn ghost sm" type="button" data-ai="face" ${L?"disabled":""}>Only the face</button><button class="btn ghost sm" type="button" data-ai="hair" ${L?"disabled":""}>Only the hair</button><button class="btn ghost sm" type="button" data-ai="colours">Only the colours</button></div></div>
+ <div class="anpanel"><h4>Versions</h4>${(cur.versions||[]).length?`<p class="row">Earlier looks of this character (saved when you saved a changed look). Tap Restore to bring one back.</p><div class="anvers">${cur.versions.map((v,i)=>`<div>${A.draw(Object.assign(flat(cur),v.look,{extras:(v.look.extras||[]).concat(outfit(cur).extras||[])}),null,{plain:true})}<span class="mt">${E(v.label)}</span><button class="btn ghost sm" type="button" data-restore="${i}" ${L?"disabled":""}>Restore</button></div>`).join("")}</div>`:`<p class="row">No earlier versions yet. Each time you save a changed look, the previous one is kept here.</p>`}</div>`}
+ if(sec==="outfits"){h=`<div class="chips">${cur.outfits.map((o,i)=>`<button type="button" class="chip" data-oi="${i}" aria-pressed="${i===cur.oi}">${E(o.name)}</button>`).join("")}<button type="button" class="chip" id="asOAdd">➕ New outfit</button><button type="button" class="chip" id="asODup">Duplicate this outfit</button>${cur.outfits.length>1?`<button type="button" class="chip" id="asODel">Delete this outfit</button>`:""}</div>
+ <label class="ansel"><span>Outfit name</span><input class="cin" data-on="name" value="${E(O.name)}"></label>
+ <div class="angrid2">${selF("outfit",O,A.OPT.outfit,false,`data-ok="outfit"`)}</div>
+ ${["outfitColor","accent","bottomColor","shoeColor"].map(k=>sw(k,O,k==="bottomColor"?["#2e3a5c","#1d1d24","#3b5a8a","#efeadc","#7a5a3a","#5a5a62","#2f6b4f"]:k==="shoeColor"?["#1d1d24","#ffffff","#7a4a2a","#b5523b","#3b82c4","#c8902a"]:A.OPT[k==="outfitColor"?"outfitColor":"accent"]).replace(/data-sw=/g,"data-osw=").replace(/data-col=/g,"data-ocol=")).join("")}
+ <div class="ancol"><span>Accessories with this outfit</span><div class="chips">${OUTX.map(x=>`<button type="button" class="chip" data-ox="${x}" aria-pressed="${(O.extras||[]).includes(x)}">${XN[x]}</button>`).join("")}</div></div>
+ <div class="anpanel"><h4>✨ Design an outfit with Claude</h4><p class="row">College, casual, traditional, action, seasonal — or describe your own. The face and body stay the same.</p>
+ <div class="chips">${["College outfit","Casual outfit","Traditional festival outfit","Action / fight outfit","Winter outfit","Summer outfit","Wedding outfit"].map(t=>`<button type="button" class="chip" data-otype="${t}">${t}</button>`).join("")}</div>
+ <label class="ansel"><span>Or describe it</span><input class="cin" id="asODesc" placeholder="e.g. white kurta with gold border for Sankranti" value="${E(cur.profile.customOutfit||"")}"></label><div class="acts"><button class="btn sm" type="button" data-ai="outfit">Design this outfit (adds a new one)</button></div></div>
+ <h4 style="margin:14px 0 6px">Compare outfits</h4><div class="angal4">${cur.outfits.map((o,i)=>`<div>${A.drawFull(flat(Object.assign({},cur,{oi:i})),{view:"front",bg:"plain",base:cur.bg,label:o.name})}</div>`).join("")}</div>`}
+ if(sec==="views"){h=`<p class="row">The same character from 6 directions — face, hair, body, clothes and colours stay identical.</p><div class="chips">${Object.keys(A.POSES).map(k=>`<button type="button" class="chip" data-vpose="${k}" aria-pressed="${pose===k}">${A.POSES[k].n}</button>`).join("")}</div>
+ <div class="angal6">${A.VIEWS.map(v=>`<div>${A.drawFull(flat(cur),{view:v,pose,bg:"plain",base:cur.bg,label:A.VIEWN[v]})}</div>`).join("")}</div><div class="acts"><button class="btn sm" type="button" data-png="views">Download turnaround (PNG)</button></div>`}
+ if(sec==="expr"){h=`<p class="row">Tap one to make it this character's default expression.</p><div class="angal4 head">${A.EXPR.map(x=>`<button type="button" class="anpick${cur.expr===x?" on":""}" data-dex="${x}">${A.draw(flat(cur),x,{label:EXN[x]})}</button>`).join("")}</div><div class="acts"><button class="btn sm" type="button" data-png="expr">Download expression sheet (PNG)</button></div>`}
+ if(sec==="poses"){h=`<p class="row">Each pose is shown from its clearest angle. Tap one to show it in the big preview.</p><div class="angal6">${Object.keys(A.POSES).map(k=>`<button type="button" class="anpick${pose===k?" on":""}" data-pp="${k}">${A.drawFull(flat(cur),{view:A.POSES[k].best||"front",pose:k,bg:"plain",base:cur.bg,label:A.POSES[k].n})}</button>`).join("")}</div>
+ <div class="acts"><button class="btn sm" type="button" data-png="poses">Download all poses (PNG)</button></div>
+ <div class="anpanel"><h4>Custom pose</h4><p class="row">Describe a moment. Claude picks the closest pose, angle, expression and background from the studio (it can't invent brand-new body positions).</p><input class="cin" id="asPDesc" placeholder="e.g. shocked when the principal walks into the bathroom"><div class="acts"><button class="btn sm" type="button" data-ai="pose">Find the pose</button></div></div>`}
+ if(sec==="scene"){h=`<div class="angrid2"><label class="ansel"><span>Background</span><select class="cin" id="asBg">${Object.keys(A.BGS).map(k=>`<option value="${k}"${cur.bgScene===k?" selected":""}>${A.BGS[k]}</option>`).join("")}</select></label>
+ <label class="ansel"><span>Angle</span><select class="cin" id="asView">${A.VIEWS.map(v=>`<option value="${v}"${view===v?" selected":""}>${A.VIEWN[v]}</option>`).join("")}</select></label>
+ <label class="ansel"><span>Pose</span><select class="cin" id="asPose">${Object.keys(A.POSES).map(k=>`<option value="${k}"${pose===k?" selected":""}>${A.POSES[k].n}</option>`).join("")}</select></label>
+ <label class="ansel"><span>Expression</span><select class="cin" id="asExpr">${A.EXPR.map(x=>`<option value="${x}"${cur.expr===x?" selected":""}>${EXN[x]}</option>`).join("")}</select></label></div>
+ <div class="acts"><button class="btn sm" type="button" data-png="one">Download this picture (PNG)</button></div>
+ <div class="anpanel"><h4>Characters together</h4><p class="row">Pick 2–4 saved characters. Each keeps its own locked look.</p><div class="chips" id="asGroupPick">${LIST.map(c=>`<button type="button" class="chip" data-gp="${c.id}" aria-pressed="${(window.__asG||[]).includes(c.id)}">${E(c.name)}</button>`).join("")||`<span class="row">Save at least two characters first.</span>`}</div>
+ <div class="acts"><button class="btn sm" type="button" id="asGroup">Make group picture</button></div><div id="asGroupOut"></div></div>`}
+ if(sec==="sheet"){h=`<p class="row">A complete character reference sheet: name and age, front, three-quarter, side and back views, expressions, poses, outfit details and colour palette.</p><div class="acts"><button class="btn" type="button" id="asSheet">Generate Character Reference Sheet</button></div><div id="asSheetOut"></div>`}
+ if(sec==="art"){h=`<div class="anpanel"><h4>Get real painted anime art — free</h4><ol class="row"><li>Download the reference sheet (section 8) or the front view.</li><li>Open a free AI image app — for example the Gemini app (it gives free users a few image generations a day) or ChatGPT.</li><li>Attach the picture and paste the prompt below. Ask for one view or pose at a time.</li><li>Upload the result here — it is saved in this character's gallery.</li></ol>
+ <textarea class="cta" rows="9" id="asPrompt" readonly>${E(artPrompt())}</textarea><div class="acts"><button class="btn sm" type="button" id="asCopyP">Copy prompt</button><button class="btn ghost sm" type="button" data-png="one">Download front view (PNG)</button></div></div>
+ <div class="anpanel"><h4>This character's saved artwork</h4><input type="file" accept="image/*" id="asArtUp" class="cin"><label class="ansel"><span>Label</span><input class="cin" id="asArtLab" placeholder="e.g. Front view — Gemini"></label>
+ <div class="angal4">${(cur.images||[]).map((im,i)=>`<div class="anart"><img src="/_blob/${E(im.id)}" alt="${E(im.label)}"><span class="mt">${E(im.label)}</span><button class="btn ghost sm" type="button" data-artdel="${i}">Remove</button></div>`).join("")||`<p class="row">No uploaded artwork yet.</p>`}</div></div>`}
+ box.innerHTML=h;if(sec==="profile")drawWho();preview()}
+function artPrompt(){const p=flat(cur),P=cur.profile,O=outfit(cur);return `Create a high-quality 2D Japanese anime character illustration, full body from head to toe (do not crop head, hands or feet), clean line art, cel shading, professional colours, plain light background. Use the attached picture ONLY as the design reference for this ORIGINAL character — keep the same face, hairstyle, colours and outfit; do not copy any existing anime character.
+Name: ${cur.name}${P.ageNum?`, age ${P.ageNum}`:""}. ${NICE.gender[p.gender]}, ${NICE.age[p.age]}, ${P.height} height${P.heightCm?` (${P.heightCm} cm)`:""}, ${P.build} build. Role: ${P.role}.
+Personality: ${P.personality||"—"}. ${P.special?`Special features: ${P.special}.`:""}
+Face: ${NICE.face[p.face]} face, ${NICE.eyes[p.eyes]} eyes (colour ${p.eyeColor}), skin tone ${p.skin}. Hair: ${NICE.hair[p.hair]}, colour ${p.hairColor}.${(cur.look.extras||[]).length?` Features: ${cur.look.extras.map(x=>XN[x]).join(", ")}.`:""}
+Outfit "${O.name}": ${NICE.outfit[O.outfit]} in ${O.outfitColor} with ${O.accent} accents, ${O.bottomColor} trousers/bottom, ${O.shoeColor} shoes${(O.extras||[]).length?`, ${O.extras.map(x=>XN[x]).join(", ")}`:""}.
+Pose: ${A.POSES[pose].n}. View: ${A.VIEWN[view]}. Expression: ${EXN[cur.expr]}. Indian (Telugu) setting.`}
+function drawGallery(){const g=$("#asGal");if(!g)return;g.innerHTML=(LIST.length?LIST.map(c=>`<button type="button" class="ancard${cur.id===c.id?" on":""}" data-open="${c.id}">${A.draw(flat(c),null,{plain:true})}<b>${E(c.name)}</b>${c.locked?`<span class="mt">🔒 approved</span>`:""}</button>`).join(""):`<p class="row">No saved characters yet.</p>`)+`<button type="button" class="ancard add" id="asNew"><span style="font-size:42px">＋</span><b>New character</b></button>`}
+function drawWho(){const ai=window.CFL_AI,s=$("#asWho");if(!s||!ai)return;const fam=window.CFL_FAM&&window.CFL_FAM.list?window.CFL_FAM.list():[];
+ s.innerHTML=`<option value="">— none —</option><optgroup label="Main characters">${ai.ROLES.filter(r=>r[3]>=0).map(r=>`<option value="${E(r[0])}">${E(r[1])} · ${E(r[2])}</option>`).join("")}</optgroup>${fam.length?`<optgroup label="Family details">${fam.map(f=>`<option value="fam:${E(f[0])}">${E(f[1])} · ${E(f[2])}</option>`).join("")}</optgroup>`:""}`}
+function profileOf(key){const ai=window.CFL_AI;if(!ai||!key)return "";if(key.startsWith("fam:"))return window.CFL_FAM?window.CFL_FAM.text(key.slice(4)):"";const r=ai.ROLES.find(x=>x[0]===key);if(!r)return "";const lib=window.SLANGLIB_GET?window.SLANGLIB_GET(r):"";const pr=ai.rpProfile(r);return pr+(lib&&lib!==pr?"\n"+lib.slice(0,2500):"")}
+/* ---------- Claude ---------- */
+function schema(){const O=A.OPT;return `gender: ${O.gender.join(", ")}
+age: ${O.age.join(", ")} (college = young; parents = adult or old)
+face: ${O.face.join(", ")}
+skin: any hex (light #f6d7bf … dark #7f5236; Indian tones)
+eyes: ${O.eyes.join(", ")}
+eyeColor, hairColor: any hex
+hair: ${O.hair.join(", ")}
+idExtras (permanent features, 0–3): ${IDX.join(", ")}
+outfit: ${O.outfit.join(", ")}
+outfitColor, accent, bottomColor, shoeColor, bg: any hex
+outfitExtras (0–3): ${OUTX.join(", ")}
+expr (typical expression): ${O.expr.join(", ")}
+build: slim, average, broad, chubby · height: short, average, tall`}
+function pickJSON(j){const L={},O={};LOOK.forEach(k=>{const v=j[k];if(v==null)return;if(["skin","eyeColor","hairColor"].includes(k)){if(isHex(v))L[k]=v.toLowerCase()}else if(A.OPT[k].includes(v))L[k]=v});
+ if(Array.isArray(j.idExtras))L.extras=j.idExtras.filter(x=>IDX.includes(x));
+ if(A.OPT.outfit.includes(j.outfit))O.outfit=j.outfit;["outfitColor","accent","bottomColor","shoeColor"].forEach(k=>{if(isHex(j[k]))O[k]=j[k].toLowerCase()});if(Array.isArray(j.outfitExtras))O.extras=j.outfitExtras.filter(x=>OUTX.includes(x));return {L,O}}
+function charText(){const P=cur.profile;return `Name: ${cur.name}; age ${P.ageNum||"?"}; role ${P.role}; height ${P.height}${P.heightCm?" ("+P.heightCm+" cm)":""}; build ${P.build}.
+Personality: ${P.personality||"—"}
+Background: ${P.background||"—"}
+Special characteristics: ${P.special||"—"}`}
+async function runAI(kind,btn){const ai=window.CFL_AI;if(!ai||!ai.ready()){msg("Claude isn't available in this view. Open the library in claude.ai.");return}if(ai.isBusy()){msg("Claude is busy with another job. Try again in a moment.");return}
+ const cur0=JSON.stringify({look:cur.look,outfit:outfit(cur)});let prompt="",imgs=null;
+ const base=`You design ORIGINAL 2D anime characters for a Telugu comedy/anime series. A drawing program draws the character from the settings you choose. Make the person look Indian (Telugu) in anime style with a fitting skin tone. Never copy a known anime, cartoon or film character's design.\n`;
+ if(kind==="all"||kind==="face"||kind==="hair"||kind==="colours"){const who=$("#asWho")?$("#asWho").value:"",desc=($("#asDesc")&&$("#asDesc").value||"")+" "+($("#asReDesc")&&$("#asReDesc").value||"");
+  prompt=base+`CHARACTER PROFILE:\n${charText()}\n${who?`LIBRARY PROFILE:\n${profileOf(who)}\n`:""}${desc.trim()?`USER'S REQUEST: ${desc.trim()}\n`:""}${kind!=="all"?`CURRENT DESIGN (keep everything; you are only redesigning the ${kind==="colours"?"colours (skin stays)":kind}): ${cur0}\n`:""}
+Choose values:\n${schema()}\nAlso "name" (only if the profile has none) and "notes" (2 sentences: why these choices fit the personality).
+Return ONLY JSON with these keys: {"gender":"","age":"","face":"","skin":"","eyes":"","eyeColor":"","hair":"","hairColor":"","idExtras":[],"outfit":"","outfitColor":"","accent":"","bottomColor":"","shoeColor":"","bg":"","outfitExtras":[],"expr":"","build":"","height":"","name":"","notes":""}`}
+ if(kind==="outfit"){const d=($("#asODesc").value||"").trim()||btn.dataset.otype||"a new outfit";prompt=base+`CHARACTER PROFILE:\n${charText()}\nCURRENT LOOK (do not change): ${JSON.stringify(cur.look)}\nDesign this outfit: ${d}.\nChoose: outfit (${A.OPT.outfit.join(", ")}), outfitColor, accent, bottomColor, shoeColor (hex), outfitExtras (0–3 of ${OUTX.join(", ")}), and "outfitName" (short).\nReturn ONLY JSON: {"outfitName":"","outfit":"","outfitColor":"","accent":"","bottomColor":"","shoeColor":"","outfitExtras":[]}`}
+ if(kind==="pose"){const d=($("#asPDesc").value||"").trim();if(!d){msg("Describe the pose first.");return}prompt=`Pick the closest match for this moment for an anime character: "${d}".\nPoses: ${Object.keys(A.POSES).map(k=>`${k} (${A.POSES[k].n})`).join(", ")}\nViews: ${A.VIEWS.join(", ")}\nExpressions: ${A.OPT.expr.join(", ")}\nBackgrounds: ${Object.keys(A.BGS).join(", ")}\nReturn ONLY JSON: {"pose":"","view":"","expr":"","bg":"","note":"one short sentence"}`}
+ if(kind==="photo"){if(!photo){msg("Upload a picture first.");return}const keep=photo.keep||["hair","hairColor","face","skin"];
+  prompt=base+`Look at the attached reference picture. Describe the visible appearance and turn it into settings for an ORIGINAL anime character (not a copy of the person).\nThe user wants to keep ONLY these features from the picture: ${keep.join(", ")}. Other settings should fit the profile instead.\nCHARACTER PROFILE:\n${charText()}\nChoose values:\n${schema()}\nAlso "seen" (one sentence describing what you see) and "notes".\nReturn ONLY JSON: {"seen":"","gender":"","age":"","face":"","skin":"","eyes":"","eyeColor":"","hair":"","hairColor":"","idExtras":[],"outfit":"","outfitColor":"","accent":"","bottomColor":"","shoeColor":"","outfitExtras":[],"notes":""}`;imgs=[photo.blob]}
+ const t0=Date.now();if(btn)btn.disabled=true;const tk=setInterval(()=>msg(`Claude is working… ${Math.round((Date.now()-t0)/1000)}s`),1000);
+ try{const res=imgs?await ai.vision(prompt,imgs):await ai.ask(prompt);const j=ai.parse(res.text);clearInterval(tk);const {L,O}=pickJSON(j);
+  if(kind==="all"){Object.assign(cur.look,L);Object.assign(outfit(cur),O);if(isHex(j.bg))cur.bg=j.bg;if(A.OPT.expr.includes(j.expr))cur.expr=j.expr;if(["slim","average","broad","chubby"].includes(j.build))cur.profile.build=j.build;if(["short","average","tall"].includes(j.height))cur.profile.height=j.height;if(j.name&&(!cur.name||cur.name==="New character"))cur.name=String(j.name).slice(0,60);cur.notes=String(j.notes||"");msg(`Designed. ${cur.notes} Tap Save when you like it.`)}
+  if(kind==="face"){["face","eyes","eyeColor"].forEach(k=>{if(L[k])cur.look[k]=L[k]});msg("New face — hair, skin, body and outfit unchanged.")}
+  if(kind==="hair"){["hair","hairColor"].forEach(k=>{if(L[k])cur.look[k]=L[k]});msg("New hair — everything else unchanged.")}
+  if(kind==="colours"){["eyeColor","hairColor"].forEach(k=>{if(L[k])cur.look[k]=L[k]});["outfitColor","accent","bottomColor","shoeColor"].forEach(k=>{if(O[k])outfit(cur)[k]=O[k]});if(isHex(j.bg))cur.bg=j.bg;msg("New colours — shapes unchanged.")}
+  if(kind==="outfit"){const nO=Object.assign({id:"o"+Date.now(),name:String(j.outfitName||btn&&btn.dataset.otype||"New outfit").slice(0,40),outfit:"tshirt",outfitColor:"#2f3863",accent:"#c8902a",bottomColor:"#2e3a5c",shoeColor:"#1d1d24",extras:[]},O);cur.outfits.push(nO);cur.oi=cur.outfits.length-1;msg(`Added outfit “${nO.name}”. Face and body unchanged.`)}
+  if(kind==="pose"){if(A.POSES[j.pose])pose=j.pose;if(A.VIEWS.includes(j.view))view=j.view;if(A.OPT.expr.includes(j.expr))cur.expr=j.expr;if(A.BGS[j.bg])cur.bgScene=j.bg;msg(`Closest match: ${A.POSES[pose].n}, ${A.VIEWN[view]}, ${EXN[cur.expr]}. ${j.note||""}`);sec="scene"}
+  if(kind==="photo"){const keep=photo.keep||[];const map={hair:["hair"],hairColor:["hairColor"],face:["face"],skin:["skin"],eyes:["eyes","eyeColor"]};
+   Object.entries(map).forEach(([g,ks])=>{if(keep.includes(g))ks.forEach(k=>{if(L[k])cur.look[k]=L[k]})});
+   if(keep.includes("facial")&&L.extras)cur.look.extras=[...new Set(cur.look.extras.filter(x=>!["beard","mustache","glasses"].includes(x)).concat(L.extras.filter(x=>["beard","mustache","glasses"].includes(x))))];
+   if(keep.includes("outfit")&&O.outfit)outfit(cur).outfit=O.outfit;if(keep.includes("colours"))["outfitColor","accent","bottomColor","shoeColor"].forEach(k=>{if(O[k])outfit(cur)[k]=O[k]});
+   cur.notes=String(j.notes||"");msg(`Claude saw: ${j.seen||"—"} Only the ticked features were used.`)}
+  drawSec()}
+ catch(err){clearInterval(tk);msg(err&&err.code?ai.errText(err):(err&&err.message)||"Something went wrong. Try again.")}
+ if(btn)btn.disabled=false}
+/* ---------- export ---------- */
+const fn=(x)=>`${(cur.name||"character").replace(/[^\wఀ-౿ -]+/g,"").trim().replace(/\s+/g,"-")||"character"}-${x}.png`;
+let dl=null;async function getDl(){if(dl)return dl;try{for(let i=0;i<50&&!window.claude&&window.parent!==window;i++)await new Promise(r=>setTimeout(r,100));dl=window.claude&&window.parent!==window?await window.claude.use("downloads"):null}catch(e){dl=null}return dl}
+async function saveBlob(blob,name){const d=await getDl();try{if(d&&d.save){await d.save({filename:name,data:blob});msg("Saved: "+name)}else{const u=URL.createObjectURL(blob);const a=document.createElement("a");a.href=u;a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),4000);msg("Downloaded: "+name)}}catch(e){msg(e&&e.code==="declined"?"Download cancelled.":"The download was blocked here.")}}
+async function svgToPng(svg,w,h,name){msg("Preparing the picture…");const sc=Math.min(2,4000/Math.max(w,h));const cv=document.createElement("canvas");cv.width=Math.round(w*sc);cv.height=Math.round(h*sc);const g=cv.getContext("2d");g.fillStyle="#fff";g.fillRect(0,0,cv.width,cv.height);
+ const img=new Image();const u=URL.createObjectURL(new Blob([svg.replace("<svg ",`<svg width="${cv.width}" height="${cv.height}" `)],{type:"image/svg+xml"}));
+ try{await new Promise((ok,no)=>{img.onload=ok;img.onerror=no;img.src=u});g.drawImage(img,0,0,cv.width,cv.height)}catch(e){msg("Couldn't draw the picture.");return}finally{URL.revokeObjectURL(u)}
+ const blob=await new Promise(r=>cv.toBlob(r,"image/png"));await saveBlob(blob,name)}
+const nest=(svg,x,y,w,h)=>svg.replace("<svg ",`<svg x="${x}" y="${y}" width="${w}" height="${h}" `);
+function gridSvg(cells,cols,cw,ch,title){const rows=Math.ceil(cells.length/cols),top=title?70:0,W=cols*cw,H=rows*ch+top;let o=`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}"><rect width="${W}" height="${H}" fill="#fff"/>${title?`<text x="24" y="48" font-family="Arial" font-size="34" font-weight="700" fill="#1d1d24">${E(title)}</text>`:""}`;cells.forEach((c,i)=>o+=nest(c,(i%cols)*cw,top+Math.floor(i/cols)*ch,cw-8,ch-8));return [o+"</svg>",W,H]}
+function sheetSvg(){const p=flat(cur),P=cur.profile,O=outfit(cur),W=2400,H=2000;let o=`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}"><rect width="${W}" height="${H}" fill="#f7f6f2"/><rect x="0" y="0" width="${W}" height="120" fill="#2f3863"/><text x="40" y="80" font-family="Arial" font-size="56" font-weight="800" fill="#fff">${E(cur.name)}</text><text x="${W-40}" y="80" text-anchor="end" font-family="Arial" font-size="34" fill="#dfe5f5">${E([P.ageNum?`Age ${P.ageNum}`:"",P.role,P.height+" height",P.build+" build"].filter(Boolean).join(" · "))} · CHARACTER REFERENCE SHEET</text>`;
+ ["front","three","side","back"].forEach((v,i)=>o+=nest(A.drawFull(p,{view:v,bg:"plain",base:cur.bg,label:A.VIEWN[v]}),40+i*370,150,350,700));
+ o+=`<text x="1540" y="190" font-family="Arial" font-size="32" font-weight="700" fill="#1d1d24">Expressions</text>`;["happy","laugh","angry","sad","shock","confident","shy","serious","evil"].forEach((x,i)=>o+=nest(A.draw(p,x,{label:EXN[x]}),1540+(i%3)*280,210+Math.floor(i/3)*300,270,290));
+ o+=`<text x="40" y="910" font-family="Arial" font-size="32" font-weight="700" fill="#1d1d24">Poses</text>`;["walk","sit","talk","fight","think","pockets"].forEach((k,i)=>o+=nest(A.drawFull(p,{view:A.POSES[k].best||"front",pose:k,bg:"plain",base:cur.bg,label:A.POSES[k].n}),40+i*250,930,240,480));
+ const pal=[["Skin",p.skin],["Hair",p.hairColor],["Eyes",p.eyeColor],["Outfit",O.outfitColor],["Accent",O.accent],["Bottom",O.bottomColor],["Shoes",O.shoeColor]];
+ o+=`<text x="1540" y="1150" font-family="Arial" font-size="32" font-weight="700" fill="#1d1d24">Colour palette</text>`+pal.map((c,i)=>`<rect x="${1540+(i%4)*210}" y="${1170+Math.floor(i/4)*120}" width="90" height="90" rx="12" fill="${c[1]}" stroke="#999" stroke-width="2"/><text x="${1640+(i%4)*210}" y="${1210+Math.floor(i/4)*120}" font-family="Arial" font-size="24" fill="#333">${c[0]}</text><text x="${1640+(i%4)*210}" y="${1240+Math.floor(i/4)*120}" font-family="Arial" font-size="20" fill="#777">${c[1]}</text>`).join("");
+ const lines=[`Outfit: ${O.name} — ${NICE.outfit[O.outfit]}`,`Accessories: ${(p.extras||[]).map(x=>XN[x]).join(", ")||"none"}`,`Face: ${NICE.face[p.face]} · Eyes: ${NICE.eyes[p.eyes]} · Hair: ${NICE.hair[p.hair]}`,`Personality: ${P.personality||"—"}`,`Special: ${P.special||"—"}`];
+ o+=`<text x="1540" y="1460" font-family="Arial" font-size="32" font-weight="700" fill="#1d1d24">Design notes</text>`+lines.map((t,i)=>`<text x="1540" y="${1510+i*46}" font-family="Arial" font-size="26" fill="#333">${E(t.length>60?t.slice(0,58)+"…":t)}</text>`).join("");
+ o+=`<text x="${W-40}" y="${H-30}" text-anchor="end" font-family="Arial" font-size="22" fill="#999">${new Date().toLocaleDateString()} · ${cur.locked?"Approved design (identity locked)":"Draft design"}</text></svg>`;return [o,W,H]}
+/* ---------- events ---------- */
+function inStudio(t){return t.closest&&t.closest("#v-anime")}
+document.addEventListener("input",e=>{const t=e.target;if(!inStudio(t))return;
+ if(t.dataset.pf==="name"){cur.name=t.value;preview()}else if(t.dataset.pr){cur.profile[t.dataset.pr]=t.value;if(["height","build"].includes(t.dataset.pr))preview()}else if(t.dataset.on){outfit(cur).name=t.value}});
+document.addEventListener("change",async e=>{const t=e.target;if(!inStudio(t))return;
+ if(t.dataset.lk){cur.look[t.dataset.lk]=t.value;preview()}
+ if(t.dataset.ok){outfit(cur)[t.dataset.ok]=t.value;drawSec()}
+ if(t.dataset.col){if(t.dataset.col==="bg")cur.bg=t.value;else cur.look[t.dataset.col]=t.value;drawSec()}
+ if(t.dataset.ocol){outfit(cur)[t.dataset.ocol]=t.value;drawSec()}
+ if(t.id==="asBg"){cur.bgScene=t.value;preview()}if(t.id==="asView"){view=t.value;preview()}if(t.id==="asPose"){pose=t.value;preview()}if(t.id==="asExpr"){cur.expr=t.value;preview()}
+ if(t.id==="asPhoto"&&t.files[0]){const f=t.files[0];const blob=await shrink(f,1024);photo={blob,url:URL.createObjectURL(blob),keep:["hair","hairColor","face","skin"]};drawSec();msg("Picture ready. Tick the features to keep, then tap Analyse.")}
+ if(t.id==="asArtUp"&&t.files[0]){await uploadArt(t.files[0])}});
+async function shrink(file,max){const img=new Image();const u=URL.createObjectURL(file);await new Promise((ok,no)=>{img.onload=ok;img.onerror=no;img.src=u});const s=Math.min(1,max/Math.max(img.width,img.height));const c=document.createElement("canvas");c.width=Math.round(img.width*s);c.height=Math.round(img.height*s);c.getContext("2d").drawImage(img,0,0,c.width,c.height);URL.revokeObjectURL(u);return await new Promise(r=>c.toBlob(r,"image/jpeg",.88))}
+async function uploadArt(file){if(!assets){msg("Uploading artwork works in the library on claude.ai (it needs your account's file storage).");return}if(!cur.id)save(true);msg("Uploading…");
+ try{const blob=await shrink(file,2048);const r=await assets.upload(blob);cur.images=(cur.images||[]).concat({id:r.id,label:($("#asArtLab").value||"").trim()||"Artwork "+new Date().toLocaleDateString(),t:Date.now()});save(true);drawSec();msg("Artwork saved to this character.")}catch(e){msg("Upload failed: "+((e&&e.message)||"try again"))}}
+document.addEventListener("click",async e=>{const t=e.target;if(!inStudio(t))return;const c=k=>t.closest(k);let b;
+ if(b=c("[data-sec]")){sec=b.dataset.sec;drawSec();return}
+ if(b=c("[data-open]")){const x=LIST.find(v=>v.id===b.dataset.open);if(x){cur=JSON.parse(JSON.stringify(x));view="front";pose="stand";drawSec();drawGallery();msg(`Opened ${x.name}.`);$("#asStudio").scrollIntoView({behavior:"smooth",block:"start"})}return}
+ if(t.closest("#asNew")){cur=blank();sec="profile";drawSec();drawGallery();msg("New character. Fill in the profile, then design it.");return}
+ if(b=c("[data-sw]")){if(b.dataset.sw==="bg")cur.bg=b.dataset.v;else cur.look[b.dataset.sw]=b.dataset.v;drawSec();return}
+ if(b=c("[data-osw]")){outfit(cur)[b.dataset.osw]=b.dataset.v;drawSec();return}
+ if(b=c("[data-ix]")){const k=b.dataset.ix,x=cur.look.extras;cur.look.extras=x.includes(k)?x.filter(v=>v!==k):x.concat(k);drawSec();return}
+ if(b=c("[data-ox]")){const k=b.dataset.ox,O=outfit(cur),x=O.extras||[];O.extras=x.includes(k)?x.filter(v=>v!==k):x.concat(k);drawSec();return}
+ if(b=c("[data-oi]")){cur.oi=+b.dataset.oi;drawSec();return}
+ if(t.id==="asOAdd"){cur.outfits.push({id:"o"+Date.now(),name:"Outfit "+(cur.outfits.length+1),outfit:"tshirt",outfitColor:"#2f3863",accent:"#c8902a",bottomColor:"#2e3a5c",shoeColor:"#1d1d24",extras:[]});cur.oi=cur.outfits.length-1;drawSec();return}
+ if(t.id==="asODup"){const o=JSON.parse(JSON.stringify(outfit(cur)));o.id="o"+Date.now();o.name+=" (copy)";cur.outfits.push(o);cur.oi=cur.outfits.length-1;drawSec();return}
+ if(t.id==="asODel"&&cur.outfits.length>1){cur.outfits.splice(cur.oi,1);cur.oi=0;drawSec();return}
+ if(b=c("[data-otype]")){$("#asODesc").value=b.dataset.otype;return}
+ if(b=c("[data-ai]")){await runAI(b.dataset.ai,b);return}
+ if(b=c("[data-keep]")){photo=photo||{keep:["hair","hairColor","face","skin"]};const k=b.dataset.keep;photo.keep=(photo.keep||[]).includes(k)?photo.keep.filter(v=>v!==k):(photo.keep||[]).concat(k);b.setAttribute("aria-pressed",photo.keep.includes(k));return}
+ if(t.id==="asRandom"){const r=k=>A.OPT[k][Math.floor(Math.random()*A.OPT[k].length)];Object.assign(cur.look,{gender:r("gender"),age:r("age"),face:r("face"),skin:r("skin"),eyes:r("eyes"),eyeColor:r("eyeColor"),hair:r("hair"),hairColor:r("hairColor")});Object.assign(outfit(cur),{outfit:r("outfit"),outfitColor:r("outfitColor"),accent:r("accent")});drawSec();return}
+ if(b=c("[data-restore]")){const v=cur.versions[+b.dataset.restore];if(v){cur.look=JSON.parse(JSON.stringify(v.look));drawSec();msg("Restored that version. Tap Save to keep it.")}return}
+ if(b=c("[data-vpose]")){pose=b.dataset.vpose;drawSec();return}
+ if(b=c("[data-dex]")){cur.expr=b.dataset.dex;drawSec();return}
+ if(b=c("[data-pp]")){pose=b.dataset.pp;view=A.POSES[pose].best||"front";drawSec();return}
+ if(b=c("[data-gp]")){const g=window.__asG=window.__asG||[];const id=b.dataset.gp;window.__asG=g.includes(id)?g.filter(v=>v!==id):g.concat(id).slice(-4);b.setAttribute("aria-pressed",window.__asG.includes(id));return}
+ if(t.id==="asGroup"){const ids=window.__asG||[];if(ids.length<2){msg("Pick at least two characters.");return}const cs=ids.map(id=>LIST.find(v=>v.id===id)).filter(Boolean);const svg=A.group(cs.map(x=>({p:flat(x),view:"three",pose:"stand",expr:x.expr})),{bg:cur.bgScene&&cur.bgScene!=="none"&&cur.bgScene!=="plain"?cur.bgScene:"campus"});$("#asGroupOut").innerHTML=`<div class="angroup">${svg}</div><div class="acts"><button class="btn sm" type="button" id="asGroupPng">Download group picture (PNG)</button></div>`;window.__asGS=svg;return}
+ if(t.id==="asGroupPng"&&window.__asGS){const m=window.__asGS.match(/viewBox="0 0 (\d+) (\d+)"/);await svgToPng(window.__asGS,+m[1],+m[2],fn("group"));return}
+ if(t.id==="asSheet"){const [s,W,H]=sheetSvg();$("#asSheetOut").innerHTML=`<div class="ansheetbig">${s}</div><div class="acts"><button class="btn" type="button" id="asSheetPng">Download reference sheet (PNG)</button></div>`;window.__asSheet=[s,W,H];return}
+ if(t.id==="asSheetPng"&&window.__asSheet){const [s,W,H]=window.__asSheet;await svgToPng(s,W,H,fn("reference-sheet"));return}
+ if(b=c("[data-png]")){const k=b.dataset.png,p=flat(cur);
+  if(k==="one"){await svgToPng(A.drawFull(p,{view,pose,bg:cur.bgScene||"plain",base:cur.bg,label:cur.name}),400,800,fn(`${pose}-${view}`))}
+  if(k==="views"){const [s,W,H]=gridSvg(A.VIEWS.map(v=>A.drawFull(p,{view:v,pose,bg:"plain",base:cur.bg,label:A.VIEWN[v]})),6,400,800,`${cur.name} — turnaround`);await svgToPng(s,W,H,fn("turnaround"))}
+  if(k==="expr"){const [s,W,H]=gridSvg(A.EXPR.map(x=>A.draw(p,x,{label:EXN[x]})),7,400,500,`${cur.name} — expressions`);await svgToPng(s,W,H,fn("expressions"))}
+  if(k==="poses"){const ks=Object.keys(A.POSES);const [s,W,H]=gridSvg(ks.map(x=>A.drawFull(p,{view:A.POSES[x].best||"front",pose:x,bg:"plain",base:cur.bg,label:A.POSES[x].n})),7,400,800,`${cur.name} — poses`);await svgToPng(s,W,H,fn("poses"))}
+  return}
+ if(t.id==="asCopyP"){try{await (window.copyAny||navigator.clipboard.writeText.bind(navigator.clipboard))($("#asPrompt").value);msg("Prompt copied.")}catch(_){$("#asPrompt").select();msg("Select the prompt and copy it.")}return}
+ if(b=c("[data-artdel]")){cur.images.splice(+b.dataset.artdel,1);save(true);drawSec();msg("Removed from this character (the file stays in your storage).");return}
+ if(t.id==="asSave"){save();drawSec();return}
+ if(t.id==="asLock"){if(!cur.locked){cur.locked=true;save(true);drawSec();msg(`${cur.name} approved — identity locked. New outfits, poses, expressions and backgrounds keep this exact face, hair, skin and body.`)}else{msg("Already approved. Use Unlock in Appearance to edit the face.")}return}
+ if(t.id==="asUnlock"){cur.locked=false;drawSec();msg("Unlocked. Your changes are saved as a new version when you tap Save.");return}
+ if(t.id==="asDup"){const d=JSON.parse(JSON.stringify(cur));d.id=uid();d.name=(cur.name||"Character")+" (copy)";d.locked=false;cur=d;save(true);drawSec();msg("Duplicated. You're now editing the copy.");return}
+ if(t.id==="asDel"){if(!cur.id){msg("This character isn't saved yet.");return}if(!t.dataset.sure){t.dataset.sure="1";t.textContent="Tap again to delete";setTimeout(()=>{t.dataset.sure="";t.textContent="Delete"},3000);return}DEL.push(cur.id);LIST=LIST.filter(v=>v.id!==cur.id);saveLocal();pushCloud();cur=LIST[0]?JSON.parse(JSON.stringify(LIST[0])):blank();drawSec();drawGallery();msg("Deleted.");return}
+});
+function init(){if(!$("#v-anime"))return;drawSec();drawGallery();const nav=document.querySelector('nav a[data-v="anime"]');if(nav)nav.addEventListener("click",()=>setTimeout(()=>{if(sec==="profile")drawWho()},60))}
+init();
+(async()=>{if(window.parent===window)return;try{for(let i=0;i<50&&!window.claude;i++)await new Promise(r=>setTimeout(r,100));if(!window.claude)return;
+ try{assets=await window.claude.use("assets")}catch(e){assets=null}
+ const db=await window.claude.use("db"),u=await window.claude.use("user"),id=u?await u.id():null;if(!db||!id)return;
+ cloud=db.collection("data/users/"+id).doc("anime");const d=await cloud.get();const r=d&&d.exists!==false&&(typeof d.data==="function"?d.data():d)||null;
+ const RD=(r&&r.del)||[];DEL=[...new Set(DEL.concat(RD))];const R=((r&&r.list)||[]).map(migrate).filter(c=>!DEL.includes(c.id));const before=JSON.stringify(LIST.map(c=>c.id));LIST=LIST.filter(c=>!DEL.includes(c.id));
+ const map=new Map(LIST.map(c=>[c.id,c]));let mine=false;R.forEach(c=>{const a=map.get(c.id);if(!a||(c.t||0)>(a.t||0))map.set(c.id,c)});LIST.forEach(c=>{const b=R.find(x=>x.id===c.id);if(!b||(c.t||0)>(b.t||0))mine=true});
+ LIST=[...map.values()].sort((a,b)=>(b.t||0)-(a.t||0));saveLocal();if(JSON.stringify(LIST.map(c=>c.id))!==before){if(!cur.id&&LIST[0])cur=JSON.parse(JSON.stringify(LIST[0]));drawGallery();drawSec()}if(mine||R.length!==LIST.length||!(r&&r.v===2))pushCloud()}catch(e){}})();
+})();
+
+</script>
+
 </body>
 
 </html>

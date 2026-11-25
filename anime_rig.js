@@ -13,7 +13,7 @@ const OPT={
  outfitColor:["#2f3863","#b5523b","#2f6b4f","#c8902a","#6b3fa0","#1d1d24","#e9e4d8","#3b82c4","#c2417a","#7a5a3a"],
  accent:["#c8902a","#ffffff","#1d1d24","#e04a3a","#3fb5c9","#9ad14b"],
  extras:["sunglasses","glasses","goldChain","headphones","mustache","beard","bindi","earrings","cap","blush","mole","scar","pen","towel","flowers"],
- expr:["neutral","happy","laugh","cool","angry","shock","panic","sad","smirk","worried","love","sleepy"],
+ expr:["neutral","happy","smiling","laugh","angry","sad","crying","surprised","shock","scared","confident","confused","shy","serious","evil","cool","panic","smirk","worried","love","sleepy"],
  bg:["#dfe5f5","#f5e6d0","#e3f1e6","#f3dede","#ece3f5","#1f2438","#fff4c9","#d9eef2"]
 };
 const DEF={name:"New character",gender:"boy",age:"young",face:"oval",skin:"#dfab84",eyes:"big",eyeColor:"#3b2a20",hair:"spiky",hairColor:"#1b1b1f",outfit:"tshirt",outfitColor:"#2f3863",accent:"#c8902a",extras:[],expr:"neutral",bg:"#dfe5f5"};
@@ -30,7 +30,16 @@ const EX={ // brows, eyes mode, mouth, effects
  smirk:{b:"oneup",e:"half",m:"smirk",fx:[]},
  worried:{b:"worried",e:"open",m:"wavy",fx:["sweat"]},
  love:{b:"up",e:"heart",m:"smile",fx:["blush"]},
- sleepy:{b:"flat",e:"sleep",m:"small",fx:["zzz"]}
+ sleepy:{b:"flat",e:"sleep",m:"small",fx:["zzz"]},
+ smiling:{b:"flat",e:"open",m:"smile",fx:[]},
+ crying:{b:"worried",e:"closed",m:"cry",fx:["tears"]},
+ surprised:{b:"raised",e:"open",m:"o",fx:[]},
+ scared:{b:"worried",e:"shock",m:"wavy",fx:["sweat","shade"]},
+ confident:{b:"oneup",e:"half",m:"grin",fx:["sparkle"]},
+ confused:{b:"confused",e:"open",m:"side",fx:["question"]},
+ shy:{b:"worried",e:"look",m:"small",fx:["blush"]},
+ serious:{b:"serious",e:"open",m:"line",fx:[]},
+ evil:{b:"angry",e:"half",m:"evil",fx:["shade"]}
 };
 function draw(p0,exprOver,opts){
  const p=Object.assign({},DEF,p0||{});p.extras=p.extras||[];const ex=EX[exprOver||p.expr]||EX.neutral;const has=x=>p.extras.includes(x);
@@ -63,8 +72,9 @@ function draw(p0,exprOver,opts){
   mohawk:`M118 196 Q112 150 128 128 L272 128 Q288 150 282 196 Z M176 130 L170 40 L200 64 L214 30 L230 70 L240 46 L232 130Z`
  }[p.hair]||"";
  const HT="translate(200 200) scale(1.14) translate(-200 -200)";
+ const iB0=o.length;
  if(p.hair!=="bald")o+=`<g transform="${HT}"><path d="${hb}" fill="url(#${id}hr)" stroke="${Hd}" stroke-width="3" stroke-linejoin="round"/></g>`;
- o+=`<g transform="translate(0 6)">`;
+ const iBody0=o.length;o+=`<g transform="translate(0 6)">`;
  // body
  const sw=fem?0:14;
  o+=`<path d="M${44-sw} 500 Q${52-sw/2} 372 168 340 L232 340 Q${348+sw/2} 372 ${356+sw} 500Z" fill="${O}" stroke="${Od}" stroke-width="3"/>`;
@@ -87,9 +97,9 @@ function draw(p0,exprOver,opts){
  if(has("towel"))o+=`<path d="M150 340 Q130 380 140 500 L176 500 Q166 400 182 346Z" fill="#ffffff" stroke="#c9c9c9" stroke-width="2"/><path d="M146 380 L170 380 M144 420 L168 420" stroke="${A}" stroke-width="4"/>`;
  if(has("pen"))o+=`<rect x="118" y="410" width="6" height="38" rx="2" fill="#2b62c4" transform="rotate(8 121 429)"/>`;
  if(has("flowers"))o+=`<g fill="#fff6d6" stroke="#e0b84a" stroke-width="1.5"><circle cx="284" cy="132" r="7"/><circle cx="296" cy="142" r="7"/><circle cx="288" cy="156" r="7"/></g>`;
- o+=`</g><g transform="${HT}">`;
+ o+=`</g>`;const iBody1=o.length;o+=`<g transform="${HT}">`;
  // ears
- o+=`<ellipse cx="121" cy="196" rx="13" ry="20" fill="${S}" stroke="${Sdd}" stroke-width="2.5"/><ellipse cx="279" cy="196" rx="13" ry="20" fill="${S}" stroke="${Sdd}" stroke-width="2.5"/><path d="M118 188 Q124 196 120 206" fill="none" stroke="${Sd}" stroke-width="3"/><path d="M282 188 Q276 196 280 206" fill="none" stroke="${Sd}" stroke-width="3"/>`;
+ const TU=(opts&&opts.turn)||0;if(TU<=8)o+=`<ellipse cx="279" cy="196" rx="13" ry="20" fill="${S}" stroke="${Sdd}" stroke-width="2.5"/><path d="M282 188 Q276 196 280 206" fill="none" stroke="${Sd}" stroke-width="3"/>`;if(TU>=-8)o+=`<ellipse cx="121" cy="196" rx="13" ry="20" fill="${S}" stroke="${Sdd}" stroke-width="2.5"/><path d="M118 188 Q124 196 120 206" fill="none" stroke="${Sd}" stroke-width="3"/>`;
  if(has("earrings"))o+=`<circle cx="121" cy="220" r="6" fill="#f2c94c" stroke="#a8801f" stroke-width="2"/><circle cx="279" cy="220" r="6" fill="#f2c94c" stroke="#a8801f" stroke-width="2"/>`;
  // face
  o+=`<path d="${face}" fill="${S}" stroke="${Sdd}" stroke-width="3" stroke-linejoin="round"/>`;
@@ -97,6 +107,7 @@ function draw(p0,exprOver,opts){
  if(old)o+=`<path d="M150 150 Q170 144 186 150 M214 150 Q230 144 250 150" fill="none" stroke="${Sd}" stroke-width="2.5"/><path d="M146 248 Q152 262 150 272 M254 248 Q248 262 250 272" fill="none" stroke="${Sd}" stroke-width="2.5"/>`;
  // blush
  if(ex.fx.includes("blush")||has("blush"))o+=`<g fill="#ff7a8a" opacity=".38"><ellipse cx="150" cy="236" rx="20" ry="9"/><ellipse cx="250" cy="236" rx="20" ry="9"/></g><g stroke="#ff6b7d" stroke-width="2" opacity=".6"><path d="M140 232 l6 -6 M150 232 l6 -6 M160 232 l6 -6 M240 232 l6 -6 M250 232 l6 -6 M260 232 l6 -6"/></g>`;
+ const TX=(opts&&opts.turn)||0;o+=`<g transform="translate(${TX} 0)">`;
  // eyes
  const eye=(x,flip)=>{const f=flip?-1:1;const st=p.eyes;let g="";const em=ex.e;
   if(em==="closed")return `<path d="M${x-22} 202 Q${x} 180 ${x+22} 202" fill="none" stroke="#1d1416" stroke-width="5" stroke-linecap="round"/>`;
@@ -106,6 +117,7 @@ function draw(p0,exprOver,opts){
   const shock=em==="shock";
   g+=`<ellipse cx="${x}" cy="200" rx="${rx+3}" ry="${ry+2}" fill="#fff" stroke="#2a1d1f" stroke-width="2"/>`;
   if(shock)g+=`<circle cx="${x}" cy="202" r="7" fill="url(#${id}ir)" stroke="#120b0c" stroke-width="2"/><circle cx="${x-2}" cy="199" r="2" fill="#fff"/>`;
+  else if(em==="look")g+=`<ellipse cx="${x-6}" cy="210" rx="${rx-4}" ry="${ry-5}" fill="url(#${id}ir)"/><ellipse cx="${x-6}" cy="212" rx="${(rx-4)*.5}" ry="${(ry-5)*.55}" fill="#120b0c"/><ellipse cx="${x-11}" cy="203" rx="5" ry="6" fill="#fff"/>`;
   else g+=`<ellipse cx="${x+f*1}" cy="${204}" rx="${rx-3}" ry="${ry-3}" fill="url(#${id}ir)"/><ellipse cx="${x+f*1}" cy="206" rx="${(rx-3)*.5}" ry="${(ry-3)*.55}" fill="#120b0c"/><ellipse cx="${x-6*f}" cy="194" rx="6" ry="7.5" fill="#fff"/><circle cx="${x+7*f}" cy="214" r="3" fill="#fff" opacity=".85"/>`;
   // upper lid / lashes
   const lidY=em==="half"||st==="sleepy"?194:180;
@@ -117,7 +129,7 @@ function draw(p0,exprOver,opts){
   return g};
  o+=eye(165,false)+eye(235,true);
  // brows
- const bw={flat:["M140 160 Q165 152 188 160","M212 160 Q235 152 260 160"],up:["M140 154 Q165 142 188 152","M212 152 Q235 142 260 154"],angry:["M142 150 Q168 158 190 170","M210 170 Q232 158 258 150"],raised:["M140 146 Q165 132 188 144","M212 144 Q235 132 260 146"],worried:["M142 162 Q168 150 188 146","M212 146 Q232 150 258 162"],oneup:["M140 160 Q165 154 188 160","M212 150 Q235 138 260 148"]}[ex.b]||["M140 160 Q165 152 188 160","M212 160 Q235 152 260 160"];
+ const bw={flat:["M140 160 Q165 152 188 160","M212 160 Q235 152 260 160"],up:["M140 154 Q165 142 188 152","M212 152 Q235 142 260 154"],angry:["M142 150 Q168 158 190 170","M210 170 Q232 158 258 150"],raised:["M140 146 Q165 132 188 144","M212 144 Q235 132 260 146"],worried:["M142 162 Q168 150 188 146","M212 146 Q232 150 258 162"],oneup:["M140 160 Q165 154 188 160","M212 150 Q235 138 260 148"],confused:["M140 150 Q165 140 188 150","M212 164 Q235 160 260 166"],serious:["M140 156 Q165 156 190 164","M210 164 Q235 156 260 156"]}[ex.b]||["M140 160 Q165 152 188 160","M212 160 Q235 152 260 160"];
  const bc=p.hair==="bald"?"#8a8a8a":Hd;
  o+=`<path d="${bw[0]}" fill="none" stroke="${bc}" stroke-width="${old?8:6}" stroke-linecap="round"/><path d="${bw[1]}" fill="none" stroke="${bc}" stroke-width="${old?8:6}" stroke-linecap="round"/>`;
  // nose
@@ -130,13 +142,19 @@ function draw(p0,exprOver,opts){
   shout:`<path d="M178 252 L222 252 L214 284 L186 284Z" fill="#7a2230" stroke="#4a1418" stroke-width="3" stroke-linejoin="round"/><path d="M180 254 L220 254 L218 260 L182 260Z" fill="#fff"/>`,
   o:`<ellipse cx="200" cy="266" rx="11" ry="15" fill="#7a2230" stroke="#4a1418" stroke-width="3"/>`,
   wavy:`<path d="M180 264 Q186 256 192 264 Q198 272 204 264 Q210 256 216 264 Q220 270 224 264" fill="none" stroke="#5a2a2a" stroke-width="3.5" stroke-linecap="round"/>`,
-  frown:`<path d="M184 270 Q200 256 216 270" fill="none" stroke="#5a2a2a" stroke-width="4" stroke-linecap="round"/>`}[ex.m];
+  frown:`<path d="M184 270 Q200 256 216 270" fill="none" stroke="#5a2a2a" stroke-width="4" stroke-linecap="round"/>`,
+  cry:`<path d="M180 270 Q190 254 200 262 Q210 254 220 270 Q210 282 200 278 Q190 282 180 270Z" fill="#7a2230" stroke="#4a1418" stroke-width="3"/>`,
+  grin:`<path d="M178 256 Q200 274 224 252 Q214 270 200 272 Q186 272 178 256Z" fill="#fff" stroke="#4a1418" stroke-width="3"/><path d="M186 262 L188 268 M196 264 L196 271 M206 264 L206 270 M215 260 L214 266" stroke="#c9b9b9" stroke-width="1.5"/>`,
+  line:`<path d="M186 264 L214 264" stroke="#5a2a2a" stroke-width="4" stroke-linecap="round"/>`,
+  side:`<path d="M188 266 Q200 262 214 258" fill="none" stroke="#5a2a2a" stroke-width="3.5" stroke-linecap="round"/>`,
+  evil:`<path d="M172 252 Q200 268 230 248 Q222 276 200 278 Q180 278 172 252Z" fill="#fff" stroke="#4a1418" stroke-width="3"/><path d="M180 258 L184 266 L188 258 M212 258 L216 266 L220 256" fill="none" stroke="#4a1418" stroke-width="2"/>`}[ex.m];
  o+=mo||"";
  if(has("mustache"))o+=`<path d="M200 246 Q182 238 168 252 Q182 252 200 250 Q218 252 232 252 Q218 238 200 246Z" fill="${p.hair==="bald"?"#7d7d7d":Hd}"/>`;
  if(has("beard"))o+=`<path d="M128 214 Q136 270 170 292 Q200 ${chin[0]+18} 230 292 Q264 270 272 214 Q266 262 236 276 Q220 284 200 284 Q180 284 164 276 Q134 262 128 214Z" fill="${p.hair==="bald"?"#7d7d7d":Hd}" opacity=".95"/>`;
  if(has("mole"))o+=`<circle cx="232" cy="250" r="3.5" fill="#3a2418"/>`;
  if(has("scar"))o+=`<path d="M246 150 L262 182 M248 166 L260 160 M252 176 L262 170" stroke="#a8523d" stroke-width="3" stroke-linecap="round"/>`;
  if(has("bindi"))o+=`<circle cx="200" cy="150" r="5" fill="#d8202f"/>`;
+ o+=`</g>`;
  // front hair
  const hf={
   spiky:`M116 178 L124 120 L140 150 L148 98 L170 140 L182 92 L198 136 L214 90 L226 138 L246 96 L254 146 L268 112 L284 178 Q292 120 260 92 Q200 62 140 92 Q108 120 116 178Z`,
@@ -163,9 +181,14 @@ function draw(p0,exprOver,opts){
  if(ex.fx.includes("vein"))o+=`<g stroke="#d8202f" stroke-width="5" stroke-linecap="round" fill="none"><path d="M258 110 q6 8 0 16 M270 110 q-6 8 0 16 M252 120 q8 -6 16 0 M252 132 q8 6 16 0"/></g>`;
  if(ex.fx.includes("lines"))o+=`<g stroke="#1d1d24" stroke-width="4" stroke-linecap="round"><path d="M80 120 L100 132 M74 160 L98 164 M320 120 L300 132 M326 160 L302 164 M200 30 L200 52"/></g>`;
  if(ex.fx.includes("tear"))o+=`<path d="M244 220 Q250 240 246 250 Q240 258 236 250 Q234 240 244 220Z" fill="#8fd3ff" stroke="#3a8fc4" stroke-width="2"/>`;
+ if(ex.fx.includes("tears"))o+=`<path d="M150 206 Q146 250 156 300 L168 300 Q160 250 162 206Z M250 206 Q254 250 244 300 L232 300 Q240 250 238 206Z" fill="#8fd3ff" opacity=".85" stroke="#3a8fc4" stroke-width="2"/>`;
+ if(ex.fx.includes("shade"))o+=`<g stroke="#4a3a7a" stroke-width="3" opacity=".55"><path d="M150 108 L150 146 M164 104 L164 142 M178 102 L178 138 M222 102 L222 138 M236 104 L236 142 M250 108 L250 146"/></g>`;
+ if(ex.fx.includes("sparkle"))o+=`<path d="M300 110 l6 16 l16 6 l-16 6 l-6 16 l-6 -16 l-16 -6 l16 -6Z" fill="#f2c94c" stroke="#c8902a" stroke-width="2"/>`;
+ if(ex.fx.includes("question"))o+=`<text x="296" y="128" font-family="Arial Black,Arial" font-size="56" font-weight="900" fill="#3b82c4" stroke="#fff" stroke-width="3" paint-order="stroke">?</text>`;
  if(ex.fx.includes("zzz"))o+=`<text x="300" y="110" font-family="Arial Black,Arial" font-size="30" fill="#2f3863" font-weight="900">Z<tspan font-size="22" dy="-14">z</tspan><tspan font-size="16" dy="-10">z</tspan></text>`;
  o+=`</g>`;
+ if(opts&&opts.headOnly){const defs=(o.match(/<defs>[\s\S]*?<\/defs>/)||[""])[0];return defs+o.slice(iB0,iBody0)+o.slice(iBody1)}
  if(opts&&opts.label)o+=`<rect x="0" y="456" width="400" height="44" fill="rgba(20,22,40,.72)"/><text x="200" y="486" font-family="Arial,sans-serif" font-size="24" font-weight="700" text-anchor="middle" fill="#fff">${String(opts.label).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]))}</text>`;
  return o+`</svg>`}
-window.ANIME={OPT,DEF,draw,EXPR:Object.keys(EX)};
+window.ANIME={OPT,DEF,draw,EXPR:Object.keys(EX),EXDEF:k=>EX[k]||EX.neutral};
 })();
