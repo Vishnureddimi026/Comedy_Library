@@ -3323,7 +3323,7 @@ function portrait(P,o){o=o||{};const r=rnd((P.name||"x")+(o.hair||""));const sty
  const TN=o.turn?18:0;let face=fem?`M166 198C164 258 176 304 210 340C228 358 242 366 250 366C258 366 272 358 290 340C324 304 336 258 334 198C330 128 170 128 166 198Z`:`M162 196C160 258 172 306 206 342C226 362 242 370 250 370C258 370 274 362 294 342C328 306 340 258 338 196C334 124 166 124 162 196Z`;
  if(TN)face=fem?`M166 198C164 262 180 308 216 342C234 360 250 368 262 366C276 362 290 350 302 334C324 302 336 260 334 198C330 128 170 128 166 198Z`:`M162 196C160 262 178 312 214 346C232 364 250 372 264 370C278 366 292 354 306 336C328 304 340 262 338 196C334 124 166 124 162 196Z`;
  const hf=`<path d="${crown(style)}"/>`+C.map(c=>`<path d="${clumpPath(c)}"/>`).join("");
- const part=o.part;let s=part?"":`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 560" width="500" height="560" class="anport">`+bgArt(o.bg||"room",o.base);
+ const part=o.part;let s=part?"":`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 560" width="500" height="560" class="anport">`+(A.ASETS&&A.ASETS[o.bg]&&A.bgArt?A.bgArt(o.bg,500,560,o.base):bgArt(o.bg||"room",o.base));
  s+=`<defs><linearGradient id="${id}h" x1="0" x2="0" gradientUnits="userSpaceOnUse" y1="80" y2="320"><stop offset="0" stop-color="${lt(hc,.2)}"/><stop offset=".45" stop-color="${hc}"/><stop offset="1" stop-color="${dk(hc,.3)}"/></linearGradient><clipPath id="${id}f"><path d="${face}"/></clipPath><clipPath id="${id}hf">${hf}</clipPath><radialGradient id="${id}sk" cx=".45" cy=".42" r=".7"><stop offset="0" stop-color="${lt(sk,.14)}"/><stop offset="1" stop-color="${sk}"/></radialGradient></defs>`;
  if(part!=="front"){s+=`<path d="${backHair(style)}" fill="${dk(hc,.28)}" stroke="${LN}" stroke-width="2.5"/>`;
  if(style==="ponytail")s+=`<path d="M300 140C380 130 420 220 400 330C392 380 372 410 352 430C368 360 360 260 320 200Z" fill="${dk(hc,.2)}" stroke="${LN}" stroke-width="2.5"/>`}
@@ -3403,6 +3403,7 @@ function headBackA(P,o,three){const style=o.hair||mapHair(P.hair),hc=P.hairColor
  if(style==="spiky")s+=`<path d="M186 120L170 70L214 98L232 52L254 92L286 54L292 98L334 76L322 124Z" fill="url(#${id}h)" stroke="${LN}" stroke-width="2.4" stroke-linejoin="round"/>`;
  return s}
 /* ---------- Anime full body ---------- */
+const SETS={flatroom:"Warm room",apartment:"Apartment",office:"Office",stage:"Stage",street_night:"City street at night"};
 const POSE={stand:"Standing",pockets:"Hands in pockets",wave:"Waving",think:"Thinking (hand on chin)",cross:"Arms crossed",point:"Pointing",cheer:"Cheering (both hands up)",run:"Running"};
 function bgFull(k,base){const W=400,H=800;
  if(k==="plain")return `<rect width="${W}" height="${H}" fill="${base||"#dfe5f5"}"/><ellipse cx="200" cy="772" rx="110" ry="14" fill="#000" opacity=".12"/>`;
@@ -3410,10 +3411,18 @@ function bgFull(k,base){const W=400,H=800;
  if(k==="night")return `<rect width="${W}" height="${H}" fill="#1d2440"/><g fill="#2c3560">${[0,1,2,3,4,5,6].map(i=>`<rect x="${i*60}" y="${300+(i*41%120)}" width="52" height="500"/>`).join("")}</g><g fill="#f3d27a" opacity=".55">${Array.from({length:44},(_,i)=>`<rect x="${(i*53)%400+8}" y="${340+(i*29)%300}" width="6" height="8"/>`).join("")}</g><rect y="720" width="${W}" height="80" fill="#2a2a34"/>`;
  if(k==="class")return `<rect width="${W}" height="${H}" fill="#e9e2cf"/><rect x="30" y="90" width="340" height="200" rx="6" fill="#2f4b3c" stroke="#6b4f33" stroke-width="10"/><g stroke="#e8efe6" stroke-width="3" opacity=".6"><path d="M70 140h120M70 170h90M240 130h100"/></g><rect y="690" width="${W}" height="110" fill="#cdbb95"/><path d="M0 690H400" stroke="#a8946c" stroke-width="3"/>`;
  return `<defs><linearGradient id="afroom" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#c9bfa4"/><stop offset=".5" stop-color="#ddd9c8"/><stop offset="1" stop-color="#b9b49c"/></linearGradient></defs><rect width="${W}" height="${H}" fill="url(#afroom)"/><rect x="14" y="160" width="62" height="540" fill="#a58c62" opacity=".55"/><rect y="700" width="${W}" height="100" fill="#a98d68"/><path d="M0 700H400" stroke="#8a7050" stroke-width="3"/><g fill="#fff" opacity=".18"><circle cx="340" cy="150" r="36"/><circle cx="300" cy="230" r="20"/></g>`}
-function limb(x,y,a1,a2,L1,L2,w1,w2,col,end){const D=v=>v*180/Math.PI,dc=dk(col,.16);
- return `<g transform="translate(${x} ${y}) rotate(${D(a1).toFixed(1)})"><path d="M${-w1/2} 0Q${-w1/2-2} ${L1/2} ${-w2/2-1} ${L1}L${w2/2+1} ${L1}Q${w1/2+2} ${L1/2} ${w1/2} 0Z" fill="${col}" stroke="${LN}" stroke-width="2.2" stroke-linejoin="round"/><path d="M${w1*.12} 2L${w1/2-1} 2L${w2/2} ${L1}L${w2*.1} ${L1}Z" fill="${dc}" opacity=".7"/><circle cx="0" cy="0" r="${w1/2}" fill="${col}"/>`+
- `<g transform="translate(0 ${L1}) rotate(${D(a2).toFixed(1)})"><path d="M${-w2/2-1} 0Q${-w2/2} ${L2/2} ${-w2/2+2} ${L2}L${w2/2-2} ${L2}Q${w2/2} ${L2/2} ${w2/2+1} 0Z" fill="${col}" stroke="${LN}" stroke-width="2.2" stroke-linejoin="round"/><circle cx="0" cy="0" r="${w2/2+.5}" fill="${col}"/>${end?end(L2):""}</g></g>`}
-function hand(sk,L,fist){return fist?`<circle cx="0" cy="${L+8}" r="10" fill="${sk}" stroke="${LN}" stroke-width="2"/><path d="M-5 ${L+5}h10M-5 ${L+10}h10" stroke="${dk(sk,.4)}" stroke-width="1.4"/>`:`<path d="M-8 ${L-2}Q-11 ${L+14} -2 ${L+20}Q6 ${L+22} 9 ${L+12}Q10 ${L+4} 8 ${L-2}Z" fill="${sk}" stroke="${LN}" stroke-width="2"/><path d="M8 ${L+4}l6 4" stroke="${LN}" stroke-width="2" stroke-linecap="round"/>`}
+function cel(d,col,amt,side){const id=uid();return `<clipPath id="${id}"><path d="${d}"/></clipPath><path d="${d}" fill="${col}"/><rect x="${side||0}" y="-400" width="400" height="1200" fill="${dk(col,amt||.17)}" clip-path="url(#${id})"/><path d="${d}" fill="none" stroke="${LN}" stroke-width="2.6" stroke-linejoin="round"/>`}
+function limb(x,y,a1,a2,L1,L2,w1,w2,col,end,o){o=o||{};const D=v=>v*180/Math.PI;
+ const U=`M${-w1/2} -2C${-w1/2-2} ${L1*.45} ${-w2/2-2} ${L1*.8} ${-w2/2-1} ${L1+2}L${w2/2+1} ${L1+2}C${w2/2+2} ${L1*.8} ${w1/2+2} ${L1*.45} ${w1/2} -2Q0 ${-w1*.35} ${-w1/2} -2Z`;
+ const F=`M${-w2/2-1} -2C${-w2/2-1} ${L2*.5} ${-w2/2+1} ${L2*.85} ${-w2/2+3} ${L2}L${w2/2-3} ${L2}C${w2/2-1} ${L2*.85} ${w2/2+1} ${L2*.5} ${w2/2+1} -2Q0 ${-w2*.4} ${-w2/2-1} -2Z`;
+ let s=`<g transform="translate(${x} ${y}) rotate(${D(a1).toFixed(1)})">`+cel(U,col,.17,w1*.12);
+ if(o.crease)s+=`<path d="M${w1*.05} 8Q${w1*.1} ${L1*.5} 0 ${L1-6}" fill="none" stroke="${dk(col,.35)}" stroke-width="1.4" opacity=".6"/>`;
+ s+=`<g transform="translate(0 ${L1}) rotate(${D(a2).toFixed(1)})">`+cel(F,o.fore||col,.17,w2*.1);
+ if(o.crease)s+=`<path d="M${-w2*.25} 4Q${-w2*.05} 9 ${w2*.25} 4M0 10Q${w2*.08} ${L2*.5} 0 ${L2-10}" fill="none" stroke="${dk(o.fore||col,.35)}" stroke-width="1.4" opacity=".6"/>`;
+ if(o.elbow)s+=`<path d="M${-w2*.3} 2Q0 6 ${w2*.3} 2" fill="none" stroke="${dk(o.fore||col,.35)}" stroke-width="1.4" opacity=".6"/>`;
+ return s+(end?end(L2):"")+`</g></g>`}
+function hand(sk,L,fist){const d=fist?`M-11 ${L-2}C-14 ${L+8} -10 ${L+20} 0 ${L+20}C10 ${L+20} 14 ${L+8} 11 ${L-2}Z`:`M-9 ${L-3}C-13 ${L+10} -10 ${L+24} -1 ${L+25}C8 ${L+25} 11 ${L+16} 10 ${L+4}L9 ${L-3}Z`;
+ let s=cel(d,sk,.15,2);if(fist)s+=`<path d="M-8 ${L+6}h16M-8 ${L+12}h16" stroke="${dk(sk,.45)}" stroke-width="1.4"/>`;else s+=`<path d="M8 ${L+3}C16 ${L+4} 18 ${L+12} 12 ${L+15}" fill="${sk}" stroke="${LN}" stroke-width="2.2" stroke-linecap="round"/><path d="M-4 ${L+14}v8M1 ${L+15}v8" stroke="${dk(sk,.4)}" stroke-width="1.2" opacity=".7"/>`;return s}
 function fullBody(P,o){o=o||{};const sk=P.skin||"#e4b48c",fem=/girl|woman/.test(P.gender||""),O=P.outfit||"tshirt",sh=P.outfitColor||"#7fa383",ac=P.accent||"#c8902a",pa=P.bottomColor||"#2e3a5c",so=P.shoeColor||"#1d1d24",ext=P.extras||[];
  const pose=o.pose||"stand",J0=o.adj||{},tall=({short:.95,average:1,tall:1.04}[P.height]||1)*(+J0.leg||1),wd=({slim:.9,average:1,broad:1.1,chubby:1.2}[P.build]||1)*(+J0.width||1);
  const J=o.adj||{},k=+J.head||.5,hx=200-250*k,hy=192-370*k,head=`<g transform="translate(${hx} ${hy}) scale(${k})">`;
@@ -3423,20 +3432,20 @@ function fullBody(P,o){o=o||{};const sk=P.skin||"#e4b48c",fem=/girl|woman/.test(
  // pose angles [upper, fore] for left (viewer's left) and right arms, radians; 0 = straight down
  const PA={stand:[[.12,-.04],[-.12,.04]],pockets:[[.3,-.94],[-.3,.94]],wave:[[.14,-.04],[-2.5,-.45]],think:[[.12,-.04],[.35,2.69]],cross:[[.1,-2.03],[-.1,2.03]],point:[[.12,-.04],[-1.5,-.05]],cheer:[[2.6,.3],[-2.6,-.3]],run:[[.55,-2.1],[-.75,1.0]]}[pose]||[[.16,-.06],[-.16,.06]];
  const LA=pose==="run"?[[.3,.45],[-.38,.1]]:[[.04,0],[-.04,0]];
- let s=`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 800" width="400" height="800" class="anfull">`+bgFull(o.bg||"room",o.base);
+ let s=`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 800" width="400" height="800" class="anfull">`+(SETS[o.bg]&&A.bgArt?A.bgArt(o.bg,400,800,o.base):bgFull(o.bg||"room",o.base))+`<ellipse cx="200" cy="${hipY+legL+16}" rx="${SD?70:92}" ry="13" fill="#000" opacity=".2"/>`;
  const tl=+J.tilt||0;s+=`<g transform="${FL?"translate(400 0) scale(-1 1)":""}"><g transform="rotate(${tl} 200 196)">`+(VB==="front"||VB==="three"?head+portrait(P,Object.assign({},o,{part:"back"}))+`</g>`:"")+`</g><g transform="translate(200 0) scale(${SQ} 1) translate(-200 0)">`;
  // legs
- const legW=(fem?30:34)*wd;const shoe=(L)=>`<path d="M${-legW/2+2} ${L-4}L${legW/2-2} ${L-4}Q${legW/2+18} ${L+4} ${legW/2+16} ${L+16}L${-legW/2} ${L+16}Q${-legW/2-4} ${L+6} ${-legW/2+2} ${L-4}Z" fill="${so}" stroke="${LN}" stroke-width="2.2"/><path d="M${-legW/2} ${L+12}H${legW/2+16}" stroke="${lt(so,.5)}" stroke-width="2"/>`;
+ const legW=(fem?30:34)*wd;const shoe=(L)=>!SD&&!BK?`<path d="M${-legW/2-3} ${L-4}Q${-legW/2-6} ${L+14} 0 ${L+16}Q${legW/2+6} ${L+14} ${legW/2+3} ${L-4}Z" fill="${so}" stroke="${LN}" stroke-width="2.6"/><path d="M${-legW/2-2} ${L+10}Q0 ${L+18} ${legW/2+2} ${L+10}" fill="none" stroke="${lt(so,.55)}" stroke-width="3"/><path d="M-4 ${L-1}h8M-4 ${L+4}h8" stroke="${lt(so,.4)}" stroke-width="1.6"/>`:BK?`<path d="M${-legW/2-3} ${L-4}Q${-legW/2-5} ${L+16} 0 ${L+16}Q${legW/2+5} ${L+16} ${legW/2+3} ${L-4}Z" fill="${dk(so,.1)}" stroke="${LN}" stroke-width="2.6"/>`:`<path d="M${-legW/2+2} ${L-4}L${legW/2-2} ${L-4}Q${legW/2+18} ${L+4} ${legW/2+16} ${L+16}L${-legW/2} ${L+16}Q${-legW/2-4} ${L+6} ${-legW/2+2} ${L-4}Z" fill="${so}" stroke="${LN}" stroke-width="2.2"/><path d="M${-legW/2} ${L+12}H${legW/2+16}" stroke="${lt(so,.5)}" stroke-width="2"/>`;
  if(O==="saree"||(O==="kurta"&&fem)){s+=`<path d="M${200-HP} ${hipY-30}L${200+HP} ${hipY-30}L${200+HP+30} ${hipY+legL-20}L${200-HP-30} ${hipY+legL-20}Z" fill="${O==="saree"?sh:pa}" stroke="${LN}" stroke-width="2.4"/><path d="M${200+10} ${hipY}L${200+HP+20} ${hipY+legL-20}" stroke="${ac}" stroke-width="6" opacity=".8"/><path d="M${200-HP-30} ${hipY+legL-30}H${200+HP+30}" stroke="${ac}" stroke-width="8"/>`;
   [-1,1].forEach(sg=>s+=`<g transform="translate(${200+sg*16} ${hipY+legL-20})">`+shoe(10)+`</g>`)}
- else [-1,1].forEach((sg,i)=>{const a=LA[i];s+=limb(200+sg*(HP*.45),hipY-6,a[0],a[1],legL*.5,legL*.5,legW,legW*.82,pa,(L)=>shoe(L))});
+ else [-1,1].forEach((sg,i)=>{const a=LA[i];s+=limb(200+sg*(HP*.45),hipY-6,a[0],a[1],legL*.5,legL*.5,legW,legW*.82,pa,(L)=>shoe(L),{crease:1})});
  // torso
- const tor=`M${200-SW} ${sy+6}Q${200-SW-4} ${sy+80} ${200-WA} ${wy}L${200-HP} ${hipY}L${200+HP} ${hipY}L${200+WA} ${wy}Q${200+SW+4} ${sy+80} ${200+SW} ${sy+6}Q200 ${sy-14} ${200-SW} ${sy+6}Z`;
+ const tor=`M${200-SW+10} ${sy-2}Q${200-SW-6} ${sy+2} ${200-SW-4} ${sy+34}Q${200-SW+2} ${sy+110} ${200-WA} ${wy}L${200-HP} ${hipY+2}Q200 ${hipY+8} ${200+HP} ${hipY+2}L${200+WA} ${wy}Q${200+SW-2} ${sy+110} ${200+SW+4} ${sy+34}Q${200+SW+6} ${sy+2} ${200+SW-10} ${sy-2}Q200 ${sy-12} ${200-SW+10} ${sy-2}Z`;
  const kurtaLen=O==="kurta"?110:0;
  if(O!=="saree")s+=`<path d="M${200-HP} ${hipY-36}L${200+HP} ${hipY-36}L${200+HP+2} ${hipY+6}L${200-HP-2} ${hipY+6}Z" fill="${pa}" stroke="${LN}" stroke-width="2"/>`;
- s+=`<path d="${tor}" fill="${shirt}" stroke="${LN}" stroke-width="2.4" stroke-linejoin="round"/>`;
+ s+=cel(tor,shirt,.15,200+SW*.3)+`<path d="M${200-SW+8} ${sy+60}Q${200-SW+22} ${sy+70} ${200-SW+18} ${sy+96}M${200+SW-8} ${sy+60}Q${200+SW-22} ${sy+70} ${200+SW-18} ${sy+96}M${200-WA+10} ${wy-30}Q${200-10} ${wy-18} ${200-4} ${wy-34}" fill="none" stroke="${dk(shirt,.3)}" stroke-width="1.5" opacity=".55"/>`;
  if(kurtaLen)s+=`<path d="M${200-HP} ${hipY-4}L${200+HP} ${hipY-4}L${200+HP+10} ${hipY+kurtaLen}L${200-HP-10} ${hipY+kurtaLen}Z" fill="${shirt}" stroke="${LN}" stroke-width="2.4"/><path d="M200 ${sy+4}V${sy+70}" stroke="${ac}" stroke-width="5"/>`;
- s+=`<path d="M${200+SW*.25} ${sy}Q${200+SW+4} ${sy+80} ${200+WA} ${wy}L${200+HP} ${hipY}L${200+HP*.45} ${hipY}Q${200+SW*.6} ${sy+120} ${200+SW*.25} ${sy}Z" fill="${dk(shirt,.14)}" opacity=".75"/>`;
+ 
  if(BK&&(O==="jacket"||O==="vest"))s+=`<path d="${tor}" fill="${sh}" stroke="${LN}" stroke-width="2.4" stroke-linejoin="round"/>`;
  if(!BK&&(O==="jacket"||O==="vest"))s+=`<path d="M${200-SW} ${sy+6}Q${200-SW-4} ${sy+80} ${200-WA} ${wy}L${200-HP} ${hipY}L${200-12} ${hipY}L${200-14} ${sy+10}Z" fill="${sh}" stroke="${LN}" stroke-width="2.2"/><path d="M${200+SW} ${sy+6}Q${200+SW+4} ${sy+80} ${200+WA} ${wy}L${200+HP} ${hipY}L${200+12} ${hipY}L${200+14} ${sy+10}Z" fill="${dk(sh,.1)}" stroke="${LN}" stroke-width="2.2"/>`;
  if(!BK&&!SD&&(O==="uniform"||O==="vest"))s+=`<path d="M196 ${sy+4}L204 ${sy+4}L208 ${sy+120}L200 ${sy+132}L192 ${sy+120}Z" fill="${ac}" stroke="${LN}" stroke-width="1.8"/>`;
@@ -3453,7 +3462,7 @@ function fullBody(P,o){o=o||{};const sk=P.skin||"#e4b48c",fem=/girl|woman/.test(
  const armL=222*Math.min(tall,1.1),uw=(fem?23:28)*wd;
  const end=(i)=>(L)=>{if(pose==="pockets")return "";return hand(sk,L,pose==="run"||(pose==="cross"))};
  const sleeveFore=long?sleeve:sk;
- const asw=(+J.arm||0)*Math.PI/180;[-1,1].forEach((sg,i)=>{if(SD&&sg<0)return;const pb=BK?[-PA[1-i][0],-PA[1-i][1]]:PA[i],a=[pb[0]+(sg<0?asw:-asw),pb[1]];
+ const asw=(+J.arm||0)*Math.PI/180;[-1,1].forEach((sg,i)=>{if(SD&&sg<0)return;const pb=BK?[-PA[1-i][0],-PA[1-i][1]]:PA[i],a=[pb[0]+(sg<0?asw:-asw),pb[1]];if(SD&&a[0]<-1.2){a[0]=-a[0];a[1]=-a[1]}
   const ar=limb((SD?202:200+sg*(SW-8)),sy+14,a[0],a[1],armL*.52,armL*.48,uw,uw*.86,long?sleeve:sk,(L)=>{
    let f="";if(long)f+=`<path d="M${-uw*.44} ${L-8}H${uw*.44}" stroke="${LN}" stroke-width="1.6"/>`;
    return f+end(i)(L)});
@@ -3462,9 +3471,10 @@ function fullBody(P,o){o=o||{};const sk=P.skin||"#e4b48c",fem=/girl|woman/.test(
  // head on top
  const HF=VB==="front"?portrait(P,Object.assign({},o,{part:"front"})):VB==="three"?portrait(P,Object.assign({},o,{part:"front",turn:1})):VB==="side"?headSideA(P,o):headBackA(P,o,VB==="tb");
  s+=`</g><g transform="rotate(${tl} 200 196)">`+head+HF+`</g></g></g>`;
+ if(o.fx!==false){const vid=uid();s+=`<defs><radialGradient id="${vid}" cx=".5" cy=".45" r=".75"><stop offset=".55" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".38"/></radialGradient></defs><rect width="400" height="800" fill="url(#${vid})"/><g fill="#fff" opacity=".22">${Array.from({length:22},(_,i)=>`<circle cx="${(i*97+31)%400}" cy="${(i*61+47)%700}" r="${1+(i%3)*.7}"/>`).join("")}</g>`}
  if(o.label)s+=`<rect x="0" y="756" width="400" height="44" fill="rgba(0,0,0,.45)"/><text x="200" y="785" text-anchor="middle" font-family="Arial" font-size="22" font-weight="700" fill="#fff">${String(o.label).replace(/[<&]/g,"")}</text>`;
  return s+`</svg>`}
-A.animeFull=fullBody;A.APOSE=POSE;A.AVIEW=[[0,"Front"],[45,"¾ right"],[90,"Right side"],[135,"¾ back right"],[180,"Back"],[225,"¾ back left"],[270,"Left side"],[315,"¾ left"]];
+A.animeFull=fullBody;A.APOSE=POSE;A.ASETS=SETS;A.AVIEW=[[0,"Front"],[45,"¾ right"],[90,"Right side"],[135,"¾ back right"],[180,"Back"],[225,"¾ back left"],[270,"Left side"],[315,"¾ left"]];
 A.portrait=portrait;A.PORT={HAIR,EXP,BG,mapHair};
 })();
 </script>
@@ -3526,7 +3536,7 @@ function drawCtl(){const box=$("#asAnCtl");if(!box)return;const md=cur.mainStyle
  ${md==="anime"?`<div class="ancol"><span>Pose</span><div class="chips">${ch("pose",A.APOSE,o.pose||"stand")}</div></div>`:""}
  <div class="ancol"><span>Expression</span><div class="chips">${ch("ex",PP.EXP,o.ex)}</div></div>
  <div class="ancol"><span>Hairstyle</span><div class="chips">${ch("hair",PP.HAIR,o.hair)}</div></div>
- <div class="ancol"><span>Background</span><div class="chips">${ch("bg",PP.BG,o.bg||"room")}</div></div>
+ <div class="ancol"><span>Background</span><div class="chips">${ch("bg",Object.assign({},PP.BG,A.ASETS||{}),o.bg||"room")}</div></div>
  <div class="ancol"><span>Adjust (drag)</span><div class="anadj">${ADJ.filter(a=>md==="anime"||["eye","tilt"].includes(a[0])).map(([k,n,mn,mx,st,df])=>`<label><span>${n}</span><input type="range" min="${mn}" max="${mx}" step="${st}" value="${J[k]!=null?J[k]:df}" data-adj="${k}"></label>`).join("")}
  ${md==="anime"?`<label class="ancheck"><input type="checkbox" data-adj="flip" ${J.flip?"checked":""}> Mirror (face the other way)</label>`:""}</div>
  <div class="acts"><button type="button" class="btn ghost sm" id="asAdjReset">↺ Reset adjustments</button></div></div>
@@ -3606,7 +3616,7 @@ function drawSec(){$("#asTabs").innerHTML=SEC.map(s=>`<button type="button" clas
  <div class="anport2"><div>${A.animeFull(cp,{hair:hs,ex:po.ex,bg:po.bg,base:cur.bg,pose:po.pose})}</div><div>${A.portrait(cp,{hair:hs,ex:po.ex,bg:po.bg,base:cur.bg})}</div></div>
  <div class="angrid2"><label class="ansel"><span>Anime hairstyle</span><select class="cin" data-po="hair">${Object.keys(PP.HAIR).map(k=>`<option value="${k}"${hs===k?" selected":""}>${PP.HAIR[k]}</option>`).join("")}</select></label>
  <label class="ansel"><span>Body pose</span><select class="cin" data-po="pose">${Object.keys(A.APOSE).map(k=>`<option value="${k}"${(po.pose||"stand")===k?" selected":""}>${A.APOSE[k]}</option>`).join("")}</select></label>
- <label class="ansel"><span>Background</span><select class="cin" data-po="bg">${Object.keys(PP.BG).map(k=>`<option value="${k}"${(po.bg||"room")===k?" selected":""}>${PP.BG[k]}</option>`).join("")}</select></label></div>
+ <label class="ansel"><span>Background</span><select class="cin" data-po="bg">${Object.entries(Object.assign({},PP.BG,A.ASETS||{})).map(([k,n])=>`<option value="${k}"${(po.bg||"room")===k?" selected":""}>${n}</option>`).join("")}</select></label></div>
  <div class="ancol"><span>Expression</span><div class="anqgrid anportg">${Object.keys(PP.EXP).map(k=>`<button type="button" class="anqb${(po.ex||"calm")===k?" on":""}" data-pox="${k}">${A.portrait(cp,{hair:hs,ex:k,bg:"plain",base:cur.bg})}<span>${PP.EXP[k]}</span></button>`).join("")}</div></div>
  <div class="acts"><button class="btn sm" type="button" data-png="animefull">Download full body (PNG)</button><button class="btn sm ghost" type="button" data-png="portrait">Download face portrait (PNG)</button><button class="btn sm ghost" type="button" data-png="animeposes">Download all poses (PNG)</button></div>`}
  if(sec==="art"){h=`<div class="anpanel"><h4>Get real painted anime art — free</h4><ol class="row"><li>Download the reference sheet (section 8) or the front view.</li><li>Open a free AI image app — for example the Gemini app (it gives free users a few image generations a day) or ChatGPT.</li><li>Attach the picture and paste the prompt below. Ask for one view or pose at a time.</li><li>Upload the result here — it is saved in this character's gallery.</li></ol>
