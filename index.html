@@ -2441,7 +2441,7 @@ if(changed){saveLocal();chips();if(open&&!document.activeElement?.id?.startsWith
 const OPT={
  gender:["boy","girl","man","woman"],
  age:["teen","young","adult","old"],
- face:["oval","round","sharp","square","long","heart","chubby"],
+ face:["oval","round","sharp","square","long","heart","chubby","diamond","pear","egg"],
  skin:["#fbe3cf","#f6d7bf","#eec3a0","#e4b48c","#dfab84","#d09a70","#c98f67","#b57d55","#a8714d","#8f5e3f","#7f5236","#5f3c26"],
  eyes:["big","sharp","sleepy","round","wide","narrow"],
  eyeColor:["#3b2a20","#4b3626","#1f2a44","#2d4a2f","#6b3a1f","#111111"],
@@ -3001,14 +3001,19 @@ function headF(L,e,turn,blink){const sk=L.skin,sd=dk(sk,.84),hc=L.hc,has=x=>L.ex
  if(L.hair==="bob")o+=fs(rr(-54,-50,108,104,40),hc);
  if(L.hair==="braid"){o+=fs(rr(-44,-48,88,70,34),hc);for(let i=0;i<6;i++)o+=fs(`M${44+i*1.5} ${18+i*15}m-10 0a10 9 0 1 0 20 0a10 9 0 1 0 -20 0`,hc,2.4);o+=fs(rr(46,104,16,8,3),L.acc,2)}
  [-1,1].forEach(s=>{if((s<0&&t<-6)||(s>0&&t>6))return;o+=fs(`M${s*38-8} 4A8 13 0 1 0 ${s*38+8} 4A8 13 0 1 0 ${s*38-8} 4Z`,sk)});
- let face;if(L.chibi)face=`M50 0A50 50 0 1 1 -50 0A50 50 0 1 1 50 0Z`;
- else if(L.face==="long")face=`M-35 -36C-39 10 -33 44 -14 60C-6 66 6 66 14 60C33 44 39 10 35 -36C28 -66 -28 -66 -35 -36Z`;
- else if(L.face==="heart")face=`M-43 -30C-43 4 -30 30 -10 50C-4 55 4 55 10 50C30 30 43 4 43 -30C34 -62 -34 -62 -43 -30Z`;
- else if(L.face==="chubby")face=`M-44 -26C-50 18 -36 46 -12 54C-4 57 4 57 12 54C36 46 50 18 44 -26C34 -64 -34 -64 -44 -26Z`;
- else if(L.fem)face=`M-37 -30C-40 10 -32 36 -12 50C-4 55 4 55 12 50C32 36 40 10 37 -30C30 -62 -30 -62 -37 -30Z`;
- else if(L.face==="square")face=`M-40 -30C-43 14 -38 38 -20 52C-8 58 8 58 20 52C38 38 43 14 40 -30C32 -62 -32 -62 -40 -30Z`;
- else if(L.face==="round")face=`M-40 -28C-44 14 -34 40 -14 52C-5 57 5 57 14 52C34 40 44 14 40 -28C32 -64 -32 -64 -40 -28Z`;
- else face=`M-38 -30C-42 10 -36 34 -16 52C-6 60 6 60 16 52C36 34 42 10 38 -30C30 -62 -30 -62 -38 -30Z`;
+ const FS={oval:`M-37 -32C-41 8 -33 36 -14 53C-6 59 6 59 14 53C33 36 41 8 37 -32C30 -62 -30 -62 -37 -32Z`,
+  round:`M-45 -18C-46 30 -24 54 0 54C24 54 46 30 45 -18C41 -63 -41 -63 -45 -18Z`,
+  sharp:`M-40 -30C-40 0 -31 22 -9 51L0 61L9 51C31 22 40 0 40 -30C32 -62 -32 -62 -40 -30Z`,
+  square:`M-42 -34L-42 32Q-42 50 -24 53L24 53Q42 50 42 32L42 -34C35 -62 -35 -62 -42 -34Z`,
+  long:`M-34 -40L-34 44Q-33 63 -12 66L12 66Q33 63 34 44L34 -40C28 -60 -28 -60 -34 -40Z`,
+  heart:`M-45 -32C-47 2 -30 30 -5 54Q0 58 5 54C30 30 47 2 45 -32C37 -63 -37 -63 -45 -32Z`,
+  chubby:`M-44 -26C-52 18 -38 48 -12 55C-4 57 4 57 12 55C38 48 52 18 44 -26C34 -64 -34 -64 -44 -26Z`,
+  diamond:`M-28 -50C-10 -56 10 -56 28 -50L45 -6Q44 18 22 42L0 58L-22 42Q-44 18 -45 -6Z`,
+  pear:`M-33 -46Q0 -63 33 -46Q43 -12 47 18Q46 46 20 55L-20 55Q-46 46 -47 18Q-43 -12 -33 -46Z`,
+  egg:`M-40 -34C-42 4 -30 34 -12 52C-6 56 6 56 12 52C30 34 42 4 40 -34C34 -66 -34 -66 -40 -34Z`};
+ let face;if(L.chibi&&(L.face==="round"||!FS[L.face]))face=`M50 0A50 50 0 1 1 -50 0A50 50 0 1 1 50 0Z`;
+ else if(L.fem&&(L.face==="oval"||!L.face))face=`M-37 -30C-40 10 -32 36 -12 50C-4 55 4 55 12 50C32 36 40 10 37 -30C30 -62 -30 -62 -37 -30Z`;
+ else face=FS[L.face]||FS.oval;
  o+=shade(face,`M${14+dx} -70C${30+dx} 0 ${30+dx} 30 ${8+dx} 70L60 70L60 -70Z`,sk,sd);
  if(has("beard")||(L.old&&!L.fem)){const id=uid();o+=`<clipPath id="${id}"><path d="${face}"/></clipPath><path d="M-40 12C-30 30 -20 40 0 42C20 40 30 30 40 12L40 70L-40 70Z" fill="rgba(52,36,28,${has("beard")?.55:.3})" clip-path="url(#${id})"/>`}
  else if(!L.fem&&!L.chibi&&L.face==="square"){const id=uid();o+=`<clipPath id="${id}"><path d="${face}"/></clipPath><path d="M-40 12C-30 30 -20 40 0 42C20 40 30 30 40 12L40 70L-40 70Z" fill="rgba(52,36,28,.22)" clip-path="url(#${id})"/>`}
@@ -3237,7 +3242,7 @@ const E=t=>String(t==null?"":t).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;","
 const isHex=v=>/^#[0-9a-f]{6}$/i.test(v||"");
 const LOOK=["gender","age","face","skin","eyes","eyeColor","hair","hairColor"],IDX=["mustache","bigMustache","beard","stubble","mole","scar","bindi","tilak","nosering","blush","freckles","dimples","eyebags","bandage","earrings","glasses"],OUTK=["outfit","outfitColor","accent","bottomColor","shoeColor"],OUTX=["sunglasses","goldChain","headphones","cap","towel","pen","flowers"];
 const LAB={gender:"Gender / body",age:"Age group",face:"Face shape",skin:"Skin tone",eyes:"Eye shape",eyeColor:"Eye colour",hair:"Hairstyle",hairColor:"Hair colour",outfit:"Outfit type",outfitColor:"Outfit colour",accent:"Accent colour",bottomColor:"Trousers / bottom colour",shoeColor:"Shoe colour",bg:"Background colour"};
-const NICE={gender:{boy:"Boy",girl:"Girl",man:"Man",woman:"Woman"},age:{teen:"Teen (school)",young:"Young (college)",adult:"Adult (parent)",old:"Old"},face:{oval:"Oval",round:"Round",sharp:"Sharp / pointed",square:"Square / strong",long:"Long / thin",heart:"Heart (wide cheeks, small chin)",chubby:"Chubby / full cheeks"},eyes:{big:"Big almond",sharp:"Half-lid (cool / bored)",sleepy:"Sleepy",round:"Dot eyes (kids, simple)",wide:"Wide open (innocent / funny)",narrow:"Narrow (suspicious)"},hair:{spiky:"Spiky",side:"Side-swept",messy:"Messy",short:"Short neat",long:"Long",ponytail:"Ponytail",bun:"Bun",bald:"Bald (sides only)",curly:"Curly",mohawk:"Mohawk",puff:"Puff / pompadour (hero style)",buzz:"Buzz cut (very short)",parted:"Middle parting",fringe:"Fringe / bangs",wavy:"Wavy",bob:"Bob (shoulder length)",braid:"Long braid (jada)",receding:"Receding hairline (uncle style)"},outfit:{tshirt:"T-shirt (casual)",shirt:"Shirt (college)",hoodie:"Hoodie (casual / winter)",jacket:"Open jacket (cool / action)",kurta:"Kurta (traditional)",saree:"Saree (traditional)",vest:"Vest over shirt (formal)",uniform:"Uniform with tie (school / office)"}};
+const NICE={gender:{boy:"Boy",girl:"Girl",man:"Man",woman:"Woman"},age:{teen:"Teen (school)",young:"Young (college)",adult:"Adult (parent)",old:"Old"},face:{oval:"Oval",round:"Round",sharp:"V-shape / pointed chin",square:"Square / boxy",long:"Long / thin",heart:"Heart (wide cheeks, small chin)",chubby:"Chubby / full cheeks",diamond:"Diamond (wide cheekbones)",pear:"Wide jaw (strong / uncle)",egg:"Egg (wide forehead)"},eyes:{big:"Big almond",sharp:"Half-lid (cool / bored)",sleepy:"Sleepy",round:"Dot eyes (kids, simple)",wide:"Wide open (innocent / funny)",narrow:"Narrow (suspicious)"},hair:{spiky:"Spiky",side:"Side-swept",messy:"Messy",short:"Short neat",long:"Long",ponytail:"Ponytail",bun:"Bun",bald:"Bald (sides only)",curly:"Curly",mohawk:"Mohawk",puff:"Puff / pompadour (hero style)",buzz:"Buzz cut (very short)",parted:"Middle parting",fringe:"Fringe / bangs",wavy:"Wavy",bob:"Bob (shoulder length)",braid:"Long braid (jada)",receding:"Receding hairline (uncle style)"},outfit:{tshirt:"T-shirt (casual)",shirt:"Shirt (college)",hoodie:"Hoodie (casual / winter)",jacket:"Open jacket (cool / action)",kurta:"Kurta (traditional)",saree:"Saree (traditional)",vest:"Vest over shirt (formal)",uniform:"Uniform with tie (school / office)"}};
 const XN={sunglasses:"Sunglasses",glasses:"Glasses",goldChain:"Gold chain",headphones:"Headphones",mustache:"Mustache",beard:"Beard",bindi:"Bindi",earrings:"Earrings",cap:"Cap",blush:"Always blushing",mole:"Mole",scar:"Scar",pen:"Pen in pocket",towel:"Towel on shoulder",flowers:"Flowers in hair",stubble:"Stubble (light beard)",bigMustache:"Big twirled mustache",freckles:"Freckles",tilak:"Tilak / namam",nosering:"Nose ring",bandage:"Plaster on cheek",eyebags:"Tired eye bags",dimples:"Dimples"};
 const EXN={neutral:"Neutral",happy:"Happy",smiling:"Smiling",laugh:"Laughing",angry:"Angry",sad:"Sad",crying:"Crying",surprised:"Surprised",shock:"Shocked",scared:"Scared",confident:"Confident",confused:"Confused",shy:"Shy",serious:"Serious",evil:"Evil smile",cool:"Cool",panic:"Panic",smirk:"Smirk",worried:"Worried",love:"In love",sleepy:"Sleepy"};
 const ROLE=["College student","School student","Hero","Villain","Comedian / sidekick","Parent","Teacher / lecturer","Shopkeeper","DJ / musician","Other"];
