@@ -3355,7 +3355,7 @@ function portrait(P,o){o=o||{};const r=rnd((P.name||"x")+(o.hair||""));const sty
  if((P.extras||[]).includes("glasses"))s+=`<g fill="#fff" fill-opacity=".1" stroke="${LN}" stroke-width="3"><rect x="174" y="250" width="68" height="44" rx="12"/><rect x="258" y="250" width="68" height="44" rx="12"/></g><path d="M242 268L258 268" stroke="${LN}" stroke-width="3"/>`;
  if((P.extras||[]).includes("earrings"))s+=`<circle cx="168" cy="310" r="5" fill="#e8c04a" stroke="${LN}" stroke-width="1.6"/><circle cx="332" cy="310" r="5" fill="#e8c04a" stroke="${LN}" stroke-width="1.6"/>`;
  if((P.extras||[]).includes("bindi"))s+=`<circle cx="250" cy="238" r="4" fill="#b8322c"/>`;
- if(o.label)s+=`<rect x="0" y="516" width="500" height="44" fill="rgba(0,0,0,.45)"/><text x="250" y="545" text-anchor="middle" font-family="Arial" font-size="22" font-weight="700" fill="#fff">${String(o.label).replace(/[<&]/g,"")}</text>`;
+ if(o.label&&!part)s+=`<rect x="0" y="516" width="500" height="44" fill="rgba(0,0,0,.45)"/><text x="250" y="545" text-anchor="middle" font-family="Arial" font-size="22" font-weight="700" fill="#fff">${String(o.label).replace(/[<&]/g,"")}</text>`;
  return part?s:s+`</svg>`}
 /* ---------- Anime side & back heads (portrait coordinates, facing right) ---------- */
 function headSideA(P,o){const r=rnd((P.name||"x")+(o.hair||""));const style=o.hair||mapHair(P.hair),ex=o.ex||"calm",hc=P.hairColor||"#1b1b1f",sk=P.skin||"#e4b48c",sd=dk(sk,.18),ec=P.eyeColor||"#3b2a20",id=uid(),fem=/girl|woman/.test(P.gender||"");
@@ -3531,7 +3531,7 @@ const ADJ=[["head","Head size",.4,.62,.01,.5],["eye","Eye size",.8,1.6,.05,1],["
 function drawCtl(){const box=$("#asAnCtl");if(!box)return;const md=cur.mainStyle||"anime";if(!md.startsWith("anime")||!A.PORT){box.innerHTML="";return}
  const po=cur.portrait||{},J=po.adj||{},o=aopts(),PP=A.PORT,O=outfit(cur),ch=(k,obj,cur0)=>Object.keys(obj).map(v=>`<button type="button" class="chip" data-ap="${k}" data-v="${v}" aria-pressed="${cur0===v}">${obj[v]}</button>`).join("");
  const open=box.querySelector("details")?box.querySelector("details").open:true;
- box.innerHTML=`<details class="anpanel anctl" ${open?"open":""}><summary><b>🎛 Edit the anime picture</b></summary>
+ box.innerHTML=`<div class="acts andl"><button type="button" class="btn" data-png="${md==="anime"?"animefull":"portrait"}">⬇ Save this picture (PNG)</button></div><details class="anpanel anctl" ${open?"open":""}><summary><b>🎛 Edit the anime picture</b></summary>
  ${md==="anime"?`<div class="ancol"><span>360° view</span><div class="chips">${A.AVIEW.map(([v,n])=>`<button type="button" class="chip" data-ap="view" data-v="${v}" aria-pressed="${(+o.view||0)===v}">${n}</button>`).join("")}</div><div class="acts"><button type="button" class="btn sm" id="asSpin">${window.__asSpin?"⏸ Stop spinning":"▶ Spin 360°"}</button><button type="button" class="btn ghost sm" data-png="anime360">Download 360° turnaround (PNG)</button></div></div>`:""}
  ${md==="anime"?`<div class="ancol"><span>Pose</span><div class="chips">${ch("pose",A.APOSE,o.pose||"stand")}</div></div>`:""}
  <div class="ancol"><span>Expression</span><div class="chips">${ch("ex",PP.EXP,o.ex)}</div></div>
@@ -3688,11 +3688,11 @@ Return ONLY JSON with these keys: {"gender":"","age":"","face":"","skin":"","eye
 const fn=(x)=>`${(cur.name||"character").replace(/[^\wఀ-౿ -]+/g,"").trim().replace(/\s+/g,"-")||"character"}-${x}.png`;
 let dl=null;async function getDl(){if(dl)return dl;try{for(let i=0;i<50&&!window.claude&&window.parent!==window;i++)await new Promise(r=>setTimeout(r,100));dl=window.claude&&window.parent!==window?await window.claude.use("downloads"):null}catch(e){dl=null}return dl}
 async function saveBlob(blob,name){const d=await getDl();try{if(d&&d.save){await d.save({filename:name,data:blob});msg("Saved: "+name)}else{const u=URL.createObjectURL(blob);const a=document.createElement("a");a.href=u;a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),4000);msg("Downloaded: "+name)}}catch(e){msg(e&&e.code==="declined"?"Download cancelled.":"The download was blocked here.")}}
-async function svgToPng(svg,w,h,name){msg("Preparing the picture…");const sc=Math.min(2,4000/Math.max(w,h));const cv=document.createElement("canvas");cv.width=Math.round(w*sc);cv.height=Math.round(h*sc);const g=cv.getContext("2d");g.fillStyle="#fff";g.fillRect(0,0,cv.width,cv.height);
+async function svgToPng(svg,w,h,name){msg("Preparing the picture…");svg=svg.replace(/^(<svg[^>]*?) width="[^"]*" height="[^"]*"/,"$1");const sc=Math.min(2,4000/Math.max(w,h));const cv=document.createElement("canvas");cv.width=Math.round(w*sc);cv.height=Math.round(h*sc);const g=cv.getContext("2d");g.fillStyle="#fff";g.fillRect(0,0,cv.width,cv.height);
  const img=new Image();const u=URL.createObjectURL(new Blob([svg.replace("<svg ",`<svg width="${cv.width}" height="${cv.height}" `)],{type:"image/svg+xml"}));
  try{await new Promise((ok,no)=>{img.onload=ok;img.onerror=no;img.src=u});g.drawImage(img,0,0,cv.width,cv.height)}catch(e){msg("Couldn't draw the picture.");return}finally{URL.revokeObjectURL(u)}
  const blob=await new Promise(r=>cv.toBlob(r,"image/png"));await saveBlob(blob,name)}
-const nest=(svg,x,y,w,h)=>svg.replace("<svg ",`<svg x="${x}" y="${y}" width="${w}" height="${h}" `);
+const nest=(svg,x,y,w,h)=>svg.replace(/^(<svg[^>]*?) width="[^"]*" height="[^"]*"/,"$1").replace("<svg ",`<svg x="${x}" y="${y}" width="${w}" height="${h}" `);
 function gridSvg(cells,cols,cw,ch,title){const rows=Math.ceil(cells.length/cols),top=title?70:0,W=cols*cw,H=rows*ch+top;let o=`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}"><rect width="${W}" height="${H}" fill="#fff"/>${title?`<text x="24" y="48" font-family="Arial" font-size="34" font-weight="700" fill="#1d1d24">${E(title)}</text>`:""}`;cells.forEach((c,i)=>o+=nest(c,(i%cols)*cw,top+Math.floor(i/cols)*ch,cw-8,ch-8));return [o+"</svg>",W,H]}
 function sheetSvg(){const p=flat(cur),P=cur.profile,O=outfit(cur),W=2400,H=2000;let o=`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}"><rect width="${W}" height="${H}" fill="#f7f6f2"/><rect x="0" y="0" width="${W}" height="120" fill="#2f3863"/><text x="40" y="80" font-family="Arial" font-size="56" font-weight="800" fill="#fff">${E(cur.name)}</text><text x="${W-40}" y="80" text-anchor="end" font-family="Arial" font-size="34" fill="#dfe5f5">${E([P.ageNum?`Age ${P.ageNum}`:"",P.role,P.height+" height",P.build+" build"].filter(Boolean).join(" · "))} · CHARACTER REFERENCE SHEET</text>`;
  ["front","three","side","back"].forEach((v,i)=>o+=nest(A.drawFull(p,{view:v,bg:"plain",base:cur.bg,label:A.VIEWN[v]}),40+i*370,150,350,700));
@@ -3765,10 +3765,10 @@ document.addEventListener("click",async e=>{const t=e.target;if(!inStudio(t))ret
  if(t.id==="asSheet"){const [s,W,H]=sheetSvg();$("#asSheetOut").innerHTML=`<div class="ansheetbig">${s}</div><div class="acts"><button class="btn" type="button" id="asSheetPng">Download reference sheet (PNG)</button></div>`;window.__asSheet=[s,W,H];return}
  if(t.id==="asSheetPng"&&window.__asSheet){const [s,W,H]=window.__asSheet;await svgToPng(s,W,H,fn("reference-sheet"));return}
  if(b=c("[data-png]")){const k=b.dataset.png,p=flat(cur);
-  if(k==="animefull"||k==="animeposes"||k==="anime360"){const po=cur.portrait||{},op={hair:po.hair||A.PORT.mapHair(p.hair),ex:po.ex,bg:po.bg,base:cur.bg,pose:po.pose};
+  if(k==="animefull"||k==="animeposes"||k==="anime360"){const po=cur.portrait||{},op=aopts();
    if(k==="anime360"){const [s,W,H]=gridSvg(A.AVIEW.map(([v,n])=>A.animeFull(p,Object.assign({},aopts(),{view:v,bg:"plain",label:n}))),4,400,800,`${cur.name} — 360° turnaround`);await svgToPng(s,W,H,fn("anime-360"));return}
    if(k==="animefull")await svgToPng(A.animeFull(p,op),400,800,fn("anime-full"));else{const ks=Object.keys(A.APOSE);const [s,W,H]=gridSvg(ks.map(x=>A.animeFull(p,Object.assign({},op,{pose:x,bg:"plain",label:A.APOSE[x]}))),4,400,800,`${cur.name} — anime poses`);await svgToPng(s,W,H,fn("anime-poses"))}}
-  if(k==="portrait"){const po=cur.portrait||{};await svgToPng(A.portrait(p,{hair:po.hair||A.PORT.mapHair(p.hair),ex:po.ex,bg:po.bg,base:cur.bg}),500,560,fn("anime-portrait"))}
+  if(k==="portrait"){await svgToPng(A.portrait(p,aopts()),500,560,fn("anime-portrait"))}
   if(k==="one"){await svgToPng(A.drawFull(p,Object.assign({view,pose,bg:cur.bgScene||"plain",base:cur.bg},ovl(),{label:cur.sceneTag?null:cur.name})),400,800,fn(`${pose}-${view}`))}
   if(k==="views"){const [s,W,H]=gridSvg(A.VIEWS.map(v=>A.drawFull(p,{view:v,pose,bg:"plain",base:cur.bg,label:A.VIEWN[v]})),6,400,800,`${cur.name} — turnaround`);await svgToPng(s,W,H,fn("turnaround"))}
   if(k==="expr"){const [s,W,H]=gridSvg(A.EXPR.map(x=>A.draw(p,x,{label:EXN[x]})),7,400,500,`${cur.name} — expressions`);await svgToPng(s,W,H,fn("expressions"))}
