@@ -139,7 +139,7 @@ nav a{color:#fff;border-radius:12px;padding:8px 14px;min-height:40px;font-size:1
 nav a:hover{background:rgba(255,255,255,.18)}
 nav a[aria-current=true]{background:#fff;color:#6d28d9;box-shadow:0 4px 14px rgba(0,0,0,.15)}
 nav a::before{margin-right:6px;font-size:16px;line-height:1}
-nav a[data-v=write]::before{content:"✍️"}nav a[data-v=formulas]::before{content:"📚"}nav a[data-v=combo]::before{content:"🎬"}nav a[data-v=compare]::before{content:"⚖️"}nav a[data-v=replace]::before{content:"🔄"}nav a[data-v=old]::before{content:"🎞️"}nav a[data-v=breakdowns]::before{content:"🧩"}nav a[data-v=characters]::before{content:"🎭"}nav a[data-v=rules]::before{content:"📜"}nav a[data-v=anime]::before{content:"🎨"}
+nav a[data-v=write]::before{content:"✍️"}nav a[data-v=formulas]::before{content:"📚"}nav a[data-v=combo]::before{content:"🎬"}nav a[data-v=compare]::before{content:"⚖️"}nav a[data-v=replace]::before{content:"🔄"}nav a[data-v=old]::before{content:"🎞️"}nav a[data-v=breakdowns]::before{content:"🧩"}nav a[data-v=characters]::before{content:"🎭"}nav a[data-v=rules]::before{content:"📜"}nav a[data-v=anime]::before{content:"🎨"}nav a[data-v=video]::before{content:"📽️"}
 .btn{background:var(--grad);color:#fff;border-radius:12px;box-shadow:0 4px 14px rgba(192,38,211,.28);transition:transform .15s,box-shadow .15s,filter .15s}
 .btn:hover{transform:translateY(-1px);box-shadow:0 8px 22px rgba(192,38,211,.38);filter:brightness(1.05)}
 .btn:active{transform:translateY(0)}
@@ -319,6 +319,25 @@ main>section:not([hidden]),.page:not([hidden]){animation:rise3d .35s cubic-bezie
 .anref{max-width:180px;border-radius:10px;margin:6px 0;display:block}.anart img{width:100%;border-radius:10px;display:block}.anart{display:flex;flex-direction:column;gap:4px}
 .ancard.add{justify-content:center;min-height:150px}.ancheck{display:flex;gap:8px;align-items:center;font-size:15px;margin:4px 0}.anstyle{display:flex;flex-direction:column;gap:6px;margin:0 0 10px}@media(max-width:760px){.anleft{position:static}.anprev{max-width:240px;margin:0 auto}.anhd{display:none}.anright2{margin-top:10px}}.ansheetbig{overflow:auto;margin-top:10px;border:1.5px solid var(--line);border-radius:10px}
 </style>
+<style>
+#vdRoot .box{margin-bottom:14px}#vdRoot h3{margin:0 0 8px}
+.vdchars{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:10px;margin:8px 0}
+.vdc{display:flex;flex-direction:column;align-items:center;gap:4px;border:2px solid var(--line);border-radius:14px;padding:6px;cursor:pointer;background:var(--card)}
+.vdc.on{border-color:var(--teal);box-shadow:0 0 0 2px var(--teal)}.vdc input{align-self:flex-start;width:20px;height:20px;accent-color:var(--teal)}
+.vdc svg{width:100%;height:auto;max-height:170px;border-radius:10px}.vdc span{font-size:12px;color:var(--mute)}
+.vdl,.vdgrid label,.vdline,.vdcr label{display:flex;flex-direction:column;gap:4px;font-size:14px;font-weight:600}
+.vdl{margin:8px 0}.vdgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px;align-items:end}
+.vdshot{border:1.5px solid var(--line);border-radius:14px;padding:12px;margin:12px 0;background:var(--card);box-shadow:var(--shadow)}
+.vdsh{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:space-between;margin-bottom:8px}.vdsh label{display:flex;gap:6px;align-items:center;font-size:14px}.vdn{width:80px}
+.vdbtns{display:flex;flex-wrap:wrap;gap:6px}.vdthumb{display:block;max-width:100%;border-radius:10px;margin:6px 0;background:#222}
+.vdline{margin:8px 0}.vdcr{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px;align-items:end;border-top:1px dashed var(--line);padding-top:8px;margin-top:8px}.vdcr>b{grid-column:1/-1}
+.vdcr input[type=range]{accent-color:var(--teal);width:100%}.vdins{flex:1 1 220px;min-height:40px}
+.vdprev canvas{display:block;max-width:100%;max-height:60vh;margin:8px auto;border-radius:12px;background:#222}
+.vdapprove{margin-top:12px;padding:12px;border-radius:12px;border:2px dashed var(--line);display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between}.vdapprove.ok{border-style:solid;border-color:#4a8a5a}
+.vdgo{font-size:17px;padding:12px 22px}.vdprog{margin:10px 0}.vdprog>div{height:10px;border-radius:5px;background:var(--line);overflow:hidden}.vdprog i{display:block;height:100%;width:0;background:var(--teal);transition:width .2s}.vdprog span{font-size:14px;color:var(--mute)}
+.vdrec{position:absolute;left:-9999px;top:0;width:10px;height:10px}#vdOut video{width:100%;max-height:70vh;border-radius:12px;background:#000;margin-top:8px}
+.vdep li{margin:6px 0}.vdep .btn{margin-left:6px}.vdfut p{font-size:15px}
+</style>
 </head>
 <body class="locked">
 <style>body.locked>*:not(#lock){display:none!important}#lock{position:fixed;inset:0;z-index:99999;display:none;align-items:center;justify-content:center;background:#14110d;padding:20px}body.locked #lock{display:flex}#lock form{width:100%;max-width:340px;background:#211c16;border:1.5px solid #4a3f30;border-radius:16px;padding:24px;color:#f3ead9;font-family:system-ui,sans-serif;text-align:center}#lock h1{font-size:22px;margin:0 0 6px}#lock p{margin:0 0 16px;color:#bfb29b;font-size:15px}#lock input{width:100%;box-sizing:border-box;font-size:24px;letter-spacing:8px;text-align:center;padding:12px;border-radius:10px;border:1.5px solid #4a3f30;background:#14110d;color:#f3ead9}#lock button{width:100%;margin-top:12px;font-size:17px;font-weight:700;padding:12px;border:0;border-radius:10px;background:#5fd3c6;color:#0b1f1d;cursor:pointer}#lock .e{color:#ff8a9a;min-height:20px;margin:10px 0 0;font-size:14px}</style>
@@ -352,7 +371,7 @@ setTimeout(function(){var i=document.getElementById("lockP");if(i)i.focus()},100
 <a href="#old" data-v="old">Old scenes</a>
 <a href="#breakdowns" data-v="breakdowns">Breakdowns</a>
 <a href="#characters" data-v="characters">Characters &amp; slang</a>
-<a href="#anime" data-v="anime">Anime</a>
+<a href="#anime" data-v="anime">Anime</a><a href="#video" data-v="video">Anime Video</a>
 <a href="#rules" data-v="rules">Rules &amp; batches</a>
 </nav>
 </header>
@@ -531,6 +550,7 @@ setTimeout(function(){var i=document.getElementById("lockP");if(i)i.focus()},100
 <div class="note" style="margin-top:16px"><b>Dialect layer:</b> the reference speaks North-Andhra (Uttarandhra) Telugu — ఏటి / ఏటవుదాం / పోద్ది / ఉంటది / ఉండింది — with heavy Tenglish. The Master and Mahesh carry it most. New scenes can keep the dialect but should invent their own pet phrases.</div>
 </section>
 
+<section id="v-video" class="band" hidden><h2>Create Anime Video</h2><p class="row" style="margin:0 0 12px">Turn your saved anime characters into short 2D anime videos: pick characters, describe the scene, let Claude split it into shots, edit and approve the storyboard, then generate and download the video. Characters always keep their approved look.</p><div id="vdRoot"></div></section>
 <section id="v-anime" class="band" hidden>
 <h2 style="font-size:28px;margin:0 0 6px">🎨 Anime Character Studio</h2>
 <p class="row" style="margin:0 0 12px">Create original 2D anime characters for your series: profile, full-body design, 6 viewing angles, 21 expressions, 13 poses, outfits, backgrounds, group pictures and a professional reference sheet. Approve a character to lock its identity, so every new picture keeps the same face, hair, skin and body. <b>Style:</b> flat cutout cartoon (explainer-video look, inspired by the MIT-licensed GrowKaz Cutout Tales kit), drawn by the app. For painted artwork, section 9 shows a free route.</p>
@@ -2194,7 +2214,7 @@ window.CFL={fm:()=>fmap};const BDALL=BD.concat(BD4,BD6);const bdOne=b=>{const R=
 </div></details>`};
 $("#bdList").innerHTML=[["U","Script 3 — Wedding curse & the lion husband"],["V","Script 4 — Wedding escape & police-station marriage"],["W","Script 5 — College days"],["X","Script 6 — The cockroach in the bottle"],["Y","Script 7 — EAMCET long term"],["Z","Script 8 — The train journey"],["Q","Script 9 — DJ Tillu"],["P","Script 10 — Family and marks"],["R","Script 11 — Tillu Square"],["N","Script 12 — The ten-year degree"],["K","Script 13 — Bheeshma"],["J","Script 14 — 24 subjects"],["H","Script 15 — Balu's degree"],["G","Script 16 — TV studio"],["E","Script 17 — Annavaram trip"],["D","Script 18 — The bag on the train"],["C","Script 19 — The village feud"],["A","Script 20 — The station wedding"],["B","Script 21 — The miser"],["L","Script 22 — The miser, part 2"],["M","Script 23 — The debtor"]].map(([p,t])=>`<h2 style="font-size:24px;margin:16px 0 10px">${t}</h2>`+BDALL.filter(b=>b.id[0]===p).map(bdOne).join("")).join("");
 try{const e=document.getElementById("old12");e.checked=localStorage.getItem("cfl-old12")==="1";e.addEventListener("change",()=>{try{localStorage.setItem("cfl-old12",e.checked?"1":"0")}catch(_){}})}catch(_){}
-const views=["write","formulas","combo","compare","replace","old","breakdowns","characters","anime","rules"];
+const views=["write","formulas","combo","compare","replace","old","breakdowns","characters","anime","video","rules"];
 const navScroll=()=>setTimeout(()=>{const n=document.querySelector("nav"),a=n&&n.querySelector("a[aria-current=true]");if(n&&a&&n.scrollWidth>n.clientWidth)n.scrollTo({left:Math.max(0,a.offsetLeft-16),behavior:"smooth"})},0);window.addEventListener("hashchange",navScroll);window.addEventListener("load",navScroll);
 function route(){const v=views.includes(location.hash.slice(1))?location.hash.slice(1):"write";views.forEach(x=>{$("#v-"+x).hidden=x!==v});document.querySelectorAll("nav a").forEach(a=>a.setAttribute("aria-current",a.dataset.v===v))}
 window.addEventListener("hashchange",route);
@@ -3293,6 +3313,7 @@ function backHair(style){if(style==="long")return `M150 230C120 120 190 80 252 8
  return `M146 236C126 124 190 80 252 80C318 80 378 124 356 236C356 270 342 298 316 314L184 314C158 298 146 270 146 236Z`}
 function eye(cx,cy,flip,P,ex){const id=uid(),ec=P.eyeColor||"#3b2a20",tf=`translate(${cx} ${cy}) scale(${flip?-1:1} 1)`;
  if(ex==="smile"||ex==="grin")return `<g transform="${tf}"><path d="M-22 4Q0 -16 22 2" fill="none" stroke="${LN}" stroke-width="5" stroke-linecap="round"/><path d="M22 2l6 -4" stroke="${LN}" stroke-width="3" stroke-linecap="round"/></g>`;
+ if(ex==="blink")return `<g transform="${tf}"><path d="M-24 2Q0 9 25 -2" fill="none" stroke="${LN}" stroke-width="4.5" stroke-linecap="round"/></g>`;
  const sur=ex==="surprised",lid=ex==="bored"?9:ex==="sad"?4:ex==="smug"?7:0,ang=ex==="angry",ML=!/girl|woman/.test(P.gender||"");
  const scl=ML?`M-25 2C-16 -12 10 -16 26 -7C20 5 -6 11 -25 2Z`:`M-24 3C-17 -14 10 -19 25 -6C19 9 -6 15 -24 3Z`;
  let o=`<g transform="${tf}"><defs><clipPath id="${id}c"><path d="${scl}"/></clipPath><linearGradient id="${id}g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${dk(ec,.55)}"/><stop offset=".55" stop-color="${ec}"/><stop offset="1" stop-color="${lt(ec,.45)}"/></linearGradient></defs>`;
@@ -3345,9 +3366,9 @@ function portrait(P,o){o=o||{};const r=rnd((P.name||"x")+(o.hair||""));const sty
  // hair shadow on the face (copy of the fringe shifted down)
  s+=`<g clip-path="url(#${id}f)" fill="${sd}" opacity=".6"><g transform="translate(4 12)">${hf}</g><path d="M300 210C334 262 322 322 282 362L360 362L360 200Z" opacity=".55"/></g>`;
  const ES=1.28*(+((o.adj||{}).eye)||1);s+=`<g transform="translate(${TN} 0)">`+`<g transform="translate(210 0) scale(${TN?.8:1} 1) translate(-210 0)">`+brow(210,234,true,ex,hc)+`</g>`+brow(290,234,false,ex,hc);
- s+=`<g transform="translate(210 272) scale(${ES*(TN?.78:1)} ${ES}) translate(-210 -272)">${eye(210,272,true,P,ex)}</g><g transform="translate(290 272) scale(${ES}) translate(-290 -272)">${eye(290,272,false,P,ex)}</g>`;
+ s+=`<g transform="translate(210 272) scale(${ES*(TN?.78:1)} ${ES}) translate(-210 -272)">${eye(210,272,true,P,o.blink?"blink":ex)}</g><g transform="translate(290 272) scale(${ES}) translate(-290 -272)">${eye(290,272,false,P,o.blink?"blink":ex)}</g>`;
  s+=TN?`<path d="M256 288L272 312Q266 318 254 317" fill="${dk(sk,.12)}" stroke="${dk(sk,.45)}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>`:fem?`<path d="M254 298L259 314Q255 318 249 317" fill="none" stroke="${dk(sk,.4)}" stroke-width="2" stroke-linecap="round"/>`:`<path d="M252 280L263 309L255 313Z" fill="${dk(sk,.16)}" opacity=".7"/><path d="M252 280L263 309Q258 316 247 314" fill="none" stroke="${dk(sk,.45)}" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>`;
- s+=mouth(ex,P);
+ s+=o.talk?`<path d="M237 331Q250 328 263 331Q259 351 250 351Q241 351 237 331Z" fill="#6e2424" stroke="${LN}" stroke-width="2.2" stroke-linejoin="round"/><path d="M243 345Q250 340 257 345Q250 349 243 345Z" fill="#d9706f"/><path d="M239 332Q250 336 261 332" fill="none" stroke="#fff" stroke-width="2.4"/>`:mouth(ex,P);
  const bl=ex==="smile"||ex==="grin"||fem?.32:.16;s+=`<ellipse cx="196" cy="310" rx="17" ry="7" fill="#e77a7a" opacity="${bl}"/><ellipse cx="304" cy="310" rx="17" ry="7" fill="#e77a7a" opacity="${bl}"/></g>`;
  if(ex==="angry")s+=`<path d="M330 168l10 10m-2 -12l-8 14" stroke="#c0392b" stroke-width="4" stroke-linecap="round"/>`;
  if(ex==="sad")s+=`<path d="M302 288Q306 304 302 316" stroke="#8fd0f5" stroke-width="4" fill="none" stroke-linecap="round"/>`;
@@ -3380,13 +3401,14 @@ function headSideA(P,o){const r=rnd((P.name||"x")+(o.hair||""));const style=o.ha
  s+=`<path d="M262 364Q240 352 226 334" fill="none" stroke="${sd}" stroke-width="3" opacity=".7"/>`;
  // eye (side) + brow
  const b=ex==="angry"?6:ex==="sad"?-5:0;
- if(ex==="smile"||ex==="grin")s+=`<path d="M298 270Q312 258 326 268" fill="none" stroke="${LN}" stroke-width="5" stroke-linecap="round"/>`;
+ if(o.blink)s+=`<path d="M296 268Q312 274 330 264" fill="none" stroke="${LN}" stroke-width="4" stroke-linecap="round"/>`;
+ else if(ex==="smile"||ex==="grin")s+=`<path d="M298 270Q312 258 326 268" fill="none" stroke="${LN}" stroke-width="5" stroke-linecap="round"/>`;
  else{const lid=ex==="bored"?8:0;s+=`<path d="M296 274C300 260 318 254 326 262C324 276 312 284 296 274Z" fill="#fbf7f2"/><ellipse cx="318" cy="${270+lid*.2}" rx="6" ry="${ex==="surprised"?6:10}" fill="${ec}"/><ellipse cx="319" cy="270" rx="3" ry="5" fill="${dk(ec,.8)}"/><circle cx="321" cy="264" r="2.6" fill="#fff"/>`;
   if(lid)s+=`<path d="M292 250H330V${262+lid}H292Z" fill="${sk}"/>`;
   s+=`<path d="M294 ${264+lid}C302 ${252+lid} 318 ${250+lid} 328 ${260+lid*.6}L330 ${264+lid*.6}C318 ${256+lid} 304 ${258+lid} 296 ${268+lid}Z" fill="${LN}"/><path d="M328 ${260+lid*.6}l7 -3" stroke="${LN}" stroke-width="3" stroke-linecap="round"/>`}
  s+=`<path d="M296 ${238-b*.3}Q312 ${232+b*.4} 330 ${238+b}" fill="none" stroke="${dk(hc,.35)}" stroke-width="4" stroke-linecap="round"/>`;
  // mouth
- s+=ex==="surprised"?`<ellipse cx="331" cy="330" rx="4" ry="6" fill="#7a2a2a"/>`:ex==="smile"||ex==="grin"?`<path d="M320 330Q328 336 334 328" fill="none" stroke="${LN}" stroke-width="2.6" stroke-linecap="round"/>`:`<path d="M322 332L333 331" stroke="${dk(sk,.6)}" stroke-width="2.6" stroke-linecap="round"/>`;
+ s+=o.talk?`<path d="M320 326Q332 324 336 328Q334 342 326 340Z" fill="#6e2424" stroke="${LN}" stroke-width="2"/>`:ex==="surprised"?`<ellipse cx="331" cy="330" rx="4" ry="6" fill="#7a2a2a"/>`:ex==="smile"||ex==="grin"?`<path d="M320 330Q328 336 334 328" fill="none" stroke="${LN}" stroke-width="2.6" stroke-linecap="round"/>`:`<path d="M322 332L333 331" stroke="${dk(sk,.6)}" stroke-width="2.6" stroke-linecap="round"/>`;
  s+=`<ellipse cx="300" cy="306" rx="14" ry="6" fill="#e77a7a" opacity="${fem||ex==="smile"||ex==="grin"?.3:.15}"/>`;
  // ear
  s+=`<path d="M226 262C210 252 200 300 228 312C240 304 240 268 226 262Z" fill="${sk}" stroke="${LN}" stroke-width="2.2"/><path d="M224 274Q214 286 226 298" fill="none" stroke="${sd}" stroke-width="2.4"/>`;
@@ -3444,9 +3466,9 @@ function fullBody(P,o){o=o||{};const sk=P.skin||"#e4b48c",fem=/girl|woman/.test(
  const SW=(fem?50:60)*wd*(SD?.58:1),WA=(fem?38:46)*wd*(SD?.64:1),HP=(fem?50:46)*wd*(SD?.62:1),sy=216,wy=396,hipY=430,legL=Math.min(330,270*tall);
  const shirt=O==="jacket"?lt(ac,.55):O==="vest"?"#f2efe8":sh,sleeve=O==="jacket"||O==="vest"?(O==="vest"?"#f2efe8":sh):sh,long=O==="hoodie"||O==="jacket"||O==="shirt"||O==="uniform"||O==="kurta"||O==="vest";
  // pose angles [upper, fore] for left (viewer's left) and right arms, radians; 0 = straight down
- const PA={stand:[[.12,-.04],[-.12,.04]],pockets:[[.3,-.94],[-.3,.94]],wave:[[.14,-.04],[-2.5,-.45]],think:[[.12,-.04],[.35,2.69]],cross:[[.1,-2.03],[-.1,2.03]],point:[[.12,-.04],[-1.5,-.05]],cheer:[[2.6,.3],[-2.6,-.3]],run:[[.55,-2.1],[-.75,1.0]]}[pose]||[[.16,-.06],[-.16,.06]];
- const LA=pose==="run"?[[.3,.45],[-.38,.1]]:[[.04,0],[-.04,0]];
- let s=`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 800" width="400" height="800" class="anfull">`+(SETS[o.bg]&&A.bgArt?A.bgArt(o.bg,400,800,o.base):bgFull(o.bg||"room",o.base))+`<ellipse cx="200" cy="${hipY+legL+16}" rx="${SD?70:92}" ry="13" fill="#000" opacity=".2"/>`;
+ A.PAT=A.PAT||{stand:[[.12,-.04],[-.12,.04]],pockets:[[.3,-.94],[-.3,.94]],wave:[[.14,-.04],[-2.5,-.45]],think:[[.12,-.04],[.35,2.69]],cross:[[.1,-2.03],[-.1,2.03]],point:[[.12,-.04],[-1.5,-.05]],cheer:[[2.6,.3],[-2.6,-.3]],run:[[.55,-2.1],[-.75,1.0]]};const PA=o.arms||A.PAT[pose]||[[.16,-.06],[-.16,.06]];
+ const LA=o.legs||(pose==="run"?[[.3,.45],[-.38,.1]]:[[.04,0],[-.04,0]]);
+ let s=`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 800" width="400" height="800" class="anfull">`+(o.nobg?"":SETS[o.bg]&&A.bgArt?A.bgArt(o.bg,400,800,o.base):bgFull(o.bg||"room",o.base))+`<ellipse cx="200" cy="${hipY+legL+16}" rx="${SD?70:92}" ry="13" fill="#000" opacity=".2"/>`;
  const tl=+J.tilt||0;s+=`<g transform="${FL?"translate(400 0) scale(-1 1)":""}"><g transform="rotate(${tl} 200 196)">`+(VB==="front"||VB==="three"?head+portrait(P,Object.assign({},o,{part:"back"}))+`</g>`:"")+`</g><g transform="translate(200 0) scale(${SQ} 1) translate(-200 0)">`;
  // legs
  const legW=(fem?30:34)*wd;const shoe=(L)=>!SD&&!BK?`<path d="M${-legW/2-3} ${L-4}Q${-legW/2-6} ${L+14} 0 ${L+16}Q${legW/2+6} ${L+14} ${legW/2+3} ${L-4}Z" fill="${so}" stroke="${LN}" stroke-width="2.6"/><path d="M${-legW/2-2} ${L+10}Q0 ${L+18} ${legW/2+2} ${L+10}" fill="none" stroke="${lt(so,.55)}" stroke-width="3"/><path d="M-4 ${L-1}h8M-4 ${L+4}h8" stroke="${lt(so,.4)}" stroke-width="1.6"/>`:BK?`<path d="M${-legW/2-3} ${L-4}Q${-legW/2-5} ${L+16} 0 ${L+16}Q${legW/2+5} ${L+16} ${legW/2+3} ${L-4}Z" fill="${dk(so,.1)}" stroke="${LN}" stroke-width="2.6"/>`:`<path d="M${-legW/2+2} ${L-4}L${legW/2-2} ${L-4}Q${legW/2+18} ${L+4} ${legW/2+16} ${L+16}L${-legW/2} ${L+16}Q${-legW/2-4} ${L+6} ${-legW/2+2} ${L-4}Z" fill="${so}" stroke="${LN}" stroke-width="2.2"/><path d="M${-legW/2} ${L+12}H${legW/2+16}" stroke="${lt(so,.5)}" stroke-width="2"/>`;
@@ -3491,7 +3513,7 @@ function fullBody(P,o){o=o||{};const sk=P.skin||"#e4b48c",fem=/girl|woman/.test(
  if(o.fx!==false){const vid=uid();s+=`<defs><radialGradient id="${vid}" cx=".5" cy=".45" r=".75"><stop offset=".55" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".38"/></radialGradient></defs><rect width="400" height="800" fill="url(#${vid})"/><g fill="#fff" opacity=".22">${Array.from({length:22},(_,i)=>`<circle cx="${(i*97+31)%400}" cy="${(i*61+47)%700}" r="${1+(i%3)*.7}"/>`).join("")}</g>`}
  if(o.label)s+=`<rect x="0" y="756" width="400" height="44" fill="rgba(0,0,0,.45)"/><text x="200" y="785" text-anchor="middle" font-family="Arial" font-size="22" font-weight="700" fill="#fff">${String(o.label).replace(/[<&]/g,"")}</text>`;
  return s+`</svg>`}
-A.animeFull=fullBody;A.APOSE=POSE;A.ASETS=SETS;A.AVIEW=[[0,"Front"],[45,"¾ right"],[90,"Right side"],[135,"¾ back right"],[180,"Back"],[225,"¾ back left"],[270,"Left side"],[315,"¾ left"]];
+A.animeFull=fullBody;A.bgFullA=bgFull;A.APOSE=POSE;A.ASETS=SETS;A.AVIEW=[[0,"Front"],[45,"¾ right"],[90,"Right side"],[135,"¾ back right"],[180,"Back"],[225,"¾ back left"],[270,"Left side"],[315,"¾ left"]];
 A.portrait=portrait;A.PORT={HAIR,EXP,BG,mapHair};
 })();
 </script>
@@ -3647,6 +3669,7 @@ Personality: ${P.personality||"—"}. ${P.special?`Special features: ${P.special
 Face: ${NICE.face[p.face]} face, ${NICE.eyes[p.eyes]} eyes (colour ${p.eyeColor}), skin tone ${p.skin}. Hair: ${NICE.hair[p.hair]}, colour ${p.hairColor}.${(cur.look.extras||[]).length?` Features: ${cur.look.extras.map(x=>XN[x]).join(", ")}.`:""}
 Outfit "${O.name}": ${NICE.outfit[O.outfit]} in ${O.outfitColor} with ${O.accent} accents, ${O.bottomColor} trousers/bottom, ${O.shoeColor} shoes${(O.extras||[]).length?`, ${O.extras.map(x=>XN[x]).join(", ")}`:""}.
 Pose: ${A.POSES[pose].n}. View: ${A.VIEWN[view]}. Expression: ${EXN[cur.expr]}. Indian (Telugu) setting.`}
+window.CFL_STUDIO={list:()=>LIST,flat:c=>flat(c),aoF:c=>aoF(c),saveBlob:(b,n)=>saveBlob(b,n)};
 function aoF(c){const p=flat(c),po=c.portrait||{};return {hair:po.hair||(A.PORT&&A.PORT.mapHair(p.hair)),ex:po.ex||"calm",bg:po.bg,base:c.bg,pose:po.pose,adj:po.adj||{},view:0}}
 let ALB=null;
 function drawAlbum(){const box=$("#asAlbum");if(!box)return;const c=LIST.find(v=>v.id===ALB);if(!c||!A.animeFull){box.innerHTML="";return}const p=flat(c),o=aoF(c);
@@ -3822,6 +3845,238 @@ init();
  LIST=[...map.values()].sort((a,b)=>(b.t||0)-(a.t||0));saveLocal();if(JSON.stringify(LIST.map(c=>c.id))!==before){if(!cur.id&&LIST[0])cur=JSON.parse(JSON.stringify(LIST[0]));drawGallery();drawSec()}if(mine||R.length!==LIST.length||!(r&&r.v===2))pushCloud()}catch(e){}})();
 })();
 
+</script>
+
+<script>
+/* ===== Create Anime Video ===== */
+(function(){
+const $=q=>document.querySelector(q),E=t=>String(t==null?"":t).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const KV="cfl-video";
+const DEF={chars:[],showDrafts:false,desc:"",dialog:"",actions:"",emotions:"",set:{dur:10,ratio:"16:9",q:"720",fps:24,style:"anime",cam:"static",bg:"campus",subs:true},shots:[],approved:false,episode:[]};
+let V;try{V=Object.assign({},DEF,JSON.parse(localStorage.getItem(KV)||"{}"))}catch(e){V=JSON.parse(JSON.stringify(DEF))}V.set=Object.assign({},DEF.set,V.set||{});
+let videoURL=null,videoMime="",busy=false;
+const persist=()=>{try{localStorage.setItem(KV,JSON.stringify(V))}catch(e){}};
+const S=()=>window.CFL_STUDIO,A=()=>window.ANIME;
+const chars=()=>S()?S().list():[];
+const charById=id=>chars().find(c=>c.id===id);
+const CAMS={static:"Still camera",panL:"Pan left",panR:"Pan right",zoomIn:"Slow zoom in",zoomOut:"Slow zoom out",shake:"Shake (shock / action)",follow:"Follow the walking character"};
+const SIZES={wide:"Wide (full body)",medium:"Medium (waist up)",close:"Close-up (face)"};
+const ACTS={stand:"Stand (idle)",talk:"Talk with gestures",walk:"Walk",run:"Run",jump:"Jump",react:"React (jumps back a little)"};
+const RATIO={"16:9":[16,9],"9:16":[9,16],"1:1":[1,1]};
+const QH={"480":480,"720":720,"1080":1080};
+function bgList(){const a=A();const o={day:"Blue sky (day)"};Object.assign(o,a&&a.BGS||{});delete o.none;delete o.dining;return o}
+function dims(st){const [a,b]=RATIO[st.ratio]||[16,9],q=QH[st.q]||720;let W,H;if(a>=b){H=q;W=Math.round(q*a/b)}else{W=q;H=Math.round(q*b/a)}return [W-W%2,H-H%2]}
+function exps(){const a=A();return a&&a.PORT?a.PORT.EXP:{calm:"Calm"}}
+function poses(){const a=A();return a&&a.APOSE?a.APOSE:{stand:"Standing"}}
+const VIEWS=[[0,"Front"],[45,"¾ right"],[90,"Facing right"],[315,"¾ left"],[270,"Facing left"],[180,"Back"]];
+/* ---------- drawing ---------- */
+const cache=new Map();
+function svgImg(svg,w,h){const key=w+"x"+h+svg.length+":"+hash(svg);if(cache.has(key))return cache.get(key);
+ const pr=new Promise((ok,no)=>{const s=svg.replace(/^(<svg[^>]*?) width="[^"]*" height="[^"]*"/,"$1").replace("<svg ",`<svg width="${w}" height="${h}" `);const u=URL.createObjectURL(new Blob([s],{type:"image/svg+xml"}));const im=new Image();im.onload=()=>{URL.revokeObjectURL(u);ok(im)};im.onerror=e=>{URL.revokeObjectURL(u);no(e)};im.src=u});
+ cache.set(key,pr);if(cache.size>2500){cache.delete(cache.keys().next().value)}return pr}
+function hash(s){let h=0;for(let i=0;i<s.length;i+=7)h=(h*31+s.charCodeAt(i))|0;return h}
+function bgSvg(k,W,H){const a=A();if(k==="day"){let c="";const cl=(x,y,sc)=>`<g transform="translate(${x} ${y}) scale(${sc})"><g fill="#fff"><circle cx="40" cy="40" r="28"/><circle cx="76" cy="26" r="34"/><circle cx="112" cy="40" r="26"/><rect x="20" y="40" width="112" height="26" rx="13"/></g></g>`;for(let i=0;i<6;i++)c+=cl((i*W/5+37*i)%W-60,40+(i*53)%(H*.4),.8+(i%3)*.35);
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}"><defs><linearGradient id="vday" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1f6fd6"/><stop offset=".7" stop-color="#7fc0f7"/><stop offset="1" stop-color="#c6e6ff"/></linearGradient></defs><rect width="${W}" height="${H}" fill="url(#vday)"/>${c}<rect y="${H*.86}" width="${W}" height="${H*.14}" fill="#7fb35a"/><path d="M0 ${H*.86}H${W}" stroke="#5c8f3e" stroke-width="4"/></svg>`}
+ return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}">${a.bgArt(k,W,H,"#dfe5f5")}</svg>`}
+function charState(sh,cs,t,d){// returns sprite options + placement for one character at time t of a shot
+ const c=charById(cs.id);if(!c)return null;const st=S(),base=st.aoF(c),P=st.flat(c);
+ const u=d>0?Math.min(1,Math.max(0,t/d)):0,ease=u<.5?2*u*u:1-Math.pow(-2*u+2,2)/2;
+ const mv=cs.act==="walk"||cs.act==="run";let x=mv?cs.x+((cs.x2!=null?cs.x2:cs.x)-cs.x)*u:cs.x;
+ let view=cs.view;if(mv&&(cs.view==null||cs.view===""||cs.view==="auto"))view=(cs.x2||0)>=cs.x?90:270;view=+view||0;
+ let y=Math.sin(t*Math.PI)*.004;let legs=null,arms=null,pose=cs.pose||"stand";
+ if(mv){const sp=cs.act==="run"?2.6:1.7,ph=Math.round(((t*sp)%1)*8)/8,a=Math.sin(ph*2*Math.PI),k=cs.act==="run"?.55:.35;legs=[[a*k,Math.max(0,-a)*k*1.2],[-a*k,Math.max(0,a)*k*1.2]];arms=[[-a*k*.9+.1,-.25-(cs.act==="run"?1:0)],[a*k*.9-.1,.25+(cs.act==="run"?1:0)]];y+=Math.abs(Math.sin(ph*2*Math.PI))*.006;if(cs.act==="run")pose="run"}
+ if(cs.act==="jump"){const ph=Math.round(((t*1.2)%1)*10)/10;y-=Math.sin(ph*Math.PI)*.12;if(ph<.9)legs=[[.25,.5],[-.25,-.5]].map(v=>[v[0]*Math.sin(ph*Math.PI),Math.abs(v[1])*Math.sin(ph*Math.PI)])}
+ const line=sh.line||{},speaking=line.who===cs.id&&line.text,ts=d*.08,te=ts+Math.min(d*.85,Math.max(1.2,(line.text||"").length*.065));
+ let talk=false,ex=cs.ex||"calm";if(speaking&&t>=ts&&t<=te){talk=Math.floor(t*9+(cs.id.length%3))%3!==0;if(cs.act==="talk"&&!mv&&!cs.arms){const g=Math.round(Math.sin(t*3.1)*4)/4;const pa=(A().PAT[pose]||A().PAT.stand);arms=[pa[0],[pa[1][0]-.35-.25*g,pa[1][1]+.5+.3*g]]}}
+ if(!speaking&&cs.ex2&&line.text&&t>te)ex=cs.ex2;if(speaking&&cs.ex2&&t>te)ex=cs.ex2;
+ if(cs.act==="react"&&line.text&&t>te&&t<te+.6){y-=Math.sin((t-te)/.6*Math.PI)*.03}
+ const seed=(cs.id.charCodeAt(0)||1)%7*.37,blink=((t+seed)%3.3)<.13&&!talk;
+ const adj=Object.assign({},base.adj||{});if(speaking&&t>=ts&&t<=te)adj.tilt=(adj.tilt||0)+Math.round(Math.sin(t*2.3)*2.5);
+ const o=Object.assign({},base,{bg:"plain",nobg:true,fx:false,pose,ex,view,legs,arms,talk,blink,adj});
+ return {P,o,x,y,c}}
+async function drawFrame(g,W,H,sh,t,d,opts){opts=opts||{};const bg=await svgImg(bgSvg(sh.bg||"campus",W,H),W,H);
+ // camera
+ const u=d>0?t/d:0;let s=1,dx=0,dy=0;const cam=sh.cam||"static";
+ if(cam==="zoomIn")s=1+.22*u;if(cam==="zoomOut")s=1.22-.22*u;if(cam==="panL"){s=1.12;dx=W*.05-W*.1*u}if(cam==="panR"){s=1.12;dx=-W*.05+W*.1*u}
+ if(cam==="shake"){s=1.05;dx=Math.sin(t*47)*W*.008;dy=Math.cos(t*39)*H*.008}
+ const states=(sh.chars||[]).map(cs=>charState(sh,cs,t,d)).filter(Boolean);
+ if(cam==="follow"&&states.length){const mvr=states.find((st,i)=>["walk","run"].includes(sh.chars[i].act))||states[0];s=1.15;dx=(0.5-mvr.x)*W*s*.7}
+ {const mx=(s-1)*W/2,my=(s-1)*H/2;dx=Math.max(-mx,Math.min(mx,dx));dy=Math.max(-my,Math.min(my,dy))}
+ g.setTransform(1,0,0,1,0,0);g.fillStyle="#000";g.fillRect(0,0,W,H);
+ g.setTransform(s,0,0,s,W/2-s*W/2+dx,H/2-s*H/2+dy);g.drawImage(bg,0,0,W,H);
+ const size=sh.size||"wide";let ch,topF;
+ const nar=W<H;if(size==="close"){ch=nar?H*1.9:H*3.1}else if(size==="medium"){ch=nar?H*1.1:H*1.65}else ch=H*(nar?.62:.84);
+ const sorted=states.map((st,i)=>[st,i]).sort((a,b)=>a[0].y-b[0].y);
+ for(const [st] of sorted){const cw=ch/2,img=await svgImg(A().animeFull(st.P,st.o),Math.round(cw),Math.round(ch));
+  let top;if(size==="close")top=H*.42-ch*.19;else if(size==="medium")top=H*.05-ch*.03;else top=H*.965-ch*.93;
+  g.drawImage(img,st.x*W-cw/2,top+st.y*H,cw,ch)}
+ g.setTransform(1,0,0,1,0,0);
+ // vignette
+ const vg=g.createRadialGradient(W/2,H/2,Math.min(W,H)*.35,W/2,H/2,Math.max(W,H)*.75);vg.addColorStop(0,"rgba(0,0,0,0)");vg.addColorStop(1,"rgba(0,0,0,.33)");g.fillStyle=vg;g.fillRect(0,0,W,H);
+ // subtitles
+ const line=sh.line||{};if(V.set.subs&&line.text){const ts=d*.08,te=ts+Math.min(d*.85,Math.max(1.2,line.text.length*.065))+.6;if(t>=ts&&t<=te){const who=charById(line.who),fs=Math.round(Math.min(W,H)*.045),txt=(who?who.name+": ":"")+line.text;
+  g.font=`600 ${fs}px "Hind Guntur","Noto Sans Telugu",system-ui,sans-serif`;const lines=wrap(g,txt,W*.86);const lh=fs*1.3,bh=lines.length*lh+fs*.6,by=H-bh-H*.04;
+  g.fillStyle="rgba(0,0,0,.6)";rr(g,W*.05,by,W*.9,bh,fs*.4);g.fill();g.fillStyle="#fff";g.textAlign="center";g.textBaseline="top";lines.forEach((l,i)=>g.fillText(l,W/2,by+fs*.3+i*lh))}}
+ if(opts.label){const fs=Math.round(Math.min(W,H)*.05);g.font=`700 ${fs}px system-ui`;g.fillStyle="rgba(0,0,0,.5)";g.fillRect(0,0,W,fs*1.6);g.fillStyle="#fff";g.textAlign="left";g.textBaseline="middle";g.fillText(opts.label,fs*.5,fs*.8)}}
+function wrap(g,t,w){const ws=String(t).split(/\s+/),out=[];let l="";for(const x of ws){const tt=l?l+" "+x:x;if(g.measureText(tt).width>w&&l){out.push(l);l=x}else l=tt}if(l)out.push(l);return out.slice(0,3)}
+function rr(g,x,y,w,h,r){g.beginPath();g.moveTo(x+r,y);g.arcTo(x+w,y,x+w,y+h,r);g.arcTo(x+w,y+h,x,y+h,r);g.arcTo(x,y+h,x,y,r);g.arcTo(x,y,x+w,y,r);g.closePath()}
+/* ---------- storyboard ---------- */
+function selChars(){return V.chars.map(charById).filter(Boolean)}
+function spread(n){return Array.from({length:n},(_,i)=>n===1?.5:.2+.6*i/(n-1))}
+function quickBoard(){const cs=selChars();if(!cs.length)return [];const st=V.set,total=+st.dur;
+ const lines=V.dialog.split(/\n+/).map(l=>l.trim()).filter(Boolean).map(l=>{const m=l.match(/^([^:：]{1,30})[:：]\s*(.+)$/);if(!m)return {who:cs[0].id,text:l};const c=cs.find(c=>c.name.toLowerCase()===m[1].trim().toLowerCase())||cs.find(c=>c.name.toLowerCase().startsWith(m[1].trim().toLowerCase().slice(0,3)))||cs[0];return {who:c.id,text:m[2]}});
+ const xs=spread(cs.length),walking=/walk|nadu|nadust|వెళ్|నడ/i.test(V.desc);
+ const n=Math.max(1,Math.min(12,lines.length+(walking?1:0)));const dur=Math.max(1.5,Math.round(total/n*10)/10);const shots=[];
+ if(walking)shots.push({dur,bg:st.bg,cam:"follow",size:"wide",line:{who:"",text:""},chars:cs.map((c,i)=>({id:c.id,x:xs[i]-.25,x2:xs[i]+.1,act:"walk",pose:"stand",ex:"smile",ex2:"",view:"auto"}))});
+ lines.forEach((l,k)=>shots.push({dur,bg:st.bg,cam:k%3===1?"zoomIn":st.cam,size:k%3===1?"medium":k%3===2?"close":"wide",line:l,chars:(k%3===2?cs.filter(c=>c.id===l.who):cs).map((c,i,arr)=>({id:c.id,x:arr.length===1?.5:spread(arr.length)[i],act:c.id===l.who?"talk":"stand",pose:"stand",ex:c.id===l.who?"smile":"calm",ex2:c.id===l.who?"":(/joke|funny|haha|lol/i.test(V.desc)?"surprised":""),view:arr.length===1?0:(i===0?45:315)}))}));
+ if(!shots.length)shots.push({dur:total,bg:st.bg,cam:st.cam,size:"wide",line:{who:"",text:""},chars:cs.map((c,i)=>({id:c.id,x:xs[i],act:"stand",pose:"stand",ex:"calm",view:0}))});
+ fitDur(shots,total);return shots}
+function fitDur(shots,total){const sum=shots.reduce((a,b)=>a+(+b.dur||0),0)||1;shots.forEach(s=>s.dur=Math.max(1,Math.round((+s.dur||1)*total/sum*10)/10))}
+function clean(sh,cs){const ids=cs.map(c=>c.id),bgs=bgList(),ex=exps(),ps=poses();
+ const one=x=>{const o={dur:Math.min(20,Math.max(1,+x.dur||3)),bg:bgs[x.bg]?x.bg:V.set.bg,cam:CAMS[x.cam]?x.cam:"static",size:SIZES[x.size]?x.size:"wide",line:{who:"",text:""},chars:[]};
+  const nm=w=>{if(!w)return "";if(ids.includes(w))return w;const c=cs.find(c=>c.name.toLowerCase()===String(w).toLowerCase());return c?c.id:""};
+  if(x.line&&x.line.text)o.line={who:nm(x.line.who),text:String(x.line.text).slice(0,220)};
+  (x.chars||[]).forEach(c=>{const id=nm(c.id||c.name);if(!id)return;o.chars.push({id,x:Math.min(.95,Math.max(.05,+c.x||.5)),x2:c.x2!=null?Math.min(1.1,Math.max(-.1,+c.x2)):undefined,act:ACTS[c.act]?c.act:"stand",pose:ps[c.pose]?c.pose:"stand",ex:ex[c.ex]?c.ex:"calm",ex2:ex[c.ex2]?c.ex2:"",view:c.view==="auto"?"auto":[0,45,90,135,180,225,270,315].includes(+c.view)?+c.view:0})});
+  return o};return sh.map(one)}
+async function aiBoard(){const ai=window.CFL_AI;const cs=selChars();if(!ai||!ai.ready()){msg("Claude isn't available here, so I made a simple storyboard instead. You can edit every shot.");V.shots=quickBoard();return}
+ const prompt=`You are a storyboard artist for a short 2D anime video made with fixed, approved character designs (never invent new characters or change their looks).
+Characters (use the id exactly): ${cs.map(c=>`${c.id} = ${c.name}${c.profile&&c.profile.role?" ("+c.profile.role+")":""}`).join("; ")}
+Scene description: ${V.desc||"(none)"}
+Dialogues (Name: line): ${V.dialog||"(none — you may write short original lines in the same language as the description)"}
+Actions: ${V.actions||"-"}
+Emotions: ${V.emotions||"-"}
+Location: ${bgList()[V.set.bg]||V.set.bg}. Default camera: ${CAMS[V.set.cam]}.
+Total length: exactly ${V.set.dur} seconds. Aspect ratio ${V.set.ratio}.
+Split into 2-10 shots. Return ONLY JSON: {"shots":[{"dur":seconds,"bg":one of [${Object.keys(bgList()).join(",")}],"cam":one of [${Object.keys(CAMS).join(",")}],"size":one of [wide,medium,close],"line":{"who":character id or "","text":"one dialogue line or empty"},"chars":[{"id":character id,"x":0.05-0.95 horizontal position,"x2":end position if walking/running,"act":one of [${Object.keys(ACTS).join(",")}],"pose":one of [${Object.keys(poses()).join(",")}],"ex":one of [${Object.keys(exps()).join(",")}],"ex2":expression after the line is spoken or "","view":0 front,45,315 three-quarter,90 facing right,270 facing left,180 back, or "auto" for walking}]}]}
+Rules: at most one dialogue line per shot; the speaking character uses act "talk"; listeners react with ex2; keep the characters' identities; walking shots use act walk with x and x2; close-ups contain one character; vary camera and shot size like a real anime.`;
+ msg("Claude is planning the shots…");try{const r=await ai.ask(prompt);const j=ai.parse(r.text);const sh=clean((j&&j.shots)||[],cs);if(!sh.length)throw {message:"empty"};fitDur(sh,+V.set.dur);V.shots=sh;msg("Storyboard ready. Check each shot, change anything, then approve it.")}catch(e){V.shots=quickBoard();msg("Claude couldn't plan this one ("+((ai.errText&&ai.errText(e))||e.message||"error")+"), so I made a simple storyboard you can edit.")}}
+async function aiShot(i,instr){const ai=window.CFL_AI;if(!ai||!ai.ready()){msg("Claude isn't available here.");return}const cs=selChars();
+ const r=await ai.ask(`Rewrite this one storyboard shot for a 2D anime video. Instruction: ${instr||"make it funnier and more dynamic"}. Characters: ${cs.map(c=>c.id+"="+c.name).join("; ")}. Keep the same JSON shape and allowed values; keep dur ${V.shots[i].dur}. Allowed bg: ${Object.keys(bgList()).join(",")}; cam: ${Object.keys(CAMS).join(",")}; act: ${Object.keys(ACTS).join(",")}; pose: ${Object.keys(poses()).join(",")}; ex: ${Object.keys(exps()).join(",")}. Return ONLY the JSON object of the shot.\n${JSON.stringify(V.shots[i])}`);
+ const j=ai.parse(r.text);const sh=clean([j&&j.shots?j.shots[0]:j],cs)[0];if(sh){sh.dur=V.shots[i].dur;V.shots[i]=sh;V.approved=false}}
+/* ---------- render / record ---------- */
+function timeline(shots){let t0=0;return shots.map(s=>{const r={s,t0,d:+s.dur};t0+=+s.dur;return r})}
+async function prewarm(shots,W,H,fps,onp){const tl=timeline(shots),tot=tl.reduce((a,b)=>a+b.d,0),c=document.createElement("canvas");c.width=W;c.height=H;const g=c.getContext("2d");let n=Math.ceil(tot*fps),i=0;
+ for(const r of tl){const fr=Math.ceil(r.d*fps);for(let k=0;k<fr;k++){await drawFrame(g,W,H,r.s,k/fps,r.d);i++;if(i%6===0){onp&&onp(i/n);await new Promise(z=>setTimeout(z,0))}}}}
+async function record(shots,label){const st=V.set,[W,H]=dims(st),fps=+st.fps||24;const cv=$("#vdCanvas");cv.width=W;cv.height=H;const g=cv.getContext("2d");
+ if(!cv.captureStream||!window.MediaRecorder){msg("This browser can't record video. Please use Chrome, Edge or Firefox on a computer or Android phone.");return null}
+ setProg(0,"Step 1 of 2 · Drawing every frame of your characters…");await prewarm(shots,W,H,fps,p=>setProg(p*.5,"Step 1 of 2 · Drawing frames… "+Math.round(p*100)+"%"));
+ const types=["video/mp4;codecs=avc1","video/mp4","video/webm;codecs=vp9","video/webm;codecs=vp8","video/webm"];const mt=types.find(t=>MediaRecorder.isTypeSupported(t))||"";
+ const stream=cv.captureStream(fps),rec=new MediaRecorder(stream,mt?{mimeType:mt,videoBitsPerSecond:st.q==="1080"?8e6:st.q==="720"?5e6:2.5e6}:undefined),chunks=[];rec.ondataavailable=e=>{if(e.data&&e.data.size)chunks.push(e.data)};
+ const done=new Promise(r=>rec.onstop=r);const tl=timeline(shots),tot=tl.reduce((a,b)=>a+b.d,0);
+ const buf=document.createElement("canvas");buf.width=W;buf.height=H;const bg2=buf.getContext("2d");
+ await drawFrame(g,W,H,tl[0].s,0,tl[0].d);rec.start(250);const t0=performance.now();let f=0;const N=Math.ceil(tot*fps);
+ while(f<N){const t=f/fps;const r=tl.find(x=>t>=x.t0&&t<x.t0+x.d)||tl[tl.length-1];await drawFrame(bg2,W,H,r.s,t-r.t0,r.d);g.drawImage(buf,0,0);f++;if(f%fps===0)setProg(.5+.5*f/N,"Step 2 of 2 · Recording the video… "+Math.round(t)+"s of "+Math.round(tot)+"s (keep this tab open)");
+  const due=t0+f*1000/fps,w=due-performance.now();if(w>0)await new Promise(z=>setTimeout(z,w))}
+ await new Promise(z=>setTimeout(z,300));rec.stop();await done;stream.getTracks().forEach(t=>t.stop());
+ const blob=new Blob(chunks,{type:(mt||"video/webm").split(";")[0]});setProg(1,"Done.");return blob}
+let previewStop=null;
+async function previewShots(shots,cv){if(previewStop)previewStop();const st=V.set,[W,H]=dims(st),fps=+st.fps||24;const sc=Math.min(1,640/Math.max(W,H)),w=Math.round(W*sc),h=Math.round(H*sc);cv.width=w;cv.height=h;const g=cv.getContext("2d");
+ g.fillStyle="#222";g.fillRect(0,0,w,h);g.fillStyle="#fff";g.font="16px system-ui";g.fillText("Preparing preview…",20,30);
+ await prewarm(shots,w,h,fps);let stop=false;previewStop=()=>{stop=true};const tl=timeline(shots),tot=tl.reduce((a,b)=>a+b.d,0),t0=performance.now();
+ const loop=async()=>{if(stop)return;const t=((performance.now()-t0)/1000)%tot;const r=tl.find(x=>t>=x.t0&&t<x.t0+x.d)||tl[0];await drawFrame(pg,w,h,r.s,t-r.t0,r.d);g.drawImage(pb,0,0);requestAnimationFrame(loop)};const pb=document.createElement("canvas");pb.width=w;pb.height=h;const pg=pb.getContext("2d");loop()}
+/* ---------- UI ---------- */
+let lastMsg="";function msg(t){lastMsg=t;const m=$("#vdMsg");if(m)m.textContent=t}
+function setProg(p,t){const b=$("#vdProg");if(b){b.hidden=false;b.querySelector("i").style.width=Math.round(p*100)+"%";b.querySelector("span").textContent=t}}
+const opt=(obj,v)=>Object.entries(obj).map(([k,n])=>`<option value="${E(k)}"${String(v)===String(k)?" selected":""}>${E(n)}</option>`).join("");
+function charCard(c){const a=A(),st=S();let pic="";try{pic=a.animeFull(st.flat(c),Object.assign(st.aoF(c),{fx:false,bg:"plain"}))}catch(e){}
+ return `<label class="vdc${V.chars.includes(c.id)?" on":""}"><input type="checkbox" data-vchar="${c.id}" ${V.chars.includes(c.id)?"checked":""}>${pic}<b>${E(c.name)}</b><span>${c.locked?"🔒 approved":"draft"}</span></label>`}
+function shotCard(sh,i){const cs=selChars(),bgs=bgList(),ex=exps(),ps=poses(),one=V.shots.length;
+ return `<div class="vdshot" data-i="${i}"><div class="vdsh"><b>Shot ${i+1}</b><label>Seconds <input type="number" class="cin vdn" min="1" max="20" step=".5" value="${sh.dur}" data-sf="dur"></label>
+ <span class="vdbtns"><button type="button" class="btn ghost sm" data-sa="play">▶ Play shot</button><button type="button" class="btn ghost sm" data-sa="up" ${i?"":"disabled"}>↑</button><button type="button" class="btn ghost sm" data-sa="down" ${i<one-1?"":"disabled"}>↓</button><button type="button" class="btn ghost sm" data-sa="dup">Copy</button><button type="button" class="btn ghost sm" data-sa="del">Delete</button></span></div>
+ <canvas class="vdthumb" data-thumb="${i}"></canvas>
+ <div class="vdgrid"><label>Background<select class="cin" data-sf="bg">${opt(bgs,sh.bg)}</select></label><label>Camera<select class="cin" data-sf="cam">${opt(CAMS,sh.cam)}</select></label><label>Shot size<select class="cin" data-sf="size">${opt(SIZES,sh.size)}</select></label>
+ <label>Who speaks<select class="cin" data-sf="who"><option value="">— nobody —</option>${cs.map(c=>`<option value="${c.id}"${sh.line.who===c.id?" selected":""}>${E(c.name)}</option>`).join("")}</select></label></div>
+ <label class="vdline">Dialogue<textarea class="cin" rows="2" data-sf="text" placeholder="What the character says (subtitles)">${E(sh.line.text)}</textarea></label>
+ ${(sh.chars||[]).map((c,j)=>{const ch=charById(c.id);return `<div class="vdcr" data-j="${j}"><b>${E(ch?ch.name:"?")}</b>
+  <label>Action<select class="cin" data-cf="act">${opt(ACTS,c.act)}</select></label><label>Pose<select class="cin" data-cf="pose">${opt(ps,c.pose)}</select></label>
+  <label>Expression<select class="cin" data-cf="ex">${opt(ex,c.ex)}</select></label><label>Then (after the line)<select class="cin" data-cf="ex2"><option value="">— same —</option>${opt(ex,c.ex2)}</select></label>
+  <label>Facing<select class="cin" data-cf="view"><option value="auto"${c.view==="auto"?" selected":""}>Auto (walk direction)</option>${VIEWS.map(([v,n])=>`<option value="${v}"${String(c.view)===String(v)?" selected":""}>${n}</option>`).join("")}</select></label>
+  <label>Position ${Math.round(c.x*100)}%<input type="range" min="0.05" max="0.95" step="0.01" value="${c.x}" data-cf="x"></label>
+  ${c.act==="walk"||c.act==="run"?`<label>Walk to ${Math.round((c.x2!=null?c.x2:c.x)*100)}%<input type="range" min="-0.1" max="1.1" step="0.01" value="${c.x2!=null?c.x2:c.x}" data-cf="x2"></label>`:""}
+  <button type="button" class="btn ghost sm" data-ca="rm">Remove from shot</button></div>`}).join("")}
+ <div class="acts">${cs.filter(c=>!(sh.chars||[]).some(x=>x.id===c.id)).map(c=>`<button type="button" class="btn ghost sm" data-sa="add" data-id="${c.id}">＋ Add ${E(c.name)}</button>`).join("")}
+ <input class="cin vdins" type="text" placeholder="Tell Claude how to change this shot (optional)" data-ins="${i}"><button type="button" class="btn ghost sm" data-sa="ai">🔁 Redo this shot with Claude</button></div></div>`}
+function render(){const root=$("#vdRoot");if(!root)return;const all=chars(),list=all.filter(c=>c.locked||V.showDrafts),st=V.set,total=V.shots.reduce((a,b)=>a+(+b.dur||0),0);
+ const [W,H]=dims(st);
+ root.innerHTML=`
+ <div class="box"><h3>1 · Pick your characters</h3><p class="row">These come from <b>My characters</b> in the Anime tab. Every frame is drawn from the saved design, so faces, hair, clothes, colours and body shape never change.</p>
+ ${all.length?`<div class="vdchars">${list.map(charCard).join("")||`<p class="row">No approved characters yet. In the Anime tab, open a character and tap <b>✅ Approve &amp; lock identity</b>, or tick “show drafts” below.</p>`}</div>
+ <label class="ancheck"><input type="checkbox" id="vdDrafts" ${V.showDrafts?"checked":""}> Also show characters that are not approved yet</label>`:`<p class="row">You have no saved characters yet. Make and save one in the <a href="#anime">Anime</a> tab first.</p>`}</div>
+ <div class="box"><h3>2 · Describe the scene</h3>
+ <label class="vdl">What happens<textarea class="cin" rows="3" data-vf="desc" placeholder="Two college friends are walking through the campus. One tells a funny joke, the other is shocked.">${E(V.desc)}</textarea></label>
+ <label class="vdl">Dialogues — one per line, “Name: words”<textarea class="cin" rows="3" data-vf="dialog" placeholder="Vicky: Ra Golu, nuvvu exam ki chadivava?&#10;Golu: Exam eppudu?">${E(V.dialog)}</textarea></label>
+ <div class="vdgrid"><label class="vdl">Actions<input class="cin" data-vf="actions" value="${E(V.actions)}" placeholder="walk in, wave, jump"></label><label class="vdl">Emotions<input class="cin" data-vf="emotions" value="${E(V.emotions)}" placeholder="happy, then shocked"></label></div></div>
+ <div class="box"><h3>3 · Video settings</h3><div class="vdgrid">
+ <label>Length<select class="cin" data-st="dur">${opt({5:"5 seconds",10:"10 seconds",15:"15 seconds",30:"30 seconds",60:"60 seconds"},st.dur)}</select></label>
+ <label>Shape<select class="cin" data-st="ratio">${opt({"16:9":"16:9 · YouTube (wide)","9:16":"9:16 · Reels / Shorts","1:1":"1:1 · Square post"},st.ratio)}</select></label>
+ <label>Quality<select class="cin" data-st="q">${opt({"480":"480p (fast)","720":"720p HD","1080":"1080p Full HD"},st.q)}</select></label>
+ <label>Frame rate<select class="cin" data-st="fps">${opt({24:"24 fps (anime)",30:"30 fps (smooth)",12:"12 fps (limited animation)"},st.fps)}</select></label>
+ <label>Animation style<select class="cin" data-st="style">${opt({anime:"Anime (cel-shaded)"},st.style)}</select></label>
+ <label>Main camera<select class="cin" data-st="cam">${opt(CAMS,st.cam)}</select></label>
+ <label>Main background<select class="cin" data-st="bg">${opt(bgList(),st.bg)}</select></label>
+ <label class="ancheck"><input type="checkbox" data-st="subs" ${st.subs?"checked":""}> Show dialogue subtitles</label></div><p class="row">Output: ${W} × ${H} pixels.</p>
+ <div class="acts"><button type="button" class="btn" id="vdPlan" ${V.chars.length?"":"disabled"}>✨ Make storyboard with Claude</button><button type="button" class="btn ghost" id="vdQuick" ${V.chars.length?"":"disabled"}>Quick storyboard (no AI)</button></div></div>
+ ${V.shots.length?`<div class="box"><h3>4 · Storyboard <span class="row">(${V.shots.length} shots · ${Math.round(total*10)/10}s of ${st.dur}s)</span></h3>
+ <p class="row">Change anything in any shot. Tap ▶ to watch one shot, or ▶ Play all to watch the whole scene before you make the video.</p>
+ <div class="vdprev"><canvas id="vdLive"></canvas></div>
+ <div class="acts"><button type="button" class="btn ghost" id="vdPlayAll">▶ Play all shots</button><button type="button" class="btn ghost" id="vdStop">⏹ Stop</button><button type="button" class="btn ghost" id="vdAddShot">＋ Add shot</button><button type="button" class="btn ghost" id="vdFit">Fit shots to ${st.dur}s</button></div>
+ ${V.shots.map(shotCard).join("")}
+ <div class="vdapprove ${V.approved?"ok":""}">${V.approved?"✅ Storyboard approved.":"Check the shots, then approve the storyboard."} <button type="button" class="btn" id="vdApprove">${V.approved?"Approved ✓ (tap to unlock edits)":"✅ Approve storyboard"}</button></div></div>`:""}
+ <div class="box"><h3>5 · Generate</h3>
+ <div class="acts"><button type="button" class="btn vdgo" id="vdGo" ${V.approved&&V.shots.length&&!busy?"":"disabled"}>🎬 Generate Anime Video</button></div>
+ ${!V.approved?`<p class="row">Approve the storyboard first.</p>`:""}
+ <div id="vdProg" class="vdprog" hidden><div><i></i></div><span></span></div>
+ <canvas id="vdCanvas" class="vdrec"></canvas>
+ <div id="vdOut">${videoURL?outHtml():""}</div>
+ <p class="row" id="vdMsg" aria-live="polite">${E(lastMsg)}</p></div>
+ <div class="box"><h3>6 · Episode (combine scenes)</h3>${V.episode.length?`<ol class="vdep">${V.episode.map((e,i)=>`<li><b>${E(e.name)}</b> · ${e.shots.length} shots · ${Math.round(e.shots.reduce((a,b)=>a+(+b.dur||0),0))}s <button type="button" class="btn ghost sm" data-ep="load" data-i="${i}">Open</button><button type="button" class="btn ghost sm" data-ep="up" data-i="${i}" ${i?"":"disabled"}>↑</button><button type="button" class="btn ghost sm" data-ep="del" data-i="${i}">Delete</button></li>`).join("")}</ol>
+ <div class="acts"><button type="button" class="btn" id="vdEpGo" ${busy?"disabled":""}>🎞 Export full episode (${Math.round(V.episode.reduce((a,e)=>a+e.shots.reduce((x,y)=>x+(+y.dur||0),0),0))}s)</button></div>`:`<p class="row">Save scenes here with “Add to episode”, then export them together as one video.</p>`}
+ ${V.shots.length?`<div class="acts"><input class="cin" id="vdSceneName" placeholder="Scene name, e.g. Scene 1 – Campus joke" style="max-width:320px"><button type="button" class="btn ghost" id="vdAddEp">＋ Add this storyboard to the episode</button></div>`:""}</div>
+ <details class="box vdfut"><summary><b>Coming next & AI video models</b></summary><div>
+ <p><b>How this studio makes video:</b> Claude plans the shots, and this website animates your saved characters frame by frame (walking, running, jumping, talking mouths, blinking, gestures, expressions, camera moves) and records a real video file in your browser. Because every frame is drawn from the approved design, the characters can never change their face, hair, clothes or colours.</p>
+ <p><b>AI video models (Runway, Kling, Luma, Google Veo, etc.) are not connected.</b> To add one you need: (1) a paid account and API key with that service, (2) a small server to keep the key secret and call the service — your AWS version of this app (the <code>app/</code> folder) can do this, and (3) the character reference sheets sent with every request. Even then, these models can drift and change faces between shots, so the built-in animator stays the safest for consistency.</p>
+ <p><b>Ready for later:</b> subtitles work now. Character voices, lip-sync to real audio, background music and sound effects need a voice/music service (for example a text-to-speech API on your server). The storyboard already stores who speaks which line and when, so these can be added without changing your scenes.</p></div></details>`;
+ // thumbnails
+ requestAnimationFrame(()=>document.querySelectorAll("canvas[data-thumb]").forEach(async cv=>{const i=+cv.dataset.thumb,sh=V.shots[i];if(!sh)return;const [W,H]=dims(V.set),sc=260/Math.max(W,H);cv.width=Math.round(W*sc);cv.height=Math.round(H*sc);try{await drawFrame(cv.getContext("2d"),cv.width,cv.height,sh,sh.dur*.55,sh.dur)}catch(e){}}))}
+function outHtml(){return `<video id="vdVideo" controls playsinline src="${videoURL}"></video><div class="acts"><button type="button" class="btn" id="vdDl">⬇ Download video (${videoMime.includes("mp4")?"MP4":"WebM"})</button><button type="button" class="btn ghost" id="vdAgain">🔁 Regenerate</button></div><p class="row">To change something: edit the storyboard above (dialogue, timing, background, actions), approve again and regenerate.${videoMime.includes("mp4")?"":" WebM plays in Chrome, VLC and uploads to YouTube; for Instagram/WhatsApp convert it to MP4 (for example with a free online converter or CapCut)."}</p>`}
+function shotOf(el){const d=el.closest("[data-i]");return d?V.shots[+d.dataset.i]:null}
+document.addEventListener("input",e=>{const t=e.target;if(!t.closest||!t.closest("#vdRoot"))return;
+ if(t.dataset.vf){V[t.dataset.vf]=t.value;persist();return}
+ if(t.dataset.st){V.set[t.dataset.st]=t.type==="checkbox"?t.checked:t.value;persist();if(t.tagName==="SELECT"||t.type==="checkbox")render();return}
+ const sh=shotOf(t);if(!sh)return;V.approved=false;
+ if(t.dataset.sf){const k=t.dataset.sf;if(k==="who")sh.line.who=t.value;else if(k==="text")sh.line.text=t.value;else if(k==="dur")sh.dur=Math.max(1,Math.min(20,+t.value||1));else sh[k]=t.value;persist();if(t.tagName==="SELECT")render();return}
+ if(t.dataset.cf){const j=+t.closest("[data-j]").dataset.j,c=sh.chars[j],k=t.dataset.cf;c[k]=k==="x"||k==="x2"?+t.value:k==="view"&&t.value!=="auto"?+t.value:t.value;if(k==="act"&&(t.value==="walk"||t.value==="run")&&c.x2==null){c.x2=Math.min(1,c.x+.3);c.view="auto"}persist();if(t.tagName==="SELECT")render();else{const lb=t.parentElement.firstChild;if(lb&&lb.nodeType===3)lb.textContent=(k==="x"?"Position ":"Walk to ")+Math.round(+t.value*100)+"% "}}
+});
+document.addEventListener("change",e=>{const t=e.target;if(!t.closest||!t.closest("#vdRoot"))return;if(t.dataset.cf==="x"||t.dataset.cf==="x2")render()});
+document.addEventListener("click",async e=>{const t=e.target;if(!t.closest||!t.closest("#vdRoot"))return;const b=t.closest("button");
+ if(t.dataset&&t.dataset.vchar){const id=t.dataset.vchar;V.chars=t.checked?[...new Set(V.chars.concat(id))]:V.chars.filter(x=>x!==id);persist();render();return}
+ if(t.id==="vdDrafts"){V.showDrafts=t.checked;persist();render();return}
+ if(!b)return;
+ if(b.id==="vdPlan"||b.id==="vdQuick"){if(!V.desc.trim()&&!V.dialog.trim()){msg("Write what happens (or some dialogues) first.");return}b.disabled=true;if(b.id==="vdPlan")await aiBoard();else{V.shots=quickBoard();msg("Quick storyboard ready — edit any shot.")}V.approved=false;persist();render();const m=$("#vdMsg");const sb=document.querySelector(".vdshot");if(sb)sb.scrollIntoView({behavior:"smooth",block:"start"});return}
+ if(b.id==="vdPlayAll"){previewShots(V.shots,$("#vdLive"));return}
+ if(b.id==="vdStop"){if(previewStop)previewStop();return}
+ if(b.id==="vdAddShot"){const cs=selChars();V.shots.push({dur:3,bg:V.set.bg,cam:"static",size:"wide",line:{who:"",text:""},chars:cs.map((c,i)=>({id:c.id,x:spread(cs.length)[i],act:"stand",pose:"stand",ex:"calm",ex2:"",view:0}))});V.approved=false;persist();render();return}
+ if(b.id==="vdFit"){fitDur(V.shots,+V.set.dur);persist();render();return}
+ if(b.id==="vdApprove"){V.approved=!V.approved;persist();render();return}
+ if(b.id==="vdGo"||b.id==="vdAgain"){if(busy)return;busy=true;b.disabled=true;if(previewStop)previewStop();try{const blob=await record(V.shots);if(blob){if(videoURL)URL.revokeObjectURL(videoURL);videoURL=URL.createObjectURL(blob);videoMime=blob.type;window.__vdBlob=blob;$("#vdOut").innerHTML=outHtml();msg("Your video is ready. Watch it below, then download it.");$("#vdOut").scrollIntoView({behavior:"smooth",block:"center"})}}catch(er){msg("Sorry, the video couldn't be made: "+(er&&er.message||er))}busy=false;b.disabled=false;return}
+ if(b.id==="vdDl"&&window.__vdBlob){const nm=(V.episodeExport?"anime-episode":"anime-scene")+"-"+new Date().toISOString().slice(0,16).replace(/[:T]/g,"-")+(videoMime.includes("mp4")?".mp4":".webm");if(S()&&S().saveBlob)await S().saveBlob(window.__vdBlob,nm);return}
+ if(b.id==="vdAddEp"){const nm=($("#vdSceneName").value||"").trim()||("Scene "+(V.episode.length+1));V.episode.push({name:nm,shots:JSON.parse(JSON.stringify(V.shots)),chars:V.chars.slice()});persist();render();msg(`Added “${nm}” to the episode.`);return}
+ if(b.dataset.ep){const i=+b.dataset.i,k=b.dataset.ep;if(k==="del")V.episode.splice(i,1);if(k==="up"&&i){const x=V.episode.splice(i,1)[0];V.episode.splice(i-1,0,x)}if(k==="load"){V.shots=JSON.parse(JSON.stringify(V.episode[i].shots));V.chars=[...new Set(V.episode[i].chars||V.chars)];V.approved=false;msg(`Opened “${V.episode[i].name}”. Edit it, then add it to the episode again if you change it.`)}persist();render();return}
+ if(b.id==="vdEpGo"){if(busy)return;const all=V.episode.flatMap(e=>e.shots);if(!all.length)return;busy=true;b.disabled=true;try{const blob=await record(all);if(blob){if(videoURL)URL.revokeObjectURL(videoURL);videoURL=URL.createObjectURL(blob);videoMime=blob.type;window.__vdBlob=blob;V.episodeExport=true;$("#vdOut").innerHTML=outHtml();msg("Your full episode is ready.");$("#vdOut").scrollIntoView({behavior:"smooth",block:"center"})}}catch(er){msg("Sorry, the episode couldn't be made: "+(er&&er.message||er))}busy=false;b.disabled=false;return}
+ const sh=shotOf(b);if(!sh)return;const i=V.shots.indexOf(sh);
+ if(b.dataset.sa==="play"){previewShots([sh],$("#vdLive"));$("#vdLive").scrollIntoView({behavior:"smooth",block:"center"});return}
+ if(b.dataset.ca==="rm"){const j=+b.closest("[data-j]").dataset.j;sh.chars.splice(j,1);V.approved=false;persist();render();return}
+ const k=b.dataset.sa;V.approved=false;
+ if(k==="up"&&i>0){V.shots.splice(i,1);V.shots.splice(i-1,0,sh)}
+ if(k==="down"&&i<V.shots.length-1){V.shots.splice(i,1);V.shots.splice(i+1,0,sh)}
+ if(k==="dup")V.shots.splice(i+1,0,JSON.parse(JSON.stringify(sh)));
+ if(k==="del")V.shots.splice(i,1);
+ if(k==="add"){const ids=sh.chars.length;sh.chars.push({id:b.dataset.id,x:Math.min(.85,.25+.3*ids),act:"stand",pose:"stand",ex:"calm",ex2:"",view:0})}
+ if(k==="ai"){b.disabled=true;b.textContent="Claude is rewriting…";try{await aiShot(i,(document.querySelector(`[data-ins="${i}"]`)||{}).value)}catch(er){msg("Claude couldn't redo this shot.")}}
+ persist();render()});
+function init(){if(!$("#vdRoot"))return;render();window.addEventListener("hashchange",()=>{if(location.hash==="#video")render()})}
+if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",()=>setTimeout(init,300));else setTimeout(init,300);
+})();
 </script>
 
 </body>
