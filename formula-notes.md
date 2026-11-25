@@ -831,3 +831,10 @@ Use these as top-quality references for every new scene. Rules:
 - Capabilities now: db, downloads, sample (images:true), user, assets.
 
 - 25 Nov 2026: user shared a reference picture (flat explainer-video cartoon: dining table, father with mustache, kid head, mother with bun, night-city window). Added Art style "Flat cartoon" (anime_flat.js) — now the default for new characters — with flat heads for all views/expressions, thick outlines, two-tone shading; "Dining room" background with table in front, "Warm room" background; teens drawn shorter.
+
+
+## GrowKaz Cutout Tales skill (saved 25 Nov 2026)
+- Zip from YouTube (Grow With Kaz, MIT licence). A Claude skill that makes flat cutout/puppet cartoon videos (MP4) in Python + cairo + ffmpeg: character rig (poses, expressions, blink, breathing, talking mouth), sets (apartment, office, street, dinner table, stage, rooftop, western town), overlays (name tag, stamp, star rating, speech bubble, caption, counter), voice-over timing (align.py), auto sound effects (sfx.py), examples (Silas western, money explainer, Dustwater western).
+- Stored in the GitHub repo: tools/growkaz-cutout-tales/ and tools/growkaz-cutout-tales.zip.
+- Checked: no network or file-deleting code. Limits: runs as Python (not inside the web app); Telugu text in bubbles needs a Telugu font + proper text shaping (Pango).
+- Plan: use it for the video stage of the anime project with the Character Studio characters.
