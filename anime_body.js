@@ -96,20 +96,20 @@ function headBack(p,turn){const H=p.hairColor,Hd=sh(H,-.35),Hl=sh(H,.25),S=p.ski
 
 /* body: returns svg group drawn in a 400x800 frame, feet near y=760 */
 function body(p,view,poseK,expr){const P=POSES[poseK]||POSES.stand,ex=A.EXDEF(expr||p.expr);
- const fem=p.gender==="girl"||p.gender==="woman",old=p.age==="old";
- const bt=p.build||"average",wide={slim:.88,average:1,broad:1.14,chubby:1.2}[bt]||1,tall={short:.9,average:1,tall:1.08}[p.height]||1;
+ const fem=p.gender==="girl"||p.gender==="woman",old=p.age==="old";const FL=p.style==="flat",OLc="#3b2b22";
+ const bt=p.build||"average",wide={slim:.88,average:1,broad:1.14,chubby:1.2}[bt]||1,tall=({short:.9,average:1,tall:1.08}[p.height]||1)*(p.age==="teen"?.78:1);
  const S=p.skin,Sdd=sh(S,-.3),O=p.outfitColor,Od=sh(O,-.3),Ol=sh(O,.18),Ac=p.accent,Bt=p.bottomColor||(p.outfit==="kurta"?"#efeadc":"#2e3a5c"),Btd=sh(Bt,-.3),Sh=p.shoeColor||"#1d1d24";
  const longSleeve=["shirt","hoodie","jacket","kurta","uniform"].includes(p.outfit),dress=p.outfit==="saree";
  const side=view==="side"||view==="side2",back=view==="back"||view==="threeback",three=view==="three"||view==="threeback";
- let y0=(P.y||0)+(P.sit?110:0);const cx=200;
+ let y0=(P.y||0)+(P.sit?110:0)+(p.age==="teen"&&!P.sit?Math.round(252*(1-tall/(({short:.9,average:1,tall:1.08}[p.height]||1)))):0);const cx=200;
  const neckY=228,shY=250+y0*0,lean=P.lean||0;
  let o="";
- const lw={arm:fem?20:24,leg:fem?26:30}; lw.arm*=wide;lw.leg*=wide;
+ const lw={arm:FL?(fem?26:30):(fem?20:24),leg:FL?(fem?30:34):(fem?26:30)}; lw.arm*=wide;lw.leg*=wide;
  const limb=(x,y,a1,a2,l1,l2,cu,cl,w,end)=>{const [ex1,ey1]=pt(x,y,l1,a1),[ex2,ey2]=pt(ex1,ey1,l2,a2);
-  let g=`<path d="M${x} ${y} L${ex1} ${ey1}" stroke="${sh(cu,-.35)}" stroke-width="${w+5}" stroke-linecap="round"/><path d="M${ex1} ${ey1} L${ex2} ${ey2}" stroke="${sh(cl,-.35)}" stroke-width="${w+3}" stroke-linecap="round"/><path d="M${x} ${y} L${ex1} ${ey1}" stroke="${cu}" stroke-width="${w}" stroke-linecap="round"/><path d="M${ex1} ${ey1} L${ex2} ${ey2}" stroke="${cl}" stroke-width="${w-2}" stroke-linecap="round"/>`;
-  if(end==="hand")g+=`<circle cx="${ex2}" cy="${ey2}" r="${w*.62}" fill="${S}" stroke="${Sdd}" stroke-width="2.5"/>`;
+  let g=`<path d="M${x} ${y} L${ex1} ${ey1}" stroke="${FL?OLc:sh(cu,-.35)}" stroke-width="${w+(FL?9:5)}" stroke-linecap="round"/><path d="M${ex1} ${ey1} L${ex2} ${ey2}" stroke="${FL?OLc:sh(cl,-.35)}" stroke-width="${w+(FL?9:3)}" stroke-linecap="round"/><path d="M${x} ${y} L${ex1} ${ey1}" stroke="${cu}" stroke-width="${w}" stroke-linecap="round"/><path d="M${ex1} ${ey1} L${ex2} ${ey2}" stroke="${cl}" stroke-width="${w-2}" stroke-linecap="round"/>`;
+  if(end==="hand")g+=`<circle cx="${ex2}" cy="${ey2}" r="${w*.62}" fill="${S}" stroke="${FL?OLc:Sdd}" stroke-width="${FL?4.5:2.5}"/>`;
   if(end==="fist")g+=`<circle cx="${ex2}" cy="${ey2}" r="${w*.72}" fill="${S}" stroke="${Sdd}" stroke-width="3"/><path d="M${ex2-6} ${ey2-4} h12 M${ex2-6} ${ey2+2} h12" stroke="${Sdd}" stroke-width="2"/>`;
-  if(end==="shoe")g+=`<ellipse cx="${ex2+(side?10:0)}" cy="${ey2+6}" rx="${w*.8+(side?8:0)}" ry="${w*.42}" fill="${Sh}" stroke="${sh(Sh,-.4)}" stroke-width="2.5"/><path d="M${ex2-w*.6} ${ey2+6} h${w*1.2}" stroke="#fff" stroke-width="2" opacity=".5"/>`;
+  if(end==="shoe")g+=`<ellipse cx="${ex2+(side?10:0)}" cy="${ey2+6}" rx="${w*.8+(side?8:0)}" ry="${w*.42}" fill="${Sh}" stroke="${FL?OLc:sh(Sh,-.4)}" stroke-width="${FL?4:2.5}"/><path d="M${ex2-w*.6} ${ey2+6} h${w*1.2}" stroke="#fff" stroke-width="2" opacity=".5"/>`;
   return {g,end:[ex2,ey2]}};
  const X=v=>three?cx+(v-cx)*.8+(view==="threeback"?-8:8):v;
  const armC=[longSleeve?O:O,longSleeve?O:S],legLen=[128*tall,124*tall],armLen=[86,80];
@@ -127,8 +127,9 @@ function body(p,view,poseK,expr){const P=POSES[poseK]||POSES.stand,ex=A.EXDEF(ex
   const wY=hipY-70,ww=shW*.78;
   const torso=`M${sL[0]} ${sL[1]} Q${X(cx)} ${shY+y0-18} ${sR[0]} ${sR[1]} Q${sR[0]+6} ${wY-60} ${X(cx+ww)} ${wY} L${hR[0]+8} ${hipY+(p.outfit==="kurta"?80:14)} L${hL[0]-8} ${hipY+(p.outfit==="kurta"?80:14)} L${X(cx-ww)} ${wY} Q${sL[0]-6} ${wY-60} ${sL[0]} ${sL[1]}Z`;
   if(dress){o+=`<path d="M${X(cx-ww)} ${wY} L${X(cx+ww)} ${wY} L${X(cx+ww*1.5)} ${P.sit?hipY+90:745} L${X(cx-ww*1.5)} ${P.sit?hipY+90:745}Z" fill="${O}" stroke="${Od}" stroke-width="3"/><path d="M${X(cx-10)} ${wY+10} L${X(cx-26)} ${P.sit?hipY+90:745} M${X(cx+6)} ${wY+10} L${X(cx+2)} ${P.sit?hipY+90:745} M${X(cx+20)} ${wY+10} L${X(cx+30)} ${P.sit?hipY+90:745}" stroke="${Od}" stroke-width="2.5"/><path d="M${X(cx-ww*1.5)} ${(P.sit?hipY+90:745)-10} L${X(cx+ww*1.5)} ${(P.sit?hipY+90:745)-10}" stroke="${Ac}" stroke-width="10"/>`;legs.forEach(l=>{o+=`<ellipse cx="${l.end[0]}" cy="${l.end[1]+6}" rx="16" ry="8" fill="${Sh}"/>`})}
-  o+=`<path d="${torso}" fill="${O}" stroke="${Od}" stroke-width="3" stroke-linejoin="round"/>`;
-  if(!back)o+=outfitFront(p,X,cx,shY+y0,wY,hipY,ww,O,Od,Ol,Ac);
+  if(FL){const tid="tc"+Math.random().toString(36).slice(2,7);o+=`<defs><clipPath id="${tid}"><path d="${torso}"/></clipPath></defs><path d="${torso}" fill="${O}"/><g clip-path="url(#${tid})"><rect x="${X(cx)+14}" y="${shY+y0-40}" width="200" height="400" fill="${sh(O,-.16)}"/></g><path d="${torso}" fill="none" stroke="${OLc}" stroke-width="5" stroke-linejoin="round"/>`}
+  else o+=`<path d="${torso}" fill="${O}" stroke="${Od}" stroke-width="3" stroke-linejoin="round"/>`;
+  if(!back&&(!FL||p.outfit==="saree"||p.outfit==="shirt"||p.outfit==="uniform"))o+=outfitFront(p,X,cx,shY+y0,wY,hipY,ww,O,Od,Ol,Ac);
   else o+=`<path d="M${X(cx)} ${shY+y0+20} L${X(cx)} ${hipY}" stroke="${Od}" stroke-width="2" opacity=".5"/>`+(p.outfit==="hoodie"?`<path d="M${X(cx-40)} ${shY+y0-6} Q${X(cx)} ${shY+y0+60} ${X(cx+40)} ${shY+y0-6}" fill="${Od}" stroke="${sh(O,-.45)}" stroke-width="3"/>`:"")+(dress?`<path d="M${sR[0]} ${sR[1]} Q${X(cx+20)} ${wY} ${X(cx-30)} ${hipY+40}" stroke="${Ac}" stroke-width="30" fill="none" opacity=".9"/>`:"");
   if(p.extras&&p.extras.includes("goldChain")&&!back)o+=`<path d="M${X(cx-22)} ${neckY+12+y0} Q${X(cx)} ${neckY+62+y0} ${X(cx+22)} ${neckY+12+y0}" fill="none" stroke="#e6b83a" stroke-width="4" stroke-dasharray="6 3"/><circle cx="${X(cx)}" cy="${neckY+56+y0}" r="7" fill="#f2c94c" stroke="#a8801f" stroke-width="2"/>`;
   if(p.extras&&p.extras.includes("towel"))o+=`<path d="M${sL[0]+4} ${sL[1]-6} Q${sL[0]-10} ${sL[1]+60} ${sL[0]} ${sL[1]+130} L${sL[0]+26} ${sL[1]+130} Q${sL[0]+20} ${sL[1]+60} ${sL[0]+30} ${sL[1]-2}Z" fill="#fff" stroke="#c9c9c9" stroke-width="2"/>`;
@@ -149,7 +150,7 @@ function body(p,view,poseK,expr){const P=POSES[poseK]||POSES.stand,ex=A.EXDEF(ex
   o+=farArm.g;
   if(!dress){o+=fl.g;o+=nl.g}
   const tw=(fem?44:52)*wide;
-  o+=`<path d="M${sx-tw*.55} ${sY} Q${sx} ${sY-16} ${sx+tw*.6} ${sY+4} Q${sx+tw*.72} ${sY+80} ${sx+tw*.5} ${hipY-60} L${sx+tw*.55} ${hipY+(p.outfit==="kurta"?80:14)} L${sx-tw*.6} ${hipY+(p.outfit==="kurta"?80:14)} L${sx-tw*.5} ${hipY-60} Q${sx-tw*.72} ${sY+60} ${sx-tw*.55} ${sY}Z" fill="${O}" stroke="${Od}" stroke-width="3" transform="rotate(${lean} ${sx} ${hipY})"/>`;
+  o+=`<path d="M${sx-tw*.55} ${sY} Q${sx} ${sY-16} ${sx+tw*.6} ${sY+4} Q${sx+tw*.72} ${sY+80} ${sx+tw*.5} ${hipY-60} L${sx+tw*.55} ${hipY+(p.outfit==="kurta"?80:14)} L${sx-tw*.6} ${hipY+(p.outfit==="kurta"?80:14)} L${sx-tw*.5} ${hipY-60} Q${sx-tw*.72} ${sY+60} ${sx-tw*.55} ${sY}Z" fill="${O}" stroke="${FL?OLc:Od}" stroke-width="${FL?5:3}" transform="rotate(${lean} ${sx} ${hipY})"/>`;
   if(dress){o+=`<path d="M${sx-tw*.6} ${hipY-60} L${sx+tw*.55} ${hipY-60} L${sx+tw*1.1} ${P.sit?hipY+90:745} L${sx-tw} ${P.sit?hipY+90:745}Z" fill="${O}" stroke="${Od}" stroke-width="3"/><path d="M${sx-tw} ${(P.sit?hipY+90:745)-10} L${sx+tw*1.1} ${(P.sit?hipY+90:745)-10}" stroke="${Ac}" stroke-width="10"/>`+[fl,nl].map(l=>`<ellipse cx="${l.end[0]+8}" cy="${l.end[1]+6}" rx="18" ry="8" fill="${Sh}"/>`).join("")}
   if(p.outfit==="hoodie")o+=`<path d="M${sx-tw*.7} ${sY-4} Q${sx-tw*.9} ${sY+40} ${sx-tw*.4} ${sY+44} Q${sx-tw*.2} ${sY+10} ${sx-tw*.3} ${sY-8}Z" fill="${Od}"/>`;
   if(p.outfit==="jacket"||p.outfit==="shirt"||p.outfit==="uniform")o+=`<path d="M${sx+tw*.5} ${sY+4} L${sx+tw*.66} ${sY+40}" stroke="${Ol}" stroke-width="8"/>`;
@@ -159,7 +160,7 @@ function body(p,view,poseK,expr){const P=POSES[poseK]||POSES.stand,ex=A.EXDEF(ex
  }
  // neck
  const nx=side?cx+8:X(cx);
- o=`<path d="M${nx-16} ${neckY-20+y0} L${nx-16} ${shY+y0} Q${nx} ${shY+y0+10} ${nx+16} ${shY+y0} L${nx+16} ${neckY-20+y0}Z" fill="${S}" stroke="${Sdd}" stroke-width="2.5"/>`+o;
+ o=`<path d="M${nx-16} ${neckY-20+y0} L${nx-16} ${shY+y0} Q${nx} ${shY+y0+10} ${nx+16} ${shY+y0} L${nx+16} ${neckY-20+y0}Z" fill="${FL?sh(S,-.13):S}" stroke="${FL?OLc:Sdd}" stroke-width="${FL?4.5:2.5}"/>`+o;
  return {g:o,y0,headX:side?cx+8:X(cx),turn:three?(view==="threeback"?-24:24):0}}
 function outfitFront(p,X,cx,shY,wY,hipY,ww,O,Od,Ol,Ac){const c=X(cx);
  switch(p.outfit){
@@ -182,22 +183,24 @@ function full(p0,o){o=o||{};const p=Object.assign({},A.DEF,p0||{});const view=o.
  const b=body(p,v==="side2"?"side":v,poseK,exK),ex=A.EXDEF(exK);
  const side=v==="side"||v==="side2",back=v==="back"||v==="threeback";
  // head
- let head;if(P.look&&back)head=`<g transform="translate(-14 0)">${headSide(p,ex)}</g>`;else if(side)head=headSide(p,ex);else if(back)head=headBack(p,b.turn?-14:0);else head=A.draw(p,exK,{headOnly:true,turn:b.turn});
+ const FL=p.style==="flat"&&A.FLAT,HS=FL?A.FLAT.headSide:headSide,HB=FL?(q=>A.FLAT.headBack(q)):headBack;
+ let head;if(P.look&&back)head=`<g transform="translate(-14 0)">${HS(p,ex)}</g>`;else if(side)head=HS(p,ex);else if(back)head=HB(p,b.turn?-14:0);else head=A.draw(p,exK,{headOnly:true,turn:b.turn});
  const defs=(head.match(/<defs>[\s\S]*?<\/defs>/)||[""])[0];head=head.replace(defs,"");
- const hs=.56,hx=b.headX,hy=0+b.y0+(P.sit?0:0);
- const headG=`<g transform="translate(${hx-200*hs} ${hy+22}) scale(${hs})">${head}</g>`;
+ const hs=FL?(p.age==="teen"?.74:.62):.56,hx=b.headX,hy=0+b.y0+(P.sit?0:0);
+ const headG=`<g transform="translate(${hx-200*hs} ${hy+(FL?(p.age==="teen"?-10:8):22)}) scale(${hs})">${head}</g>`;
  // back hair for front: long hair behind body handled inside head (drawn first) - fine
  let inner=`${defs}<g transform="rotate(${(P.lean||0)*(side?1:0)} 200 ${420+b.y0})">${back?headG+b.g:b.g+headG}</g>`;
  if(back&&!(P.look))inner=`${defs}${b.g}${headG}`;
  inner+=addFx(P,hx);
  if(v==="side2")inner=`<g transform="translate(400 0) scale(-1 1)">${inner}</g>`;
  return inner}
-function frame(inner,o){o=o||{};const W=o.w||400,H=o.h||800;const bg=bgArt(o.bg||"plain",W,H,o.base);
+function frame(inner,o){o=o||{};const W=o.w||400,H=o.h||800;const bg=A.bgArt(o.bg||"plain",W,H,o.base);
  const label=o.label?`<rect x="0" y="${H-46}" width="${W}" height="46" fill="rgba(20,22,40,.72)"/><text x="${W/2}" y="${H-15}" font-family="Arial,sans-serif" font-size="24" font-weight="700" text-anchor="middle" fill="#fff">${String(o.label).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]))}</text>`:"";
- return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}">${bg}${inner}${label}</svg>`}
+ const fg=o.bg==="dining"&&A.DINING_FG?A.DINING_FG(W,H,o.fgN||1):"";
+ return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}">${bg}${inner}${fg}${label}</svg>`}
 function drawFull(p,o){o=o||{};return frame(`<g transform="translate(0 10)">${full(p,o)}</g>`,Object.assign({bg:o.bg||(p&&p.bgScene)||"plain",base:p&&p.bg},o))}
 function group(chars,o){o=o||{};const n=chars.length,W=Math.max(800,n*330),H=800;let inner="";
- chars.forEach((c,i)=>{const x=(W/(n+1))*(i+1)-200*.95;inner+=`<g transform="translate(${x} 30) scale(.95)">${full(c.p,{view:c.view||"three",pose:c.pose||"stand",expr:c.expr})}</g>`});
- return frame(inner,{w:W,h:H,bg:o.bg||"campus",label:o.label})}
+ chars.forEach((c,i)=>{const x=(W/(n+1))*(i+1)-200*.95;inner+=`<g transform="translate(${x} 30) scale(.95)">${full(c.p,{view:c.view||(c.p.style==="flat"&&o.bg==="dining"?"front":"three"),pose:c.pose||"stand",expr:c.expr})}</g>`});
+ return frame(inner,{w:W,h:H,bg:o.bg||"campus",label:o.label,fgN:n})}
 Object.assign(A,{VIEWS,VIEWN,POSES,BGS,drawFull,group,bgArt});
 })();

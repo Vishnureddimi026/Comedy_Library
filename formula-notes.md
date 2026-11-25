@@ -829,3 +829,5 @@ Use these as top-quality references for every new scene. Rules:
 - Engine: anime_rig.js (head, 21 expressions, headOnly/turn) + anime_body.js (full body, 6 views, 13 poses, 12 backgrounds, group pictures).
 - Studio: gallery; profile (name, age, gender, height, build, role, personality, background, special); appearance with identity lock (Approve & lock) and versions; multiple outfits with Claude outfit design; views; expressions; poses + custom pose (Claude picks nearest); scene & group; reference sheet PNG; reference photo analysis (Claude vision, choose features to keep); real-art prompt; artwork uploads.
 - Capabilities now: db, downloads, sample (images:true), user, assets.
+
+- 25 Nov 2026: user shared a reference picture (flat explainer-video cartoon: dining table, father with mustache, kid head, mother with bun, night-city window). Added Art style "Flat cartoon" (anime_flat.js) — now the default for new characters — with flat heads for all views/expressions, thick outlines, two-tone shading; "Dining room" background with table in front, "Warm room" background; teens drawn shorter.
