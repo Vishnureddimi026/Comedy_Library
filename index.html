@@ -311,7 +311,7 @@ main>section:not([hidden]),.page:not([hidden]){animation:rise3d .35s cubic-bezie
 .anhead{display:flex;flex-wrap:wrap;gap:10px;justify-content:space-between;align-items:center;margin-bottom:6px}.lockb{display:inline-block;margin-top:4px;padding:2px 10px;border-radius:10px;background:#2f6b4f;color:#fff;font-size:13px;font-weight:700}.lockb.off{background:#8a8a95}
 .anright2{min-width:0}.antabs{margin-bottom:10px}.anleft{position:sticky;top:8px;align-self:start}.anhd svg{width:42%;height:auto;border-radius:12px;margin-top:8px;box-shadow:var(--shadow)}
 .angrid2{display:grid;grid-template-columns:1fr 1fr;gap:4px 12px}@media(max-width:560px){.angrid2{grid-template-columns:1fr}}
-.anpanel{border:1.5px dashed var(--line);border-radius:12px;padding:10px;margin:12px 0}.anquick{border-style:solid;border-color:var(--teal)}.anqgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(74px,1fr));gap:6px;margin-top:4px}.anqb{border:2px solid var(--line);border-radius:12px;padding:3px 3px 4px;background:var(--card,#fff);cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:2px;color:inherit;font:inherit}.anqb svg{width:100%;height:auto;max-height:70px;display:block;border-radius:8px}.anqb span{font-size:11px;line-height:1.15;text-align:center}.anqnose .anqb,.anqzoom .anqb,.anqmouth .anqb{overflow:hidden}.anqnose .anqb svg{transform:scale(2.3);transform-origin:50% 33%}.anqzoom .anqb svg{transform:scale(2.4);transform-origin:50% 27%}.anqmouth .anqb svg{transform:scale(2.4);transform-origin:50% 44%}.anqnose .anqb span,.anqzoom .anqb span,.anqmouth .anqb span{position:relative;z-index:1;background:var(--card,#fff);width:100%}.anportbig svg{width:100%;max-width:440px;height:auto;display:block;margin:8px auto;border-radius:16px;box-shadow:var(--shadow)}.anportg{grid-template-columns:repeat(auto-fill,minmax(96px,1fr))}.anportg .anqb svg{max-height:none}.anqb.on{border-color:var(--teal);box-shadow:0 0 0 2px var(--teal)}.anqb:disabled{opacity:.5;cursor:not-allowed}.anpanel h4{margin:0 0 4px}
+.anpanel{border:1.5px dashed var(--line);border-radius:12px;padding:10px;margin:12px 0}.anquick{border-style:solid;border-color:var(--teal)}.anqgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(74px,1fr));gap:6px;margin-top:4px}.anqb{border:2px solid var(--line);border-radius:12px;padding:3px 3px 4px;background:var(--card,#fff);cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:2px;color:inherit;font:inherit}.anqb svg{width:100%;height:auto;max-height:70px;display:block;border-radius:8px}.anqb span{font-size:11px;line-height:1.15;text-align:center}.anqnose .anqb,.anqzoom .anqb,.anqmouth .anqb{overflow:hidden}.anqnose .anqb svg{transform:scale(2.3);transform-origin:50% 33%}.anqzoom .anqb svg{transform:scale(2.4);transform-origin:50% 27%}.anqmouth .anqb svg{transform:scale(2.4);transform-origin:50% 44%}.anqnose .anqb span,.anqzoom .anqb span,.anqmouth .anqb span{position:relative;z-index:1;background:var(--card,#fff);width:100%}.anportbig svg{width:100%;max-width:440px;height:auto;display:block;margin:8px auto;border-radius:16px;box-shadow:var(--shadow)}.anportg{grid-template-columns:repeat(auto-fill,minmax(96px,1fr))}.anportg .anqb svg{max-height:none}.anmode{margin:0 0 8px}#asPrev svg.anport{width:100%;height:auto;max-height:74vh;border-radius:16px}.anqb.on{border-color:var(--teal);box-shadow:0 0 0 2px var(--teal)}.anqb:disabled{opacity:.5;cursor:not-allowed}.anpanel h4{margin:0 0 4px}
 .lockmsg{background:rgba(47,107,79,.1);border:1.5px solid #2f6b4f;border-radius:10px;padding:8px}
 .angal4{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}.angal6{display:grid;grid-template-columns:repeat(6,1fr);gap:8px}@media(max-width:900px){.angal6{grid-template-columns:repeat(3,1fr)}}@media(max-width:560px){.angal4,.angal6{grid-template-columns:repeat(2,1fr)}}
 .angal4 svg,.angal6 svg,.anvers svg,.angroup svg,.ansheetbig svg{width:100%;height:auto;display:block;border-radius:10px}.anpick{border:2px solid transparent;border-radius:12px;padding:0;background:none;cursor:pointer}.anpick.on{border-color:var(--teal)}
@@ -537,7 +537,7 @@ setTimeout(function(){var i=document.getElementById("lockP");if(i)i.focus()},100
 <div class="box"><h3 style="margin-top:0">My characters</h3><div id="asGal" class="anlist"></div></div>
 <div class="box" id="asStudio"><div class="anhead"><div><h3 id="asTitle" style="margin:0"></h3><div id="asBadge"></div></div><div class="acts" style="margin:0"><button class="btn" type="button" id="asSave">💾 Save</button><button class="btn" type="button" id="asLock">✅ Approve &amp; lock identity</button><button class="btn ghost sm" type="button" id="asDup">Duplicate</button><button class="btn ghost sm" type="button" id="asDel">Delete</button></div></div>
 <p class="row" id="asMsg" aria-live="polite"></p>
-<div class="anwrap"><div class="anleft"><div id="asPrev" class="anprev"></div><div id="asHead" class="anhd"></div></div>
+<div class="anwrap"><div class="anleft"><div class="chips anmode" id="asMode"></div><div id="asPrev" class="anprev"></div><div id="asHead" class="anhd"></div></div>
 <div class="anright2"><div class="chips antabs" id="asTabs"></div><div id="asBody"></div></div></div></div>
 </section>
 <section id="v-rules" class="band" hidden>
@@ -3398,7 +3398,10 @@ function crop(svg){try{const parts=[...svg.querySelectorAll("[data-char],[data-k
  svg.setAttribute("viewBox",`${x0.toFixed(1)} ${y0.toFixed(1)} ${w.toFixed(1)} ${h.toFixed(1)}`);svg.setAttribute("width",Math.round(w*2));svg.setAttribute("height",Math.round(h*2));svg.classList.add("cropped")}catch(e){}}
 function cropIn(root){if(!root)return;root.querySelectorAll("svg").forEach(s=>{if(s.querySelector("[data-char]")&&!s.closest(".ansheetbig,.angroup"))crop(s)})}
 const ovl=()=>({tag:cur.sceneTag?cur.name:null,tagSub:cur.sceneTag?(cur.profile.role||""):null,stamp:(cur.stampTxt||"").trim()||null});
-function preview(){const p=flat(cur);$("#asPrev").innerHTML=A.drawFull(p,Object.assign({view,pose,bg:cur.bgScene||"plain",base:cur.bg},ovl()));cropIn($("#asPrev"));$("#asHead").innerHTML=A.draw(p,null,{plain:true});
+function preview(){const p=flat(cur),md=cur.mainStyle||"anime",po=cur.portrait||{};
+ $("#asMode").innerHTML=[["anime","✨ Anime"],["flat","Flat cartoon (full body)"]].map(([k,n])=>`<button type="button" class="chip" data-mode="${k}" aria-pressed="${md===k}">${n}</button>`).join("");
+ if(md==="anime"&&A.portrait){$("#asPrev").innerHTML=A.portrait(p,{hair:po.hair||A.PORT.mapHair(p.hair),ex:po.ex||(A.PORT.EXP[cur.expr]?cur.expr:"calm"),bg:po.bg,base:cur.bg});$("#asHead").innerHTML=A.drawFull(p,{view:"front",pose:"stand",bg:"plain",base:cur.bg});cropIn($("#asHead"))}
+ else{$("#asPrev").innerHTML=A.drawFull(p,Object.assign({view,pose,bg:cur.bgScene||"plain",base:cur.bg},ovl()));cropIn($("#asPrev"));$("#asHead").innerHTML=A.draw(p,null,{plain:true})}
  $("#asBadge").innerHTML=cur.locked?`<span class="lockb">🔒 Identity locked</span>`:`<span class="lockb off">Draft</span>`;$("#asTitle").textContent=cur.name+(cur.profile.ageNum?` · ${cur.profile.ageNum}`:"")}
 function quick(L){const p=flat(cur),O=outfit(cur),th=(k,v)=>`<button type="button" class="anqb${(k==="hair"?cur.look.hair:cur.look[k])===v?" on":""}" data-qset="${k}" data-v="${v}" ${L?"disabled":""} title="${E((NICE[k]&&NICE[k][v])||v)}">${A.draw(Object.assign({},p,{[k]:v}),null,{plain:true})}<span>${E(((NICE[k]&&NICE[k][v])||v).split(" (")[0])}</span></button>`;
  const und=(window.__asUndo||[]).length;
@@ -3571,6 +3574,7 @@ document.addEventListener("change",async e=>{const t=e.target;if(!inStudio(t))re
  if(t.dataset.ocol){outfit(cur)[t.dataset.ocol]=t.value;drawSec()}
  if(t.dataset.po){(cur.portrait=cur.portrait||{})[t.dataset.po]=t.value;drawSec()}
  if(t.id==="asTagOn"){cur.sceneTag=t.checked;preview()}
+ if(["asBg","asView","asPose"].includes(t.id))cur.mainStyle="flat";
  if(t.id==="asBg"){cur.bgScene=t.value;preview()}if(t.id==="asView"){view=t.value;preview()}if(t.id==="asPose"){pose=t.value;preview()}if(t.id==="asExpr"){cur.expr=t.value;preview()}
  if(t.id==="asPhoto"&&t.files[0]){const f=t.files[0];const blob=await shrink(f,1024);photo={blob,url:URL.createObjectURL(blob),keep:["hair","hairColor","face","skin"]};drawSec();msg("Picture ready. Tick the features to keep, then tap Analyse.")}
  if(t.id==="asArtUp"&&t.files[0]){await uploadArt(t.files[0])}});
@@ -3582,6 +3586,7 @@ document.addEventListener("click",async e=>{const t=e.target;if(!inStudio(t))ret
  if(b=c("[data-open]")){const x=LIST.find(v=>v.id===b.dataset.open);if(x){cur=JSON.parse(JSON.stringify(x));view="front";pose="stand";drawSec();drawGallery();msg(`Opened ${x.name}.`);$("#asStudio").scrollIntoView({behavior:"smooth",block:"start"})}return}
  if(t.closest("#asNew")){cur=blank();sec="profile";drawSec();drawGallery();msg("New character. Fill in the profile, then design it.");return}
  if(b=c("[data-style]")){cur.look.style=b.dataset.style;drawSec();return}
+ if(b=c("[data-mode]")){cur.mainStyle=b.dataset.mode;preview();return}
  if(b=c("[data-pox]")){(cur.portrait=cur.portrait||{}).ex=b.dataset.pox;drawSec();return}
  if(b=c("[data-qset]")){snap();cur.look[b.dataset.qset]=b.dataset.v;drawSec();return}
  if(b=c("[data-qr]")){const k=b.dataset.qr,r=a=>a[Math.floor(Math.random()*a.length)];
@@ -3607,7 +3612,7 @@ document.addEventListener("click",async e=>{const t=e.target;if(!inStudio(t))ret
  if(b=c("[data-restore]")){const v=cur.versions[+b.dataset.restore];if(v){cur.look=JSON.parse(JSON.stringify(v.look));drawSec();msg("Restored that version. Tap Save to keep it.")}return}
  if(b=c("[data-vpose]")){pose=b.dataset.vpose;drawSec();return}
  if(b=c("[data-dex]")){cur.expr=b.dataset.dex;drawSec();return}
- if(b=c("[data-pp]")){pose=b.dataset.pp;view=A.POSES[pose].best||"front";drawSec();return}
+ if(b=c("[data-pp]")){cur.mainStyle="flat";pose=b.dataset.pp;view=A.POSES[pose].best||"front";drawSec();return}
  if(b=c("[data-gp]")){const g=window.__asG=window.__asG||[];const id=b.dataset.gp;window.__asG=g.includes(id)?g.filter(v=>v!==id):g.concat(id).slice(-4);b.setAttribute("aria-pressed",window.__asG.includes(id));return}
  if(t.id==="asGroup"){const ids=window.__asG||[];if(ids.length<2){msg("Pick at least two characters.");return}const cs=ids.map(id=>LIST.find(v=>v.id===id)).filter(Boolean);const svg=A.group(cs.map(x=>({p:flat(x),view:(cur.bgScene==="dining"?"front":"three"),pose:"stand",expr:x.expr})),{bg:cur.bgScene&&cur.bgScene!=="none"&&cur.bgScene!=="plain"?cur.bgScene:"campus"});$("#asGroupOut").innerHTML=`<div class="angroup">${svg}</div><div class="acts"><button class="btn sm" type="button" id="asGroupPng">Download group picture (PNG)</button></div>`;window.__asGS=svg;return}
  if(t.id==="asGroupPng"&&window.__asGS){const m=window.__asGS.match(/viewBox="0 0 (\d+) (\d+)"/);await svgToPng(window.__asGS,+m[1],+m[2],fn("group"));return}
