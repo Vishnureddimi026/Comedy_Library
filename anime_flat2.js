@@ -209,12 +209,12 @@ const SC=1.3;
 function inner(p,o){const view0=o.view||"front";let view=view0;const P=PZ[o.pose||"stand"]||PZ.stand;if(P.look&&view==="front")view="back";
  const v=view==="side2"?"side":view==="threeback"?"back":view;const {g}=charG(p,v,o.pose||"stand",o.expr||p.expr);
  let s=`<g transform="translate(200 762) scale(${SC})">${g}</g>`;if(view==="side2"||view==="threeback")s=`<g transform="translate(400 0) scale(-1 1)">${s}</g>`;
- return s+popFx(P,null,200)}
+ return `<g data-char="1">${s}</g><g data-keep="1">${popFx(P,null,200)}</g>`}
 const prevFull=A.drawFull;A.drawFull=function(p,o){o=o||{};if(!(p&&p.style==="flat"))return prevFull(p,o);const W=400,H=800,bg=o.bg||p.bgScene||"plain";
  let s=`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}">${A.bgArt(bg,W,H,o.base||p.bg)}${inner(p,o)}`;
- if(bg==="dining")s+=A.DINING_FG(W,H,1);if(o.tag)s+=tagSvg(200,46,o.tag,o.tagSub);if(o.stamp)s+=stampSvg(292,610,o.stamp);
+ if(bg==="dining")s+=A.DINING_FG(W,H,1);if(o.tag)s+=`<g data-keep="1">${tagSvg(200,46,o.tag,o.tagSub)}</g>`;if(o.stamp)s+=`<g data-keep="1">${stampSvg(292,610,o.stamp)}</g>`;
  if(!["plain","none"].includes(bg))s+=dustV(W,H,true);
- if(o.label)s+=`<rect x="0" y="${H-46}" width="${W}" height="46" fill="rgba(20,22,40,.72)"/><text x="${W/2}" y="${H-15}" font-family="Arial,sans-serif" font-size="24" font-weight="700" text-anchor="middle" fill="#fff">${String(o.label).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]))}</text>`;
+ if(o.label)s+=`<rect data-lab="1" x="0" y="${H-46}" width="${W}" height="46" fill="rgba(20,22,40,.72)"/>`;if(o.label)s+=`<text data-lab="1" x="${W/2}" y="${H-15}" font-family="Arial,sans-serif" font-size="24" font-weight="700" text-anchor="middle" fill="#fff">${String(o.label).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]))}</text>`;
  return s+`</svg>`};
 const prevGroup=A.group;A.group=function(chars,o){o=o||{};if(!chars.some(c=>c.p&&c.p.style==="flat"))return prevGroup(chars,o);const n=chars.length,W=Math.max(900,n*340),H=800,bg=o.bg||"dining";
  let s=`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}">${A.bgArt(bg,W,H)}`;

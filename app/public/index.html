@@ -298,7 +298,7 @@ main>section:not([hidden]),.page:not([hidden]){animation:rise3d .35s cubic-bezie
 .fament{border:1.5px solid var(--line);border-radius:12px;padding:10px;margin-top:10px;background:var(--card)}.fament textarea{width:100%;min-height:180px;margin:6px 0;font-size:16px;line-height:1.6}.fament .acts{align-items:center}
 .famrow{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:6px 0}.famrow label{display:flex;flex-direction:column;gap:4px;font-size:14px}.famrow input{width:100%}@media(max-width:560px){.famrow{grid-template-columns:1fr}}
 .anwrap{display:grid;grid-template-columns:minmax(260px,420px) 1fr;gap:18px;align-items:start}@media(max-width:760px){.anwrap{grid-template-columns:1fr}}
-.anprev svg{width:100%;height:auto;border-radius:16px;box-shadow:var(--shadow);display:block}
+.anprev svg{width:100%;height:auto;max-height:74vh;border-radius:16px;box-shadow:var(--shadow);display:block}#v-anime svg.cropped{width:auto;height:auto;max-width:100%;max-height:74vh;margin:0 auto;display:block}.angal6 svg.cropped,.angal4 svg.cropped{max-height:340px}
 .anright{display:grid;grid-template-columns:1fr 1fr;gap:10px}@media(max-width:560px){.anright{grid-template-columns:1fr}}
 .ansel{display:flex;flex-direction:column;gap:4px;font-size:14px;margin:6px 0}.ansel span,.ancol>span{font-weight:700;font-size:14px}
 .ansel select,.ansel input,.ansel textarea{width:100%}.ancol{grid-column:1/-1;display:flex;flex-direction:column;gap:6px}
@@ -3183,12 +3183,12 @@ const SC=1.3;
 function inner(p,o){const view0=o.view||"front";let view=view0;const P=PZ[o.pose||"stand"]||PZ.stand;if(P.look&&view==="front")view="back";
  const v=view==="side2"?"side":view==="threeback"?"back":view;const {g}=charG(p,v,o.pose||"stand",o.expr||p.expr);
  let s=`<g transform="translate(200 762) scale(${SC})">${g}</g>`;if(view==="side2"||view==="threeback")s=`<g transform="translate(400 0) scale(-1 1)">${s}</g>`;
- return s+popFx(P,null,200)}
+ return `<g data-char="1">${s}</g><g data-keep="1">${popFx(P,null,200)}</g>`}
 const prevFull=A.drawFull;A.drawFull=function(p,o){o=o||{};if(!(p&&p.style==="flat"))return prevFull(p,o);const W=400,H=800,bg=o.bg||p.bgScene||"plain";
  let s=`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}">${A.bgArt(bg,W,H,o.base||p.bg)}${inner(p,o)}`;
- if(bg==="dining")s+=A.DINING_FG(W,H,1);if(o.tag)s+=tagSvg(200,46,o.tag,o.tagSub);if(o.stamp)s+=stampSvg(292,610,o.stamp);
+ if(bg==="dining")s+=A.DINING_FG(W,H,1);if(o.tag)s+=`<g data-keep="1">${tagSvg(200,46,o.tag,o.tagSub)}</g>`;if(o.stamp)s+=`<g data-keep="1">${stampSvg(292,610,o.stamp)}</g>`;
  if(!["plain","none"].includes(bg))s+=dustV(W,H,true);
- if(o.label)s+=`<rect x="0" y="${H-46}" width="${W}" height="46" fill="rgba(20,22,40,.72)"/><text x="${W/2}" y="${H-15}" font-family="Arial,sans-serif" font-size="24" font-weight="700" text-anchor="middle" fill="#fff">${String(o.label).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]))}</text>`;
+ if(o.label)s+=`<rect data-lab="1" x="0" y="${H-46}" width="${W}" height="46" fill="rgba(20,22,40,.72)"/>`;if(o.label)s+=`<text data-lab="1" x="${W/2}" y="${H-15}" font-family="Arial,sans-serif" font-size="24" font-weight="700" text-anchor="middle" fill="#fff">${String(o.label).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]))}</text>`;
  return s+`</svg>`};
 const prevGroup=A.group;A.group=function(chars,o){o=o||{};if(!chars.some(c=>c.p&&c.p.style==="flat"))return prevGroup(chars,o);const n=chars.length,W=Math.max(900,n*340),H=800,bg=o.bg||"dining";
  let s=`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}">${A.bgArt(bg,W,H)}`;
@@ -3237,8 +3237,16 @@ function save(silent){cur.name=(cur.name||"").trim()||"New character";if(!cur.id
 /* ---------- rendering of the studio ---------- */
 function sw(k,obj,vals,dis){return `<div class="ancol"><span>${LAB[k]}</span><div class="sw">${vals.map(v=>`<button type="button" class="swb${obj[k]===v?" on":""}" data-sw="${k}" data-v="${v}" style="background:${v}" aria-label="${v}" ${dis?"disabled":""}></button>`).join("")}<input type="color" data-col="${k}" value="${isHex(obj[k])?obj[k]:"#888888"}" ${dis?"disabled":""} aria-label="Custom ${LAB[k]}"></div></div>`}
 function selF(k,obj,vals,dis,attr){return `<label class="ansel"><span>${LAB[k]}</span><select class="cin" ${attr||`data-lk="${k}"`} ${dis?"disabled":""}>${vals.map(v=>`<option value="${v}"${obj[k]===v?" selected":""}>${(NICE[k]&&NICE[k][v])||v}</option>`).join("")}</select></label>`}
+/* crop a full-body picture around the character (preview & galleries) */
+function crop(svg){try{const parts=[...svg.querySelectorAll("[data-char],[data-keep]")];if(!parts.length)return;let x0=1e9,y0=1e9,x1=-1e9,y1=-1e9;
+ parts.forEach(el=>{const b=el.getBBox();if(!b.width&&!b.height)return;x0=Math.min(x0,b.x);y0=Math.min(y0,b.y);x1=Math.max(x1,b.x+b.width);y1=Math.max(y1,b.y+b.height)});if(x1<x0)return;
+ const vb=svg.viewBox.baseVal,W=vb.width,H=vb.height,pad=26;x0=Math.max(0,x0-pad);y0=Math.max(0,y0-pad);x1=Math.min(W,x1+pad);y1=Math.min(H,y1+pad+10);
+ let w=x1-x0,h=y1-y0;const minW=h*.62;if(w<minW){const c=(x0+x1)/2;w=Math.min(W,minW);x0=Math.max(0,Math.min(W-w,c-w/2))}
+ const lab=svg.querySelectorAll("[data-lab]");if(lab.length){const shift=(y0+h)-(H-46)-46;lab.forEach(el=>el.setAttribute("transform",`translate(0 ${-(H-(y0+h))})`))}
+ svg.setAttribute("viewBox",`${x0.toFixed(1)} ${y0.toFixed(1)} ${w.toFixed(1)} ${h.toFixed(1)}`);svg.setAttribute("width",Math.round(w*2));svg.setAttribute("height",Math.round(h*2));svg.classList.add("cropped")}catch(e){}}
+function cropIn(root){if(!root)return;root.querySelectorAll("svg").forEach(s=>{if(s.querySelector("[data-char]")&&!s.closest(".ansheetbig,.angroup"))crop(s)})}
 const ovl=()=>({tag:cur.sceneTag?cur.name:null,tagSub:cur.sceneTag?(cur.profile.role||""):null,stamp:(cur.stampTxt||"").trim()||null});
-function preview(){const p=flat(cur);$("#asPrev").innerHTML=A.drawFull(p,Object.assign({view,pose,bg:cur.bgScene||"plain",base:cur.bg},ovl()));$("#asHead").innerHTML=A.draw(p,null,{plain:true});
+function preview(){const p=flat(cur);$("#asPrev").innerHTML=A.drawFull(p,Object.assign({view,pose,bg:cur.bgScene||"plain",base:cur.bg},ovl()));cropIn($("#asPrev"));$("#asHead").innerHTML=A.draw(p,null,{plain:true});
  $("#asBadge").innerHTML=cur.locked?`<span class="lockb">🔒 Identity locked</span>`:`<span class="lockb off">Draft</span>`;$("#asTitle").textContent=cur.name+(cur.profile.ageNum?` · ${cur.profile.ageNum}`:"")}
 function drawSec(){$("#asTabs").innerHTML=SEC.map(s=>`<button type="button" class="chip" data-sec="${s[0]}" aria-pressed="${sec===s[0]}">${s[1]}</button>`).join("");
  const L=cur.locked,O=outfit(cur),P=cur.profile,box=$("#asBody");let h="";
@@ -3296,7 +3304,7 @@ function drawSec(){$("#asTabs").innerHTML=SEC.map(s=>`<button type="button" clas
  <textarea class="cta" rows="9" id="asPrompt" readonly>${E(artPrompt())}</textarea><div class="acts"><button class="btn sm" type="button" id="asCopyP">Copy prompt</button><button class="btn ghost sm" type="button" data-png="one">Download front view (PNG)</button></div></div>
  <div class="anpanel"><h4>This character's saved artwork</h4><input type="file" accept="image/*" id="asArtUp" class="cin"><label class="ansel"><span>Label</span><input class="cin" id="asArtLab" placeholder="e.g. Front view — Gemini"></label>
  <div class="angal4">${(cur.images||[]).map((im,i)=>`<div class="anart"><img src="/_blob/${E(im.id)}" alt="${E(im.label)}"><span class="mt">${E(im.label)}</span><button class="btn ghost sm" type="button" data-artdel="${i}">Remove</button></div>`).join("")||`<p class="row">No uploaded artwork yet.</p>`}</div></div>`}
- box.innerHTML=h;if(sec==="profile")drawWho();preview()}
+ box.innerHTML=h;if(sec==="profile")drawWho();preview();cropIn(box)}
 function artPrompt(){const p=flat(cur),P=cur.profile,O=outfit(cur);return `${cur.look.style==="flat"?"Create a clean flat 2D cartoon character in a simple explainer-video style (thick dark outlines, flat colours with simple two-tone shading, simple round eyes, muted warm palette)":"Create a high-quality 2D Japanese anime character illustration"}, full body from head to toe (do not crop head, hands or feet), clean line art, cel shading, professional colours, plain light background. Use the attached picture ONLY as the design reference for this ORIGINAL character — keep the same face, hairstyle, colours and outfit; do not copy any existing anime character.
 Name: ${cur.name}${P.ageNum?`, age ${P.ageNum}`:""}. ${NICE.gender[p.gender]}, ${NICE.age[p.age]}, ${P.height} height${P.heightCm?` (${P.heightCm} cm)`:""}, ${P.build} build. Role: ${P.role}.
 Personality: ${P.personality||"—"}. ${P.special?`Special features: ${P.special}.`:""}

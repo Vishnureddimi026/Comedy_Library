@@ -28,8 +28,16 @@ function save(silent){cur.name=(cur.name||"").trim()||"New character";if(!cur.id
 /* ---------- rendering of the studio ---------- */
 function sw(k,obj,vals,dis){return `<div class="ancol"><span>${LAB[k]}</span><div class="sw">${vals.map(v=>`<button type="button" class="swb${obj[k]===v?" on":""}" data-sw="${k}" data-v="${v}" style="background:${v}" aria-label="${v}" ${dis?"disabled":""}></button>`).join("")}<input type="color" data-col="${k}" value="${isHex(obj[k])?obj[k]:"#888888"}" ${dis?"disabled":""} aria-label="Custom ${LAB[k]}"></div></div>`}
 function selF(k,obj,vals,dis,attr){return `<label class="ansel"><span>${LAB[k]}</span><select class="cin" ${attr||`data-lk="${k}"`} ${dis?"disabled":""}>${vals.map(v=>`<option value="${v}"${obj[k]===v?" selected":""}>${(NICE[k]&&NICE[k][v])||v}</option>`).join("")}</select></label>`}
+/* crop a full-body picture around the character (preview & galleries) */
+function crop(svg){try{const parts=[...svg.querySelectorAll("[data-char],[data-keep]")];if(!parts.length)return;let x0=1e9,y0=1e9,x1=-1e9,y1=-1e9;
+ parts.forEach(el=>{const b=el.getBBox();if(!b.width&&!b.height)return;x0=Math.min(x0,b.x);y0=Math.min(y0,b.y);x1=Math.max(x1,b.x+b.width);y1=Math.max(y1,b.y+b.height)});if(x1<x0)return;
+ const vb=svg.viewBox.baseVal,W=vb.width,H=vb.height,pad=26;x0=Math.max(0,x0-pad);y0=Math.max(0,y0-pad);x1=Math.min(W,x1+pad);y1=Math.min(H,y1+pad+10);
+ let w=x1-x0,h=y1-y0;const minW=h*.62;if(w<minW){const c=(x0+x1)/2;w=Math.min(W,minW);x0=Math.max(0,Math.min(W-w,c-w/2))}
+ const lab=svg.querySelectorAll("[data-lab]");if(lab.length){const shift=(y0+h)-(H-46)-46;lab.forEach(el=>el.setAttribute("transform",`translate(0 ${-(H-(y0+h))})`))}
+ svg.setAttribute("viewBox",`${x0.toFixed(1)} ${y0.toFixed(1)} ${w.toFixed(1)} ${h.toFixed(1)}`);svg.setAttribute("width",Math.round(w*2));svg.setAttribute("height",Math.round(h*2));svg.classList.add("cropped")}catch(e){}}
+function cropIn(root){if(!root)return;root.querySelectorAll("svg").forEach(s=>{if(s.querySelector("[data-char]")&&!s.closest(".ansheetbig,.angroup"))crop(s)})}
 const ovl=()=>({tag:cur.sceneTag?cur.name:null,tagSub:cur.sceneTag?(cur.profile.role||""):null,stamp:(cur.stampTxt||"").trim()||null});
-function preview(){const p=flat(cur);$("#asPrev").innerHTML=A.drawFull(p,Object.assign({view,pose,bg:cur.bgScene||"plain",base:cur.bg},ovl()));$("#asHead").innerHTML=A.draw(p,null,{plain:true});
+function preview(){const p=flat(cur);$("#asPrev").innerHTML=A.drawFull(p,Object.assign({view,pose,bg:cur.bgScene||"plain",base:cur.bg},ovl()));cropIn($("#asPrev"));$("#asHead").innerHTML=A.draw(p,null,{plain:true});
  $("#asBadge").innerHTML=cur.locked?`<span class="lockb">🔒 Identity locked</span>`:`<span class="lockb off">Draft</span>`;$("#asTitle").textContent=cur.name+(cur.profile.ageNum?` · ${cur.profile.ageNum}`:"")}
 function drawSec(){$("#asTabs").innerHTML=SEC.map(s=>`<button type="button" class="chip" data-sec="${s[0]}" aria-pressed="${sec===s[0]}">${s[1]}</button>`).join("");
  const L=cur.locked,O=outfit(cur),P=cur.profile,box=$("#asBody");let h="";
@@ -87,7 +95,7 @@ function drawSec(){$("#asTabs").innerHTML=SEC.map(s=>`<button type="button" clas
  <textarea class="cta" rows="9" id="asPrompt" readonly>${E(artPrompt())}</textarea><div class="acts"><button class="btn sm" type="button" id="asCopyP">Copy prompt</button><button class="btn ghost sm" type="button" data-png="one">Download front view (PNG)</button></div></div>
  <div class="anpanel"><h4>This character's saved artwork</h4><input type="file" accept="image/*" id="asArtUp" class="cin"><label class="ansel"><span>Label</span><input class="cin" id="asArtLab" placeholder="e.g. Front view — Gemini"></label>
  <div class="angal4">${(cur.images||[]).map((im,i)=>`<div class="anart"><img src="/_blob/${E(im.id)}" alt="${E(im.label)}"><span class="mt">${E(im.label)}</span><button class="btn ghost sm" type="button" data-artdel="${i}">Remove</button></div>`).join("")||`<p class="row">No uploaded artwork yet.</p>`}</div></div>`}
- box.innerHTML=h;if(sec==="profile")drawWho();preview()}
+ box.innerHTML=h;if(sec==="profile")drawWho();preview();cropIn(box)}
 function artPrompt(){const p=flat(cur),P=cur.profile,O=outfit(cur);return `${cur.look.style==="flat"?"Create a clean flat 2D cartoon character in a simple explainer-video style (thick dark outlines, flat colours with simple two-tone shading, simple round eyes, muted warm palette)":"Create a high-quality 2D Japanese anime character illustration"}, full body from head to toe (do not crop head, hands or feet), clean line art, cel shading, professional colours, plain light background. Use the attached picture ONLY as the design reference for this ORIGINAL character — keep the same face, hairstyle, colours and outfit; do not copy any existing anime character.
 Name: ${cur.name}${P.ageNum?`, age ${P.ageNum}`:""}. ${NICE.gender[p.gender]}, ${NICE.age[p.age]}, ${P.height} height${P.heightCm?` (${P.heightCm} cm)`:""}, ${P.build} build. Role: ${P.role}.
 Personality: ${P.personality||"—"}. ${P.special?`Special features: ${P.special}.`:""}
