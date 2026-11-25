@@ -840,3 +840,5 @@ Use these as top-quality references for every new scene. Rules:
 - Plan: use it for the video stage of the anime project with the Character Studio characters.
 
 - 25 Nov 2026: Flat style upgraded (anime_flat2.js) using the GrowKaz cutout style bible: shaped bodies (tapered legs, curved torso, belt + gold buckle, jacket panels, tie, collar), one hard shadow tone per part, dark-brown outline #2b1c17, two-part arms with mitten hands, almond eyes, heavy emotional brows, nose shadow wedge, stubble, mustache stroke, chibi kids; new flat sets (dining, warm room, apartment, office, stage, city street at night) with wainscot, perspective floor, night window with moon/stars/city lights, lamp glow, dust and vignette; Scene section has pop-up name tag and stamp (Telugu works).
+
+- 25 Nov 2026: user asked to remove the big-eyed Anime style from the Character Studio; only the flat cutout style remains, and every saved character is shown in it.
