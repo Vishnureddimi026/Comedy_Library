@@ -383,6 +383,7 @@ setTimeout(function(){var i=document.getElementById("lockP");if(i)i.focus()},100
 <option value="complex">Best quality: can take 1–3 minutes</option>
 <option value="deep">Deepest: extra polishing, up to 5 minutes</option>
 </select></label>
+<label for="polish" style="display:flex;gap:8px;align-items:center"><input type="checkbox" id="polish" checked> Polish pass: check and rewrite weak lines before showing (recommended)</label>
 <label for="alang">Analysis language<select id="alang">
 <option value="mix">English with Telugu quotes</option>
 <option value="te">Telugu</option>
@@ -1270,6 +1271,15 @@ How to do it:
 In the "scene" array, give every dialogue an extra key "f": the reference scene number the line was taken from (1–${r.combo.length}), or 0 for a new linking line you wrote.
 Add to the JSON a key "combo": {"picked":[{"from":1,"element":"the line you took","why":"why it is strong","lines":[0]}],"left":"one sentence on what you left out and why","improved":"one sentence on how the new order makes the punches land harder"} — "from" is the reference scene number, "lines" are the dialogue numbers in the new scene where it is used.
 `}
+window.CFL_CRAFT=`COMEDY CRAFT (the user's standing upgrade — quality over quantity, every scene):
+1. NATURAL FLOW: every line answers what the previous speaker ACTUALLY said (a word, an image, a claim) — no line could be moved elsewhere. It must sound like real people talking: reactions, half-sentences, pauses (…), interruptions, slang. Build from an ordinary conversation into comedy gradually. Cut any line that does not move the scene or the laugh. Each line should make the audience want the next one.
+2. PUNCH COMEDY: real counters instead of ordinary answers — the opponent turns the speaker's own words, logic or boast against him. Mix clever wordplay, misunderstandings, absurd logic, sarcasm and surprising reactions, all born from THIS situation. Set up every punch properly (plant → build → punch, punch word last). Mostly short sharp punches; sometimes a longer build that pays off with one strong hit. Never repeat a joke's mechanism in different words. Do NOT force a punch into every line: allow natural talk and reactions between comedy moments so the punches land harder.
+3. UNEXPECTED TWISTS that grow from the scene itself, never random: a confident statement turned against its speaker; a small misunderstanding snowballing into a bigger problem; an escape attempt that makes things worse; a clever explanation exposed by one unexpected detail; someone who thinks he has won, reversed by the final reply. Plant clues early so the twist feels surprising AND logical.
+4. DISTINCT VOICES: each character keeps his own slang, vocabulary, expressions, attitude, reaction style and kind of punch (cover them and you can still tell who speaks). Never let two characters sound alike.
+5. STRUCTURE (adapt, don't follow mechanically): interesting opening (start in the middle of something) → setup (give them something to react to) → development (misunderstandings, counters, reactions climbing) → strong punches at the right moments → a natural unexpected turn → a powerful ending payoff, ideally a callback to something planted earlier. Never end on a moral or a plain line.
+6. EVERY LINE HAS A PURPOSE: no explanations, no characters explaining their own jokes, no predictable question-and-answer ping-pong; balance short punches with longer comedy-building lines; every line must sound right when spoken aloud.
+7. LIBRARY USE: borrow the MECHANISM of a formula (why it works), never its lines; combine techniques from different references where they fit naturally; invent new techniques and fresh punchlines; never reuse the same formula twice in a scene and never force formulas in; the scene must feel original, not a rewrite of an old one.
+8. QUALITY CHECK — before answering, privately draft the scene, then judge it: Does the opening create interest at once? Does every line connect to the one before? Are voices distinct? Are the counters clever? Are the punches genuinely funny? Are the twists surprising AND logical? Is the pacing right? Any boring or unnecessary line? Does the ending pay off? Is it original? Rewrite every weak part and show only the improved version — never the first average draft.`;
 function scenePrompt(r){
 return `You are a top Telugu comedy dialogue writer for a YouTube sketch channel.
 
@@ -1278,7 +1288,7 @@ ${LIBCF()}
 
 CHARACTER NOTES (from the reference):
 ${CHARSF()}
-Dialect: North-Andhra (Uttarandhra) Telugu with natural Tenglish.
+Dialect: follow the SLANG TYPE given with the cast, with natural Tenglish.
 
 USER'S SCENE IDEA (the starting point):
 ${r.idea}
@@ -1298,7 +1308,7 @@ GOLD TECHNIQUES (the user's hand-picked best lines — highest-quality reference
 - Report the scan in "scan": how many formulas you checked (must be ${SF().length}) and the shortlist.
 
 
-${$("#tier").value==="deep"?"DEEP MODE (the user chose the slowest, most careful setting — take your time):\n- Before writing the final JSON, privately draft the scene, then do a full rewrite pass: for every punchline, think of at least three alternatives and keep only the strongest; cut any line that is not funny or does not move the scene.\n- Check every beat against the GOLD TECHNIQUES quality bar; if a line is weaker than those, rewrite it.\n- Make the final punchline the biggest laugh of the scene.\n- Output only the final polished version.\n\n":""}STEP 2 — WRITE THE SCENE.
+${$("#tier").value==="deep"?"DEEP MODE (the user chose the slowest, most careful setting): for every punchline think of at least three alternatives and keep only the strongest.\n\n":""}STEP 2 — WRITE THE SCENE.
 
 RULES:
 - TECHNIQUE MIX TARGET: about ${$("#mix").value}% of the comedy beats driven by library formulas and about ${100-+$("#mix").value}% driven by NEW techniques you invent that are not in the library (new comic mechanisms, not just new wording). List every invented technique in "newTech".
@@ -1308,21 +1318,17 @@ RULES:
 - Write natural spoken Telugu in Telugu script. Every character must sound different, and reference characters must use their own listed slang throughout.
 - The scene must be funny line by line, not only at the end.
 
-QUALITY BAR (the user's standing rules — every scene, no exceptions):
-1. POWERFUL PUNCH DIALOGUES: fresh, unexpected punchlines. If a line is the first joke anyone would think of, throw it away and write the third or fourth idea.
-2. NATURAL CHARACTER COMEDY: every laugh comes from WHO is speaking — his personality, slang, tags and reactions. Swap the names and the line should stop working.
-3. NON-STOP COMEDY: no filler, no plain information lines. Every line is a setup, a punch, a counter or a reaction that gets its own laugh.
-4. COMEDY TWISTS: at least three — one funny misunderstanding, one clever counter that flips who is winning, and one surprise reveal or reversal late in the scene.
-5. STRONG TIMING: build each joke over 2–3 lines (setup → escalation → punch); put the punch word last in the line; follow big punches with a short reaction line.
-6. CHARACTER-TO-CHARACTER PUNCHES: characters tease, insult, counter and out-do each other; nobody wins twice in a row; at least one counter-of-a-counter exchange.
-7. TRAILER-LEVEL: the scene must have at least 5 standalone, quotable highlight lines that would work in a comedy trailer. List them in "trailer".
-8. EXPLOSIVE ENDING: the final line is the biggest, most unexpected laugh of the scene — a reversal, callback or payoff of something planted earlier. Never end on a plain line or a moral.
-9. EXTRA SLANG & EXPRESSIONS: add AT LEAST 5 extra slang words, tags or expressions across the scene (spread over different characters), wherever they fit naturally, in each speaker's own voice, drawing on each character's usual slang and the chosen slang type. Use them to speed up exchanges, sharpen reactions and add flavour (fillers, exclamations, reaction words, mock-respect, rhythmic tags). Natural for the character, never forced; no slang word more than twice in a scene; never let slang replace the punch word.
+${window.CFL_CRAFT}
+ALSO (unchanged standing rules):
+- TWISTS: at least one funny misunderstanding, one counter that flips who is winning, and one late surprise reversal — each born from the scene.
+- CHARACTER-TO-CHARACTER PUNCHES: nobody wins twice in a row; include at least one counter-of-a-counter exchange.
+- TRAILER-LEVEL: at least 5 standalone, quotable highlight lines; list them in "trailer".
+- EXTRA SLANG: at least 5 extra slang words, tags or expressions spread over the characters, in each one's own voice; no slang word more than twice; never in place of the punch word.
 - LENGTH: expand the idea into a complete, long scene that fills the requested length; keep the energy up all the way.
-- PUNCH-UP PASS before you answer: re-read every line; cut or rewrite any line that is ordinary, predictable, explains a joke, or repeats an earlier joke's mechanism.
+
 
 Return ONLY valid JSON, no markdown fences:
-{"scan":{"checked":${SF().length},"shortlist":[{"id":"F..","who":"character","why":"one-line reason it fits this idea","lines":[0],"how":"ఉంచింది: … | మార్చింది: … | ఎందుకు నవ్వొస్తుంది: …"}]},"title":"short Telugu or English title","box1":"ONE English sentence explaining the situation, the central idea and the type of comedy","formulas":["F.."],"newTech":[{"name":"short name of an invented technique","how":"one-line recipe"}],"trailer":[{"n":0,"why":"why this line is a trailer highlight"}],"twists":["one-line description of each twist"],"scene":[{"s":"speaker name in Telugu","l":"dialogue line in Telugu"}]}`;
+{"scan":{"checked":${SF().length},"shortlist":[{"id":"F..","who":"character","why":"one-line reason it fits this idea","lines":[0],"how":"ఉంచింది: … | మార్చింది: … | ఎందుకు నవ్వొస్తుంది: …"}]},"title":"short Telugu or English title","box1":"ONE English sentence explaining the situation, the central idea and the type of comedy","formulas":["F.."],"newTech":[{"name":"short name of an invented technique","how":"one-line recipe"}],"trailer":[{"n":0,"why":"why this line is a trailer highlight"}],"twists":["one-line description of each twist"],"qc":{"scores":{"opening":0,"flow":0,"voices":0,"counters":0,"punches":0,"twists":0,"pacing":0,"no filler":0,"ending":0,"originality":0},"fixed":["what your quality check rewrote, one item each"]},"scene":[{"s":"speaker name in Telugu","l":"dialogue line in Telugu"}]}`;
 }
 const LANG=()=>$("#alang")&&$("#alang").value==="te"?"Write ALL analysis text in natural Telugu script (formula IDs and short technical words may stay in English).":"Write the analysis in clear, simple English, quoting the Telugu words from the scene in Telugu script wherever you refer to a line, slang word or punchline.";
 function analysisPrompt(r,sc){
@@ -1403,7 +1409,7 @@ let h=`<article class="scene">
 ${item.s&&item.s.replace?`<details class="box" open><summary><b>Character replacement</b> · ${esc(item.s.replace.desc||"")}</summary><div>${rpCmp(item.s.replace.orig||[],item.s.scene,new Set())}${(item.s.replace.changes||[]).map(c=>`<p><b>${esc(c.was||"")} → ${esc(c.char||"")}:</b> ${esc(c.how||"")}</p>`).join("")}</div></details>`:""}${contBox(item)}${transformBox(item)}${comboBox(sc)}${scanBox(sc)}
 <div class="box b1"><div class="lbl">BOX 1 · Scene description</div><p>${esc(sc.box1)}</p></div>
 <div class="box"><div class="lbl">BOX 2 · New scene — ${esc(sc.title)} · ${sc.scene.length} dialogues</div><div class="dlg">${dlg(sc)}</div>
-${(sc.trailer||[]).length?`<details class="box" open><summary><b>Trailer highlights</b> · ${sc.trailer.length} lines${(sc.twists||[]).length?` · ${sc.twists.length} twists`:""}</summary><div>${sc.trailer.map(t=>{const d=sc.scene[(+t.n||0)-1];return d?`<p><b>L${+t.n} ${esc(d.s)}:</b> ${esc(d.l)}<br><span class="row">${esc(t.why||"")}</span></p>`:""}).join("")}${(sc.twists||[]).length?`<p class="row"><b>Twists:</b> ${sc.twists.map(esc).join(" · ")}</p>`:""}</div></details>`:""}
+${(sc.trailer||[]).length?`<details class="box" open><summary><b>Trailer highlights</b> · ${sc.trailer.length} lines${(sc.twists||[]).length?` · ${sc.twists.length} twists`:""}</summary><div>${sc.trailer.map(t=>{const d=sc.scene[(+t.n||0)-1];return d?`<p><b>L${+t.n} ${esc(d.s)}:</b> ${esc(d.l)}<br><span class="row">${esc(t.why||"")}</span></p>`:""}).join("")}${(sc.twists||[]).length?`<p class="row"><b>Twists:</b> ${sc.twists.map(esc).join(" · ")}</p>`:""}</div></details>`:""}${sc.qc&&sc.qc.scores?`<details class="box"><summary><b>Quality check</b>${sc.polished?" · polished":""} · ${Object.entries(sc.qc.scores).map(([k,v])=>`${esc(k)} ${esc(String(v))}`).join(" · ")}</summary><div>${sc.qc.draft?`<p class="row"><b>Draft:</b> ${Object.entries(sc.qc.draft).map(([k,v])=>`${esc(k)} ${esc(String(v))}`).join(" · ")}</p>`:""}${(sc.qc.fixed||[]).length?`<ul>${sc.qc.fixed.map(x=>`<li>${esc(x)}</li>`).join("")}</ul>`:""}</div></details>`:""}
 <div class="acts"><button class="btn ghost" data-cp="scene">Copy scene</button><button class="btn ghost" data-cp="all">Copy scene + analysis</button><button class="btn ghost" data-addc="1">Add to scene combo</button></div></div>
 <h2>Complete analysis (A–F)</h2>`;
 if(!a){h+=`<div class="box" id="anaBox">${item.aerr?`<span class="err">${esc(item.aerr)}</span> <button class="btn" id="reAna">Try the analysis again</button>`:"Writing the analysis…"}</div>`}
@@ -1515,6 +1521,8 @@ HOW TO REWRITE:
 5. Use the Telugu name of the new character as the speaker label. Keep stage directions in brackets where useful.
 6. The voices must be clearly different from each other; the scene must stay as funny or funnier than the original, with a strong ending.
 7. Keep about the same length (±25%).
+8. Make it STRONGER, not just re-voiced: preserve the original comedy technique where useful, but write fresh, sharper counters and punchlines in the new character's own style; every line must answer the line before naturally; no filler, no explained jokes; the ending must land harder than the original's.
+${window.CFL_CRAFT}
 Return ONLY valid JSON, no fences:
 {"title":"new scene title in Telugu","scene":[{"s":"speaker","l":"line"}],"changes":[{"char":"new character's Telugu name","was":"old character's name","how":"2-3 sentences: how his lines, attitude, slang and punchlines were rewritten, with an example"}],"kept":"1-2 sentences: which lines of the kept characters changed and why"}
 ${LANG().replace("the analysis","the \"changes\" and \"kept\" text")}`}
@@ -1772,6 +1780,26 @@ const sit=$("#csit").value.trim();
 const r={idea:(sit?sit+" — ":"")+"Scene combo: the best of "+filled.length+" reference scenes",n:+$("#clen").value||24,cast:"Use the characters who appear in the reference scenes, with the same names, personalities, slang and speaking styles.",combo:filled};
 $("#cstatus").textContent="Writing your scene combo — follow it on the Write a scene tab.";location.hash="#write";setTimeout(()=>genScene(r),60)});
 $("#comboClear").addEventListener("click",()=>{[1,2,3,4,5].forEach(i=>$("#cs"+i).value="");$("#csit").value="";saveCombo();$("#cstatus").textContent="Cleared."});
+function refinePrompt(r,sc){return `You are the head writer of a Telugu comedy sketch channel doing the FINAL POLISH of a draft scene. The draft is not good enough yet. Make it genuinely strong — not by changing a few words, but by rewriting weak lines, sharpening setups and punches, fixing flow and strengthening twists and the ending.
+
+USER'S SCENE IDEA: ${r.idea}
+CAST:
+${r.cast}
+
+DRAFT (JSON):
+${JSON.stringify({title:sc.title,box1:sc.box1,scene:sc.scene,twists:sc.twists,trailer:sc.trailer})}
+
+${window.CFL_CRAFT}
+
+HOW TO POLISH:
+- First score the draft 1–10 on each check: opening, flow, voices, counters, punches, twists, pacing, no filler, ending, originality. Every check under 8 must be fixed.
+- Rewrite every line that is ordinary, predictable, disconnected from the line before, explains a joke, repeats a mechanism or sounds like another character. Strengthen setups so the punches hit harder. Make the final line the biggest laugh.
+- Keep the story idea, the cast, the speaker names, the language and dialect, and about the same number of lines (${sc.scene.length}, ±2).
+- Keep the formula techniques where they still work; you may swap one for a better fit.
+
+Return ONLY valid JSON, no fences:
+{"title":"…","box1":"…","scene":[{"s":"speaker","l":"line"}],"twists":["…"],"trailer":[{"n":0,"why":"…"}],"qc":{"scores":{"opening":0,"flow":0,"voices":0,"counters":0,"punches":0,"twists":0,"pacing":0,"no filler":0,"ending":0,"originality":0},"draft":{"opening":0,"flow":0,"voices":0,"counters":0,"punches":0,"twists":0,"pacing":0,"no filler":0,"ending":0,"originality":0},"fixed":["one item per real improvement, e.g. 'L7: counter now turns his own boast against him'"]}}
+"scores" = the polished scene, "draft" = the draft you received.`}
 async function genScene(r){
 if(busy)return;
 if(!sample){$("#status").textContent="Scene writing isn't available in this view. Use Copy request for chat instead.";return}
@@ -1781,6 +1809,10 @@ $("#stop").hidden=false;startTimer(()=>$("#status"),r.prev&&!r.transform&&!r.com
 const res=await ask(scenePrompt(r),{cache:false,onText:({text})=>{stopTimer();$("#status").textContent=`Writing the scene… ${text.length} characters`}});stopTimer();
 if(res.truncated)throw {message:"The scene was cut off. Try fewer dialogues."};
 const sc=parse(res.text);sc.mix=+$("#mix").value;sc.scanTotal=SF().length;sc.skip12=!inc12();if(!sc.scene||!sc.scene.length)throw {message:"The scene came back empty. Try again."};
+const pol=document.getElementById("polish");if(!pol||pol.checked){try{startTimer(()=>$("#status"),"Polishing the scene: checking flow, punches, twists and the ending, then rewriting weak lines");
+const res2=await ask(refinePrompt(r,sc),{cache:false,onText:({text})=>{stopTimer();$("#status").textContent=`Polishing… ${text.length} characters`}});stopTimer();
+if(!res2.truncated){const p=parse(res2.text);if(p&&Array.isArray(p.scene)&&p.scene.length>=Math.max(4,sc.scene.length*.6)){const draftLen=sc.scene.length;Object.assign(sc,{title:p.title||sc.title,box1:p.box1||sc.box1,scene:p.scene,twists:p.twists||sc.twists,trailer:p.trailer||sc.trailer,qc:p.qc||sc.qc,polished:true});
+if(sc.scan&&Array.isArray(sc.scan.shortlist)&&sc.scene.length!==draftLen)sc.scan.shortlist.forEach(x=>{x.lines=(x.lines||[]).filter(n=>n<=sc.scene.length)})}}}catch(e){stopTimer()}}
 (sc.formulas||[]).forEach(id=>used.add(id));save();render();
 cur={t:Date.now(),idea:r.idea,r,s:sc,a:null};hist.unshift(cur);saveHist();drawHist();if(r.onScene){try{r.onScene(cur)}catch(e){}delete r.onScene}
 $("#status").textContent="Scene ready. Writing the analysis…";
