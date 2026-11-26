@@ -2413,7 +2413,9 @@ if(changed){saveLocal();chips();if(open&&!document.activeElement?.id?.startsWith
 
 <script>
 (function(){const show=()=>{if(location.hash==="#creator"){const f=document.getElementById("cc3dFrame");if(f&&!f.src)f.src=f.dataset.src}};window.addEventListener("hashchange",show);document.addEventListener("DOMContentLoaded",show);setTimeout(show,400);
-window.addEventListener("message",async e=>{const f=document.getElementById("cc3dFrame");if(!f||e.source!==f.contentWindow||e.origin!==location.origin)return;const d=e.data;if(!d||d.type!=="cc3d-save"||!(d.blob instanceof Blob))return;
+window.addEventListener("message",async e=>{const f=document.getElementById("cc3dFrame");if(!f||e.source!==f.contentWindow||e.origin!==location.origin)return;const d=e.data;
+ if(d&&d.type==="cc3d-ai"&&typeof d.input==="string"&&d.id){let out={type:"cc3d-ai-r",id:String(d.id)};try{const s=window.claude&&window.claude.use?await window.claude.use("sample"):null;if(!s)out.error={code:"not_granted"};else{const r=await s(d.input.slice(0,60000),{modelTier:"default"});out.text=String(r&&r.text||"")}}catch(x){out.error={code:(x&&x.code)||"error"}}f.contentWindow.postMessage(out,location.origin);return}
+ if(!d||d.type!=="cc3d-save"||!(d.blob instanceof Blob))return;
  const name=String(d.name||"character.png").replace(/[^\w.\-]+/g,"-").slice(0,80);
  try{let dl=null;try{dl=window.claude&&window.claude.use?await window.claude.use("downloads"):null}catch(x){}dl=dl||window.CFL_FDL;if(dl)await dl.save({filename:name,data:d.blob});}catch(x){}});})();
 </script>

@@ -185,8 +185,8 @@ function prop(rig,c,spine){const h=rig.arms[1].hd,p=c.prop||"none",ac=mat(c.accC
  if(p==="flowers"){h.add(at(M(cyl(.02,.02,.4),mat("#2f7a45")),0,0,.05));[[0,.25],[-.07,.2],[.07,.2],[0,.15]].forEach(([x,y],i)=>h.add(at(M(sph(.06),mat(["#ff6fa8","#ffd25a","#ff8a3d","#c06fff"][i])),x,y,.05)))}
  if(p==="umbrella"){h.add(at(M(cyl(.015,.015,1.1),mat("#333")),0,.5,0));const cn=at(M(new T.ConeGeometry(.8,.4,12,1,true),ac),0,1.15,0);cn.children.forEach(m=>{m.material=m.material===LINE?LINE:ac;m.material.side=T.DoubleSide});h.add(cn)}
  if(p==="guitar"){const gt=new T.Group();gt.add(at(M(sph(.22),mat("#b5651d")),0,0,0,0,0,0,1,1.1,.35));gt.add(at(M(sph(.16),mat("#b5651d")),0,.26,0,0,0,0,1,1,.35));gt.add(at(new T.Mesh(cyl(.06,.06,.02),basic("#2a1a10")),0,.05,.08,Math.PI/2));gt.add(at(M(box(.07,.7,.04),mat("#5a3a22")),0,.7,0));gt.position.set(0,.28,.32);gt.rotation.set(0,0,-.9);spine.add(gt)}}
-function face(h,c,fem){const dark=basic("#241816"),sk=mat(c.skin);
- const eye=(s)=>{const g=new T.Group();g.position.set(s*.19,-.03,.4);g.rotation.y=s*.22;h.add(g);const e=c.eyes;
+function face(h,c,fem){const dark=basic("#241816"),sk=mat(c.skin);h.userData.eyes=[];
+ const eye=(s)=>{const g=new T.Group();g.position.set(s*.19,-.03,.4);g.rotation.y=s*.22;h.add(g);h.userData.eyes.push(g);const e=c.eyes;
   const wink=e==="wink"&&s>0;
   if(e==="happy"||wink){g.add(tube([[-.13,-.02,0],[-.06,.08,.03],[.06,.08,.03],[.13,-.02,0]],.026,dark));return}
   if(e==="sleepy"){g.add(tube([[-.13,.02,0],[0,-.04,.03],[.13,.02,0]],.024,dark));return}
@@ -215,6 +215,7 @@ function face(h,c,fem){const dark=basic("#241816"),sk=mat(c.skin);
  if(mo==="grin"||mo==="tongue"||mo==="teeth"){const m=new T.Mesh(new T.CircleGeometry(.15,28,Math.PI,Math.PI),basic("#6e2424"));at(m,0,-.22,.455,-.25);h.add(m);h.add(at(new T.Mesh(box(.26,.045,.02),basic("#ffffff")),0,-.235,.465,-.25));
   if(mo!=="teeth")h.add(at(new T.Mesh(new T.CircleGeometry(.07,20),basic("#e57373")),0,-.32,.44,-.3,0,0,1,.55,1));else h.add(at(new T.Mesh(box(.24,.04,.02),basic("#ffffff")),0,-.33,.44,-.3))}
  if(mo==="tongue")h.add(at(M(sph(.06),mat("#e57373"),{lw:.08}),0,-.38,.44,0,0,0,1,1.2,.5));
+ {const tm=new T.Mesh(sph(.075),basic("#5a1c1c"));tm.position.set(0,-.29,.448);tm.scale.set(1.25,.5,.3);tm.visible=false;h.add(tm);h.userData.talk=tm;const tg=new T.Mesh(sph(.04),basic("#e57373"));tg.position.set(0,-.4,.25);tm.add(tg)}
  if(c.blush)[-1,1].forEach(s=>{const b=new T.Mesh(new T.CircleGeometry(.07,20),new T.MeshBasicMaterial({color:"#e77a7a",transparent:true,opacity:.38}));at(b,s*.27,-.18,.415,0,s*.5,0,1,.5,1);h.add(b)});
  // facial hair
  const fh=c.face_hair,hm=mat(c.hairC);
@@ -292,7 +293,7 @@ cv.addEventListener("pointermove",e=>{if(!pts.has(e.pointerId))return;pts.set(e.
 const up=e=>{pts.delete(e.pointerId);if(pts.size<2)pinch=0;if(!pts.size)drag=false};cv.addEventListener("pointerup",up);cv.addEventListener("pointercancel",up);
 cv.addEventListener("wheel",e=>{e.preventDefault();dist=Math.min(14,Math.max(2.2,dist*(1+e.deltaY*.001)))},{passive:false});
 function setAuto(v){auto=v;const b=$("#bSpin");if(b)b.textContent=auto?"⏸ Stop":"🔄 Spin"}
-function resize(){const w=wrap.clientWidth,h=wrap.clientHeight;R.setSize(w,h,false);cv.style.width=w+"px";cv.style.height=h+"px";Cam.aspect=w/h;Cam.fov=w<h?46:35;Cam.updateProjectionMatrix()}
+var CINEACT=false;function resize(){if(CINEACT)return;const w=wrap.clientWidth,h=wrap.clientHeight;R.setSize(w,h,false);cv.style.width=w+"px";cv.style.height=h+"px";Cam.aspect=w/h;Cam.fov=w<h?46:35;Cam.updateProjectionMatrix()}
 window.addEventListener("resize",resize);try{new ResizeObserver(()=>resize()).observe(wrap)}catch(e){}
 /* ------------------------------------------------------------ storage */
 const KEY="cc3d-chars";let LIST=[];try{LIST=JSON.parse(localStorage.getItem(KEY)||"[]")}catch(e){LIST=[]}
@@ -302,7 +303,7 @@ async function saveFile(blob,name){try{if(DL){await DL.save({filename:name,data:
 function toast(t){const el=$("#toast");el.textContent=t;el.classList.add("on");clearTimeout(toast.t);toast.t=setTimeout(()=>el.classList.remove("on"),2200)}
 /* ------------------------------------------------------------ UI */
 let tab="body";
-const TABS=[["body","🧍 Body"],["face","🙂 Face"],["hair","💇 Hair"],["outfit","👕 Outfit"],["acc","🎧 Extras"],["pose","🕺 Pose"],["scene","🏫 Scene"],["save","💾 Save"],["video","🎬 Story video"]];
+const TABS=[["body","🧍 Body"],["face","🙂 Face"],["hair","💇 Hair"],["outfit","👕 Outfit"],["acc","🎧 Extras"],["pose","🕺 Pose"],["scene","🏫 Scene"],["save","💾 Save"],["video","🎬 Story video"],["cine","🎞 Cinematic"]];
 const chips=(k,obj)=>`<div class="chips">${Object.entries(obj).map(([v,n])=>`<button type="button" class="chip" data-set="${k}" data-v="${v}" aria-pressed="${C[k]===v}">${n}</button>`).join("")}</div>`;
 const sw=(k,list,label)=>`<div class="row"><b>${label}</b><div class="sws">${list.map(c=>`<button type="button" class="sw${C[k]===c?" on":""}" style="background:${c}" data-col="${k}" data-v="${c}" aria-label="${c}"></button>`).join("")}<label class="sw pick" title="Any colour"><input type="color" value="${C[k]}" data-pick="${k}"></label></div></div>`;
 const slider=(k,label,min,max,st)=>`<label class="sl"><span>${label}</span><input type="range" min="${min}" max="${max}" step="${st}" value="${C[k]}" data-num="${k}"></label>`;
@@ -324,11 +325,13 @@ function panel(){const b=$("#panel");let h="";
   <h3>My characters (${LIST.length})</h3>${LIST.length?`<div class="mylist">${LIST.map((c,i)=>`<div class="my"><button type="button" class="chip" data-load="${i}">${E(c.name)}</button><button type="button" class="x" data-del="${i}" aria-label="Delete ${E(c.name)}">✕</button></div>`).join("")}</div>`:`<p class="mute">Nothing saved yet. Saved characters stay in this browser.</p>`}
   <div class="acts"><button type="button" class="btn ghost" id="bExport">⬇ Export all (file)</button><label class="btn ghost">⬆ Import file<input type="file" id="fImport" accept=".json,application/json" hidden></label></div>`;
  if(tab==="video")h=videoPanel();
+ if(tab==="cine")h=CINE.panel();
  b.innerHTML=h;$("#tabs").innerHTML=TABS.map(([k,n])=>`<button type="button" class="tab" data-tab="${k}" aria-pressed="${tab===k}">${n}</button>`).join("");$("#title").textContent=C.name;shelf()}
 const UNDO=[],REDO=[];function snap(){UNDO.push(JSON.stringify(C));if(UNDO.length>60)UNDO.shift();REDO.length=0;undoBtns()}
 function undoBtns(){const u=$("#bUndo"),r=$("#bRedo");if(u)u.disabled=!UNDO.length;if(r)r.disabled=!REDO.length}
 function rebuild(){build();panel();undoBtns()}
 document.addEventListener("click",async e=>{const t=e.target.closest("button,[data-tab]");if(!t)return;
+ if(await CINE.click(t))return;
  if(PLAY&&t.id!=="bPlay"&&!t.dataset.tab){toast("Stop the story first");return}
  if(t.dataset.tab){tab=t.dataset.tab;panel();return}
  if(t.id==="bLine"){const l=SCRIPT.lines[SCRIPT.lines.length-1];SCRIPT.lines.push({who:l?(l.who+1)%(1+GROUP.length):0,say:"",pose:"keep",expr:"",sec:3});saveScript();panel();return}
@@ -363,7 +366,7 @@ document.addEventListener("click",async e=>{const t=e.target.closest("button,[da
  if(t.id==="bBody"){dist=6.4;target.y=1.45;return}
  if(t.id==="bExport"){await saveFile(new Blob([JSON.stringify({characters:LIST},null,1)],{type:"application/json"}),"my-3d-characters.json");return}
 });
-document.addEventListener("input",e=>{const t=e.target;
+document.addEventListener("input",e=>{const t=e.target;if(CINE.input(t))return;
  if(t.dataset.num){C[t.dataset.num]=+t.value;build();return}
  if(t.dataset.pick){C[t.dataset.pick]=t.value;if(t.dataset.pick==="bgC")buildBG();build();return}
  if(t.dataset.bool){C[t.dataset.bool]=t.checked;build();return}
@@ -371,7 +374,7 @@ document.addEventListener("input",e=>{const t=e.target;
  if(t.id==="cSay"){C.say=t.value;bubble()}
  if(t.dataset.lf==="say"){const l=SCRIPT.lines[+t.dataset.li];if(l){l.say=t.value.slice(0,90);saveScript()}}});
 let sliding=false;document.addEventListener("pointerdown",e=>{const t=e.target;if(t.dataset&&(t.dataset.num||t.dataset.pick||t.dataset.bool)){snap()}},true);
-document.addEventListener("change",e=>{const t=e.target;if(t.dataset.pick||t.dataset.num)panel();
+document.addEventListener("change",e=>{const t=e.target;if(Object.keys(t.dataset||{}).some(k=>/^k[a-z]/.test(k))){CINE.change(t);return}if(t.dataset.pick||t.dataset.num)panel();
  if(t.dataset.cast!=null){const i=+t.dataset.cast,v=t.value;if(i===0){if(v&&v!=="cur"){const c=groupConf(v);if(c){snap();C=JSON.parse(JSON.stringify(Object.assign({},BASE,c)));buildBG()}}}else{const g=GROUP.slice();if(v)g[i-1]=v;else g.splice(i-1,1);GROUP=g.filter(Boolean).slice(0,3);try{localStorage.setItem("cc3d-group",JSON.stringify(GROUP))}catch(x){}}SCRIPT.lines.forEach(l=>{if(l.who>GROUP.length)l.who=0});saveScript();rebuild();return}
  if(t.dataset.lf!=null){const l=SCRIPT.lines[+t.dataset.li];if(!l)return;const k=t.dataset.lf;l[k]=k==="who"?+t.value:k==="sec"?Math.min(15,Math.max(1,+t.value||3)):t.value;saveScript();return}
  if(t.id==="fImport"&&t.files[0]){const r=new FileReader();r.onload=()=>{try{const j=JSON.parse(r.result);const arr=(j.characters||[]).filter(x=>x&&typeof x==="object"&&x.name).map(x=>{const o=Object.assign({},BASE);for(const k of Object.keys(BASE))if(k in x)o[k]=x[k];o.acc=Array.isArray(o.acc)?o.acc.filter(a=>OPT.acc[a]):[];for(const k of ["gender","build","hair","eyes","brows","mouth","face_hair","glasses","top","bottom","shoes","pose","bg","faceShape","nose","prop"])if(!OPT[k][o[k]])o[k]=BASE[k];for(const k of ["skin","hairC","eyeC","topC","accC","botC","shoeC","bgC"])if(!/^#[0-9a-f]{6}$/i.test(o[k]))o[k]=BASE[k];o.name=String(o.name).slice(0,40);o.say=String(o.say||"").slice(0,90);o.height=Math.min(1.2,Math.max(.8,+o.height||1));o.head=Math.min(1.3,Math.max(.8,+o.head||1));return o});LIST=LIST.concat(arr);saveList();panel();toast("Imported "+arr.length)}catch(err){toast("That file couldn't be read.")}};r.readAsText(t.files[0])}});
@@ -437,9 +440,10 @@ function recordStory(){if(REC||PLAY)return;const cv=R.domElement;if(!cv.captureS
  rec.onstop=async()=>{st.getTracks().forEach(t=>t.stop());document.body.classList.remove("rec");const b=new Blob(ch,{type:(mt||"video/webm").split(";")[0]});
   await saveFile(b,(SCRIPT.name||"story").replace(/[^\w-]+/g,"-")+(b.type.includes("mp4")?".mp4":".webm"));toast("Story video ready")};
  if(!startPlay(()=>{if(rec.state==="recording")setTimeout(()=>rec.stop(),150)}))return;document.body.classList.add("rec");rec.start(200);toast("Recording story…")}
+/* @@CINE@@ */
 /* ------------------------------------------------------------ go */
-buildBG();build();panel();resize();
+buildBG();build();panel();resize();CINE.init();
 const clock=new T.Clock();let tt=0;
-(function loop(){requestAnimationFrame(loop);const dt=Math.min(.05,clock.getDelta());tt+=dt;if(auto&&!drag)yaw+=dt*.5;if(PLAY)PLAY.tick(dt);applyPoseTo(rig,PLAY?PLAY.cur[0]:C,tt);GB.forEach((b,i)=>applyPoseTo(b.rig,b.c,tt+(i+1)*.37));if(PLAY&&PLAY.sp!=null&&(PLAY.lines[PLAY.i]||{}).say){const r=PLAY.sp?GB[PLAY.sp-1]&&GB[PLAY.sp-1].rig:rig;if(r&&r.head){r.head.rotation.z=Math.sin(tt*11)*.07;r.head.rotation.x+=Math.sin(tt*17)*.04}}place();R.render(S,Cam);if(REC)REC.tick(dt)})();
+(function loop(){requestAnimationFrame(loop);const dt=Math.min(.05,clock.getDelta());tt+=dt;if(CINEACT){CINE.frame(dt);return}if(auto&&!drag)yaw+=dt*.5;if(PLAY)PLAY.tick(dt);applyPoseTo(rig,PLAY?PLAY.cur[0]:C,tt);GB.forEach((b,i)=>applyPoseTo(b.rig,b.c,tt+(i+1)*.37));if(PLAY&&PLAY.sp!=null&&(PLAY.lines[PLAY.i]||{}).say){const r=PLAY.sp?GB[PLAY.sp-1]&&GB[PLAY.sp-1].rig:rig;if(r&&r.head){r.head.rotation.z=Math.sin(tt*11)*.07;r.head.rotation.x+=Math.sin(tt*17)*.04}}place();R.render(S,Cam);if(REC)REC.tick(dt)})();
 window.__ready=true;
 })();
