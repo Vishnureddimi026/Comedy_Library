@@ -818,19 +818,5 @@ Use these as top-quality references for every new scene. Rules:
 - The four are also cast roles (Write a scene chips, Replace characters lists). Their text goes into the scene prompt and Replace prompt as FAMILY DETAILS whenever filled.
 
 
-## Anime studio (25 Nov 2026) — 2D anime project, step 1: characters
-- New "Anime" tab. Built-in 2D anime drawing system (SVG): body type, age, face, skin, eyes, hair, outfit, colours, 15 extras, 12 expressions. Claude designs a character from a library character profile (Vicky/Golu use their full style libraries; family members use the Family Details text) and/or a description, by choosing those settings; the user can change anything by hand.
-- Save characters (sync to account, doc data/users/<id>/anime), expression sheet of all 12, download PNG/SVG.
-- Limit told to the user: no real AI image generation in the app; the style is clean flat 2D anime vector. Planned next steps: poses/scene backgrounds, talking animation (mouth/blink), then video export from scenes.
-
-
-## Anime Character Studio (25 Nov 2026, replaces the simple creator)
-- User has no budget for paid image APIs (Gemini image API free tier is 0 per developer reports; others are paid), so the studio uses the built-in vector engine; section 9 gives a free route to painted art (prompt + reference sheet for free apps like the Gemini app, upload results back via assets).
-- Engine: anime_rig.js (head, 21 expressions, headOnly/turn) + anime_body.js (full body, 6 views, 13 poses, 12 backgrounds, group pictures).
-- Studio: gallery; profile (name, age, gender, height, build, role, personality, background, special); appearance with identity lock (Approve & lock) and versions; multiple outfits with Claude outfit design; views; expressions; poses + custom pose (Claude picks nearest); scene & group; reference sheet PNG; reference photo analysis (Claude vision, choose features to keep); real-art prompt; artwork uploads.
-- Capabilities now: db, downloads, sample (images:true), user, assets.
-
-- 25 Nov 2026: user shared a reference picture (flat explainer-video cartoon: dining table, father with mustache, kid head, mother with bun, night-city window). Added Art style "Flat cartoon" (anime_flat.js) — now the default for new characters — with flat heads for all views/expressions, thick outlines, two-tone shading; "Dining room" background with table in front, "Warm room" background; teens drawn shorter.
-
-
-- 25 Nov 2026: user asked to remove the big-eyed Anime style from the Character Studio; only the flat cutout style remains, and every saved character is shown in it.
+## Anime removed (26 Nov 2026)
+- The user asked to remove all anime character creating from the project. The Anime studio, its engine files (anime_*.js) and these notes were removed. Characters are now made in the Clay 3D Character Creator (🧸 3D Characters tab), which also has Story video and Cinematic video.
