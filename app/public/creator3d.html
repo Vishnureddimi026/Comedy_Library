@@ -23,6 +23,7 @@
 .ck{display:flex;gap:8px;align-items:center;margin:12px 0;font-size:15px}.ck input{width:20px;height:20px;accent-color:#7a5cff}
 .txt{width:100%;font-size:16px;padding:10px 12px;border:2px solid #e3d7ef;border-radius:12px;min-height:44px}
 .acts{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}.mute{color:#7a6a8a;font-size:14px}
+.cast{display:grid;grid-template-columns:1fr 1fr;gap:8px}.cast label{display:flex;flex-direction:column;gap:3px;font-size:13px;min-width:0}.cast select,.line select{width:100%;min-width:0}.lines{display:flex;flex-direction:column;gap:8px}.line{border:1.5px solid #e4dcef;border-radius:14px;padding:8px;display:flex;flex-direction:column;gap:6px}.lh{display:flex;gap:6px;align-items:center}.lh select{flex:1}.txt.sec{width:58px;flex:none}
 .mylist{display:flex;flex-wrap:wrap;gap:6px}.my{display:flex;align-items:center;gap:2px}.x{min-width:40px;min-height:40px;border:0;background:none;color:#a33;font-weight:700;cursor:pointer}
 .tools button:disabled{opacity:.4}body.rec .tools{display:none}body.rec .view::after{content:"● REC";position:absolute;top:14px;right:14px;color:#fff;background:#e53935;padding:6px 12px;border-radius:999px;font:800 14px system-ui}
 #toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(80px);background:#241816;color:#fff;padding:10px 16px;border-radius:999px;font-weight:700;transition:transform .25s;z-index:9}#toast.on{transform:translateX(-50%) translateY(0)}
@@ -203,10 +204,11 @@ function build(){if(CH)S.remove(CH);GB.forEach(b=>S.remove(b.g));GB=[];const m=b
  GROUP.forEach(k=>{const c=groupConf(k);if(c){const b=buildChar(c);GB.push(b);S.add(b.g)}});
  const n=1+GB.length,gap=1.55;const xs=Array.from({length:n},(_,i)=>(i-(n-1)/2)*gap);CH.position.x=xs[0];GB.forEach((b,i)=>{b.g.position.x=xs[i+1];b.g.rotation.y=-.18});CH.rotation.y=n>1?.18:0;
  target.x=0;groupDist=n>1?1+.22*(n-1):1;
- const dj=BG.getObjectByName("djdesk");if(dj){dj.visible=C.pose==="dj";dj.position.x=CH.position.x}
+ const dj=BG.getObjectByName("djdesk");if(dj){dj.visible=C.pose==="dj"&&!GB.length;dj.position.x=CH.position.x}
  bubble()}
 let groupDist=1;
-function bubble(){if(bubbleSp){S.remove(bubbleSp);bubbleSp=null}const t=(C.say||"").trim();if(!t)return;
+function bubble(){bubbleAt(C.say,CH.position.x+1.1,3.6*(+C.height||1))}
+function bubbleAt(txt,bx0,by0){if(bubbleSp){S.remove(bubbleSp);bubbleSp=null}const t=(txt||"").trim();if(!t)return;
  const cv=document.createElement("canvas");cv.width=1024;cv.height=512;const x=cv.getContext("2d");x.font="700 64px system-ui,'Noto Sans Telugu',sans-serif";
  const words=t.split(/\s+/),lines=[];let l="";for(const w of words){const tt=l?l+" "+w:w;if(x.measureText(tt).width>820&&l){lines.push(l);l=w}else l=tt}if(l)lines.push(l);const L=lines.slice(0,4);
  const bh=L.length*76+70,bw=Math.min(980,Math.max(...L.map(s=>x.measureText(s).width))+110),bx=(1024-bw)/2,by=380-bh;
@@ -214,7 +216,7 @@ function bubble(){if(bubbleSp){S.remove(bubbleSp);bubbleSp=null}const t=(C.say||
  x.beginPath();x.moveTo(470,by+bh-6);x.lineTo(500,470);x.lineTo(560,by+bh-6);x.closePath();x.fill();x.stroke();x.fillRect(476,by+bh-14,78,12);
  x.fillStyle="#241816";x.textAlign="center";x.textBaseline="middle";L.forEach((s,i)=>x.fillText(s,512,by+50+i*76));
  const tx=new T.CanvasTexture(cv);tx.encoding=T.sRGBEncoding;bubbleSp=new T.Sprite(new T.SpriteMaterial({map:tx,transparent:true,depthTest:false}));bubbleSp.scale.set(3.2,1.6,1);bubbleSp.renderOrder=10;
- bubbleSp.position.set(CH.position.x+1.1,3.6*(+C.height||1),0);S.add(bubbleSp)}
+ bubbleSp.position.set(bx0,by0,0);S.add(bubbleSp)}
 function prop(rig,c,spine){const h=rig.arms[1].hd,p=c.prop||"none",ac=mat(c.accC);
  if(p==="phone")h.add(at(M(box(.13,.24,.025),mat("#15151b")),0,-.12,.08,.3)),h.add(at(new T.Mesh(box(.11,.2,.005),basic("#7ab8ff")),0,-.12,.095,.3));
  if(p==="tea"){h.add(at(M(cyl(.075,.06,.13),mat("#f4f4f4")),0,-.1,.1));h.add(at(new T.Mesh(cyl(.065,.065,.01),basic("#a0622d")),0,-.04,.1));h.add(at(M(tor(.04,.012,Math.PI*1.2),mat("#f4f4f4"),{line:false}),.08,-.1,.1,0,0,-Math.PI/2))}
@@ -340,7 +342,7 @@ async function saveFile(blob,name){if(window.parent!==window){try{window.parent.
 function toast(t){const el=$("#toast");el.textContent=t;el.classList.add("on");clearTimeout(toast.t);toast.t=setTimeout(()=>el.classList.remove("on"),2200)}
 /* ------------------------------------------------------------ UI */
 let tab="body";
-const TABS=[["body","🧍 Body"],["face","🙂 Face"],["hair","💇 Hair"],["outfit","👕 Outfit"],["acc","🎧 Extras"],["pose","🕺 Pose"],["scene","🏫 Scene"],["save","💾 Save"]];
+const TABS=[["body","🧍 Body"],["face","🙂 Face"],["hair","💇 Hair"],["outfit","👕 Outfit"],["acc","🎧 Extras"],["pose","🕺 Pose"],["scene","🏫 Scene"],["save","💾 Save"],["video","🎬 Story video"]];
 const chips=(k,obj)=>`<div class="chips">${Object.entries(obj).map(([v,n])=>`<button type="button" class="chip" data-set="${k}" data-v="${v}" aria-pressed="${C[k]===v}">${n}</button>`).join("")}</div>`;
 const sw=(k,list,label)=>`<div class="row"><b>${label}</b><div class="sws">${list.map(c=>`<button type="button" class="sw${C[k]===c?" on":""}" style="background:${c}" data-col="${k}" data-v="${c}" aria-label="${c}"></button>`).join("")}<label class="sw pick" title="Any colour"><input type="color" value="${C[k]}" data-pick="${k}"></label></div></div>`;
 const slider=(k,label,min,max,st)=>`<label class="sl"><span>${label}</span><input type="range" min="${min}" max="${max}" step="${st}" value="${C[k]}" data-num="${k}"></label>`;
@@ -361,12 +363,22 @@ function panel(){const b=$("#panel");let h="";
   <h3>Start from</h3><div class="chips">${Object.entries(PRESETS).map(([k,p])=>`<button type="button" class="chip" data-preset="${k}">${E(p.name)}</button>`).join("")}<button type="button" class="chip" data-preset="new">➕ Blank</button></div>
   <h3>My characters (${LIST.length})</h3>${LIST.length?`<div class="mylist">${LIST.map((c,i)=>`<div class="my"><button type="button" class="chip" data-load="${i}">${E(c.name)}</button><button type="button" class="x" data-del="${i}" aria-label="Delete ${E(c.name)}">✕</button></div>`).join("")}</div>`:`<p class="mute">Nothing saved yet. Saved characters stay in this browser.</p>`}
   <div class="acts"><button type="button" class="btn ghost" id="bExport">⬇ Export all (file)</button><label class="btn ghost">⬆ Import file<input type="file" id="fImport" accept=".json,application/json" hidden></label></div>`;
+ if(tab==="video")h=videoPanel();
  b.innerHTML=h;$("#tabs").innerHTML=TABS.map(([k,n])=>`<button type="button" class="tab" data-tab="${k}" aria-pressed="${tab===k}">${n}</button>`).join("");$("#title").textContent=C.name}
 const UNDO=[],REDO=[];function snap(){UNDO.push(JSON.stringify(C));if(UNDO.length>60)UNDO.shift();REDO.length=0;undoBtns()}
 function undoBtns(){const u=$("#bUndo"),r=$("#bRedo");if(u)u.disabled=!UNDO.length;if(r)r.disabled=!REDO.length}
 function rebuild(){build();panel();undoBtns()}
 document.addEventListener("click",async e=>{const t=e.target.closest("button,[data-tab]");if(!t)return;
+ if(PLAY&&t.id!=="bPlay"&&!t.dataset.tab){toast("Stop the story first");return}
  if(t.dataset.tab){tab=t.dataset.tab;panel();return}
+ if(t.id==="bLine"){const l=SCRIPT.lines[SCRIPT.lines.length-1];SCRIPT.lines.push({who:l?(l.who+1)%(1+GROUP.length):0,say:"",pose:"keep",expr:"",sec:3});saveScript();panel();return}
+ if(t.dataset.ldel){SCRIPT.lines.splice(+t.dataset.ldel,1);saveScript();panel();return}
+ if(t.dataset.lup){const i=+t.dataset.lup;if(i>0){const a=SCRIPT.lines;[a[i-1],a[i]]=[a[i],a[i-1]];saveScript();panel()}return}
+ if(t.id==="bPlay"){if(PLAY)stopPlay();else startPlay();return}
+ if(t.id==="bStoryRec"){recordStory();return}
+ if(t.id==="bStorySave"){const n=($("#stName").value||"").trim()||"My story";SCRIPT.name=n;const st={name:n,main:JSON.parse(JSON.stringify(C)),group:GROUP.slice(),bg:C.bg,lines:JSON.parse(JSON.stringify(SCRIPT.lines))};const i=STORIES.findIndex(x=>x.name===n);if(i>=0)STORIES[i]=st;else STORIES.push(st);saveStories();saveScript();panel();toast("Saved story "+n);return}
+ if(t.dataset.sload){const st=STORIES[+t.dataset.sload];if(!st)return;snap();C=Object.assign({},BASE,JSON.parse(JSON.stringify(st.main)));GROUP=(st.group||[]).filter(k=>groupConf(k)).slice(0,3);try{localStorage.setItem("cc3d-group",JSON.stringify(GROUP))}catch(x){}SCRIPT={name:st.name,lines:JSON.parse(JSON.stringify(st.lines||[]))};saveScript();buildBG();rebuild();toast("Opened "+st.name);return}
+ if(t.dataset.sdel){const i=+t.dataset.sdel;if(t.dataset.sure){STORIES.splice(i,1);saveStories();panel();toast("Deleted")}else{t.dataset.sure="1";t.textContent="Delete?";setTimeout(()=>{if(t.isConnected){delete t.dataset.sure;t.textContent="✕"}},2500)}return}
  if(t.id==="bUndo"){if(!UNDO.length)return;REDO.push(JSON.stringify(C));C=JSON.parse(UNDO.pop());buildBG();rebuild();return}
  if(t.id==="bRedo"){if(!REDO.length)return;UNDO.push(JSON.stringify(C));C=JSON.parse(REDO.pop());buildBG();rebuild();return}
  if(t.dataset.expr){snap();Object.assign(C,EXPR[t.dataset.expr][1]);rebuild();return}
@@ -396,9 +408,12 @@ document.addEventListener("input",e=>{const t=e.target;
  if(t.dataset.pick){C[t.dataset.pick]=t.value;if(t.dataset.pick==="bgC")buildBG();build();return}
  if(t.dataset.bool){C[t.dataset.bool]=t.checked;build();return}
  if(t.id==="cName"){C.name=t.value;$("#title").textContent=t.value}
- if(t.id==="cSay"){C.say=t.value;bubble()}});
+ if(t.id==="cSay"){C.say=t.value;bubble()}
+ if(t.dataset.lf==="say"){const l=SCRIPT.lines[+t.dataset.li];if(l){l.say=t.value.slice(0,90);saveScript()}}});
 let sliding=false;document.addEventListener("pointerdown",e=>{const t=e.target;if(t.dataset&&(t.dataset.num||t.dataset.pick||t.dataset.bool)){snap()}},true);
 document.addEventListener("change",e=>{const t=e.target;if(t.dataset.pick||t.dataset.num)panel();
+ if(t.dataset.cast!=null){const i=+t.dataset.cast,v=t.value;if(i===0){if(v&&v!=="cur"){const c=groupConf(v);if(c){snap();C=JSON.parse(JSON.stringify(Object.assign({},BASE,c)));buildBG()}}}else{const g=GROUP.slice();if(v)g[i-1]=v;else g.splice(i-1,1);GROUP=g.filter(Boolean).slice(0,3);try{localStorage.setItem("cc3d-group",JSON.stringify(GROUP))}catch(x){}}SCRIPT.lines.forEach(l=>{if(l.who>GROUP.length)l.who=0});saveScript();rebuild();return}
+ if(t.dataset.lf!=null){const l=SCRIPT.lines[+t.dataset.li];if(!l)return;const k=t.dataset.lf;l[k]=k==="who"?+t.value:k==="sec"?Math.min(15,Math.max(1,+t.value||3)):t.value;saveScript();return}
  if(t.id==="fImport"&&t.files[0]){const r=new FileReader();r.onload=()=>{try{const j=JSON.parse(r.result);const arr=(j.characters||[]).filter(x=>x&&typeof x==="object"&&x.name).map(x=>{const o=Object.assign({},BASE);for(const k of Object.keys(BASE))if(k in x)o[k]=x[k];o.acc=Array.isArray(o.acc)?o.acc.filter(a=>OPT.acc[a]):[];for(const k of ["gender","build","hair","eyes","brows","mouth","face_hair","glasses","top","bottom","shoes","pose","bg","faceShape","nose","prop"])if(!OPT[k][o[k]])o[k]=BASE[k];for(const k of ["skin","hairC","eyeC","topC","accC","botC","shoeC","bgC"])if(!/^#[0-9a-f]{6}$/i.test(o[k]))o[k]=BASE[k];o.name=String(o.name).slice(0,40);o.say=String(o.say||"").slice(0,90);o.height=Math.min(1.2,Math.max(.8,+o.height||1));o.head=Math.min(1.3,Math.max(.8,+o.head||1));return o});LIST=LIST.concat(arr);saveList();panel();toast("Imported "+arr.length)}catch(err){toast("That file couldn't be read.")}};r.readAsText(t.files[0])}});
 /* ------------------------------------------------------------ 360 video */
 let REC=null;
@@ -410,10 +425,54 @@ async function recordVideo(){if(REC)return;const cv=R.domElement;if(!cv.captureS
  rec.onstop=async()=>{st.getTracks().forEach(t=>t.stop());REC=null;yaw=y0;setAuto(wasAuto);document.body.classList.remove("rec");const b=new Blob(ch,{type:(mt||"video/webm").split(";")[0]});
   await saveFile(b,(C.name||"character").replace(/[^\w-]+/g,"-")+"-360"+(b.type.includes("mp4")?".mp4":".webm"));toast("Video ready")};
  rec.start(200)}
+/* ------------------------------------------------------------ story video */
+const SKEY="cc3d-stories";let STORIES=[];try{STORIES=JSON.parse(localStorage.getItem(SKEY)||"[]")}catch(e){STORIES=[]}
+const saveStories=()=>{try{localStorage.setItem(SKEY,JSON.stringify(STORIES))}catch(e){toast("Couldn't save — browser storage is full")}};
+let SCRIPT={name:"My story",lines:[{who:0,say:"Ra Golu, chai taagudama?",pose:"wave",expr:"happy",sec:3},{who:1,say:"Chai aa? Naaku biryani kaavali!",pose:"cheer",expr:"laugh",sec:3}]};
+try{const j=JSON.parse(localStorage.getItem("cc3d-script")||"null");if(j&&Array.isArray(j.lines))SCRIPT=j}catch(e){}
+const saveScript=()=>{try{localStorage.setItem("cc3d-script",JSON.stringify(SCRIPT))}catch(e){}};
+function castNames(){return [C.name,...GROUP.map(k=>{const c=groupConf(k);return c?c.name:"?"})]}
+function videoPanel(){const opts=[...Object.entries(PRESETS).map(([k,p])=>["p:"+k,p.name]),...LIST.map(c=>["s:"+c.name,c.name+" ★"])];
+ const sel=(i,cur)=>`<select class="txt" data-cast="${i}">${i===0?`<option value="cur" selected>${E(C.name)} (current)</option>`:`<option value=""${cur?"":" selected"}>— nobody —</option>`}${opts.map(([k,n])=>`<option value="${E(k)}"${k===cur?" selected":""}>${E(n)}</option>`).join("")}</select>`;
+ const names=castNames(),po=Object.assign({keep:"(same pose)"},OPT.pose),ex=Object.assign({"":"(same face)"},Object.fromEntries(Object.entries(EXPR).map(([k,[n]])=>[k,n])));
+ const o=(obj,v)=>Object.entries(obj).map(([k,n])=>`<option value="${E(k)}"${k===v?" selected":""}>${E(n)}</option>`).join("");
+ return `<h3>🎭 Cast (up to 4)</h3><p class="mute">Save your characters with a name in 💾 Save — they show here with ★ so you can use the same character in every video.</p>
+ <div class="cast">${[0,1,2,3].map(i=>`<label><span>${i?"Character "+(i+1):"Main"}</span>${sel(i,i?GROUP[i-1]||"":"")}</label>`).join("")}</div>
+ <h3>📝 Script</h3><p class="mute">Each line: who speaks, what they say, their pose and face, and how many seconds.</p>
+ <div class="lines">${SCRIPT.lines.map((l,i)=>`<div class="line"><div class="lh"><b>${i+1}</b><select class="txt" data-lf="who" data-li="${i}">${names.map((n,j)=>`<option value="${j}"${j===l.who?" selected":""}>${E(n)}</option>`).join("")}</select>
+  <input class="txt sec" type="number" min="1" max="15" value="${l.sec}" data-lf="sec" data-li="${i}" aria-label="Seconds"><span class="mute">s</span>
+  <button type="button" class="x" data-lup="${i}" aria-label="Move up">↑</button><button type="button" class="x" data-ldel="${i}" aria-label="Delete line">✕</button></div>
+  <input class="txt" maxlength="90" value="${E(l.say)}" data-lf="say" data-li="${i}" placeholder="Dialogue (leave empty for a silent action)">
+  <div class="lh"><select class="txt" data-lf="pose" data-li="${i}">${o(po,l.pose)}</select><select class="txt" data-lf="expr" data-li="${i}">${o(ex,l.expr)}</select></div></div>`).join("")}</div>
+ <div class="acts"><button type="button" class="btn ghost" id="bLine">➕ Add line</button></div>
+ <div class="acts"><button type="button" class="btn" id="bPlay">${PLAY?"⏹ Stop":"▶ Play story"}</button><button type="button" class="btn" id="bStoryRec">🔴 Record video</button></div>
+ <h3>💾 Save this story</h3><input class="txt" id="stName" maxlength="40" value="${E(SCRIPT.name)}" placeholder="Story name">
+ <div class="acts"><button type="button" class="btn ghost" id="bStorySave">💾 Save story</button></div>
+ <h3>My stories (${STORIES.length})</h3>${STORIES.length?`<div class="mylist">${STORIES.map((st,i)=>`<div class="my"><button type="button" class="chip" data-sload="${i}">${E(st.name)}</button><button type="button" class="x" data-sdel="${i}" aria-label="Delete ${E(st.name)}">✕</button></div>`).join("")}</div>`:`<p class="mute">No stories saved yet.</p>`}`}
+let PLAY=null;
+function replaceChar(i,conf){const old=i?GB[i-1]:{g:CH};if(!old||!old.g)return;const b=buildChar(conf);b.g.position.copy(old.g.position);b.g.rotation.copy(old.g.rotation);S.remove(old.g);S.add(b.g);if(i===0){CH=b.g;rig=b.rig}else GB[i-1]=b;
+ const dj=BG.getObjectByName("djdesk");if(dj)dj.visible=PLAY.cur[0].pose==="dj"&&!GB.length}
+function startPlay(onEnd){const lines=SCRIPT.lines.filter(l=>l.who<=GROUP.length);if(!lines.length){toast("Add a line to the script first");return false}
+ setAuto(false);build();if(bubbleSp){S.remove(bubbleSp);bubbleSp=null}
+ const cur=[JSON.parse(JSON.stringify(C)),...GB.map(b=>JSON.parse(JSON.stringify(b.c)))];const y0=yaw,d0=dist,ty=target.y;
+ PLAY={cur,i:-1,t:0,sp:null,end:0,lines,onEnd,y0,d0,ty,
+  go(i){this.i=i;this.t=0;const L=lines[i];const w=L.who;this.sp=w;const c=Object.assign({},this.cur[w]);if(L.pose&&L.pose!=="keep")c.pose=L.pose;if(L.expr&&EXPR[L.expr])Object.assign(c,EXPR[L.expr][1]);c.say="";this.cur[w]=c;replaceChar(w,c);
+   const g=w?GB[w-1].g:CH;bubbleAt(L.say,g.position.x+(GB.length?0:1.1),(GB.length?3.75:3.6)*(+c.height||1))},
+  tick(dt){const now=performance.now();if(this.i<0){this.last=now;this.go(0);return}const rdt=Math.min(.5,(now-this.last)/1000);this.last=now;this.t+=rdt;const L=lines[this.i];const g=this.sp?GB[this.sp-1]&&GB[this.sp-1].g:CH;
+   if(g){target.x+=(g.position.x*.55-target.x)*Math.min(1,dt*2.5)}yaw+=(0-yaw)*Math.min(1,dt*1.5);
+   if(this.t>=(+L.sec||3)){if(this.i+1<lines.length)this.go(this.i+1);else{this.end+=rdt;if(this.end>.6)stopPlay()}}}};
+ if(tab==="video")panel();return true}
+function stopPlay(){if(!PLAY)return;const p=PLAY;PLAY=null;yaw=p.y0;target.x=0;build();if(tab==="video")panel();if(p.onEnd)p.onEnd()}
+function recordStory(){if(REC||PLAY)return;const cv=R.domElement;if(!cv.captureStream||!window.MediaRecorder){toast("This browser can't record video");return}
+ const types=["video/mp4;codecs=avc1","video/mp4","video/webm;codecs=vp9","video/webm"];const mt=types.find(t=>MediaRecorder.isTypeSupported(t))||"";
+ const st=cv.captureStream(30),rec=new MediaRecorder(st,mt?{mimeType:mt,videoBitsPerSecond:6e6}:undefined),ch=[];rec.ondataavailable=e=>{if(e.data.size)ch.push(e.data)};
+ rec.onstop=async()=>{st.getTracks().forEach(t=>t.stop());document.body.classList.remove("rec");const b=new Blob(ch,{type:(mt||"video/webm").split(";")[0]});
+  await saveFile(b,(SCRIPT.name||"story").replace(/[^\w-]+/g,"-")+(b.type.includes("mp4")?".mp4":".webm"));toast("Story video ready")};
+ if(!startPlay(()=>{if(rec.state==="recording")setTimeout(()=>rec.stop(),150)}))return;document.body.classList.add("rec");rec.start(200);toast("Recording story…")}
 /* ------------------------------------------------------------ go */
 buildBG();build();panel();resize();
 const clock=new T.Clock();let tt=0;
-(function loop(){requestAnimationFrame(loop);const dt=Math.min(.05,clock.getDelta());tt+=dt;if(auto&&!drag)yaw+=dt*.5;applyPoseTo(rig,C,tt);GB.forEach((b,i)=>applyPoseTo(b.rig,b.c,tt+(i+1)*.37));place();R.render(S,Cam);if(REC)REC.tick(dt)})();
+(function loop(){requestAnimationFrame(loop);const dt=Math.min(.05,clock.getDelta());tt+=dt;if(auto&&!drag)yaw+=dt*.5;if(PLAY)PLAY.tick(dt);applyPoseTo(rig,PLAY?PLAY.cur[0]:C,tt);GB.forEach((b,i)=>applyPoseTo(b.rig,b.c,tt+(i+1)*.37));if(PLAY&&PLAY.sp!=null&&(PLAY.lines[PLAY.i]||{}).say){const r=PLAY.sp?GB[PLAY.sp-1]&&GB[PLAY.sp-1].rig:rig;if(r&&r.head){r.head.rotation.z=Math.sin(tt*11)*.07;r.head.rotation.x+=Math.sin(tt*17)*.04}}place();R.render(S,Cam);if(REC)REC.tick(dt)})();
 window.__ready=true;
 })();
 </script></body></html>
