@@ -635,3 +635,11 @@ Use these as top-quality references for every new scene. Rules:
 
 ## Anime removed (26 Nov 2026)
 - The user asked to remove all anime character creating from the project. The Anime studio, its engine files (anime_*.js) and these notes were removed. Characters are now made in the Clay 3D Character Creator (🧸 3D Characters tab), which also has Story video and Cinematic video.
+
+## Comedy craft upgrade (26 Nov 2026 — every scene, in chat and on the page)
+- Quality over quantity. Natural flow: every line answers what the previous speaker actually said; real talk with reactions and pauses; no filler; no explained jokes.
+- Punch comedy: real counters that turn the speaker's own words or boast against him; proper setups (plant → build → punch, punch word last); mostly short punches, sometimes a long build; never repeat a mechanism; don't force a punch into every line.
+- Twists grow from the scene (confident claim turned around, small misunderstanding snowballs, escape makes it worse, one detail exposes the truth, last reply reverses the "winner"); plant clues early.
+- Distinct voices and kinds of punch per character; replacement characters get fresh, stronger lines in their own style, not renamed lines.
+- Flexible structure: opening → setup → development → punches → natural turn → payoff ending (callback). Use library mechanisms, never lines; invent new techniques; no formula twice.
+- Quality check before showing (opening, flow, voices, counters, punches, twists, pacing, no filler, ending, originality); rewrite anything weak. The web app runs a separate Polish pass (on by default) that scores the draft and rewrites weak lines, shown under "Quality check".
