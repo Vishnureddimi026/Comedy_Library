@@ -293,7 +293,7 @@ const up=e=>{pts.delete(e.pointerId);if(pts.size<2)pinch=0;if(!pts.size)drag=fal
 cv.addEventListener("wheel",e=>{e.preventDefault();dist=Math.min(14,Math.max(2.2,dist*(1+e.deltaY*.001)))},{passive:false});
 function setAuto(v){auto=v;const b=$("#bSpin");if(b)b.textContent=auto?"⏸ Stop":"🔄 Spin"}
 function resize(){const w=wrap.clientWidth,h=wrap.clientHeight;R.setSize(w,h,false);cv.style.width=w+"px";cv.style.height=h+"px";Cam.aspect=w/h;Cam.fov=w<h?46:35;Cam.updateProjectionMatrix()}
-window.addEventListener("resize",resize);
+window.addEventListener("resize",resize);try{new ResizeObserver(()=>resize()).observe(wrap)}catch(e){}
 /* ------------------------------------------------------------ storage */
 const KEY="cc3d-chars";let LIST=[];try{LIST=JSON.parse(localStorage.getItem(KEY)||"[]")}catch(e){LIST=[]}
 const saveList=()=>{try{localStorage.setItem(KEY,JSON.stringify(LIST))}catch(e){}};
@@ -324,7 +324,7 @@ function panel(){const b=$("#panel");let h="";
   <h3>My characters (${LIST.length})</h3>${LIST.length?`<div class="mylist">${LIST.map((c,i)=>`<div class="my"><button type="button" class="chip" data-load="${i}">${E(c.name)}</button><button type="button" class="x" data-del="${i}" aria-label="Delete ${E(c.name)}">✕</button></div>`).join("")}</div>`:`<p class="mute">Nothing saved yet. Saved characters stay in this browser.</p>`}
   <div class="acts"><button type="button" class="btn ghost" id="bExport">⬇ Export all (file)</button><label class="btn ghost">⬆ Import file<input type="file" id="fImport" accept=".json,application/json" hidden></label></div>`;
  if(tab==="video")h=videoPanel();
- b.innerHTML=h;$("#tabs").innerHTML=TABS.map(([k,n])=>`<button type="button" class="tab" data-tab="${k}" aria-pressed="${tab===k}">${n}</button>`).join("");$("#title").textContent=C.name}
+ b.innerHTML=h;$("#tabs").innerHTML=TABS.map(([k,n])=>`<button type="button" class="tab" data-tab="${k}" aria-pressed="${tab===k}">${n}</button>`).join("");$("#title").textContent=C.name;shelf()}
 const UNDO=[],REDO=[];function snap(){UNDO.push(JSON.stringify(C));if(UNDO.length>60)UNDO.shift();REDO.length=0;undoBtns()}
 function undoBtns(){const u=$("#bUndo"),r=$("#bRedo");if(u)u.disabled=!UNDO.length;if(r)r.disabled=!REDO.length}
 function rebuild(){build();panel();undoBtns()}
@@ -350,9 +350,9 @@ document.addEventListener("click",async e=>{const t=e.target.closest("button,[da
  if(t.dataset.col){C[t.dataset.col]=t.dataset.v;if(t.dataset.col==="bgC")buildBG();rebuild();return}
  if(t.dataset.acc){const v=t.dataset.acc;C.acc=C.acc.includes(v)?C.acc.filter(x=>x!==v):C.acc.concat(v);if(v==="cap")C.acc=C.acc.filter(x=>x!=="beanie"||v!=="cap");if(v==="beanie")C.acc=C.acc.filter(x=>x!=="cap"||v!=="beanie");rebuild();return}
  if(t.dataset.preset){C=JSON.parse(JSON.stringify(t.dataset.preset==="new"?BASE:PRESETS[t.dataset.preset]));buildBG();rebuild();toast("Loaded "+C.name);return}
- if(t.dataset.load){C=Object.assign({},BASE,JSON.parse(JSON.stringify(LIST[+t.dataset.load])));buildBG();rebuild();toast("Opened "+C.name);return}
+ if(t.dataset.load){C=Object.assign({},BASE,JSON.parse(JSON.stringify(LIST[+t.dataset.load])));delete C.thumb;buildBG();rebuild();toast("Opened "+C.name);return}
  if(t.dataset.del){const i=+t.dataset.del;if(t.dataset.sure){LIST.splice(i,1);saveList();panel();toast("Deleted")}else{t.dataset.sure="1";t.textContent="Delete?";setTimeout(()=>{if(t.isConnected){delete t.dataset.sure;t.textContent="✕"}},2500)}return}
- if(t.id==="bSave"){const n=($("#cName").value||"").trim()||"My character";C.name=n;const i=LIST.findIndex(x=>x.name===n);if(i>=0)LIST[i]=JSON.parse(JSON.stringify(C));else LIST.push(JSON.parse(JSON.stringify(C)));saveList();panel();toast("Saved "+n);return}
+ if(t.id==="bSave"||t.id==="bShSave"){const inp=$(t.id==="bSave"?"#cName":"#shName");saveChar((inp&&inp.value||"").trim()||"My character");return}
  if(t.id==="bShot"||t.id==="bShot2"){R.render(S,Cam);R.domElement.toBlob(b=>b&&saveFile(b,(C.name||"character").replace(/[^\w-]+/g,"-")+"-3d.png"),"image/png");return}
  if(t.id==="bRand"||t.id==="bRand2"){const pick=o=>{const k=Object.keys(o);return k[Math.floor(Math.random()*k.length)]},pc=a=>a[Math.floor(Math.random()*a.length)];
   Object.assign(C,{faceShape:pick(OPT.faceShape),nose:pick(OPT.nose),prop:Math.random()<.6?"none":pick(OPT.prop),gender:pick(OPT.gender),build:pick(OPT.build),skin:pc(SKIN),hair:pick(OPT.hair),hairC:pc(HAIRC),eyes:pick(OPT.eyes),eyeC:pc(EYEC),brows:pick(OPT.brows),mouth:pick(OPT.mouth),top:pick(OPT.top),topC:pc(CLOTH),accC:pc(CLOTH),bottom:pick(OPT.bottom),botC:pc(CLOTH),shoes:pick(OPT.shoes),shoeC:pc(CLOTH),glasses:Math.random()<.7?"none":pick(OPT.glasses),face_hair:Math.random()<.7?"none":pick(OPT.face_hair),acc:Object.keys(OPT.acc).filter(()=>Math.random()<.18)});
@@ -367,7 +367,7 @@ document.addEventListener("input",e=>{const t=e.target;
  if(t.dataset.num){C[t.dataset.num]=+t.value;build();return}
  if(t.dataset.pick){C[t.dataset.pick]=t.value;if(t.dataset.pick==="bgC")buildBG();build();return}
  if(t.dataset.bool){C[t.dataset.bool]=t.checked;build();return}
- if(t.id==="cName"){C.name=t.value;$("#title").textContent=t.value}
+ if(t.id==="cName"||t.id==="shName"){C.name=t.value;$("#title").textContent=t.value}
  if(t.id==="cSay"){C.say=t.value;bubble()}
  if(t.dataset.lf==="say"){const l=SCRIPT.lines[+t.dataset.li];if(l){l.say=t.value.slice(0,90);saveScript()}}});
 let sliding=false;document.addEventListener("pointerdown",e=>{const t=e.target;if(t.dataset&&(t.dataset.num||t.dataset.pick||t.dataset.bool)){snap()}},true);
@@ -385,6 +385,14 @@ async function recordVideo(){if(REC)return;const cv=R.domElement;if(!cv.captureS
  rec.onstop=async()=>{st.getTracks().forEach(t=>t.stop());REC=null;yaw=y0;setAuto(wasAuto);document.body.classList.remove("rec");const b=new Blob(ch,{type:(mt||"video/webm").split(";")[0]});
   await saveFile(b,(C.name||"character").replace(/[^\w-]+/g,"-")+"-360"+(b.type.includes("mp4")?".mp4":".webm"));toast("Video ready")};
  rec.start(200)}
+/* ------------------------------------------------------------ my characters shelf */
+function thumb(){try{R.render(S,Cam);const src=R.domElement,w=src.width,h=src.height,sz=Math.min(w,h)*.9,c=document.createElement("canvas");c.width=c.height=180;
+ c.getContext("2d").drawImage(src,(w-sz)/2,(h-sz)/2-h*.02,sz,sz,0,0,180,180);return c.toDataURL("image/jpeg",.8)}catch(e){return""}}
+function saveChar(n){n=String(n).slice(0,40);C.name=n;const o=JSON.parse(JSON.stringify(C));delete o.thumb;o.thumb=thumb();const i=LIST.findIndex(x=>x.name===n);
+ if(i>=0)LIST[i]=o;else LIST.push(o);saveList();panel();toast("Saved “"+n+"”")}
+function shelf(){const el=$("#shelf");if(!el)return;const focused=document.activeElement&&document.activeElement.id==="shName";if(focused&&el.dataset.n==LIST.length)return;el.dataset.n=LIST.length;
+ el.innerHTML=`<div class="shh"><b>💾 My characters</b><input class="txt" id="shName" maxlength="40" value="${E(C.name)}" placeholder="Name your character" aria-label="Character name"><button type="button" class="btn" id="bShSave">Save</button></div>
+ <div class="cards">${LIST.length?LIST.map((c,i)=>`<div class="card${c.name===C.name?" on":""}"><button type="button" class="cimg" data-load="${i}" aria-label="Open ${E(c.name)}">${c.thumb?`<img src="${c.thumb}" alt="">`:`<span class="ph">🧸</span>`}<span class="cn">${E(c.name)}</span></button><button type="button" class="x" data-del="${i}" aria-label="Delete ${E(c.name)}">✕</button></div>`).join(""):`<p class="mute">Type a name and tap Save — your characters appear here. Tap one to open it again.</p>`}</div>`}
 /* ------------------------------------------------------------ story video */
 const SKEY="cc3d-stories";let STORIES=[];try{STORIES=JSON.parse(localStorage.getItem(SKEY)||"[]")}catch(e){STORIES=[]}
 const saveStories=()=>{try{localStorage.setItem(SKEY,JSON.stringify(STORIES))}catch(e){toast("Couldn't save — browser storage is full")}};
