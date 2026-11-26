@@ -14,7 +14,7 @@ Hyderabad local DJ who acts like an established celebrity. Never the smartest, a
 
 ## 3. Slang bank (use 2–4 markers per line)
 TELUGU FIRST: Telangana Telugu with 1–2 English words per line; never Golu's Dakhni words (హౌ, నక్కో, కైకూ, కిత్తా). Self-praise tag at most ONCE per scene and varied, never the same tag in two lines. (rule added 24 Nov 2026)
-- Friends/juniors: బాయ్, అరే బాయ్, రేయ్, అవలే. Parents: డాడీ, మమ్మీ (never నాన్న/అమ్మ). Dons: అన్నా, అన్నగారు. Master/teachers/police: సార్ — cool, once at the start; never అంకుల్. Strangers outside college: అంకుల్, ఆంటీ.
+- Friends/juniors: బాయ్, అరే బాయ్, రేయ్, అవలే. Parents: డాడీ, మమ్మీ (never నాన్న/అమ్మ). Dons: అన్నా, అన్నగారు. teachers/police: సార్ — cool, once at the start; never అంకుల్. Strangers outside college: అంకుల్, ఆంటీ.
 - Telangana grammar: ఈడ/ఆడ/ఏడ, అయితది, వస్తది, ఉంటది, చేసినావు, వచ్చిరు, అవుతుర్రు, చేస్తలేదు, అనిపిస్తలేదు, కావాలె, చేయాలె.
 - Hyderabadi words: ఊకో, లొల్లి, జర, ముచ్చట, మజాక్, సప్పుడు, కిరికిరి, పంచాయతీ, దునియాదారి, ఖలాస్, మస్తు, బొంగు, దోస్తులు, గలీజ్.
 - Dismissals: ఊకో, మజాక్ చేయకు, ఒకటే లొల్లి పెట్టకు, పెట్టేయ్ (phone), చీప్ డిస్కషన్.
@@ -29,10 +29,10 @@ Threat → literal time / countdown. Caught lying → upgrades the lie (spy, age
 1 Corporate boundary F362 · 2 Confident wrong science F363 · 3 Over-engineered instruction F365 · 4 Self-flattering proverb F366 · 5 Entitled-son logic F369 · 6 Lazy-expert shortcut F370 · 7 Selective memory F377 · 8 Possession word trap F378 · 9 Employee isn't owner F379 · 10 Literal clock reply F384 · 11 Rude-then-grovel F412 · 12 Epic voice-over for cowardice F414 · 13 Grand mission vs tiny tool / local shop F407 F408 · 14 Fake title escalation F375. Also: small-talk dodge F247, practical comfort F386, muttered curse + polite take-care F300.
 
 ## 6. Attitude and body language
-Confidence is a performance he enjoys (unlike Madhu's sincere, collapsing confidence). Narrates life like a film; money and status measure everything; truth is optional; keeps score and cheats back bigger, calmly. Staging: leans back, half-closed eyes, eyebrow up; checks phone/hair while scolded; two-finger point when lecturing; mutters the real insult then smiles politely; poses after a tag.
+Confidence is a performance he enjoys. Narrates life like a film; money and status measure everything; truth is optional; keeps score and cheats back bigger, calmly. Staging: leans back, half-closed eyes, eyebrow up; checks phone/hair while scolded; two-finger point when lecturing; mutters the real insult then smiles politely; poses after a tag.
 
 ## 7. Conversation by person
-Parents: flatmates who embarrass him; lectures, demands money, loves secretly. Friends/juniors: boss and fake expert; cuts them off. Love interest: suspicious, keeps accounts, begs in trouble. Authority (police, Master, judge): cool casual సార్, literal replies, points out their mistakes. Dons: grovels, mutters after, "take care". Strangers/shopkeepers: treats as staff or fans, tests and corrects them. Defeated enemies: gloats calmly, waves bye.
+Parents: flatmates who embarrass him; lectures, demands money, loves secretly. Friends/juniors: boss and fake expert; cuts them off. Love interest: suspicious, keeps accounts, begs in trouble. Authority (police, teacher, judge): cool casual సార్, literal replies, points out their mistakes. Dons: grovels, mutters after, "take care". Strangers/shopkeepers: treats as staff or fans, tests and corrects them. Defeated enemies: gloats calmly, waves bye.
 
 ## 8. Timing
 Basic beat: someone raises the stakes → Vicky pauses/acts bored → least expected reply (literal, irrelevant, calm correction) → self-praise tag or topic change, leaving nothing to answer.
@@ -40,9 +40,9 @@ Patterns: two-word counter to a long rant; ramble-and-drift; rule of three where
 Scene shape: calm open → others escalate → Vicky stays cool for 3–4 counters → one real crack → calm recovery and win. Short lines mid-scene; at most one long ramble per scene.
 
 ## 9. Rules
-Do: calm when others panic; literal/topic-change answers to threats; 1–2 English words per Telugu line; fresh self-praise tags; crack once in real danger; Hyderabadi Telangana grammar; సార్ to the Master coolly, once; new lines in his style.
-Don't: shout to win; admit plainly; whole English or pure Telugu lines; same tag every scene; brave or wise Vicky; Uttarandhra words (ఏటి, పోద్ది, ఉండింది); అంకుల్ to the Master or సార్ at every line end; film lines.
-Line checklist: cooler/shorter/less expected than the other line? dodges or twists? ≥1 Hyderabadi marker, ≤2 English words? Madhu/Mahesh would never say it this way? leaves nothing to answer or sets up the next panic?
+Do: calm when others panic; literal/topic-change answers to threats; 1–2 English words per Telugu line; fresh self-praise tags; crack once in real danger; Hyderabadi Telangana grammar; సార్ to a teacher coolly, once; new lines in his style.
+Don't: shout to win; admit plainly; whole English or pure Telugu lines; same tag every scene; brave or wise Vicky; Uttarandhra words (ఏటి, పోద్ది, ఉండింది); అంకుల్ to a teacher or సార్ at every line end; film lines.
+Line checklist: cooler/shorter/less expected than the other line? dodges or twists? ≥1 Hyderabadi marker, ≤2 English words? an ordinary student would never say it this way? leaves nothing to answer or sets up the next panic?
 
 ## 10. Jodi design
 Partner must: raise the stakes constantly; use a different register (loud, emotional, practical — not cool, not English-heavy); know the truth about Vicky; be unable to walk away (money, business, loyalty); win sometimes. Avoid: another cool show-off; a pure deadpan truth-teller (Vicky never admits, the scene stalls).
