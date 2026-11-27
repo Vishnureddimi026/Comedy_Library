@@ -309,7 +309,7 @@ main>section:not([hidden]),.page:not([hidden]){animation:rise3d .35s cubic-bezie
 <script>
 /* Robust copy: clipboard API, then hidden-textarea execCommand fallback */
 window.copyAny=async function(t){t=String(t==null?"":t);
- try{if(navigator.clipboard&&window.isSecureContext!==false){await copyAny(t);return true}}catch(e){}
+ try{if(navigator.clipboard&&navigator.clipboard.writeText&&window.isSecureContext!==false){await navigator.clipboard.writeText(t);return true}}catch(e){}
  const ta=document.createElement("textarea");ta.value=t;ta.setAttribute("readonly","");ta.style.cssText="position:fixed;top:0;left:0;width:1px;height:1px;opacity:0;font-size:16px";
  document.body.appendChild(ta);const sel=document.getSelection(),rg=sel&&sel.rangeCount?sel.getRangeAt(0):null;
  ta.focus();ta.select();ta.setSelectionRange(0,t.length);let ok=false;try{ok=document.execCommand("copy")}catch(e){}
