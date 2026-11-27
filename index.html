@@ -78,6 +78,7 @@ textarea{resize:vertical;min-height:110px}
 .lbl{font-size:13px;font-weight:600;color:var(--red);margin-bottom:6px}
 .b1 .lbl{color:#7a0d1d}.b1 p{margin:0;font-size:17px}
 .dlg p{margin:0 0 10px;display:grid;grid-template-columns:2.2em minmax(0,1fr) auto;gap:6px;font-size:17px}
+.rel{border:1.5px solid var(--line);background:none;color:inherit;font:inherit;font-size:14px;border-radius:999px;padding:6px 12px;margin:3px 4px 0 0;min-height:36px;cursor:pointer;text-align:left}.rel:hover{border-color:var(--red)}.rel:focus-visible{outline:2px solid var(--red)}
 .star{border:0;background:none;font-size:22px;line-height:1;min-width:40px;min-height:40px;margin-top:-8px;cursor:pointer;color:var(--mute);border-radius:10px}.star[aria-pressed=true]{color:#d99a00}.star:focus-visible{outline:2px solid var(--red)}
 .starrow{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;align-items:start}.starrow .btn{min-height:40px}
 .dlg p span{color:var(--mute);font-size:13px;text-align:right;padding-top:3px}
@@ -412,6 +413,7 @@ setTimeout(function(){var i=document.getElementById("lockP");if(i)i.focus()},100
 <div class="chips" id="cats"></div>
 <div class="chips" id="whos"></div>
 <div class="chips" id="bats"></div>
+<div class="chips" id="sorts"></div>
 </div>
 <div class="meta" id="count"></div>
 <div class="grid" id="list"></div>
@@ -1291,6 +1293,14 @@ const TILLU_F=new Set("F362 F365 F366 F369 F370 F376 F377 F378 F379 F384 F387 F4
 const BABLOO_F=new Set("F311 F371 F373 F279 F569 F617 F633 F504 F386 F411".split(" "));
 const whoList=["all","Madhu","Mahesh","DJ Vicky","Golu","Master","Budatha","Venki","Lead","Sidekick","Authority","Boss","Rival","Group","Father","AI","Side role"];
 const pow=n=>`<span class="pow" aria-label="Punch strength ${n} of 10">${Array.from({length:10},(_,i)=>`<i class="${i<n?'on':''}"></i>`).join('')}</span>`;
+let fsort="lib";
+const FSTOP=new Set("a an the to of and or in on at for with his her he she it its is as by then that this from be your you their them they who what when someone something into one out up but not so if than more most very same own just only any each all".split(" "));
+const fstem=x=>{for(const s of ["ing","ed","es","s","ly"])if(x.endsWith(s)&&x.length>s.length+3)return x.slice(0,-s.length);return x};
+let FREL=null;
+function relMap(){if(FREL)return FREL;const W=F.map(f=>new Set((String(f[1])+" "+String(f[4])).toLowerCase().match(/[a-z]+/g)?.filter(x=>x.length>2&&!FSTOP.has(x)).map(fstem)||[]));
+const best=F.map(()=>[]);for(let a=0;a<F.length;a++){const A=W[a];if(!A.size)continue;for(let b=a+1;b<F.length;b++){const B=W[b];if(!B.size)continue;let n=0;for(const x of A)if(B.has(x))n++;if(!n)continue;const j=n/(A.size+B.size-n);if(j>=.15){best[a].push([j,b]);best[b].push([j,a])}}}
+FREL=new Map(F.map((f,i)=>[f[0],best[i].sort((x,y)=>y[0]-x[0]).slice(0,3).map(x=>F[x[1]])]));return FREL}
+function useCounts(){const m=new Map();let H=[];try{H=hist}catch(e){H=[]}(Array.isArray(H)?H:[]).forEach(h=>{const fs=h&&h.s&&h.s.formulas;if(Array.isArray(fs))new Set(fs).forEach(id=>m.set(id,(m.get(id)||0)+1))});return m}
 const slip=(f,swap)=>`<article class="slip ${used.has(f[0])?'used':''}">
 <div class="top"><h3>${f[1]}</h3><span class="id">${f[0]} · ${f[9]}</span></div>
 <div class="te">${f[2]} · ${CATS[f[3]]}</div>
@@ -1298,12 +1308,17 @@ const slip=(f,swap)=>`<article class="slip ${used.has(f[0])?'used':''}">
 <div class="row"><b>Use when:</b> ${f[5]}</div>
 <div class="row"><b>Best voice:</b> ${f[6]} · <b>Ref scenes:</b> ${/^\d/.test(f[7])?f[7].split(", ").map(x=>"S"+x).join(", "):f[7]}${f[10]?` · <b>Script-2 code:</b> ${f[10]}`:""}</div>${f[11]?`<div class="row"><b>Reused in later scripts:</b> ${f[11]}</div>`:""}${f[12]?`<div class="q new"><div class="qh">Sample punchline · ${esc(f[6])}</div>${esc(f[12])}</div>`:""}
 ${pow(f[8])}
+${swap?"":(()=>{const n=(window._fuse&&window._fuse.get(f[0]))||0;const rel=relMap().get(f[0])||[];return `<div class="row"><b>In your saved scenes:</b> ${n?`used in ${n} scene${n===1?"":"s"}`:"not used yet"}</div>${rel.length?`<div class="row"><b>Related formulas:</b> ${rel.map(x=>`<button type="button" class="rel" data-rel="${x[0]}">${x[0]} · ${esc(x[1])}</button>`).join(" ")}</div>`:""}`})()}
 ${swap?`<button class="btn ghost" data-swap="${f[0]}">Swap this one</button>`:`<button class="btn ghost" data-use="${f[0]}">${used.has(f[0])?'Unmark used':'Mark used'}</button>`}
 </article>`;
 function render(){
-const q=$("#q").value.trim().toLowerCase();
-const r=F.filter(f=>(bat==="all"||(bat==="re"?!!f[11]:f[9]===bat))&&(cat==="all"||f[3]===cat)&&(who==="all"||(who==="DJ Vicky"?TILLU_F.has(f[0]):who==="Golu"?BABLOO_F.has(f[0]):f[6].includes(who)))&&(!q||f.join(" ").toLowerCase().includes(q)));
-$("#count").textContent=`${r.length} of ${F.length} formulas · ${used.size} marked used`;
+const q=$("#q").value.trim().toLowerCase();const qid=/^f\d+$/.test(q);const U=useCounts();window._fuse=U;
+let r=F.filter(f=>(bat==="all"||(bat==="re"?!!f[11]:f[9]===bat))&&(cat==="all"||f[3]===cat)&&(who==="all"||(who==="DJ Vicky"?TILLU_F.has(f[0]):who==="Golu"?BABLOO_F.has(f[0]):f[6].includes(who)))&&(!q||(qid?f[0].toLowerCase()===q:f.join(" ").toLowerCase().includes(q))));
+if(fsort==="never")r=r.filter(f=>!U.get(f[0]));
+if(fsort==="strong")r=r.slice().sort((a,b)=>(+b[8]||0)-(+a[8]||0));
+if(fsort==="most")r=r.slice().sort((a,b)=>(U.get(b[0])||0)-(U.get(a[0])||0)||(+b[8]||0)-(+a[8]||0));
+const usedIn=[...U.keys()].length;
+$("#count").textContent=`${r.length} of ${F.length} formulas · ${used.size} marked used · ${usedIn} used in your saved scenes${fsort==="strong"?" · strongest first":fsort==="most"?" · most used first":fsort==="never"?" · never used in your scenes":""}`;
 $("#list").innerHTML=r.length?r.map(f=>slip(f)).join(''):'<div class="empty">No formula matches. Try another word or clear a filter.</div>';
 }
 $("#cats").innerHTML=[["all","All families"],...Object.entries(CATS)].map(([k,v])=>`<button class="chip" data-cat="${k}" aria-pressed="${k==='all'}">${v}</button>`).join('');
@@ -1312,6 +1327,9 @@ $("#cats").addEventListener("click",e=>{const b=e.target.closest("[data-cat]");i
 $("#whos").addEventListener("click",e=>{const b=e.target.closest("[data-who]");if(!b)return;who=b.dataset.who;document.querySelectorAll("[data-who]").forEach(x=>x.setAttribute("aria-pressed",x===b));render()});
 $("#q").addEventListener("input",render);
 $("#bats").innerHTML=[["all","All batches"],["B1","B1 · Script 1"],["B2","B2 · Script 2 new"],["B3","B3 · Script 3 new"],["B4","B4 · Script 4 new"],["B5","B5 · Script 3 with names"],["B6","B6 · Script 5 part 1"],["B7","B7 · Script 5 part 2"],["B8","B8 · Script 5 part 3"],["B9","B9 · Script 6"],["B10","B10 · Script 7"],["B11","B11 · Script 8"],["B12","B12 · Script 9"],["B13","B13 · Script 10"],["B14","B14 · Script 11"],["B15","B15 · Script 12"],["B16","B16 · Script 13"],["B17","B17 · Script 14"],["B18","B18 · Script 15"],["B19","B19 · Script 16"],["B20","B20 · Script 17"],["B21","B21 · Script 18"],["B22","B22 · Script 19"],["B23","B23 · Script 20"],["B24","B24 · Script 21"],["B25","B25 · Script 22"],["B26","B26 · Script 23"],["re","Reused in later scripts"]].map(([k,v])=>`<button class="chip" data-bat="${k}" aria-pressed="${k==="all"}">${v}</button>`).join("");
+$("#sorts").innerHTML=[["lib","Library order"],["strong","Strongest first"],["most","Most used in my scenes"],["never","Never used in my scenes"]].map(([k,v])=>`<button class="chip" data-fsort="${k}" aria-pressed="${k==="lib"}">${v}</button>`).join("");
+$("#sorts").addEventListener("click",e=>{const b=e.target.closest("[data-fsort]");if(!b)return;fsort=b.dataset.fsort;document.querySelectorAll("[data-fsort]").forEach(x=>x.setAttribute("aria-pressed",x===b));render()});
+$("#list").addEventListener("click",e=>{const b=e.target.closest("[data-rel]");if(!b)return;$("#q").value=b.dataset.rel;render();const t=document.getElementById("v-formulas");if(t)t.scrollIntoView({behavior:"smooth",block:"start"})});
 $("#bats").addEventListener("click",e=>{const b=e.target.closest("[data-bat]");if(!b)return;bat=b.dataset.bat;document.querySelectorAll("[data-bat]").forEach(x=>x.setAttribute("aria-pressed",x===b));render()});
 document.body.addEventListener("click",e=>{const b=e.target.closest("[data-use]");if(!b)return;const id=b.dataset.use;used.has(id)?used.delete(id):used.add(id);save();render();drawCombo()});
 let combo=[];
