@@ -78,6 +78,7 @@ textarea{resize:vertical;min-height:110px}
 .lbl{font-size:13px;font-weight:600;color:var(--red);margin-bottom:6px}
 .b1 .lbl{color:#7a0d1d}.b1 p{margin:0;font-size:17px}
 .dlg p{margin:0 0 10px;display:grid;grid-template-columns:2.2em minmax(0,1fr) auto;gap:6px;font-size:17px}
+#bkBox.due{border-color:var(--red)}#bkBox summary .btn{vertical-align:middle}
 .rel{border:1.5px solid var(--line);background:none;color:inherit;font:inherit;font-size:14px;border-radius:999px;padding:6px 12px;margin:3px 4px 0 0;min-height:36px;cursor:pointer;text-align:left}.rel:hover{border-color:var(--red)}.rel:focus-visible{outline:2px solid var(--red)}
 .star{border:0;background:none;font-size:22px;line-height:1;min-width:40px;min-height:40px;margin-top:-8px;cursor:pointer;color:var(--mute);border-radius:10px}.star[aria-pressed=true]{color:#d99a00}.star:focus-visible{outline:2px solid var(--red)}
 .starrow{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;align-items:start}.starrow .btn{min-height:40px}
@@ -404,7 +405,12 @@ setTimeout(function(){var i=document.getElementById("lockP");if(i)i.focus()},100
 </div>
 <p class="row" id="tStatus" role="status"></p><div id="out"></div>
 <details class="box" id="starBox" hidden></details>
-<div id="histWrap" hidden><div style="display:flex;align-items:center;justify-content:space-between;gap:10px;margin:28px 0 10px"><h2 style="font-size:24px;margin:0">Saved scenes</h2><button class="btn ghost" id="delAll" style="min-height:40px">Delete all</button></div><p class="row" id="syncMsg">Saved on this device only.</p><div class="acts" style="margin:6px 0 12px"><button class="btn ghost sm" type="button" id="bkOut">Download backup of saved scenes</button><button class="btn ghost sm" type="button" id="bkIn">Restore from a backup file</button><input type="file" id="bkFile" accept=".json,application/json" hidden></div><div class="hist" id="hist"></div></div>
+<details class="box" id="bkBox"><summary><b>💾 Backup</b> · save all your scenes, starred lines and settings to one file<span id="bkNag" hidden> · <b>backup due</b> <button type="button" class="btn" id="bkNagBtn" style="min-height:36px;padding:4px 12px;margin-left:6px">Back up now</button></span></summary><div>
+<p class="row" id="bkLast"></p>
+<p class="row">Your scenes also sync to your Claude account, but this device keeps only the newest 60. A backup file holds everything, and Restore brings it back on any device without deleting anything. Your API key is never put in the file.</p>
+<div class="acts"><button type="button" class="btn" id="bkSave">⬇ Back up everything</button><button type="button" class="btn ghost" id="bkPick">⬆ Restore from a backup file</button><input type="file" id="bkFile" accept=".json,application/json" hidden></div>
+<p class="row" id="bkMsg" role="status"></p></div></details>
+<div id="histWrap" hidden><div style="display:flex;align-items:center;justify-content:space-between;gap:10px;margin:28px 0 10px"><h2 style="font-size:24px;margin:0">Saved scenes</h2><button class="btn ghost" id="delAll" style="min-height:40px">Delete all</button></div><p class="row" id="syncMsg">Saved on this device only.</p><div class="acts" style="margin:6px 0 12px"><button class="btn ghost sm" type="button" id="bkOut">Download backup (scenes, stars, settings)</button><button class="btn ghost sm" type="button" id="bkIn">Restore from a backup file</button></div><div class="hist" id="hist"></div></div>
 </section>
 
 <section id="v-formulas" class="band" hidden>
@@ -1436,7 +1442,7 @@ $("#slang").addEventListener("change",()=>{try{localStorage.setItem("cfl-slang",
 let pinned=[];
 const SK="cfl-scenes";let hist=[];try{hist=JSON.parse(localStorage.getItem(SK)||"[]")}catch(e){}
 const saveLocal=()=>{for(const n of [60,30,15,5]){try{localStorage.setItem(SK,JSON.stringify(hist.slice(0,n)));return}catch(e){}}};
-const saveHist=()=>{saveLocal();if(window.CFL_SRV)window.CFL_SRV.save(hist.slice(0,200));if(window.CFL_CLOUD)window.CFL_CLOUD.push()};
+const saveHist=()=>{setTimeout(()=>{if(window.CFL_BK)window.CFL_BK.remind()},0);saveLocal();if(window.CFL_SRV)window.CFL_SRV.save(hist.slice(0,200));if(window.CFL_CLOUD)window.CFL_CLOUD.push()};
 const cleanItem=h=>{const o={};for(const k in h)if(k[0]!=="_"&&k!=="aerr")o[k]=h[k];return o};
 function mergeScenes(list,tomb){const seen=new Map(hist.map(h=>[h.t,h]));let added=0;
 (Array.isArray(list)?list:[]).forEach(h=>{if(!h||!h.t||!h.s||!Array.isArray(h.s.scene)||(tomb&&tomb.has(h.t)))return;const mine=seen.get(h.t);
@@ -2206,12 +2212,6 @@ const i=+x.dataset.del,gone=hist[i];hist.splice(i,1);saveHist();if(cur===gone){c
 const b=e.target.closest("[data-h]");if(!b)return;cur=hist[+b.dataset.h];renderScene(cur);if(!cur.a&&!cur.aerr)cur.aerr="Analysis wasn't finished.";renderScene(cur);$("#out").scrollIntoView&&$("#out").scrollIntoView({behavior:"smooth"})});
 $("#delAll").addEventListener("click",e=>{const x=e.currentTarget;if(!x.classList.contains("arm")){x.classList.add("arm");x.textContent="Tap again to delete all";x.style.background="#b3122b";x.style.color="#fff";setTimeout(()=>{x.classList.remove("arm");x.textContent="Delete all";x.style.background="";x.style.color=""},4000);return}
 hist.length=0;saveHist();cur=null;$("#out").innerHTML="";drawHist();x.classList.remove("arm");x.textContent="Delete all";x.style.background="";x.style.color="";$("#status").textContent="All saved scenes deleted."});
-$("#bkOut").addEventListener("click",async()=>{if(!hist.length){$("#syncMsg").textContent="No saved scenes on this device yet. Tap Download backup on the device that has your scenes (your phone), send the file here, then tap Restore from a backup file.";return}const d=new Date().toISOString().slice(0,10);const body=JSON.stringify({kind:"cfl-saved-scenes",v:1,scenes:hist.map(cleanItem)});
-const fn=`saved-scenes-${d}.json`;try{let dlr=null;try{dlr=window.claude&&window.parent!==window?await window.claude.use("downloads"):null}catch(e){}
-if(dlr&&dlr.save){await dlr.save({filename:fn,data:new Blob([body],{type:"application/json"})})}else{const u=URL.createObjectURL(new Blob([body],{type:"application/json"}));const a=document.createElement("a");a.href=u;a.download=fn;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),4000)}
-$("#syncMsg").textContent=`Backup of ${hist.length} scenes downloaded (${fn}). Open the library on the other device and tap "Restore from a backup file".`}catch(e){$("#syncMsg").textContent="The download was blocked here."}});
-$("#bkIn").addEventListener("click",()=>$("#bkFile").click());
-$("#bkFile").addEventListener("change",async e=>{const f=e.target.files[0];e.target.value="";if(!f)return;try{const j=JSON.parse(await f.text());const list=Array.isArray(j)?j:j.scenes;const n=mergeScenes(list);saveHist();drawHist();$("#syncMsg").textContent=n?`Restored ${n} scene${n>1?"s":""} from the backup. Scenes already here were kept.`:"Nothing new in that backup — all its scenes are already here."}catch(err){$("#syncMsg").textContent="That file isn't a saved-scenes backup."}});
 (async()=>{if(window.parent===window)return;let db=null,uid=null;try{for(let i=0;i<50&&!window.claude;i++)await new Promise(r=>setTimeout(r,100));if(!window.claude)return;db=await window.claude.use("db");const u=await window.claude.use("user");uid=u?await u.id():null}catch(e){return}
 if(!db||!uid)return;const col=db.collection("data/users/"+uid),tombRef=col.doc("deleted");const synced=new Map();let tomb=new Set();
 const msg=t=>{const m=document.getElementById("syncMsg");if(m)m.textContent=t};msg("Syncing saved scenes with your Claude account…");
@@ -2228,6 +2228,37 @@ for(const t of gone){try{await col.doc("s"+t).delete();synced.delete(t)}catch(e)
 if(!failed)msg(`Synced with your Claude account · ${hist.length} scene${hist.length===1?"":"s"} · open this library on any device signed in to the same account to see them.`)}
 window.CFL_CLOUD={push};await push()})();
 drawHist();
+{const BK_AT="cfl-backup-at",BK_N="cfl-backup-n";
+const bkMsg=t=>{const m=document.getElementById("bkMsg");if(m)m.textContent=t;const b=document.getElementById("bkBox");if(b)b.open=true};
+const sceneCount=()=>hist.filter(h=>h&&h.s&&Array.isArray(h.s.scene)).length;
+function bkRemind(){const box=document.getElementById("bkBox");if(!box)return;let at=0,n=0;try{at=+localStorage.getItem(BK_AT)||0;n=+localStorage.getItem(BK_N)||0}catch(e){}
+const c=sceneCount(),fresh=Math.max(0,c-n),days=at?Math.floor((Date.now()-at)/864e5):null;
+const due=c>0&&(!at||fresh>=5||(days>=7&&fresh>0));box.classList.toggle("due",due);
+const last=document.getElementById("bkLast");if(last)last.textContent=at?`Last backup: ${new Date(at).toLocaleDateString()} · ${fresh} new scene${fresh===1?"":"s"} since then`:(c?"No backup yet on this device.":"Nothing to back up yet.");
+const nag=document.getElementById("bkNag");if(nag)nag.hidden=!due}
+function bkData(){const local={};try{for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);if(k&&k.startsWith("cfl")&&k!=="cfl_api_key"&&k!=="cfl-scenes"&&k!=="cfl-stars"&&k!==BK_AT&&k!==BK_N)local[k]=localStorage.getItem(k)}}catch(e){}
+return {app:"comedy-formula-library",v:1,at:new Date().toISOString(),scenes:hist.map(cleanItem),stars:STARS,local}}
+async function bkSave(){const d=bkData();const name=`Comedy_Library_backup_${new Date().toISOString().slice(0,10)}.json`;
+const blob=new Blob([JSON.stringify(d,null,1)],{type:"application/json"});let dl=null;try{dl=window.claude?await window.claude.use("downloads"):null}catch(e){dl=null}dl=dl||window.CFL_FDL;
+if(!dl){bkMsg("Downloads aren't available in this view.");return}
+try{bkMsg("Preparing your backup — confirm the download.");await dl.save({filename:name,data:blob});try{localStorage.setItem(BK_AT,String(Date.now()));localStorage.setItem(BK_N,String(sceneCount()))}catch(e){}
+bkMsg(`Saved ${name}: ${d.scenes.length} scene${d.scenes.length===1?"":"s"}, ${d.stars.length} starred line${d.stars.length===1?"":"s"} and your settings. Keep this file somewhere safe (Google Drive, email it to yourself).`);bkRemind()}
+catch(e){bkMsg(e&&e.code==="declined"?"Download cancelled.":"The backup couldn't be saved here. Try again, or open the library in claude.ai.")}}
+async function bkRestore(file){let d;try{d=JSON.parse(await file.text())}catch(e){bkMsg("That file isn't a Comedy Library backup.");return}
+if(Array.isArray(d))d={scenes:d};if(d&&d.kind==="cfl-saved-scenes")d={scenes:d.scenes};if(!d||!Array.isArray(d.scenes)||(d.app&&d.app!=="comedy-formula-library")){bkMsg("That file isn't a Comedy Library backup.");return}
+const before=sceneCount();const added=mergeScenes(d.scenes);
+let sAdded=0;const have=new Set(STARS.map(x=>starKey(x.l)));(Array.isArray(d.stars)?d.stars:[]).forEach(x=>{if(x&&typeof x.l==="string"&&!have.has(starKey(x.l))){STARS.push({s:String(x.s||""),l:x.l,from:String(x.from||""),t:+x.t||0});have.add(starKey(x.l));sAdded++}});
+if(sAdded){STARS.sort((a,b)=>(b.t||0)-(a.t||0));STARS=STARS.slice(0,300);starSave()}
+let kAdded=0;try{for(const [k,v] of Object.entries(d.local||{})){if(typeof k==="string"&&k.startsWith("cfl")&&k!=="cfl_api_key"&&typeof v==="string"&&localStorage.getItem(k)===null){localStorage.setItem(k,v);kAdded++}}}catch(e){}
+if(added){hist.sort((a,b)=>(b.t||0)-(a.t||0));saveHist();drawHist()}
+bkMsg(`Restored: ${added} new scene${added===1?"":"s"} (you had ${before}), ${sAdded} new starred line${sAdded===1?"":"s"}${kAdded?`, ${kAdded} setting${kAdded===1?"":"s"}`:""}. Nothing you already had was changed.${kAdded?" Reload the page to see restored settings.":""}`);bkRemind()}
+document.getElementById("bkSave").addEventListener("click",bkSave);
+document.getElementById("bkNagBtn").addEventListener("click",e=>{e.preventDefault();bkSave()});
+document.getElementById("bkPick").addEventListener("click",()=>document.getElementById("bkFile").click());
+document.getElementById("bkOut").addEventListener("click",()=>{bkSave();const s=document.getElementById("syncMsg");if(s)s.textContent="Backing up — see the Backup box above for the result."});
+document.getElementById("bkIn").addEventListener("click",()=>document.getElementById("bkFile").click());
+document.getElementById("bkFile").addEventListener("change",e=>{const f=e.target.files&&e.target.files[0];if(f)bkRestore(f);e.target.value=""});
+window.CFL_BK={remind:bkRemind};bkRemind();setInterval(bkRemind,60000)}
 (async()=>{try{for(let i=0;i<50&&!window.claude&&window.parent!==window;i++)await new Promise(r=>setTimeout(r,100));sample=window.claude?await window.claude.use("sample"):null}catch(e){sample=null}
 if(!sample&&!(await useServer()))setupKey()})();
 async function useServer(){try{const r=await fetch("api/health",{cache:"no-store"});if(!r.ok)return false;const j=await r.json();if(!j||!j.ok)return false;
