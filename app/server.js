@@ -1,6 +1,6 @@
 'use strict';
 // Comedy Formula Library — web server with Claude-powered scene writing.
-// The page (public/index.html) builds the exact same prompt it uses inside claude.ai
+// The page (the repository's index.html — the only copy) builds the exact same prompt it uses inside claude.ai
 // and sends it here; this server forwards it to the Claude API and streams the answer back.
 
 const express = require('express');
@@ -31,6 +31,9 @@ const GEN_PER_HOUR = +env('GEN_PER_HOUR', 60);
 const DATA_DIR = path.resolve(__dirname, env('DATA_DIR', 'data'));
 const SCENES_FILE = path.join(DATA_DIR, 'scenes.json');
 const PUBLIC_DIR = path.join(__dirname, 'public');
+// One library page for everything: the repository root's index.html (also the GitHub Pages site).
+// The Docker image copies it into public/; elsewhere it is read from the repository root.
+const PAGE = [path.join(PUBLIC_DIR, 'index.html'), path.join(__dirname, '..', 'index.html')].find(p => fs.existsSync(p));
 const EVO_PDF = [path.join(PUBLIC_DIR, 'Old_to_New_Dialogue_Evolution.pdf'), path.join(__dirname, '..', 'Old_to_New_Dialogue_Evolution.pdf')].find(p => fs.existsSync(p));
 
 fs.mkdirSync(DATA_DIR, { recursive: true });
@@ -177,11 +180,13 @@ app.put('/api/scenes', express.json({ limit: '25mb' }), (req, res) => {
 
 // --- static files -------------------------------------------------------------
 if (EVO_PDF) app.get('/Old_to_New_Dialogue_Evolution.pdf', (req, res) => res.sendFile(EVO_PDF));
-app.use(express.static(PUBLIC_DIR, { index: 'index.html', maxAge: '5m' }));
+if (PAGE) app.get(['/', '/index.html'], (req, res) => { res.set('Cache-Control', 'public, max-age=300'); res.sendFile(PAGE); });
+app.use(express.static(PUBLIC_DIR, { index: false, maxAge: '5m' }));
 app.use((req, res) => res.status(404).send('Not found'));
 
 app.listen(PORT, HOST, () => {
   console.log(`Comedy Formula Library on http://${HOST}:${PORT}`);
+  console.log(`Page: ${PAGE || 'index.html NOT FOUND'}`);
   console.log(`AI: Claude ${API_KEY ? `on (fast=${MODEL_FAST}, best=${MODEL_BEST}, default=${DEFAULT_TIER})` : 'off'} · backup ${FB_ON ? `on (${FB_MODEL} at ${FB_BASE})` : 'off'}`);
   console.log(`Password: ${APP_PASSWORD ? 'on' : 'off'} · scenes file: ${SCENES_FILE}`);
 });

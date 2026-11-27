@@ -1,6 +1,6 @@
 # Deploy the Comedy Formula Library on AWS
 
-The app is one small Node.js server (`app/server.js`) plus the library page (`app/public/index.html`).
+The app is one small Node.js server (`app/server.js`) plus the library page — the repository's `index.html`, the same single file GitHub Pages uses. Edit only that one file; the server and the Docker image both read it.
 The page builds the **same scene prompt it uses inside claude.ai** (full library scan, character notes,
 slang, all the A–F analysis sections) and sends it to the server. The server sends it to the Claude API
 with your key and streams the answer back. So scenes, the Library scan, old → new lines, the Telugu HOW
@@ -60,7 +60,6 @@ Saved scenes live in the Docker volume `scenes` and survive updates.
 ```bash
 curl -fsSL https://deb.nodesource.com/setup_22.x | sudo -E bash - && sudo apt-get install -y nodejs nginx
 git clone https://github.com/Vishnureddimi026/Comedy_Library.git && cd Comedy_Library/app
-cp ../Old_to_New_Dialogue_Evolution.pdf public/
 npm ci --omit=dev && cp .env.example .env && nano .env
 sudo cp deploy/comedy-library.service /etc/systemd/system/ && sudo systemctl enable --now comedy-library
 sudo cp deploy/nginx.conf /etc/nginx/sites-available/comedy-library && sudo sed -i 's/YOUR_DOMAIN/_/' /etc/nginx/sites-available/comedy-library
