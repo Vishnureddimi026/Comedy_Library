@@ -1,0 +1,102 @@
+Library update: batch B24, by character — Script 21 (the miser)
+
+Budatha — 4 formulas
+
+F598 Tiny precise menu (కంది గింజంత పచ్చడి, ఆరు మజ్జిగ చుక్కలు) · B1 · punch 9/10
+  Recipe: Describe a meal or ration with absurdly exact tiny quantities.
+  Use when: Describing stinginess or a diet
+  Sample punchline: బుడత: మా హాస్టల్ మెనూ సార్: పట్టెడు అన్నం, ఒక బంగాళాదుంప ముక్క, ఆవగింజంత పచ్చడి, మూడు సాంబార్ చుక్కలు. ఆదివారం నాలుగు చుక్కలు!
+
+F604 'Oh, that type!' coaching (ఓ, ఆ టైపా! అదరగొట్టేస్తాను) · B3 · punch 8/10
+  Recipe: Coached on how to play a role, the actor suddenly understands the cliché and promises to overdo it.
+  Use when: Rehearsing a fake act
+  Sample punchline: మహేష్: ప్రిన్సిపాల్ ముందు నువ్వు టాపర్‌లా మాట్లాడాలి రా. — బుడత: ఓ, ఆ టైపా! కళ్ళజోడు పెట్టుకొని 'యాక్చువల్లీ' అంటా అన్నా. అదరగొట్టేస్తా!
+
+F605 Abuse as an affection scale (ముద్దొస్తే తిడతారు, మరీ ముద్దొస్తే…) · B4 · punch 9/10
+  Recipe: A disciple explains the boss's insults and slaps as levels of affection.
+  Use when: Covering for a rude boss
+  Sample punchline: బుడత: మాస్టర్ గారికి నచ్చితే 'వెధవ' అంటారు సార్. బాగా నచ్చితే 'అరగుండు వెధవ' అంటారు. మరీ నచ్చితే డస్టర్‌తో కొడతారు!
+
+F608 'Sit gently — the cot may break' (మెల్లిగా కూర్చోండి) · B6 · punch 8/10
+  Recipe: Treat a guest with fake care by warning him about the shabby furniture, while you sit on the floor.
+  Use when: A poor host with a grand guest
+  Sample punchline: బుడత: మెల్లగా కూర్చోండి సార్. — ఎందుకు? — బుడత: ఆ కుర్చీకి మూడే కాళ్ళు. నాలుగోది నేనే, అందుకే కింద కూర్చున్నా!
+
+Venki — 3 formulas
+
+F596 An absurd association with an acronym (అభాపీసం = అఖిల భారత పీనాసి సంఘం) · B1 · punch 9/10
+  Recipe: Mention a strange-sounding body by its acronym, then expand it into an all-India association for a petty vice.
+  Use when: Explaining a habit as a rule
+  Sample punchline: వెంకి: మా అభాఅసం రూల్ బాబు! — మహేష్: అదేంటి? — వెంకి: అఖిల భారత అప్పుల సంఘం. ఎవరైనా అప్పు తీరిస్తే సభ్యత్వం రద్దు అమ్మా!
+
+F601 Arriving exactly at mealtime (సరిగ్గా భోజనాల టైంకి వచ్చాను) · B2 · punch 8/10
+  Recipe: A guest announces happily that he's arrived just in time to eat, and the host can't escape.
+  Use when: A freeloading visitor
+  Sample punchline: వెంకి: అరె, సరిగ్గా భోజనం టైంకి వచ్చాను బాబు! మాస్టర్, ఇంకా మీరు తప్పించుకోలేరు అమ్మా. ఇంకో ప్లేట్ పెట్టండి!
+
+F609 'You came — what's in it for me?' (వచ్చారనుకోండి, నాకేంటి?) · B6 · punch 9/10
+  Recipe: Answer 'I came on business' with a blunt 'so what do I get?'
+  Use when: Someone asks you for a favour
+  Sample punchline: మహేష్: నీతో పని ఉండి వచ్చా రా. — వెంకి: వచ్చావనుకో బాబు, నాకేంటి? ముందు అది చెప్పు అమ్మా.
+
+Father — 3 formulas
+
+F597 Stare and eat (కోడిని చూస్తూ ఉత్త అన్నం) · B1 · punch 10/10
+  Recipe: Save money by hanging the tasty thing in front of you and eating plain food while staring at it — 'tastes the same'.
+  Use when: A stingy character's meal
+  Sample punchline: నాన్న: ఈరోజు ఇంట్లో బిర్యానీ రా. — మధు: ఎక్కడ నాన్నా? — నాన్న: ఆ ఫోన్‌లో ఫోటో చూస్తూ ఉప్మా తిను. అచ్చం బిర్యానీ తిన్నట్టే ఉంటుంది!
+
+F606 Same clothes since childhood (ఉతికితే అరిగిపోతాయని తడపనూ లేదు) · B4 · punch 9/10
+  Recipe: Boast of thrift: still wearing the clothes from childhood, never washed so they won't wear out.
+  Use when: A miser shows off
+  Sample punchline: నాన్న: ఈ చొక్కా నా పెళ్ళి నాటిది రా. ఉతికితే రంగు పోతుందని ఇప్పటిదాకా ఉతకలేదు. అందుకే ఇంత కొత్తగా ఉంది!
+
+F607 Money changes the welcome (పొరపాటున తమరెవరో తెలియదు అన్నాను) · B6 · punch 9/10
+  Recipe: A host is rude to a stranger, sees his money, and instantly treats him as a great soul.
+  Use when: A rich visitor
+  Sample punchline: నాన్న: ఎవరు బాబు నువ్వు? తెలీదు. … (చేతిలో నోట్ల కట్ట చూసి) అయ్యా! పొరపాటున తెలీదన్నాను! రండి రండి, కూర్చోండి, కాఫీనా టీనా?
+
+Madhu — 3 formulas
+
+F600 Shocked at a normal habit (మీరు రాత్రిపూట కూడా భోం చేస్తారా?!) · B1 · punch 9/10
+  Recipe: React with horror to something ordinary another person does, as if it were outrageous.
+  Use when: Two extremists compare habits
+  Sample punchline: మధు: మీరు రోజూ ఇస్త్రీ చేసిన బట్టలు వేసుకుంటారా సార్?! మా ఇంట్లో దసరాకి ఒక్కసారే! రోజూ చేస్తే బట్టలకి కూడా బోర్ కొడుతుంది సార్!
+
+F603 'Swap the sentences yourselves' (ఈ వాక్యాన్ని ఇటు, ఈ వాక్యాన్ని ఇటు మీరే మార్చేసుకోండి) · B2 · punch 9/10
+  Recipe: In a confused exit, say a blessing and a curse to the wrong people, then tell them to swap the lines themselves.
+  Use when: A flustered goodbye
+  Sample punchline: మధు: సార్, మీకు ప్రమోషన్ రావాలి! మహేష్, నువ్వు ఫెయిల్ అవ్వాలి! … అయ్యో, ఈ మాట అటు, ఆ మాట ఇటు… మీరే మార్చుకోండి సార్!
+
+F610 Chosen for your worst trait — and proud (మిమ్మల్ని మించిన పీనాసి చక్రవర్తి ఎవరూ లేరు → సంతోషం) · B6 · punch 9/10
+  Recipe: Told you were picked for being the worst at something, take it as a compliment.
+  Use when: Being chosen for a job
+  Sample punchline: మాస్టర్: ఈ నాటకంలో 'బద్దకస్తుడు' పాత్రకి నిన్నే తీసుకున్నా రా నాన్న. కాలేజీ మొత్తంలో నిన్ను మించిన సోమరి లేడు. — మధు: థాంక్యూ సార్! ఎట్టకేలకు నా టాలెంట్ గుర్తించారు!
+
+Mahesh — 2 formulas
+
+F599 Muttered 'face like…' curse (పెళ్ళిలో తద్దినం మంత్రాలు చదివేవాడి మొహంలా మొహం చూడు!) · B1 · punch 10/10
+  Recipe: Behind someone's back, describe his face with an absurdly specific comparison.
+  Use when: A put-upon character mutters about the boss
+  Sample punchline: మహేష్ (తనలో): ఎగ్జామ్ హాల్‌లో ఆన్సర్ గుర్తొచ్చి పెన్ను మర్చిపోయినోడి మొహంలా ఉంది మాస్టర్ మొహం చూడు!
+
+F612 'Keep the change yourself' (ఆ పది పైసలు మాత్రం నాకు దేనికి? నువ్వే ఉంచుకో) · B7 · punch 9/10
+  Recipe: After a near-total cut, the victim scornfully tells the boss to keep the tiny remainder too.
+  Use when: After an unfair cut
+  Sample punchline: మహేష్ (తనలో): ఇరవై కోసి ఒక్క మార్కు ఇచ్చాడు! ఆ ఒక్కటి కూడా నాకెందుకు? ఆయనే ఉంచుకోని… రిటైర్మెంట్ రోజు ఫ్రేమ్ కట్టించుకుంటాడు!
+
+Master — 2 formulas
+
+F602 Mad-king lament (నా రాజ్యం ఇలా పాడైపోయింది!) · B2 · punch 10/10
+  Recipe: Faced with a tiny disappointment, burst into an old-film mad-king speech about a ruined kingdom, full of absurd images.
+  Use when: A small letdown
+  Sample punchline: మాస్టర్: ఏమైంది నా క్లాస్‌కి? నా టాపర్లు క్యాంటీన్‌లో సమోసాలు లెక్కపెడుతున్నారు! నా బ్లాక్‌బోర్డు మీద బొమ్మలు గీస్తున్నారు! వాట్ హాపెన్డ్ టు మై క్లాస్ రా నాన్న?!
+
+F611 Pay cut that leaves a coin (ఆరు రూపాయల పది పైసల జీతంలో ఆరు రూపాయలు కోసేస్తున్నాను) · B7 · punch 9/10
+  Recipe: Punish someone by cutting almost all of a tiny sum, leaving only coins.
+  Use when: Punishing gossip or mistakes
+  Sample punchline: మాస్టర్: నీకు వచ్చిన ఇరవై ఒక్క మార్కుల్లో ఇరవై కోసేస్తున్నా రా నాన్న, నా మీద కామెంట్ చేసినందుకు. ఆ ఒక్కటి ఉంచుకో!
+
+Repeats (already in the library, now also assigned)
+  F204 Spin translation of an insult → Mahesh · B4
+  F299 Hurt at not being recognised → Venki · B6

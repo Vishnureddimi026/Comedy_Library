@@ -1,0 +1,118 @@
+Library update: batch B21, by character — Script 18 (the bag on the train)
+
+Madhu — 4 formulas
+
+F542 Betrayal read as sincerity (బాత్రూమ్‌కి కూడా నా బ్యాగ్ తీసుకెళ్ళాడు) · D1 · punch 9/10
+  Recipe: When someone vanishes with your things, praise him for being so careful he even took them with him.
+  Use when: Someone disappears with your stuff
+  Sample punchline: మధు: మహేష్ గాడు భలే సిన్సియర్ సార్! క్యాంటీన్‌కి వెళ్తూ నా లంచ్ బాక్స్ కూడా తీసుకెళ్ళాడు… జాగ్రత్తగా ఉంటుందని!
+
+F551 Borrowed line reused against someone else (ఈ టైంలో దొరికింది కళ్ళకద్దుకొని తినాలి) · D10 · punch 9/10
+  Recipe: Pick up a line someone used on you and repeat it, word for word, to the next person — even when it makes no sense.
+  Use when: After losing a bargain
+  Sample punchline: (క్యాంటీన్ వాడు మధుతో: 'సాయంత్రం ఆరింటికి దొరికింది తినాలి, బేరాలు ఆడకు') … మధు (మహేష్‌తో): నోట్స్ ఇప్పుడు దొరికాయంటే కళ్ళకద్దుకొని చదవాలి కానీ బేరాలు ఆడతావేంటి రా?
+
+F556 Love failure as degree failure (లవ్‌తో పాటు డిగ్రీలో కూడా ఫెయిల్) · D10 · punch 9/10
+  Recipe: Blame bad marks on a heartbreak: you failed love and exams together, as a package.
+  Use when: Asked about bad marks
+  Sample punchline: మధు: ఇంటర్‌లో ఆ అమ్మాయి నోట్స్ ఇచ్చేది సార్. ఆమె వేరే సెక్షన్‌కి వెళ్ళిపోయింది. లవ్‌తో పాటు మ్యాథ్స్ కూడా పోయింది సార్!
+
+F559 Poem as an escape order (పదండి తోసుకు… పదండి!) · D13 · punch 10/10
+  Recipe: Forced to recite, choose a marching poem and use its words as cover to push everyone aside and run.
+  Use when: Trapped by an authority
+  Sample punchline: మధు (మాస్టర్ పద్యం అడిగితే): ముందుకు పదండి… వెనక్కి చూడకండి… తలుపు దగ్గరికి పదండి… (పారిపోతాడు) — మాస్టర్: ఏంట్రా, పద్యం చెప్పమంటే దారి చెప్పి పోయాడు!
+
+Budatha — 4 formulas
+
+F543 Polite permission for a rude question (మీరు హర్ట్ అవనంటే అడుగుతా) · D2 · punch 9/10
+  Recipe: Ask very politely for permission, then ask something insulting.
+  Use when: Doubting someone's honesty
+  Sample punchline: బుడత: సార్, ఒక డౌట్. మీరు హర్ట్ అవనంటే అడుగుతా. — మాస్టర్: అడుగు రా. — బుడత: మీరు నిజంగా డిగ్రీ పాస్ అయ్యారా సార్?
+
+F547 Rhyme poem that drags in a random item (కాకి… డ్రాయర్ జాకీ) · D3 · punch 9/10
+  Recipe: Recite a 'poem' that starts lyrical and lets the rhyme drag in a silly everyday item.
+  Use when: Forced to recite
+  Sample punchline: బుడత: మామిడి కొమ్మ మీద… కోయిల కూసింది… కోయిల కూసింది… అది వేసుకుంది రెడ్ కలర్ టోపీ!
+
+F550 Old glory with fake devotion (తిండి కూడా మానేసి చదివేవాడిని) · D7 · punch 8/10
+  Recipe: Caught with a surprisingly good old mark, claim you loved studying so much you skipped meals.
+  Use when: An old good result surfaces
+  Sample punchline: బుడత: ఐదో తరగతిలో ఫస్ట్ అన్నా? అప్పట్లో చదువంటే పిచ్చి అన్నా. టిఫిన్ మానేసి టెక్స్ట్ బుక్ తినేవాడిని!
+
+F552 Greed wakes up in disguise (ఈ వ్యాపారమే బాగున్నట్టుందే!) · D9 · punch 9/10
+  Recipe: Forced into a humble disguise, a customer overpays and the character instantly prefers the new job.
+  Use when: Doing a job you thought was beneath you
+  Sample punchline: బుడత: (కాంటీన్‌లో సర్వ్ చేస్తూ) పది రూపాయల టీకి పదిహేను ఇచ్చాడు సార్! మా నాన్న చెప్పినట్టు చదువు ఎందుకు? ఈ వ్యాపారమే బాగుంది!
+
+Venki — 4 formulas
+
+F544 Innocence proved by thief logic (నేను దొంగ అయితే ఫోన్ స్విచ్ ఆఫ్ చేసేవాడిని) · D2 · punch 9/10
+  Recipe: Accused of being a crook, prove your innocence by explaining exactly what a real crook would have done.
+  Use when: Someone doubts your honesty
+  Sample punchline: వెంకి: నేను కాపీ కొట్టి ఉంటే బాబు, ఈ పాటికి నూటికి నూరు వచ్చేవి. నలభై వచ్చాయంటే అది నా సొంత తెలివి అమ్మా!
+
+F548 Late to answer because of the caller tune (ఎవరూ వినకపోతే 30 రూపాయలు వేస్ట్) · D4 · punch 9/10
+  Recipe: Explain a late reply by saying you wanted the caller to hear your paid caller tune fully.
+  Use when: Someone is angry you didn't pick up
+  Sample punchline: మాస్టర్: ఫోన్ ఎత్తడానికి ఇంత లేట్ ఏంట్రా? — వెంకి: కొత్త కాలర్ ట్యూన్ బాబు. మీరు పూర్తిగా వినకపోతే నా నలభై రూపాయలు వేస్ట్ అమ్మా.
+
+F553 Street cry with odd claims (ఈగలు వాలని పులిహోర!) · D9 · punch 8/10
+  Recipe: Sell something with a street cry that boasts of a strange 'quality'.
+  Use when: Selling or promoting anything
+  Sample punchline: వెంకి: నోట్స్ బాబు, నోట్స్! మాస్టర్ చూడని నోట్స్! చదివినా గుర్తుండని నోట్స్! అర్జెంట్‌గా కావాలంటే డబుల్ రేట్ అమ్మా!
+
+F560 'Sad, not bad' self-review (సాడ్ కవితే కానీ బ్యాడ్ కవిత కాదు) · D13 · punch 8/10
+  Recipe: Before performing something awful, review it yourself with a rhyming English pair.
+  Use when: Introducing your own work
+  Sample punchline: వెంకి: ఇది స్లో సాంగ్ బాబు, కానీ లో సాంగ్ కాదు అమ్మా. వినండి…
+
+Master — 3 formulas
+
+F545 Ownership loop, then the verdict (అంటే టికెట్ కూడా ట్రైన్‌లో లేదన్నమాట) · D3 · punch 9/10
+  Recipe: Follow a confused excuse step by step (it's in the bag, the bag's with him, he's not here) to the obvious conclusion.
+  Use when: A student's excuse goes in circles
+  Sample punchline: మాస్టర్: హోంవర్క్ ఎక్కడ రా నాన్న? — మధు: పుస్తకంలో సార్. — పుస్తకం? — మహేష్ దగ్గర. — మహేష్? — ఇవాళ రాలేదు సార్. — మాస్టర్: అంటే హోంవర్క్ కూడా ఇవాళ రాలేదన్నమాట.
+
+F546 Fine paid in poetry (ఫైన్ కట్టక్కర్లేదు, ఫైన్‌గా కవిత చెప్పు) · D3 · punch 9/10
+  Recipe: An art-mad authority waives the punishment if the culprit recites a good poem — and punishes bad poems instead.
+  Use when: Punishing a student
+  Sample punchline: మాస్టర్: ఫైన్ కట్టక్కర్లేదు రా నాన్న. ఫైన్‌గా ఓ పద్యం చెప్పు. బాగుంటే వదిలేస్తా. బాగోకపోతే రెండు ఫైన్లు!
+
+F555 Hostage document (దీన్ని చించడంలో మాత్రం ఫెయిల్ అవ్వను) · D10 · punch 9/10
+  Recipe: Holding someone's certificate or marks card, threaten that tearing it is the one thing you won't fail at.
+  Use when: Forcing someone to cooperate
+  Sample punchline: మాస్టర్: నీ హాల్ టికెట్ నా చేతిలో ఉంది రా నాన్న. నువ్వు అన్నిట్లో ఫెయిల్ అయ్యావేమో, నేను దీన్ని చించడంలో మాత్రం ఫెయిల్ అవ్వను!
+
+Mahesh — 3 formulas
+
+F549 'Are you the Railway Minister?' (మీరేమన్నా రైల్వే మినిస్టరా?) · D6 · punch 9/10
+  Recipe: Answer an unrealistic expectation by asking if the person holds the high office it would need.
+  Use when: Someone expects special treatment
+  Sample punchline: మధు: బస్సు నా కోసం ఆగుతుంది కదా రా? — మహేష్: నువ్వేమైనా ట్రాన్స్‌పోర్ట్ మినిస్టర్‌వా రా? 'మధు వస్తున్నాడు, ఆపండి' అనడానికి?
+
+F554 Refuse the one buyer you need (అయితే అక్కడే కొనుక్కో!) · D9 · punch 9/10
+  Recipe: Sent to sell to one specific person, lose your temper over a small haggle and tell him to buy elsewhere.
+  Use when: On a mission with a short temper
+  Sample punchline: మహేష్ (మాస్టర్‌కి మధు ప్రాజెక్ట్ అమ్ముతూ): సార్, ఈ ప్రాజెక్ట్ ఐదు మార్కులు. — మాస్టర్: మూడు చాలు. — మహేష్: అయితే వేరే వాడి దగ్గర కొనుక్కోండి సార్! … (తనలో) ఛీ, మధుకి మార్కులే కదా కావాల్సింది.
+
+F561 'Was that a scold or praise?' (తిట్టావా? పొగిడావా?) · D15 · punch 8/10
+  Recipe: After an ambiguous compliment, ask flatly whether it was an insult or praise.
+  Use when: Someone gives a backhanded compliment
+  Sample punchline: మాస్టర్: రాత్రంతా చదివావా రా? గ్రేట్ అడ్వెంచర్! — మహేష్: తిట్టారా సార్? పొగిడారా?
+
+Father — 2 formulas
+
+F557 Free is an insult (నేనేమైనా బిచ్చగాడిలా కనపడుతున్నానా?) · D11 · punch 9/10
+  Recipe: Refuse a bargain, and when it's offered free, be insulted that you look like you need charity.
+  Use when: Someone keeps lowering a price
+  Sample punchline: నాన్న: వద్దు బాబు. — మధు: పోనీ సగం రేటు. — వద్దు. — ఫ్రీగా తీసుకోండి. — నాన్న: నేనేమైనా బిచ్చగాడిలా కనిపిస్తున్నానా రా? ఊరికే తీసుకోడానికి!
+
+F558 Work cry as a poem (మరమరాలే, మరమరాలే… పొట్లం 10 రూపాయలే!) · D13 · punch 9/10
+  Recipe: Forced to recite poetry, a working man chants his sales cry as if it were verse.
+  Use when: Someone is asked to perform art
+  Sample punchline: మాస్టర్: ఓ పద్యం చెప్పండి అంకుల్. — నాన్న: బియ్యం బియ్యం సన్న బియ్యం! కందిపప్పు కిలో వందే! అప్పు లేదు, ఉద్దెర లేదు!
+
+Repeats (already in the library, now also assigned)
+  F264 Job-title refusal → Madhu · D7
+  F313 Haggle against yourself → Budatha · D11
+  F444 Topic answered with pop culture → Venki · D13
