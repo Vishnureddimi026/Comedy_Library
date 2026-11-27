@@ -301,7 +301,6 @@ main>section:not([hidden]),.page:not([hidden]){animation:rise3d .35s cubic-bezie
 #rpBest{background:#8e4a3a;color:#fff;box-shadow:0 1px 0 rgba(255,255,255,.3) inset,0 -2px 0 rgba(0,0,0,.18) inset,0 3px 0 #5e2e23,0 6px 12px -2px rgba(80,30,20,.3)}
 .fament{border:1.5px solid var(--line);border-radius:12px;padding:10px;margin-top:10px;background:var(--card)}.fament textarea{width:100%;min-height:180px;margin:6px 0;font-size:16px;line-height:1.6}.fament .acts{align-items:center}
 .famrow{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:6px 0}.famrow label{display:flex;flex-direction:column;gap:4px;font-size:14px}.famrow input{width:100%}@media(max-width:560px){.famrow{grid-template-columns:1fr}}
-.cc3dwrap{border:2px solid var(--line);border-radius:16px;overflow:hidden;box-shadow:var(--shadow);height:82vh;min-height:560px;background:#f6dcc6}.cc3dwrap iframe{width:100%;height:100%;border:0;display:block}nav a[data-v=creator]::before{content:"🧸"}
 </style>
 </head>
 <body class="locked">
@@ -332,7 +331,7 @@ setTimeout(function(){var i=document.getElementById("lockP");if(i)i.focus()},100
 <a href="#formulas" data-v="formulas">Formulas</a>
 <a href="#combo" data-v="combo">Scene combo</a>
 <a href="#compare" data-v="compare">Compare scenes</a>
-<a href="#replace" data-v="replace">Replace characters</a><a href="#creator" data-v="creator">3D Characters</a>
+<a href="#replace" data-v="replace">Replace characters</a>
 <a href="#old" data-v="old">Old scenes</a>
 <a href="#breakdowns" data-v="breakdowns">Breakdowns</a>
 <a href="#characters" data-v="characters">Characters &amp; slang</a>
@@ -342,9 +341,6 @@ setTimeout(function(){var i=document.getElementById("lockP");if(i)i.focus()},100
 </header>
 
 <main>
-<section id="v-creator" class="band" hidden><h2>Clay 3D Character Creator</h2><p class="row" style="margin:0 0 10px">Make your characters in soft clay 3D: body, face, hair, outfits, extras, poses and backgrounds. Drag to spin, pinch to zoom. Saved characters stay in this browser — use Save › Export for a backup.</p>
-<div class="cc3dwrap"><iframe id="cc3dFrame" title="Clay 3D Character Creator" data-src="creator3d.html" loading="lazy"></iframe></div>
-<p class="row"><a href="creator3d.html" target="_blank" rel="noopener">Open full screen ↗</a></p></section>
 <section id="v-write" class="band">
 <div class="ask">
 <details class="prevbox" id="prevBox"><summary><b>Previous scenes</b> <span class="row" id="prevSum">(optional — paste Scene 1, Scene 2… to continue the story)</span></summary>
@@ -2309,7 +2305,7 @@ window.CFL={fm:()=>fmap};const BDALL=BD.concat(BD4,BD6);const bdOne=b=>{const R=
 </div></details>`};
 $("#bdList").innerHTML=[["U","Script 3 — Wedding curse & the lion husband"],["V","Script 4 — Wedding escape & police-station marriage"],["W","Script 5 — College days"],["X","Script 6 — The cockroach in the bottle"],["Y","Script 7 — EAMCET long term"],["Z","Script 8 — The train journey"],["Q","Script 9 — DJ Tillu"],["P","Script 10 — Family and marks"],["R","Script 11 — Tillu Square"],["N","Script 12 — The ten-year degree"],["K","Script 13 — Bheeshma"],["J","Script 14 — 24 subjects"],["H","Script 15 — Balu's degree"],["G","Script 16 — TV studio"],["E","Script 17 — Annavaram trip"],["D","Script 18 — The bag on the train"],["C","Script 19 — The village feud"],["A","Script 20 — The station wedding"],["B","Script 21 — The miser"],["L","Script 22 — The miser, part 2"],["M","Script 23 — The debtor"]].map(([p,t])=>`<h2 style="font-size:24px;margin:16px 0 10px">${t}</h2>`+BDALL.filter(b=>b.id[0]===p).map(bdOne).join("")).join("");
 try{const e=document.getElementById("old12");e.checked=localStorage.getItem("cfl-old12")==="1";e.addEventListener("change",()=>{try{localStorage.setItem("cfl-old12",e.checked?"1":"0")}catch(_){}})}catch(_){}
-const views=["write","formulas","combo","compare","replace","old","breakdowns","characters","creator","rules"];
+const views=["write","formulas","combo","compare","replace","old","breakdowns","characters","rules"];
 const navScroll=()=>setTimeout(()=>{const n=document.querySelector("nav"),a=n&&n.querySelector("a[aria-current=true]");if(n&&a&&n.scrollWidth>n.clientWidth)n.scrollTo({left:Math.max(0,a.offsetLeft-16),behavior:"smooth"})},0);window.addEventListener("hashchange",navScroll);window.addEventListener("load",navScroll);
 function route(){const v=views.includes(location.hash.slice(1))?location.hash.slice(1):"write";views.forEach(x=>{$("#v-"+x).hidden=x!==v});document.querySelectorAll("nav a").forEach(a=>a.setAttribute("aria-current",a.dataset.v===v))}
 window.addEventListener("hashchange",route);
@@ -2552,14 +2548,6 @@ if(changed){saveLocal();chips();if(open&&!document.activeElement?.id?.startsWith
 </script>
 
 
-<script>
-(function(){const show=()=>{if(location.hash==="#creator"){const f=document.getElementById("cc3dFrame");if(f&&!f.src)f.src=f.dataset.src}};window.addEventListener("hashchange",show);document.addEventListener("DOMContentLoaded",show);setTimeout(show,400);
-window.addEventListener("message",async e=>{const f=document.getElementById("cc3dFrame");if(!f||e.source!==f.contentWindow||e.origin!==location.origin)return;const d=e.data;
- if(d&&d.type==="cc3d-ai"&&typeof d.input==="string"&&d.id){let out={type:"cc3d-ai-r",id:String(d.id)};try{const s=window.claude&&window.claude.use?await window.claude.use("sample"):null;if(!s)out.error={code:"not_granted"};else{const r=await s(d.input.slice(0,60000),{modelTier:"default"});out.text=String(r&&r.text||"")}}catch(x){out.error={code:(x&&x.code)||"error"}}f.contentWindow.postMessage(out,location.origin);return}
- if(!d||d.type!=="cc3d-save"||!(d.blob instanceof Blob))return;
- const name=String(d.name||"character.png").replace(/[^\w.\-]+/g,"-").slice(0,80);
- try{let dl=null;try{dl=window.claude&&window.claude.use?await window.claude.use("downloads"):null}catch(x){}dl=dl||window.CFL_FDL;if(dl)await dl.save({filename:name,data:d.blob});}catch(x){}});})();
-</script>
 </body>
 
 </html>
