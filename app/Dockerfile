@@ -4,7 +4,7 @@ WORKDIR /srv/app
 COPY app/package.json app/package-lock.json ./
 RUN npm ci --omit=dev
 COPY app/server.js ./
-COPY app/public ./public
+COPY index.html ./public/index.html
 COPY Old_to_New_Dialogue_Evolution.pdf ./public/
 ENV NODE_ENV=production PORT=3000 DATA_DIR=/srv/data
 VOLUME ["/srv/data"]
