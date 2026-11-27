@@ -1,9 +1,13 @@
 # Comedy Formula Library
 
-A Telugu comedy formula library: 507 comedy formulas collected from 21 reference scripts (Scripts 3–23), each tagged with a general role. The project's characters are DJ Vicky and Golu.
+A Telugu comedy formula library: 648 comedy formulas (F01–F648) collected from 23 reference scripts in 26 batches, each assigned to the existing cast (Madhu, Mahesh, Master, Budatha, Venki, Father) with a fresh sample line in Uttarandhra slang.
 
 - `index.html` — the library page (formulas, old scenes, breakdowns, scene writer). Open it in a browser. On GitHub Pages the scene writer uses your own Claude API key, saved only in your browser.
 - `formula-notes.md` — every formula as plain text, grouped by type, with owner and sample.
+- `Old_to_New_Dialogue_Evolution.pdf` — old vs new dialogue for every formula, in order.
+- `batches/` — the breakdown PDF for each batch (Batches 3–5 and 10–26).
+- `by-character/` — the new formulas of Batches 17–26, listed by character.
+- `Everything_I_sent_in_this_chat.pdf` — every message, script and screenshot sent in the original chat, oldest first.
 - `gold-techniques.md` — the 8 gold techniques (G01–G08) learned from your hand-picked best lines, with rules and fresh examples; the lines themselves are in `references/`.
 - `app/` — the full web application for AWS: a Node.js server that connects the library page to the Claude API (same scene prompt and output structure as in claude.ai), saves scenes on the server and has an optional sign-in. Deploy guide: `app/DEPLOY-AWS.md`.
 
@@ -14,4 +18,4 @@ A Telugu comedy formula library: 507 comedy formulas collected from 21 reference
 - **Saved scenes** — every scene is saved. Open one to get **Copy scene** (whole dialogue in one tap) and **Add to scene combo** (fills the next empty combo box). Each saved scene in the list also has **+ Add to scene combo** and **Delete**. Each combo box has a **Saved scene…** list and a **Paste** button.
 - **Downloads** — PDF of one scene or of all saved scenes, and the Old to New Dialogue Evolution PDF.
 - **Previous scenes** (Write a scene, above Box 1, optional) — paste earlier scenes of your script; the new scene from Box 1 continues that story (same characters and slang, no repeated or contradicted events, callbacks), with a Story continuity box. "Add to previous scenes" appends a written scene so you can go on to the next one. Empty = stand-alone scene.
-- **Replace characters** — paste a scene or pick a saved one; the speakers are detected automatically. Choose a replacement for any of them from the character library (e.g. a film character → DJ Vicky). Claude rewrites the replaced characters' dialogues, reactions, slang, attitude, punchlines and timing in the new character's style, keeps the others' lines where they still work, and shows Original vs New side by side. The original is never changed; the new version is saved in Saved scenes.
+- **Replace characters** — paste a scene or pick a saved one; the speakers are detected automatically. Choose a replacement for any of them from the character library (e.g. Madhu → DJ Tillu). Claude rewrites the replaced characters' dialogues, reactions, slang, attitude, punchlines and timing in the new character's style, keeps the others' lines where they still work, and shows Original vs New side by side. The original is never changed; the new version is saved in Saved scenes.
